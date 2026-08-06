@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>수학·물리·화학 노트 — 의료용 전극 기술의 이론 기반</title>
+<meta name="description" content="의료용 생체전극·전도성 하이드로젤·니들 전극·전기수술기를 다루는 데 필요한 수학·물리·화학 이론을 인터랙티브 아티팩트로 학습하는 노트.">
+<link rel="stylesheet" href="assets/css/site.css">
+</head>
+<body>
+
+<div class="topbar">
+  <div class="wrap">
+    <a class="brand" href="index.html">수학·물리·화학 노트</a>
+    <ul class="topnav">
+      <li><a href="pages/math-ode.html">미분방정식</a></li>
+      <li><a href="pages/electrochem.html">전기화학</a></li>
+      <li><a href="pages/corrosion.html">부식</a></li>
+      <li><a href="pages/eis.html">임피던스·EIS</a></li>
+      <li><a href="pages/polymer.html">고분자</a></li>
+      <li><a href="pages/surface.html">표면·계면</a></li>
+      <li><a href="pages/rheology.html">레올로지</a></li>
+      <li><a href="pages/mechanics.html">점착·역학</a></li>
+      <li><a href="pages/needle.html">니들</a></li>
+      <li><a href="pages/thermal.html">열분석</a></li>
+      <li><a href="pages/biosignal.html">생체신호</a></li>
+      <li><a href="pages/standards.html">규격·통계</a></li>
+      <li><a href="pages/ai-tools.html">AI 도구</a></li>
+    </ul>
+    <button class="theme-btn" type="button">DARK</button>
+  </div>
+</div>
+
+<header class="mast">
+  <div class="wrap">
+    <p class="kicker">Science Notes · Interactive</p>
+    <h1>측정값을 읽으려면 <em>먼저 식을 읽어야 함</em></h1>
+    <p class="lede">
+      의료용 생체전극과 전도성 하이드로젤, 근전도 니들 전극, 전기수술기를 다루는 데 필요한
+      수학·물리·화학 이론을 분야별로 나누고, 각 이론에 슬라이더를 붙여 값이 어떻게 움직이는지
+      직접 확인하는 노트임. 곡선이 왜 그 모양인지, 상수를 바꾸면 어디가 먼저 무너지는지를
+      식과 그래프로 동시에 확인하도록 구성했음.
+    </p>
+    <div class="btnrow">
+      <a class="artifact-tag" href="#fields">13개 분야</a>
+      <span class="artifact-tag" style="color:var(--purple);border-color:var(--purple)">102개 인터랙티브</span>
+      <span class="artifact-tag" style="color:var(--green);border-color:var(--green)">외부 라이브러리 없음</span>
+    </div>
+  </div>
+</header>
+
+<div class="searchbar">
+  <div class="wrap">
+    <input id="q" type="search" placeholder="주제 검색 — 예: Nernst, Flory, 베벨, 접촉각, Warburg, DSC">
+    <div class="filters">
+      <button class="on" data-filter="all" type="button">전체</button>
+      <button data-filter="math" type="button">수학</button>
+      <button data-filter="chem" type="button">화학</button>
+      <button data-filter="phys" type="button">물리</button>
+      <button data-filter="mat" type="button">재료</button>
+      <button data-filter="eng" type="button">공학·규격</button>
+    </div>
+  </div>
+</div>
+
+<main>
+
+<section id="fields">
+  <div class="wrap">
+    <p class="eyebrow"><span class="num">01</span> 분야 색인</p>
+    <h2>분야별 노트</h2>
+    <p class="muted">각 카드는 이론 설명과 인터랙티브 아티팩트를 함께 담은 페이지로 이어짐.</p>
+
+    <div class="fields">
+
+      <a class="field-card" href="pages/math-ode.html" data-cat="math"
+         data-search="미분방정식 적분 변수분리법 치환적분 연쇄법칙 chain rule separation of variables 방향장 slope field 지수함수 적분상수 자연로그 ODE differential equation">
+        <span class="fc-no">FIELD 01 · 수학</span>
+        <h3>미분방정식과 적분법</h3>
+        <p>변수분리법이 왜 성립하는지를 치환적분과 연쇄법칙까지 거슬러 올라가 확인함. 방향장 위에 해곡선을 그려 적분상수의 의미를 봄.</p>
+        <div class="fc-meta"><span><b>5</b> 주제</span><span><b>5</b> 인터랙티브</span></div>
+      </a>
+
+      <a class="field-card fc-green" href="pages/electrochem.html" data-cat="chem"
+         data-search="전기화학 Nernst 네른스트 Faraday 패러데이 반쪽전지 전기이중층 chronopotentiometry 정전류 크로노포텐셔메트리 Ag/AgCl 은염화은 전하량 두께 OCP 개방회로전위 CV 순환전압전류법 염소화 무전해도금 electroless">
+        <span class="fc-no">FIELD 02 · 화학</span>
+        <h3>전기화학과 Ag/AgCl 전극</h3>
+        <p>Nernst 식에서 시작해 3-step 정전류법으로 AgCl과 Ag를 분리 정량하고, 전하량을 두께로 환산하는 경로 전체를 다룸.</p>
+        <div class="fc-meta"><span><b>9</b> 주제</span><span><b>12</b> 인터랙티브</span></div>
+      </a>
+
+      <a class="field-card fc-charcoal" href="pages/corrosion.html" data-cat="chem"
+         data-search="부식 corrosion 갈바닉 galvanic 공식 pitting 틈새부식 crevice PREN Tafel 타펠 Pourbaix 푸르베 부동태 passivation SUS304 316L 부식전류 부식전위 산 노출 전해 반응">
+        <span class="fc-no">FIELD 03 · 화학</span>
+        <h3>금속 부식과 내식성</h3>
+        <p>갈바닉·공식·틈새 부식의 기전을 전위 차이로 정리하고, Tafel 외삽으로 부식속도를 뽑는 과정을 따라감.</p>
+        <div class="fc-meta"><span><b>8</b> 주제</span><span><b>9</b> 인터랙티브</span></div>
+      </a>
+
+      <a class="field-card fc-purple" href="pages/eis.html" data-cat="phys"
+         data-search="임피던스 impedance EIS 허수부 리액턴스 위상 phasor 페이저 Nyquist 나이퀴스트 Bode 보데 Randles 랜들스 등가회로 CPE Warburg 바르부르크 전하이동저항 이중층 커패시턴스 시정수 특성주파수 반원">
+        <span class="fc-no">FIELD 04 · 물리</span>
+        <h3>임피던스와 EIS</h3>
+        <p>허수부가 무엇을 뜻하는지에서 출발해 Nyquist 반원과 Randles 등가회로, CPE·Warburg까지 주파수 응답 전체를 다룸.</p>
+        <div class="fc-meta"><span><b>10</b> 주제</span><span><b>5</b> 인터랙티브</span></div>
+      </a>
+
+      <a class="field-card fc-green" href="pages/polymer.html" data-cat="mat"
+         data-search="고분자 하이드로젤 polymer hydrogel Flory Huggins 플로리 허긴스 Flory-Rehner 팽윤 swelling 가교밀도 crosslink 라디칼 중합 radical polymerization UV 광개시제 photoinitiator 겔화 PEDOT PSS 고무탄성 Mc">
+        <span class="fc-no">FIELD 05 · 재료</span>
+        <h3>고분자와 하이드로젤</h3>
+        <p>UV 광개시 라디칼 중합의 동역학과 Flory–Huggins 상거동, Flory–Rehner 팽윤 모델을 곡선 위에서 확인함.</p>
+        <div class="fc-meta"><span><b>8</b> 주제</span><span><b>8</b> 인터랙티브</span></div>
+      </a>
+
+      <a class="field-card fc-amber" href="pages/surface.html" data-cat="chem"
+         data-search="표면 계면 접촉각 contact angle Young 영 식 표면자유에너지 surface free energy Owens-Wendt 오웬스 웬트 Neumann 노이만 EoS Dyne 다인 표면장력 젖음 wetting 친수성 소수성 소포제 defoamer">
+        <span class="fc-no">FIELD 06 · 화학</span>
+        <h3>표면·계면 화학</h3>
+        <p>Young 식으로 접촉각의 힘 균형을 세우고, Owens–Wendt 2액법과 Neumann EoS로 표면 자유에너지를 산출함.</p>
+        <div class="fc-meta"><span><b>7</b> 주제</span><span><b>5</b> 인터랙티브</span></div>
+      </a>
+
+      <a class="field-card fc-purple" href="pages/rheology.html" data-cat="phys"
+         data-search="레올로지 rheology 점도 viscosity 전단속도 shear rate 멱법칙 power law 전단담화 shear thinning 뉴턴유체 비뉴턴 항복응력 도공 코팅 coating 갭 라인속도">
+        <span class="fc-no">FIELD 07 · 물리</span>
+        <h3>레올로지와 도공 공정</h3>
+        <p>전단속도에 따라 점도가 변하는 거동을 멱법칙으로 기술하고, 도공 갭과 라인속도가 도포 두께에 어떻게 걸리는지 봄.</p>
+        <div class="fc-meta"><span><b>6</b> 주제</span><span><b>4</b> 인터랙티브</span></div>
+      </a>
+
+      <a class="field-card" href="pages/mechanics.html" data-cat="phys"
+         data-search="점착력 박리 peel 90도 180도 Kendall 켄달 접착 일 adhesion work UTM 만능재료시험기 로드셀 load cell 인장 tensile 응력 변형 stress strain 탄성계수 영률 마찰 friction 요철평균">
+        <span class="fc-no">FIELD 08 · 물리</span>
+        <h3>점착·박리와 기계물성</h3>
+        <p>박리각에 따라 측정값이 달라지는 이유를 에너지 균형으로 설명하고, 응력–변형 곡선과 로드셀 정확도 구간을 다룸.</p>
+        <div class="fc-meta"><span><b>9</b> 주제</span><span><b>15</b> 인터랙티브</span></div>
+      </a>
+
+      <a class="field-card fc-charcoal" href="pages/needle.html" data-cat="eng"
+         data-search="니들 needle 바늘 EMG 근전도 투과력 penetration force 베벨 bevel 연마 grinding 각도 게이지 gauge 외경 내경 SUS304 SUS304V 실리콘 코팅 silicone PTFE 절연 노출면적">
+        <span class="fc-no">FIELD 09 · 공학</span>
+        <h3>니들 기하와 투과역학</h3>
+        <p>베벨각과 절삭날 길이의 기하 관계를 세우고, 힘–변위 곡선의 구간 분해로 천공력을 읽는 방법을 다룸.</p>
+        <div class="fc-meta"><span><b>8</b> 주제</span><span><b>7</b> 인터랙티브</span></div>
+      </a>
+
+      <a class="field-card fc-amber" href="pages/thermal.html" data-cat="mat"
+         data-search="열분석 TGA 열중량 DSC 시차주사열량 Tg 유리전이 Tm 융점 결정화도 DTG Py-GCMS 열분해 FT-IR 적외선 전기수술기 electrosurgery 고주파 절단 응고 PTFE 팁 온도 열전도">
+        <span class="fc-no">FIELD 10 · 재료</span>
+        <h3>열분석과 전기수술</h3>
+        <p>TGA·DSC 곡선의 각 변곡이 무엇을 뜻하는지 짚고, 고주파 절단·응고와 팁 온도의 열전도 문제를 함께 다룸.</p>
+        <div class="fc-meta"><span><b>9</b> 주제</span><span><b>12</b> 인터랙티브</span></div>
+      </a>
+
+      <a class="field-card fc-green" href="pages/biosignal.html" data-cat="phys"
+         data-search="생체신호 ECG 심전도 EMG 근전도 반쪽전지 half-cell 분극 비분극 offset 전위 모션 아티팩트 motion artifact 필터 대역통과 bandpass SNR 확산 Fick 픽 물질전달 percolation 침투 전도도">
+        <span class="fc-no">FIELD 11 · 물리</span>
+        <h3>생체신호와 전극 계면</h3>
+        <p>전극이 잡는 신호가 왜 그 크기인지 반쪽전지 전위에서 풀고, 필터 대역과 노이즈, 물질 전달·전도 이론을 붙임.</p>
+        <div class="fc-meta"><span><b>8</b> 주제</span><span><b>9</b> 인터랙티브</span></div>
+      </a>
+
+      <a class="field-card fc-charcoal" href="pages/standards.html" data-cat="eng"
+         data-search="규격 standard ISO 10993 생체적합성 biocompatibility AAMI EC12 EC53 MDR 가속수명 accelerated aging Arrhenius 아레니우스 Q10 ASTM F1980 통계 신뢰구간 표본수 유의수준 t검정 Cpk">
+        <span class="fc-no">FIELD 12 · 공학</span>
+        <h3>규격·신뢰성·통계</h3>
+        <p>ISO 10993과 AAMI EC12의 판정값 체계를 정리하고, Arrhenius 가속수명과 표본수·신뢰구간 계산을 다룸.</p>
+        <div class="fc-meta"><span><b>8</b> 주제</span><span><b>6</b> 인터랙티브</span></div>
+      </a>
+
+      <a class="field-card" href="pages/ai-tools.html" data-cat="eng"
+         data-search="AI 도구 Claude 클로드 cowork code 파라미터 가중치 토큰 token 세션 session pre-trained catastrophic forgetting 파국적 망각 CLAUDE.md 메모리 스킬 서브에이전트 MCP">
+        <span class="fc-no">FIELD 13 · 도구</span>
+        <h3>AI 도구의 작동 원리</h3>
+        <p>신경망 파라미터와 사전학습, 세션이 기억을 잇지 못하는 구조적 이유를 정리하고 설정 파일 3층 구조를 다룸.</p>
+        <div class="fc-meta"><span><b>7</b> 주제</span><span><b>5</b> 인터랙티브</span></div>
+      </a>
+
+    </div>
+    <p class="nores hidden">검색 결과가 없음. 다른 용어로 시도해 보기 바람.</p>
+  </div>
+</section>
+
+<section id="how">
+  <div class="wrap">
+    <p class="eyebrow"><span class="num">02</span> 구성 방식</p>
+    <h2>이론과 조작 가능한 그래프를 한 화면에 둠</h2>
+    <p>
+      각 주제는 세 층으로 쌓았음. 먼저 현상을 말로 설명하고, 그다음 식을 세우면서 모든 기호의
+      뜻과 단위를 밝히며, 마지막에 그 식을 그대로 구현한 위젯을 붙여 슬라이더로 상수를 움직이게 했음.
+      식을 눈으로만 읽으면 어느 항이 곡선의 어느 부분을 지배하는지 잡히지 않지만, 상수 하나를
+      끌어 보면 그 대응이 바로 드러남.
+    </p>
+
+    <div class="cards">
+      <div class="card">
+        <h5><span class="tag">01</span> 이론</h5>
+        <p>현상이 왜 일어나는지를 서술함. 규격이 값을 정한 항목은 규격 번호와 판정값을 함께 적었음.</p>
+      </div>
+      <div class="card">
+        <h5><span class="tag">02</span> 수식</h5>
+        <p>식을 세우고 모든 기호에 의미와 단위를 붙였음. 유도가 필요한 식은 중간 단계를 남겨 두었음.</p>
+      </div>
+      <div class="card">
+        <h5><span class="tag">03</span> 인터랙티브</h5>
+        <p>같은 식을 그대로 구현한 위젯임. 슬라이더로 입력을 바꾸면 그래프와 산출값이 즉시 갱신됨.</p>
+      </div>
+    </div>
+
+    <div class="callout note">
+      <p><b>구현 방식</b> — 모든 페이지는 외부 라이브러리·폰트·이미지 없이 동작하는 정적 HTML임.
+      그래프는 SVG로 직접 그리고 계산은 브라우저에서 수행하므로, 파일을 내려받아 오프라인에서 열어도 같게 작동함.</p>
+    </div>
+  </div>
+</section>
+
+<section id="source">
+  <div class="wrap">
+    <p class="eyebrow"><span class="num">03</span> 수록 기준</p>
+    <h2>공개 규격·문헌·물리 상수에 근거한 내용만 담음</h2>
+    <p>
+      ISO·ASTM·ANSI/AAMI·IEC·KS가 정한 시험 조건과 한계값, 교과서 수준의 전기화학·고분자·열분석 이론,
+      문헌에 보고된 재료 물성값을 실었음. 특정 기업의 제품 사양과 도면 규격, 내부 표준 절차와 관리 기준,
+      배합·공정 조건, 시료 측정 결과는 담지 않았음.
+    </p>
+    <p>
+      값 대신 원리가 실린 자리가 있음. 규격이 값을 정한 항목은 규격 근거와 함께 값을 적었고,
+      값을 정하는 주체가 규격이 아닌 항목은 그 값이 왜 통제 대상인지와 어떤 방향으로 결과를
+      움직이는지까지만 서술했음.
+    </p>
+  </div>
+</section>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <p>수학·물리·화학 노트 — 의료용 전극·하이드로젤·니들 기술의 이론 기반</p>
+    <p>정적 사이트. 외부 스크립트·폰트·이미지 의존 없음.</p>
+  </div>
+</footer>
+
+<script src="assets/js/site.js"></script>
+</body>
+</html>

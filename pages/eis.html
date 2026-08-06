@@ -1,0 +1,1180 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>임피던스와 EIS — 수학·물리·화학 노트</title>
+<meta name="description" content="허수부가 무엇을 뜻하는지에서 출발해 Nyquist 반원과 Randles 등가회로, CPE·Warburg까지 주파수 응답 전체를 인터랙티브로 다룸.">
+<link rel="stylesheet" href="../assets/css/site.css">
+</head>
+<body>
+
+<div class="topbar">
+  <div class="wrap">
+    <a class="brand" href="../index.html">← 수학·물리·화학 노트</a>
+    <ul class="topnav">
+      <li><a href="#s1">실수부와 허수부</a></li>
+      <li><a href="#s2">전류를 줄이는 방식</a></li>
+      <li><a href="#s3">부호와 위상</a></li>
+      <li><a href="#s4">EIS</a></li>
+      <li><a href="#s5">Nyquist</a></li>
+      <li><a href="#s6">Randles</a></li>
+      <li><a href="#s7">반원의 기하</a></li>
+      <li><a href="#s8">CPE</a></li>
+      <li><a href="#s9">이탈 사례</a></li>
+      <li><a href="#s10">측정 설계</a></li>
+    </ul>
+    <button class="theme-btn" type="button">DARK</button>
+  </div>
+</div>
+
+<header class="mast">
+  <div class="wrap">
+    <p class="kicker">Field 04 · 물리 · 임피던스와 EIS</p>
+    <h1>임피던스의 <em>허수부</em>에서 EIS까지</h1>
+    <p class="lede">
+      허수부에는 전류를 줄이는 요인과 위상을 밀어내는 요인이 함께 들어 있는가. 이 질문에서 출발해
+      Nyquist 선도와 Randles 등가회로, CPE와 Warburg까지 이어지는 정리임. 모든 그림은 브라우저에서
+      직접 계산해 그리며, 슬라이더로 조작할 수 있음.
+    </p>
+    <div class="eq" style="border-left-color:var(--accent)">
+      Z(ω) = Z′ + jZ″ = |Z|∠θ &nbsp;&nbsp;<span class="cm">— 하나의 복소수가 크기와 위상을 동시에 담음</span>
+    </div>
+  </div>
+</header>
+
+<main>
+
+<!-- ================= 01 ================= -->
+<section id="s1">
+  <div class="wrap">
+    <p class="eyebrow"><span class="num">01</span><span>Z = R + jX</span></p>
+    <h2>크기와 위상은 R과 X가 함께 결정함</h2>
+
+    <p>
+      흔한 오해부터 정리해야 함. <strong>실수부가 크기를, 허수부가 위상을 담당하는 구조가 아님.</strong>
+      전류의 진폭과 위상은 둘 다 R과 X가 함께 결정함.
+    </p>
+
+    <div class="eq">
+      |I| = V / √(R² + X²) &nbsp;&nbsp;<span class="cm">— 진폭</span><br>
+      θ&nbsp; = atan(X / R) &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="cm">— 위상</span>
+    </div>
+
+    <p>
+      X가 0이면 위상차도 0이고, R이 0이면 ±90°가 됨. 아래 복소평면에서 점을 직접 끌어 볼 것.
+      R만 키우면 전류만 줄고 위상은 그대로이며, X만 키우면 두 가지가 동시에 나타남.
+    </p>
+
+    <div class="panel accent-top">
+      <div class="panel-hd">
+        <h4>임피던스 실험대</h4>
+        <span id="lab1-state">R 50 Ω · X +50 Ω</span>
+      </div>
+      <div class="panel-bd">
+        <div class="lab">
+          <div>
+            <svg id="plane" viewBox="0 0 420 350" class="grab" role="img" aria-label="임피던스 복소평면. 점을 끌어 R과 X를 조절함.">
+              <line x1="24" y1="175" x2="404" y2="175" stroke="var(--rule)" stroke-width="1"/>
+              <line x1="70" y1="26" x2="70" y2="330" stroke="var(--rule)" stroke-width="1"/>
+              <text class="tm" x="398" y="192" text-anchor="end">R (Ω)</text>
+              <text class="ts" x="70" y="18" text-anchor="middle">+X 유도성</text>
+              <text class="ts" x="70" y="344" text-anchor="middle">−X 용량성</text>
+              <g id="pl-grid"></g>
+              <path id="pl-arc" d="" fill="none" stroke="var(--neutral)" stroke-width="1"/>
+              <line id="pl-r" x1="70" y1="175" x2="70" y2="175" stroke="var(--re)" stroke-width="3.5"/>
+              <line id="pl-x" x1="70" y1="175" x2="70" y2="175" stroke="var(--im)" stroke-width="3.5"/>
+              <line id="pl-z" x1="70" y1="175" x2="70" y2="175" stroke="var(--ink)" stroke-width="2"/>
+              <text class="th" id="pl-lz" x="0" y="0">|Z|</text>
+              <text class="tm" id="pl-lt" x="0" y="0">θ</text>
+              <circle id="pl-dot" cx="70" cy="175" r="8" fill="var(--ink)" stroke="var(--panel)" stroke-width="2.5"/>
+              <rect id="pl-hit" x="24" y="26" width="380" height="304" fill="transparent"/>
+            </svg>
+            <p class="hint">점을 끌거나 슬라이더를 쓸 것.</p>
+            <div style="margin-top:14px">
+              <div class="ctl"><label for="sR">저항 R</label><input type="range" id="sR" min="5" max="100" step="1" value="50"><output id="oR">50 Ω</output></div>
+              <div class="ctl"><label for="sX">리액턴스 X</label><input type="range" id="sX" min="-100" max="100" step="1" value="50"><output id="oX">+50 Ω</output></div>
+            </div>
+            <div class="btnrow">
+              <button type="button" data-p="50,0">순저항</button>
+              <button type="button" data-p="20,80">유도성</button>
+              <button type="button" data-p="20,-80">용량성</button>
+              <button type="button" data-p="50,50">45°</button>
+            </div>
+          </div>
+
+          <div>
+            <svg id="wave" viewBox="0 0 600 250" role="img" aria-label="전압과 전류의 교류 파형">
+              <line x1="20" y1="128" x2="592" y2="128" stroke="var(--rule)" stroke-width="1"/>
+              <path id="wv-ref" d="" fill="none" stroke="var(--neutral)" stroke-width="1.4" stroke-dasharray="4 4" opacity=".75"/>
+              <path id="wv-v" d="" fill="none" stroke="var(--volt)" stroke-width="2.2"/>
+              <path id="wv-i" d="" fill="none" stroke="var(--curr)" stroke-width="2.2"/>
+              <line id="wv-sh" x1="40" y1="236" x2="40" y2="236" stroke="var(--im)" stroke-width="3"/>
+              <text class="ts" id="wv-lab" x="40" y="230">—</text>
+              <text class="tm" x="20" y="20" fill="var(--volt)">v(t)</text>
+              <text class="tm" x="66" y="20" fill="var(--curr)">i(t)</text>
+              <text class="tm" x="112" y="20" fill="var(--neutral)">i(t) if X=0 (점선)</text>
+            </svg>
+
+            <svg id="pow" viewBox="0 0 600 200" role="img" aria-label="순시 전력과 평균 전력" style="margin-top:6px">
+              <text class="tm" x="20" y="16">p(t) = v·i</text>
+              <line x1="20" y1="100" x2="592" y2="100" stroke="var(--rule)" stroke-width="1"/>
+              <path id="pw-fill" d="" fill="var(--im)" opacity=".16"/>
+              <path id="pw-line" d="" fill="none" stroke="var(--im)" stroke-width="1.8"/>
+              <line id="pw-avg" x1="40" y1="100" x2="580" y2="100" stroke="var(--re)" stroke-width="1.8" stroke-dasharray="6 4"/>
+              <text class="tm" id="pw-lab" x="586" y="94" text-anchor="end" fill="var(--re)">평균</text>
+            </svg>
+          </div>
+        </div>
+      </div>
+      <dl class="stats">
+        <div class="stat"><dt>임피던스 |Z|</dt><dd id="m-z">70.7 Ω</dd></div>
+        <div class="stat"><dt>위상각 θ</dt><dd id="m-t">+45°</dd></div>
+        <div class="stat"><dt>전류 진폭</dt><dd id="m-i">1.41 A</dd></div>
+        <div class="stat"><dt>평균 소비전력</dt><dd id="m-p">50 W</dd></div>
+        <div class="stat"><dt>역률 cos θ</dt><dd id="m-f">0.71</dd></div>
+      </dl>
+    </div>
+    <figcaption>
+      전압 진폭은 100 V로 고정했음. 전류 파형은 상대 스케일로 그렸고, 아래 p(t) 곡선은 매 순간의
+      전력을 절반 폭으로 정규화해 표시했음. 점선의 높이가 그대로 역률에 해당함.
+    </figcaption>
+  </div>
+</section>
+
+<!-- ================= 02 ================= -->
+<section id="s2">
+  <div class="wrap">
+    <p class="eyebrow"><span class="num">02</span><span>P = ½ I² R</span></p>
+    <h2>전류를 줄이는 두 가지 방식</h2>
+    <p>R과 X 모두 전류를 감소시키지만 성격이 다름.</p>
+
+    <div class="cards">
+      <div class="card">
+        <h5><span class="tag" style="background:var(--mint);color:var(--green)">R</span> 실수부 · 저항</h5>
+        <ul>
+          <li>전류를 감소시킴</li>
+          <li><b>에너지를 열로 소비함</b></li>
+          <li>P = ½ I² R</li>
+          <li>전압과 전류가 동상</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h5><span class="tag" style="background:var(--warm);color:var(--amber)">X</span> 허수부 · 리액턴스</h5>
+        <ul>
+          <li>전류를 감소시킴</li>
+          <li><b>저장했다 되돌려줌</b></li>
+          <li>평균 소비전력 = 0</li>
+          <li>전압과 전류가 90° 어긋남</li>
+        </ul>
+      </div>
+    </div>
+
+    <p>
+      위 실험대에서 R을 낮추고 X만 키우면 전류 진폭은 줄어드는데 평균 소비전력도 함께 떨어짐.
+      p(t) 곡선이 0선 위아래로 거의 대칭이 되면서 평균선이 0에 붙음.
+    </p>
+
+    <p class="pull">
+      두 효과는 별개의 요인 두 개가 아님. 에너지를 소비하지 않고 저장했다 되돌려주는
+      <strong>하나의 성질</strong>이 갖는 두 얼굴임. 전류가 전압과 90° 어긋나 있기 때문에 v·i의
+      평균이 0이 되고, 그 위상 어긋남이 곧 손실 없는 전류 제한으로 나타남.
+    </p>
+  </div>
+</section>
+
+<!-- ================= 03 ================= -->
+<section id="s3">
+  <div class="wrap">
+    <p class="eyebrow"><span class="num">03</span><span>sign(X)</span></p>
+    <h2>지연이라는 설명은 절반만 맞음</h2>
+    <p>허수부의 <strong>크기</strong>가 위상차의 크기를, <strong>부호</strong>가 지연인지 선행인지를 결정함.</p>
+
+    <figure>
+      <svg viewBox="0 0 680 240" role="img" aria-label="유도성일 때 전류가 뒤지고 용량성일 때 전류가 앞서는 파형 비교">
+        <line x1="252" y1="22" x2="278" y2="22" stroke="var(--volt)" stroke-width="2.2"/>
+        <text class="ts" x="284" y="26">전압</text>
+        <line x1="332" y1="22" x2="358" y2="22" stroke="var(--curr)" stroke-width="2.2"/>
+        <text class="ts" x="364" y="26">전류</text>
+        <text class="th" x="180" y="52" text-anchor="middle">X &gt; 0  유도성 (인덕터)</text>
+        <text class="th" x="510" y="52" text-anchor="middle">X &lt; 0  용량성 (커패시터)</text>
+        <line x1="40" y1="140" x2="322" y2="140" stroke="var(--rule)"/>
+        <line x1="50" y1="78" x2="50" y2="202" stroke="var(--rule)"/>
+        <line x1="370" y1="140" x2="652" y2="140" stroke="var(--rule)"/>
+        <line x1="380" y1="78" x2="380" y2="202" stroke="var(--rule)"/>
+        <path id="ll-v1" d="" fill="none" stroke="var(--volt)" stroke-width="2.2"/>
+        <path id="ll-i1" d="" fill="none" stroke="var(--curr)" stroke-width="2.2"/>
+        <path id="ll-v2" d="" fill="none" stroke="var(--volt)" stroke-width="2.2"/>
+        <path id="ll-i2" d="" fill="none" stroke="var(--curr)" stroke-width="2.2"/>
+        <text class="ts" x="180" y="226" text-anchor="middle">전류가 뒤짐 — lag</text>
+        <text class="ts" x="510" y="226" text-anchor="middle">전류가 앞섬 — lead</text>
+      </svg>
+      <figcaption>
+        인덕터에서는 전류가 전압보다 뒤지고(lag), 커패시터에서는 앞섬(lead). 지연이라는 표현은
+        X &gt; 0 인 경우에만 해당함. 전기화학 계면은 거의 항상 용량성이므로 −X 영역에 놓임.
+      </figcaption>
+    </figure>
+  </div>
+</section>
+
+<!-- ================= 04 ================= -->
+<section id="s4">
+  <div class="wrap">
+    <p class="eyebrow"><span class="num">04</span><span>Z(ω)</span></p>
+    <h2>EIS는 같은 임피던스를 반대 방향으로 씀</h2>
+
+    <p>
+      EIS(전기화학 임피던스 분광법)가 다른 물리를 쓰는 것은 아님. 일반 AC 회로 해석이
+      R·L·C를 알고 전류를 구하는 방향이라면, EIS는 반대로 <strong>Z(ω)를 측정해 놓고 안에서
+      무슨 반응이 일어나는지 역추정하는 방향</strong>임.
+    </p>
+    <p>
+      성립 근거는 전극 계면의 각 물리 과정이 <strong>서로 다른 시정수</strong>를 갖는다는 점임.
+      빠른 과정은 고주파에서만 따라오고, 느린 과정은 저주파에서만 응답할 시간이 있음.
+      그래서 주파수를 훑으면 과정들이 분리되어 보임.
+    </p>
+
+    <figure>
+      <svg viewBox="0 0 680 250" role="img" aria-label="전극 계면의 각 영역과 대응하는 등가회로 요소">
+        <text class="ts" x="100" y="52" text-anchor="middle">전극 (금속)</text>
+        <text class="ts" x="195" y="52" text-anchor="middle">전기이중층</text>
+        <text class="ts" x="340" y="52" text-anchor="middle">확산층</text>
+        <text class="ts" x="525" y="52" text-anchor="middle">벌크 전해질</text>
+        <rect x="60" y="66" width="80" height="104" fill="var(--panel-2)" stroke="var(--rule)"/>
+        <rect x="140" y="66" width="110" height="104" fill="var(--warm)" stroke="var(--rule)"/>
+        <rect x="250" y="66" width="180" height="104" fill="var(--mint)" stroke="var(--rule)"/>
+        <rect x="430" y="66" width="190" height="104" fill="var(--lilac)" stroke="var(--rule)"/>
+        <text class="ts" x="130" y="92" text-anchor="middle">+</text><text class="ts" x="130" y="114" text-anchor="middle">+</text>
+        <text class="ts" x="130" y="136" text-anchor="middle">+</text><text class="ts" x="130" y="158" text-anchor="middle">+</text>
+        <circle cx="160" cy="88" r="5" fill="var(--amber)" opacity=".6"/><circle cx="160" cy="110" r="5" fill="var(--amber)" opacity=".6"/>
+        <circle cx="160" cy="132" r="5" fill="var(--amber)" opacity=".6"/><circle cx="160" cy="154" r="5" fill="var(--amber)" opacity=".6"/>
+        <circle cx="272" cy="96" r="4" fill="var(--re)" opacity=".45"/><circle cx="300" cy="132" r="4" fill="var(--re)" opacity=".5"/>
+        <circle cx="330" cy="90" r="4" fill="var(--re)" opacity=".5"/><circle cx="344" cy="140" r="4" fill="var(--re)" opacity=".55"/>
+        <circle cx="372" cy="106" r="4" fill="var(--re)" opacity=".55"/><circle cx="386" cy="150" r="4" fill="var(--re)" opacity=".6"/>
+        <circle cx="408" cy="86" r="4" fill="var(--re)" opacity=".6"/><circle cx="416" cy="126" r="4" fill="var(--re)" opacity=".6"/>
+        <circle cx="452" cy="96" r="4" fill="var(--volt)" opacity=".5"/><circle cx="470" cy="152" r="4" fill="var(--volt)" opacity=".5"/>
+        <circle cx="500" cy="120" r="4" fill="var(--volt)" opacity=".5"/><circle cx="528" cy="82" r="4" fill="var(--volt)" opacity=".5"/>
+        <circle cx="546" cy="146" r="4" fill="var(--volt)" opacity=".5"/><circle cx="576" cy="104" r="4" fill="var(--volt)" opacity=".5"/>
+        <circle cx="602" cy="140" r="4" fill="var(--volt)" opacity=".5"/>
+        <line x1="100" y1="170" x2="100" y2="188" stroke="var(--rule)" stroke-dasharray="3 3"/>
+        <line x1="195" y1="170" x2="195" y2="188" stroke="var(--rule)" stroke-dasharray="3 3"/>
+        <line x1="340" y1="170" x2="340" y2="188" stroke="var(--rule)" stroke-dasharray="3 3"/>
+        <line x1="525" y1="170" x2="525" y2="188" stroke="var(--rule)" stroke-dasharray="3 3"/>
+        <text class="th" x="100" y="204" text-anchor="middle">전자 전도</text>
+        <text class="th" x="195" y="204" text-anchor="middle">Rct ∥ Cdl</text>
+        <text class="th" x="340" y="204" text-anchor="middle">Warburg</text>
+        <text class="th" x="525" y="204" text-anchor="middle">Rs</text>
+        <text class="ts" x="100" y="224" text-anchor="middle">DC 성분</text>
+        <text class="ts" x="195" y="224" text-anchor="middle">1 Hz – 1 kHz</text>
+        <text class="ts" x="340" y="224" text-anchor="middle">저주파 &lt; 1 Hz</text>
+        <text class="ts" x="525" y="224" text-anchor="middle">고주파 &gt; 1 kHz</text>
+      </svg>
+      <figcaption>
+        공간 순서와 주파수 순서가 반대임. 가장 바깥인 벌크의 저항이 가장 높은 주파수에서 보이고,
+        가장 안쪽 계면의 확산이 가장 낮은 주파수에서 보임.
+      </figcaption>
+    </figure>
+
+    <h3>일반 AC 임피던스와의 차이</h3>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>구분</th><th>일반 AC 회로</th><th>EIS</th></tr></thead>
+        <tbody>
+          <tr><td>목적</td><td>Z를 알고 전류·전력 계산</td><td>Z(ω)를 측정해 내부 기구 역추정</td></tr>
+          <tr><td>주파수</td><td>보통 단일 (60 Hz 등)</td><td>mHz ~ MHz, 6~8 decade 스윕</td></tr>
+          <tr><td>소자</td><td>실제 R, L, C 부품</td><td>물리·화학 과정의 등가 표현</td></tr>
+          <tr><td>선형성</td><td>소자 자체가 선형</td><td>계는 비선형이라 미소진폭으로 국소 선형화</td></tr>
+          <tr><td>동작점</td><td>무관</td><td>DC bias·SOC·온도에 따라 Z가 바뀜</td></tr>
+          <tr><td>표현</td><td>페이저 한 점</td><td>Nyquist / Bode 곡선</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p>
+      가장 큰 차이는 <strong>비선형성</strong>임. 전기화학 반응은 Butler–Volmer 식처럼 전류가
+      전압에 지수적으로 의존하므로, EIS는 5~10 mV 정도의 작은 진폭만 걸어 동작점 주변에서
+      접선 기울기 dE/dI를 잼. 즉 EIS의 Z는 고정된 물성이 아니라
+      <strong>그 동작점에서의 미분 임피던스</strong>이고, 배터리 SOC가 바뀌면 같은 셀도 다른 곡선을 냄.
+    </p>
+
+    <p>
+      소자도 이상적이지 않음. R·L·C는 위상이 0°나 ±90°로 고정이지만 EIS에서는 그 사이 값이 흔함.
+      Warburg는 <code>Z = σ(1−j)/√ω</code> 로 위상이 항상 −45°에 고정되는데, jω의 반정수 거듭제곱이라
+      R·L·C 조합으로는 만들 수 없음.
+    </p>
+  </div>
+</section>
+
+<!-- ================= 05 ================= -->
+<section id="s5">
+  <div class="wrap">
+    <p class="eyebrow"><span class="num">05</span><span>−Z″ vs Z′</span></p>
+    <h2>Nyquist 선도 — 주파수 스윕을 한 장에</h2>
+    <p>
+      가로축은 Z′(실수부), 세로축은 −Z″(허수부의 부호를 뒤집은 값)이며, 주파수를 훑으며 찍은 궤적임.
+      슬라이더를 조작하면 각 파라미터가 그림의 <strong>서로 다른 부분만</strong> 움직인다는 점이 드러남.
+      이 분리 가능성이 EIS를 쓰는 이유임.
+    </p>
+
+    <div class="panel accent-top">
+      <div class="panel-hd">
+        <h4>Randles 스펙트럼 실험대</h4>
+        <span id="lab2-state">현재 지배 요소 — 전하이동</span>
+      </div>
+      <div class="panel-bd">
+        <svg id="nyq" viewBox="0 0 680 390" role="img" aria-label="Randles 회로의 Nyquist 선도">
+          <line x1="70" y1="320" x2="668" y2="320" stroke="var(--rule)"/>
+          <line id="nq-ay" x1="70" y1="320" x2="70" y2="30" stroke="var(--rule)"/>
+          <g id="nq-ticks"></g>
+          <path id="nq-curve" d="" fill="none" stroke="var(--im)" stroke-width="2.4"/>
+          <line id="nq-drop" x1="0" y1="0" x2="0" y2="0" stroke="var(--rule)" stroke-dasharray="3 3"/>
+          <circle id="nq-p1" cx="70" cy="320" r="4" fill="var(--ink)"/>
+          <circle id="nq-p2" cx="70" cy="320" r="4" fill="var(--ink)"/>
+          <text class="tm" id="nq-l1" x="70" y="342" text-anchor="middle">Rs</text>
+          <text class="tm" id="nq-l2" x="70" y="342" text-anchor="middle">Rs+Rct</text>
+          <circle id="nq-dot" cx="70" cy="320" r="6" fill="var(--curr)"/>
+          <text class="tm" x="668" y="308" text-anchor="end">Z′ (Ω)</text>
+          <text class="tm" id="nq-ylab" x="78" y="40">−Z″ (Ω)</text>
+          <text class="ts" x="369" y="382" text-anchor="middle">← 고주파　·　저주파 →</text>
+        </svg>
+
+        <svg id="circ" viewBox="0 0 680 150" role="img" aria-label="Randles 등가회로. 현재 주파수에서 지배적인 요소가 강조됨." style="margin-top:4px">
+          <g stroke="var(--ink-3)" stroke-width="1.6" fill="none">
+            <line x1="40" y1="80" x2="80" y2="80"/><line x1="160" y1="80" x2="196" y2="80"/>
+            <line x1="196" y1="40" x2="196" y2="120"/><line x1="196" y1="40" x2="296" y2="40"/>
+            <line x1="312" y1="40" x2="470" y2="40"/>
+            <line x1="196" y1="120" x2="256" y2="120"/><line x1="336" y1="120" x2="376" y2="120"/>
+            <line x1="456" y1="120" x2="470" y2="120"/><line x1="470" y1="40" x2="470" y2="120"/>
+            <line x1="470" y1="80" x2="540" y2="80"/>
+          </g>
+          <circle cx="40" cy="80" r="4" fill="none" stroke="var(--ink-3)" stroke-width="1.6"/>
+          <circle cx="540" cy="80" r="4" fill="none" stroke="var(--ink-3)" stroke-width="1.6"/>
+          <circle cx="196" cy="80" r="3.5" fill="var(--ink-3)"/><circle cx="470" cy="80" r="3.5" fill="var(--ink-3)"/>
+          <rect id="e-rs" x="80" y="66" width="80" height="28" fill="var(--lilac)" stroke="var(--rule)"/>
+          <line id="e-c1" x1="296" y1="24" x2="296" y2="56" stroke="var(--amber)" stroke-width="3"/>
+          <line id="e-c2" x1="312" y1="24" x2="312" y2="56" stroke="var(--amber)" stroke-width="3"/>
+          <rect id="e-rct" x="256" y="106" width="80" height="28" fill="var(--warm)" stroke="var(--rule)"/>
+          <rect id="e-w" x="376" y="106" width="80" height="28" fill="var(--mint)" stroke="var(--rule)"/>
+          <text class="tm" x="120" y="58" text-anchor="middle">Rs</text>
+          <text class="tm" x="304" y="18" text-anchor="middle">Cdl</text>
+          <text class="tm" x="296" y="150" text-anchor="middle">Rct</text>
+          <text class="tm" x="416" y="150" text-anchor="middle">Zw</text>
+          <text class="ts" x="40" y="104" text-anchor="middle">전극</text>
+          <text class="ts" x="540" y="104" text-anchor="middle">전해질</text>
+        </svg>
+
+        <div style="margin-top:18px;display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:0 30px">
+          <div class="ctl"><label for="aRs">용액 저항 Rs</label><input type="range" id="aRs" min="5" max="60" step="1" value="20"><output id="vRs">20 Ω</output></div>
+          <div class="ctl"><label for="aRct">전하이동 Rct</label><input type="range" id="aRct" min="20" max="300" step="5" value="150"><output id="vRct">150 Ω</output></div>
+          <div class="ctl"><label for="aCdl">이중층 Cdl</label><input type="range" id="aCdl" min="1" max="200" step="1" value="20"><output id="vCdl">20 µF</output></div>
+          <div class="ctl"><label for="aSg">Warburg σ</label><input type="range" id="aSg" min="0" max="100" step="1" value="30"><output id="vSg">30</output></div>
+          <div class="ctl" style="grid-column:1/-1"><label for="aF">측정 주파수 f</label><input type="range" id="aF" min="0" max="600" step="1" value="380"><output id="vF">100 Hz</output></div>
+        </div>
+
+        <h4 style="margin-top:24px">같은 데이터의 Bode 표현</h4>
+        <svg id="bode" viewBox="0 0 680 300" role="img" aria-label="같은 Randles 회로의 Bode 선도"></svg>
+        <p class="hint">
+          왼쪽 축은 log|Z|, 오른쪽 축은 위상각임. Nyquist가 저주파 구간을 뭉뚱그리는 반면
+          Bode는 주파수 축이 로그로 펼쳐져 각 decade의 거동을 균등하게 보여줌. 실무에서는 두 표현을
+          같이 봄 — Nyquist로 등가회로 구조를 잡고, Bode로 어느 주파수 대역이 어긋나는지 확인함.
+        </p>
+      </div>
+      <dl class="stats">
+        <div class="stat"><dt>|Z|</dt><dd id="n-z">—</dd></div>
+        <div class="stat"><dt>위상각 θ</dt><dd id="n-t">—</dd></div>
+        <div class="stat"><dt>정점 주파수 f₀</dt><dd id="n-f0">—</dd></div>
+        <div class="stat"><dt>시정수 τ</dt><dd id="n-tau">—</dd></div>
+      </dl>
+    </div>
+    <figcaption>
+      Rs는 곡선 전체를 좌우로 평행이동시키고, Rct는 반원의 지름을, Cdl은 정점이 나타나는 주파수를,
+      σ는 저주파 45° 꼬리를 바꿈. 주파수 슬라이더를 움직이면 회로도에서 그 순간 지배적인 요소가 강조됨.
+    </figcaption>
+  </div>
+</section>
+
+<!-- ================= 06 ================= -->
+<section id="s6">
+  <div class="wrap">
+    <p class="eyebrow"><span class="num">06</span><span>Rs + (Rct + Zw) ∥ Cdl</span></p>
+    <h2>Randles 등가회로 — 전류가 흐를 길이 두 개임</h2>
+    <p>
+      전극에 전위를 걸면 전류가 흐를 길이 두 개로 갈림. 하나는 실제 산화·환원 반응으로 전자가 넘어가는
+      <strong>패러데이 경로</strong>이고, 다른 하나는 반응 없이 계면에 전하만 쌓이는
+      <strong>축전 경로</strong>임. 두 길이 같은 계면에서 동시에 열려 있으므로 병렬이고,
+      그 전에 이온이 벌크 전해질을 가로질러 와야 하므로 용액 저항이 직렬로 앞에 붙음.
+    </p>
+    <ul class="notes">
+      <li><b>Rs</b><span>용액 저항. 이온이 벌크를 가로지르며 겪는 저항으로, 계면 바깥의 성질임.</span></li>
+      <li><b>Cdl</b><span>이중층 용량. 계면에 전하가 쌓이는 축전 경로이며, 반응 없이 전류를 흘림.</span></li>
+      <li><b>Rct</b><span>전하이동 저항. 반응 속도의 역수에 해당하고 교환전류밀도와 직결됨.</span></li>
+      <li><b>Zw</b><span>Warburg 임피던스. 반응물이 계면까지 확산해 오는 데 걸리는 시간을 표현함.</span></li>
+    </ul>
+
+    <div class="eq">
+      Z(ω) = Rs + [ (Rct + Zw)<sup>−1</sup> + jωCdl ]<sup>−1</sup><br>
+      Zw = σ(1 − j)/√ω &nbsp;&nbsp;<span class="cm">— 반무한 확산, 위상 −45° 고정</span><br>
+      i₀ = RT / (n F Rct) &nbsp;&nbsp;<span class="cm">— 교환전류밀도</span>
+    </div>
+    <ul class="sym">
+      <li><b>Rs</b><span>용액 저항 [Ω]</span></li>
+      <li><b>Rct</b><span>전하이동 저항 [Ω]</span></li>
+      <li><b>Cdl</b><span>이중층 용량 [F]</span></li>
+      <li><b>σ</b><span>Warburg 계수 [Ω·s<sup>−1/2</sup>]. σ ∝ 1/(C√D)</span></li>
+      <li><b>ω</b><span>각주파수 [rad/s], ω = 2πf</span></li>
+      <li><b>i₀</b><span>교환전류밀도 [A/cm²]</span></li>
+      <li><b>R, T, n, F</b><span>기체상수 8.314 J/(mol·K), 절대온도 [K], 전자수, Faraday 상수 96485 C/mol</span></li>
+    </ul>
+  </div>
+</section>
+
+<!-- ================= 07 ================= -->
+<section id="s7">
+  <div class="wrap">
+    <p class="eyebrow"><span class="num">07</span><span>(Z′ − Rs − Rct/2)² + Z″² = (Rct/2)²</span></p>
+    <h2>왜 반원인가 — 세 개의 극한</h2>
+    <p>Warburg를 잠시 빼고(σ = 0) 계산하면 반원이 나오는 이유가 떨어짐.</p>
+
+    <div class="eq">
+Z = Rs + Rct / (1 + jωRctCdl)<br><br>
+Z′&nbsp; = Rs + Rct / (1 + ω²τ²)&nbsp;&nbsp;&nbsp;&nbsp;<span class="cm">τ = Rct·Cdl</span><br>
+−Z″ = ωτRct / (1 + ω²τ²)<br><br>
+<span class="cm">ω를 소거하면</span><br>
+(Z′ − Rs − Rct/2)² + (Z″)² = (Rct/2)²
+    </div>
+
+    <p>
+      중심이 <code>(Rs + Rct/2, 0)</code>, 반지름이 <code>Rct/2</code>인 <strong>원의 방정식</strong>임.
+      ω를 훑는다는 것은 이 원 위를 도는 일이고, 그래서 Nyquist에 반원이 그려짐.
+    </p>
+
+    <figure>
+      <svg viewBox="0 0 680 316" role="img" aria-label="Nyquist 반원의 기하학적 의미">
+        <defs><marker id="ar" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
+          <path d="M2 1L8 5L2 9" fill="none" stroke="var(--ink-2)" stroke-width="1.5" stroke-linecap="round"/></marker></defs>
+        <line x1="60" y1="240" x2="648" y2="240" stroke="var(--rule)"/>
+        <line x1="90" y1="240" x2="90" y2="50" stroke="var(--rule)"/>
+        <text class="tm" x="98" y="58">−Z″</text><text class="tm" x="644" y="232" text-anchor="end">Z′</text>
+        <path d="M150 240 A160 160 0 0 1 470 240" fill="none" stroke="var(--im)" stroke-width="2.5"/>
+        <line x1="470" y1="240" x2="590" y2="120" stroke="var(--re)" stroke-width="2.5"/>
+        <line x1="310" y1="88" x2="310" y2="240" stroke="var(--rule)" stroke-dasharray="3 3"/>
+        <circle cx="310" cy="80" r="4.5" fill="var(--im)"/>
+        <circle cx="150" cy="240" r="4.5" fill="var(--ink)"/><circle cx="470" cy="240" r="4.5" fill="var(--ink)"/>
+        <text class="th" x="310" y="48" text-anchor="middle">정점 ω = 1 / (Rct·Cdl)</text>
+        <text class="ts" x="310" y="66" text-anchor="middle">−Z″ = Rct / 2</text>
+        <text class="ts" x="122" y="232" text-anchor="middle">ω→∞</text>
+        <text class="th" x="150" y="260" text-anchor="middle">Rs</text>
+        <text class="th" x="470" y="260" text-anchor="middle">Rs + Rct</text>
+        <line x1="150" y1="280" x2="470" y2="280" stroke="var(--ink-2)" stroke-width="1.2" marker-start="url(#ar)" marker-end="url(#ar)"/>
+        <text class="ts" x="310" y="300" text-anchor="middle">지름 = Rct</text>
+        <text class="ts" x="636" y="102" text-anchor="end">45° 확산 꼬리</text>
+        <text class="ts" x="598" y="146">ω→0</text>
+      </svg>
+    </figure>
+
+    <ul class="notes">
+      <li><b>ω → ∞ 고주파</b><span>커패시터의 임피던스 1/jωCdl이 0으로 가서 계면을 단락시킴. 전류가 전부 Cdl로 새어 Rct와 Zw는 보이지 않고 남는 것은 Rs뿐이며, 이것이 왼쪽 절편임.</span></li>
+      <li><b>ω → 0 직류</b><span>Cdl이 개방되어 전류가 전부 패러데이 경로로 감. Warburg가 없다면 오른쪽 절편 Rs + Rct에서 끝남.</span></li>
+      <li><b>중간</b><span>두 경로가 전류를 나눠 가지며 위상이 어긋나고, 그 궤적이 반원임. 정점(ωτ = 1)은 두 경로의 임피던스가 균형을 이루는 지점임.</span></li>
+      <li><b>확산 꼬리</b><span>Z_W = σ/√ω · (1−j)에서 실수부와 허수부 크기가 항상 같으므로 기울기 1, 즉 45° 직선임. 이 직선을 실수축까지 외삽한 절편은 Rs + Rct가 아니라 <b>Rs + Rct − 2σ²Cdl</b>로 왼쪽에 잡힘.</span></li>
+    </ul>
+
+    <h3>실측 스펙트럼에서 뽑아내는 값</h3>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>그림에서 읽는 것</th><th>얻는 값</th><th>해석</th></tr></thead>
+        <tbody>
+          <tr><td>고주파 절편</td><td>Rs</td><td>전해질 전도도, 셀 설계 품질</td></tr>
+          <tr><td>반원의 지름</td><td>Rct</td><td>반응 속도. 교환전류밀도 i₀ = RT / (n·F·Rct)</td></tr>
+          <tr><td>정점 주파수 f₀</td><td>Cdl = 1 / (2π f₀ Rct)</td><td>유효 표면적, 계면 상태</td></tr>
+          <tr><td>45° 꼬리의 기울기</td><td>σ</td><td>확산계수 D&nbsp; (σ ∝ 1 / (C√D))</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p>
+      부식 연구에서 Rct가 크다는 것은 반응이 느리다는 뜻이므로 곧 <strong>방식 성능이 좋다</strong>는
+      의미이고, 배터리에서 사이클을 돌릴수록 반원이 커진다면 계면 열화가 진행 중이라는 신호임.
+    </p>
+  </div>
+</section>
+
+<!-- ================= 08 CPE ================= -->
+<section id="s8">
+  <div class="wrap">
+    <p class="eyebrow"><span class="num">08</span><span>Z<sub>CPE</sub> = 1 / [Q(jω)<sup>n</sup>]</span></p>
+    <h2>CPE — 지수 n이 이상성의 척도가 됨</h2>
+
+    <p>
+      실측 반원은 매끈한 반원보다 납작하게 눌린 경우가 많음. 이상적인 커패시터는 위상이 −90°에
+      고정이지만, 표면 거칠기와 다공성, 시정수 분포가 있으면 위상이 그보다 얕게 잡힘.
+      이를 담기 위해 Cdl 자리에 상수위상요소(constant phase element)를 넣음.
+    </p>
+
+    <div class="eq">
+      Z<sub>CPE</sub>(ω) = 1 / [ Q (jω)<sup>n</sup> ] &nbsp;&nbsp;<span class="cm">위상 = −n·90°, 주파수에 무관하게 일정</span><br><br>
+      n = 1 <span class="cm">→ 이상 커패시터 (Q = C)</span><br>
+      n = 0.5 <span class="cm">→ Warburg 확산과 동일 (−45°)</span><br>
+      n = 0 <span class="cm">→ 순저항 (Q = 1/R)</span><br><br>
+      C<sub>eff</sub> = [ Q · (Rs<sup>−1</sup> + Rct<sup>−1</sup>)<sup>n−1</sup> ]<sup>1/n</sup>
+      &nbsp;&nbsp;<span class="cm">— Brug 식으로 유효 용량 환산</span>
+    </div>
+
+    <ul class="sym">
+      <li><b>Q</b><span>CPE 계수 [S·s<sup>n</sup> = F·s<sup>n−1</sup>]. n=1일 때 정전용량과 같아짐</span></li>
+      <li><b>n</b><span>CPE 지수 [무차원], 0 ≤ n ≤ 1. 이상성 척도</span></li>
+      <li><b>C<sub>eff</sub></b><span>등가 정전용량 [F]. 표면적 비교에 쓰려면 이 환산이 필요함</span></li>
+    </ul>
+
+    <div id="lab-cpe"></div>
+
+    <div class="callout">
+      <p><b>주의</b> — n이 1에서 멀어질수록 Q의 단위 자체가 정전용량이 아니게 됨. 서로 다른 n을 가진
+      시료의 Q를 그대로 비교하면 물리적 의미가 없으므로, 표면적을 비교하려면 위의 Brug 식으로
+      C<sub>eff</sub>로 환산한 뒤 비교해야 함.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ================= 09 이탈 사례 ================= -->
+<section id="s9">
+  <div class="wrap">
+    <p class="eyebrow"><span class="num">09</span><span>Randles ≠ 실측</span></p>
+    <h2>실제 데이터가 교과서와 갈라지는 지점</h2>
+    <p>Randles는 가장 단순한 이상화임. 실측 스펙트럼은 아래처럼 벗어남. 버튼을 눌러 비교해 볼 것.</p>
+
+    <div class="panel accent-top">
+      <div class="panel-hd">
+        <h4>이탈 사례</h4>
+        <span id="dev-eq">Z = Rs + Rct ∥ Cdl</span>
+      </div>
+      <div class="panel-bd">
+        <div class="btnrow" style="margin:0 0 16px">
+          <button type="button" class="devbtn" data-m="0" aria-pressed="true">이상 Randles</button>
+          <button type="button" class="devbtn" data-m="1" aria-pressed="false">눌린 반원 (CPE)</button>
+          <button type="button" class="devbtn" data-m="2" aria-pressed="false">두 개의 반원</button>
+          <button type="button" class="devbtn" data-m="3" aria-pressed="false">유한 확산</button>
+          <button type="button" class="devbtn" data-m="4" aria-pressed="false">고주파 인덕턴스</button>
+        </div>
+        <svg id="dev" viewBox="0 0 680 320" role="img" aria-label="실제 데이터에서 나타나는 Nyquist 선도의 이탈 사례">
+          <line id="dv-ax" x1="60" y1="260" x2="668" y2="260" stroke="var(--rule)"/>
+          <line id="dv-ay" x1="70" y1="286" x2="70" y2="30" stroke="var(--rule)"/>
+          <path id="dv-ref" d="" fill="none" stroke="var(--neutral)" stroke-width="1.5" stroke-dasharray="4 4" opacity=".8"/>
+          <path id="dv-curve" d="" fill="none" stroke="var(--curr)" stroke-width="2.6"/>
+          <text class="tm" x="668" y="252" text-anchor="end">Z′</text>
+          <text class="tm" x="78" y="40">−Z″</text>
+        </svg>
+        <p id="dev-note" class="hint" style="font-size:14px;color:var(--ink-2);margin-top:12px">가장 단순한 형태임. 하나의 매끈한 반원이 실수축 위에 정확히 앉음.</p>
+      </div>
+    </div>
+
+    <p class="pull">
+      등가회로 피팅은 <strong>유일하지 않음.</strong> 서로 다른 회로 구조가 거의 같은 Nyquist를
+      낼 수 있어서, 피팅이 잘 됐다는 것만으로 그 회로가 실제 기구라고 주장할 수 없음.
+      보통 조건(전위·온도·농도)을 바꿔 가며 파라미터가 물리적으로 타당하게 움직이는지로 뒷받침함.
+    </p>
+
+    <p>
+      실험적 제약도 다름. 저주파일수록 한 사이클에 걸리는 시간이 길어져 1 mHz 한 점을 재는 데만
+      1000초가 걸림. 그 사이 배터리가 자가방전하거나 부식이 진행되면 정상상태 가정이 깨지고
+      Kramers–Kronig 검증에서 걸림. 일반 AC 회로 측정에서는 신경 쓸 일이 거의 없는 문제임.
+    </p>
+  </div>
+</section>
+
+<!-- ================= 10 측정 설계 ================= -->
+<section id="s10">
+  <div class="wrap">
+    <p class="eyebrow"><span class="num">10</span><span>측정 설계</span></p>
+    <h2>측정 수단이 다르면 같은 시료도 다른 값을 냄</h2>
+
+    <p>
+      임피던스는 측정 수단과 셀 구성에 따라 값이 달라지므로, 값을 비교하려면 조건을 먼저 맞춰야 함.
+      LCR 미터는 단일 주파수에서 크기와 위상을 재고 potentiostat 기반 EIS는 주파수 스윕을 하는데,
+      전극 규격에서 요구하는 ACZ는 특정 주파수에서의 크기이므로 두 장비의 결과를 직접 비교하려면
+      같은 주파수·같은 진폭·같은 셀 구성이어야 함.
+    </p>
+
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>측정 수단</th><th>측정하는 것</th><th>한계</th></tr></thead>
+        <tbody>
+          <tr><td>LCR 미터</td><td>지정 주파수에서 |Z|와 θ, 또는 등가 R·C</td><td>스윕이 없어 시정수 분리가 안 됨. 등가회로 모드(직렬/병렬) 선택에 따라 값이 달라짐</td></tr>
+          <tr><td>Potentiostat EIS</td><td>mHz~MHz 스윕 전체 스펙트럼</td><td>저주파 한 점에 수백~수천 초가 소요됨. 정상상태 유지가 전제</td></tr>
+          <tr><td>DCR (직류 저항)</td><td>ω → 0 극한의 전체 저항</td><td>계면 성분과 벌크 성분이 합쳐져 나와 분리 불가</td></tr>
+          <tr><td>오실로스코프 + 함수발생기</td><td>파형에서 직접 위상차 판독</td><td>분해능이 낮아 작은 위상차 판별이 어려움</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>진폭을 키우면 안 되는 이유</h3>
+    <p>
+      전기화학 계는 비선형이므로 진폭이 커지면 응답에 고조파가 섞이고, 측정된 Z가 특정 동작점의
+      미분 임피던스라는 전제가 깨짐. 그래서 통상 5~10 mV 진폭을 씀. 신호가 묻힐 정도로 잡음이 크면
+      진폭을 올리는 대신 적산 횟수를 늘리거나 대역을 좁히는 쪽을 택함.
+    </p>
+
+    <div id="lab-lin"></div>
+
+    <h3>로그 보간 — 규격 주파수에서의 값 산출</h3>
+    <p>
+      규격이 요구하는 주파수가 측정 격자에 없을 때는 인접한 두 점을 로그–로그 공간에서 보간함.
+      임피던스는 주파수에 대해 멱함수적으로 변하는 구간이 많아 선형 보간보다 오차가 작음.
+    </p>
+
+    <div class="eq">
+      log|Z(f)| = log|Z₁| + (log f − log f₁) · (log|Z₂| − log|Z₁|) / (log f₂ − log f₁)
+      <br><span class="cm">— f₁ &lt; f &lt; f₂ 인 인접 격자점 두 개를 사용함</span>
+    </div>
+
+    <div class="callout note">
+      <p><b>Kramers–Kronig 검증</b> — 선형·인과·안정·시불변 조건을 만족하는 계라면 실수부와 허수부가
+      서로를 결정함. 측정 스펙트럼이 이 관계를 크게 벗어나면 측정 도중 계가 변했다는 뜻이므로,
+      등가회로 피팅에 들어가기 전에 데이터 자체를 버려야 함.</p>
+    </div>
+  </div>
+</section>
+
+<div class="wrap">
+  <div class="pager">
+    <a href="corrosion.html"><span class="pg-lbl">이전</span>금속 부식과 내식성</a>
+    <a href="polymer.html" style="text-align:right"><span class="pg-lbl">다음</span>고분자와 하이드로젤</a>
+  </div>
+</div>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <p>Field 04 · 임피던스와 EIS · 모든 그림은 브라우저에서 직접 계산해 그림</p>
+  </div>
+</footer>
+
+<script src="../assets/js/site.js"></script>
+<script src="../assets/js/lab.js"></script>
+<script>
+(function(){
+"use strict";
+var $ = function(id){ return document.getElementById(id); };
+var TAU = Math.PI*2;
+
+function poly(pts){
+  var d="", i;
+  for(i=0;i<pts.length;i++){ d += (i?"L":"M") + pts[i][0].toFixed(1) + " " + pts[i][1].toFixed(1); }
+  return d;
+}
+function niceT(mx){
+  var raw = mx/5, p = Math.pow(10, Math.floor(Math.log10(raw))), n = raw/p;
+  var st = (n<1.5?1:n<3?2:n<7?5:10)*p, o=[], i=1;
+  while(i*st <= mx){ o.push(i*st); i++; }
+  return o;
+}
+
+/* ============ 01. impedance lab ============ */
+var R = 50, X = 50, V = 100;
+var OX = 70, OY = 175, K = 1.35;
+
+function planeGrid(){
+  var g = "", v;
+  for(v=25; v<=100; v+=25){
+    g += '<line x1="'+(OX+v*K)+'" y1="171" x2="'+(OX+v*K)+'" y2="179" stroke="var(--rule)"/>';
+    g += '<text class="tm" x="'+(OX+v*K)+'" y="193" text-anchor="middle">'+v+'</text>';
+  }
+  for(v=-100; v<=100; v+=50){
+    if(v===0) continue;
+    g += '<line x1="66" y1="'+(OY-v*K)+'" x2="74" y2="'+(OY-v*K)+'" stroke="var(--rule)"/>';
+    g += '<text class="tm" x="60" y="'+(OY-v*K+4)+'" text-anchor="end">'+v+'</text>';
+  }
+  $("pl-grid").innerHTML = g;
+}
+
+function drawLab1(){
+  var Z = Math.hypot(R,X), th = Math.atan2(X,R);
+  var ex = OX + R*K, ey = OY - X*K;
+
+  $("pl-r").setAttribute("x1",OX); $("pl-r").setAttribute("x2",ex);
+  $("pl-r").setAttribute("y1",OY); $("pl-r").setAttribute("y2",OY);
+  $("pl-x").setAttribute("x1",ex); $("pl-x").setAttribute("x2",ex);
+  $("pl-x").setAttribute("y1",OY); $("pl-x").setAttribute("y2",ey);
+  $("pl-z").setAttribute("x2",ex); $("pl-z").setAttribute("y2",ey);
+  $("pl-dot").setAttribute("cx",ex); $("pl-dot").setAttribute("cy",ey);
+
+  var r = 34, sw = th>0 ? 0 : 1;
+  $("pl-arc").setAttribute("d", Math.abs(X)<2 ? "" :
+    "M"+(OX+r)+" "+OY+"A"+r+" "+r+" 0 0 "+sw+" "+(OX+r*Math.cos(th)).toFixed(1)+" "+(OY-r*Math.sin(th)).toFixed(1));
+  $("pl-lt").setAttribute("x", OX+r+8);
+  $("pl-lt").setAttribute("y", OY - (X>0?12:-20));
+  $("pl-lt").textContent = Math.abs(X)<2 ? "" : "θ";
+  $("pl-lz").setAttribute("x", (ex + 13).toFixed(1));
+  $("pl-lz").setAttribute("y", (ey - 7).toFixed(1));
+  $("pl-lz").textContent = "|Z| = " + Z.toFixed(0) + " Ω";
+
+  var N = 220, i, t, x, pv=[], pi=[], pr=[], pp=[];
+  var AV = 90;
+  var Ip = V/Z;
+  var AI = Math.max(4, Math.min(112, 70*(50/Z)));
+  var AR = Math.max(4, Math.min(112, 70*(50/R)));
+  for(i=0;i<=N;i++){
+    t = i/N * 2*TAU; x = 40 + i/N*540;
+    pv.push([x, 128 - AV*Math.sin(t)]);
+    pi.push([x, 128 - AI*Math.sin(t-th)]);
+    pr.push([x, 128 - AR*Math.sin(t)]);
+  }
+  $("wv-v").setAttribute("d", poly(pv));
+  $("wv-i").setAttribute("d", poly(pi));
+  $("wv-ref").setAttribute("d", poly(pr));
+  var dx = th/(2*TAU)*540, deg = th*180/Math.PI;
+  $("wv-sh").setAttribute("x1",40); $("wv-sh").setAttribute("x2",(40+Math.abs(dx)).toFixed(1));
+  $("wv-lab").setAttribute("x", (40 + Math.abs(dx) + 12).toFixed(1));
+  $("wv-lab").textContent = Math.abs(deg)<1 ? "위상차 없음"
+    : (deg>0 ? "전류가 "+deg.toFixed(0)+"° 뒤짐 (lag)" : "전류가 "+(-deg).toFixed(0)+"° 앞섬 (lead)");
+
+  var half = 0.5*V*Ip, kk = 45/half;
+  for(i=0;i<=N;i++){
+    t = i/N * 2*TAU; x = 40 + i/N*540;
+    pp.push([x, 100 - kk*(V*Math.sin(t))*(Ip*Math.sin(t-th))]);
+  }
+  $("pw-line").setAttribute("d", poly(pp));
+  $("pw-fill").setAttribute("d", poly(pp)+"L580 100L40 100Z");
+  var ay = 100 - 45*Math.cos(th);
+  $("pw-avg").setAttribute("y1", ay.toFixed(1));
+  $("pw-avg").setAttribute("y2", ay.toFixed(1));
+  $("pw-lab").setAttribute("y", (ay - 7).toFixed(1));
+  $("pw-lab").textContent = "평균 = " + (0.5*Ip*Ip*R).toFixed(0) + " W";
+
+  $("oR").textContent = R + " Ω";
+  $("oX").textContent = (X>0?"+":"") + X + " Ω";
+  $("m-z").textContent = Z.toFixed(1) + " Ω";
+  $("m-t").textContent = (deg>0?"+":"") + deg.toFixed(0) + "°";
+  $("m-i").textContent = Ip.toFixed(2) + " A";
+  $("m-p").textContent = (0.5*Ip*Ip*R).toFixed(0) + " W";
+  $("m-f").textContent = Math.cos(th).toFixed(2);
+  $("lab1-state").textContent = "R " + R + " Ω · X " + (X>0?"+":"") + X + " Ω";
+}
+
+function setRX(r,x){
+  R = Math.max(5, Math.min(100, Math.round(r)));
+  X = Math.max(-100, Math.min(100, Math.round(x)));
+  $("sR").value = R; $("sX").value = X;
+  drawLab1();
+}
+$("sR").addEventListener("input", function(){ setRX(+this.value, X); });
+$("sX").addEventListener("input", function(){ setRX(R, +this.value); });
+Array.prototype.forEach.call(document.querySelectorAll("[data-p]"), function(b){
+  b.addEventListener("click", function(){
+    var p = b.getAttribute("data-p").split(",");
+    setRX(+p[0], +p[1]);
+  });
+});
+
+(function(){
+  var svg = $("plane"), dragging = false;
+  function toOhm(evt){
+    var r = svg.getBoundingClientRect();
+    var sx = 420/r.width, sy = 350/r.height;
+    var px = (evt.clientX - r.left)*sx, py = (evt.clientY - r.top)*sy;
+    setRX((px-OX)/K, (OY-py)/K);
+  }
+  svg.addEventListener("pointerdown", function(e){
+    dragging = true; svg.setPointerCapture(e.pointerId); toOhm(e); e.preventDefault();
+  });
+  svg.addEventListener("pointermove", function(e){ if(dragging) toOhm(e); });
+  svg.addEventListener("pointerup", function(e){ dragging = false; svg.releasePointerCapture(e.pointerId); });
+  svg.addEventListener("pointercancel", function(){ dragging = false; });
+})();
+
+planeGrid();
+drawLab1();
+document.addEventListener('themechange', function(){ planeGrid(); drawLab1(); });
+
+/* ============ 03. lag / lead ============ */
+(function(){
+  var cfg = [[50, 282, "ll-v1", "ll-i1",  Math.PI/3],
+             [380, 282, "ll-v2", "ll-i2", -Math.PI/3]];
+  cfg.forEach(function(c){
+    var N=180, pv=[], pi=[], i, t, x;
+    for(i=0;i<=N;i++){
+      t = i/N*2*TAU; x = c[0] + i/N*(c[1]-c[0]-20);
+      pv.push([x, 140 - 52*Math.sin(t)]);
+      pi.push([x, 140 - 36*Math.sin(t-c[4])]);
+    }
+    $(c[2]).setAttribute("d", poly(pv));
+    $(c[3]).setAttribute("d", poly(pi));
+  });
+})();
+
+/* ============ 05. Randles Nyquist + Bode ============ */
+var P = { Rs:20, Rct:150, Cdl:20, sg:30 }, FQ = 380;
+
+function Zrand(f, p){
+  var w = TAU*f, v = p.sg>0 ? p.sg/Math.sqrt(w) : 0;
+  var ar = p.Rct + v, ai = -v, d = ar*ar + ai*ai;
+  var yr = ar/d, yi = v/d + w*p.Cdl*1e-6;
+  var n = yr*yr + yi*yi;
+  return [p.Rs + yr/n, -yi/n];
+}
+function fmtHz(f){
+  if(f >= 1000) return (f/1000).toFixed(1) + " kHz";
+  if(f >= 1) return f.toFixed(1) + " Hz";
+  return (f*1000).toFixed(0) + " mHz";
+}
+
+function drawBode(){
+  var svg = $("bode");
+  while(svg.firstChild) svg.removeChild(svg.firstChild);
+  var W=680,H=300, L=64, Rr=56, T=22, B=46;
+  var pw = W-L-Rr, ph = H-T-B;
+  var NS='http://www.w3.org/2000/svg';
+  function e(t,a,txt){ var n=document.createElementNS(NS,t);
+    for(var k in a) n.setAttribute(k,a[k]);
+    if(txt!=null) n.appendChild(document.createTextNode(txt));
+    svg.appendChild(n); return n; }
+
+  var f1=-1, f2=5;  // decades
+  var mags=[], phs=[], i, f, z, mn=1e9, mx=-1e9;
+  for(i=0;i<=240;i++){
+    f = Math.pow(10, f1 + (f2-f1)*i/240);
+    z = Zrand(f,P);
+    var m = Math.log10(Math.hypot(z[0],z[1]));
+    var p = Math.atan2(z[1],z[0])*180/Math.PI;
+    mags.push([f1+(f2-f1)*i/240, m]); phs.push([f1+(f2-f1)*i/240, p]);
+    if(m<mn) mn=m; if(m>mx) mx=m;
+  }
+  mn=Math.floor(mn*2)/2-0.1; mx=Math.ceil(mx*2)/2+0.1;
+  var sx = d => L + (d-f1)/(f2-f1)*pw;
+  var sy1 = m => T + (1-(m-mn)/(mx-mn))*ph;
+  var sy2 = p => T + (1-(p+90)/90)*ph;
+
+  // grid
+  for(i=f1;i<=f2;i++){
+    e('line',{x1:sx(i),y1:T,x2:sx(i),y2:T+ph,stroke:'var(--rule-2)'});
+    e('text',{x:sx(i),y:T+ph+17,'text-anchor':'middle',class:'tm'}, '10'+String(i).replace('-','⁻').replace(/[0-9]/g,function(d){return '⁰¹²³⁴⁵⁶⁷⁸⁹'[+d];}));
+  }
+  var ms = Lab.niceTicks(mn,mx,4);
+  ms.forEach(function(m){
+    e('line',{x1:L,y1:sy1(m),x2:L+pw,y2:sy1(m),stroke:'var(--rule-2)'});
+    e('text',{x:L-8,y:sy1(m)+4,'text-anchor':'end',class:'tm'}, Math.pow(10,m)>=1000?(Math.pow(10,m)/1000).toFixed(1)+'k':Math.pow(10,m).toFixed(0));
+  });
+  [-90,-60,-30,0].forEach(function(p){
+    e('text',{x:L+pw+8,y:sy2(p)+4,class:'tm',fill:'var(--curr)'}, p+'°');
+  });
+  e('line',{x1:L,y1:T+ph,x2:L+pw,y2:T+ph,stroke:'var(--rule)'});
+  e('line',{x1:L,y1:T,x2:L,y2:T+ph,stroke:'var(--rule)'});
+  e('line',{x1:L+pw,y1:T,x2:L+pw,y2:T+ph,stroke:'var(--rule)'});
+
+  e('path',{d:poly(mags.map(function(q){return [sx(q[0]),sy1(q[1])];})),fill:'none',stroke:'var(--im)','stroke-width':2.4});
+  e('path',{d:poly(phs.map(function(q){return [sx(q[0]),sy2(q[1])];})),fill:'none',stroke:'var(--curr)','stroke-width':2,'stroke-dasharray':'5 3'});
+
+  var fnow = Math.pow(10, -1 + FQ/100);
+  e('line',{x1:sx(Math.log10(fnow)),y1:T,x2:sx(Math.log10(fnow)),y2:T+ph,stroke:'var(--ink-3)','stroke-dasharray':'3 3'});
+
+  e('text',{x:L+pw/2,y:H-8,'text-anchor':'middle',class:'ts'},'주파수 f (Hz)');
+  e('text',{x:14,y:T+ph/2,'text-anchor':'middle',class:'ts',transform:'rotate(-90 14 '+(T+ph/2)+')'},'|Z| (Ω)');
+  e('text',{x:L+8,y:T+14,class:'tm',fill:'var(--im)'},'|Z|');
+  e('text',{x:L+44,y:T+14,class:'tm',fill:'var(--curr)'},'위상 θ');
+}
+
+function drawLab2(){
+  var i, pts = [], mr = 0, mi = 0, z;
+  for(i=0;i<=200;i++){
+    z = Zrand(Math.pow(10, -1 + i/200*6), P);
+    pts.push(z);
+    if(z[0]>mr) mr = z[0];
+    if(-z[1]>mi) mi = -z[1];
+  }
+  var xm = mr*1.08, ym = Math.max(mi*1.25, 1);
+  var sc = Math.min(590/xm, 278/ym);
+
+  $("nq-curve").setAttribute("d", poly(pts.map(function(q){ return [70+q[0]*sc, 320+q[1]*sc]; })));
+
+  var g = "", tv, tx = niceT(xm), ty = niceT(ym);
+  for(i=0;i<tx.length;i++){
+    tv = 70 + tx[i]*sc;
+    g += '<line x1="'+tv.toFixed(1)+'" y1="320" x2="'+tv.toFixed(1)+'" y2="326" stroke="var(--rule)"/>';
+    g += '<text class="tm" x="'+tv.toFixed(1)+'" y="362" text-anchor="middle">'+(+tx[i].toFixed(0))+'</text>';
+  }
+  for(i=0;i<ty.length;i++){
+    tv = 320 - ty[i]*sc;
+    if(tv < 34) break;
+    g += '<line x1="64" y1="'+tv.toFixed(1)+'" x2="70" y2="'+tv.toFixed(1)+'" stroke="var(--rule)"/>';
+    g += '<text class="tm" x="58" y="'+(tv+4).toFixed(1)+'" text-anchor="end">'+(+ty[i].toFixed(0))+'</text>';
+  }
+  $("nq-ticks").innerHTML = g;
+
+  var topY = Math.max(0, Math.min(150, 320 - mi*sc - 56));
+  $("nyq").setAttribute("viewBox", "0 " + topY + " 680 " + (398 - topY));
+  $("nq-ay").setAttribute("y2", (topY + 14).toFixed(0));
+  $("nq-ylab").setAttribute("y", (topY + 24).toFixed(0));
+
+  var x1 = 70 + P.Rs*sc, x2 = 70 + (P.Rs+P.Rct)*sc;
+  $("nq-p1").setAttribute("cx", x1.toFixed(1));
+  $("nq-p2").setAttribute("cx", x2.toFixed(1));
+  $("nq-l1").setAttribute("x", x1.toFixed(1));
+  $("nq-l2").setAttribute("x", x2.toFixed(1));
+  $("nq-l2").textContent = (P.Rct*sc > 58) ? "Rs+Rct" : "";
+
+  var f = Math.pow(10, -1 + FQ/100), zz = Zrand(f, P);
+  var px = 70 + zz[0]*sc, py = 320 + zz[1]*sc;
+  $("nq-dot").setAttribute("cx", px.toFixed(1));
+  $("nq-dot").setAttribute("cy", py.toFixed(1));
+  $("nq-drop").setAttribute("x1", px.toFixed(1));
+  $("nq-drop").setAttribute("x2", px.toFixed(1));
+  $("nq-drop").setAttribute("y1", py.toFixed(1));
+  $("nq-drop").setAttribute("y2", 320);
+
+  var mag = Math.hypot(zz[0], zz[1]), ph = Math.atan2(zz[1], zz[0])*180/Math.PI;
+  var f0 = 1/(TAU*P.Rct*P.Cdl*1e-6), tau = P.Rct*P.Cdl*1e-6;
+
+  $("vRs").textContent = P.Rs + " Ω";
+  $("vRct").textContent = P.Rct + " Ω";
+  $("vCdl").textContent = P.Cdl + " µF";
+  $("vSg").textContent = P.sg;
+  $("vF").textContent = fmtHz(f);
+  $("n-z").textContent = mag.toFixed(1) + " Ω";
+  $("n-t").textContent = ph.toFixed(1) + "°";
+  $("n-f0").textContent = f0 >= 1000 ? (f0/1000).toFixed(1)+" kHz" : f0.toFixed(1)+" Hz";
+  $("n-tau").textContent = (tau*1000).toFixed(2) + " ms";
+
+  var dom, lab;
+  if(f > 12*f0){ dom = "rs"; lab = "용액 저항 Rs"; }
+  else if(f < f0/12 && P.sg > 4){ dom = "w"; lab = "확산 Warburg"; }
+  else { dom = "ct"; lab = "전하이동 Rct ∥ Cdl"; }
+  var hi = "var(--ink)", lo = "var(--rule)";
+  $("e-rs").setAttribute("stroke", dom==="rs"?hi:lo);
+  $("e-rs").setAttribute("stroke-width", dom==="rs"?2:1);
+  $("e-rct").setAttribute("stroke", dom==="ct"?hi:lo);
+  $("e-rct").setAttribute("stroke-width", dom==="ct"?2:1);
+  $("e-c1").setAttribute("opacity", dom==="ct"?1:.35);
+  $("e-c2").setAttribute("opacity", dom==="ct"?1:.35);
+  $("e-w").setAttribute("stroke", dom==="w"?hi:lo);
+  $("e-w").setAttribute("stroke-width", dom==="w"?2:1);
+  $("lab2-state").textContent = "현재 지배 요소 — " + lab;
+
+  drawBode();
+}
+
+[["aRs","Rs"],["aRct","Rct"],["aCdl","Cdl"],["aSg","sg"]].forEach(function(pair){
+  $(pair[0]).addEventListener("input", function(){ P[pair[1]] = +this.value; drawLab2(); });
+});
+$("aF").addEventListener("input", function(){ FQ = +this.value; drawLab2(); });
+drawLab2();
+document.addEventListener('themechange', drawLab2);
+
+/* ============ 09. deviations ============ */
+var DEV = [
+  { eq:"Z = Rs + Rct ∥ Cdl",
+    note:"가장 단순한 형태임. 하나의 매끈한 반원이 실수축 위에 정확히 앉음.",
+    f:function(f){ return Zrand(f, {Rs:20,Rct:180,Cdl:20,sg:0}); }, ref:false },
+  { eq:"Z = Rs + Rct ∥ CPE   (n ≈ 0.66)",
+    note:"Cdl을 CPE로 바꿔야 맞음. 중심이 실수축 아래로 내려가 반원이 납작해짐. 표면 거칠기나 시정수 분포 때문이며 n 값이 이상성의 척도가 됨. 점선이 이상 반원임.",
+    f:function(f){
+      var w = TAU*f, n = 0.66, Q = 6e-5, Rs = 20, Rct = 180;
+      var jr = Math.cos(n*Math.PI/2)*Math.pow(w,n), ji = Math.sin(n*Math.PI/2)*Math.pow(w,n);
+      var yr = Q*jr + 1/Rct, yi = Q*ji, d = yr*yr + yi*yi;
+      return [Rs + yr/d, -yi/d];
+    },
+    ref:function(f){ return Zrand(f, {Rs:20,Rct:180,Cdl:20,sg:0}); } },
+  { eq:"Z = Rs + (R₁ ∥ C₁) + (R₂ ∥ C₂)",
+    note:"리튬이온 배터리가 대표적임. 고주파 반원은 SEI 피막, 저주파 반원이 전하이동임. 두 시정수가 가까우면 겹쳐서 하나처럼 보이는데 이것이 피팅 비유일성 문제의 주된 원인임.",
+    f:function(f){
+      var w = TAU*f, out = [20,0], rc = [[60,3e-7],[150,1e-4]], i, R1, C1, den;
+      for(i=0;i<2;i++){
+        R1 = rc[i][0]; C1 = rc[i][1];
+        den = 1 + Math.pow(w*R1*C1,2);
+        out[0] += R1/den; out[1] += -w*R1*R1*C1/den;
+      }
+      return out;
+    }, ref:false },
+  { eq:"유한길이 확산 (bounded Warburg)",
+    note:"확산층 두께가 유한할 때(박막, 다공성 전극) 무한 확산 가정이 깨져서, 저주파에서 45° 직선이 꺾여 수직으로 서거나 반원으로 닫힘. Warburg 대신 유한길이 확산 요소를 씀.",
+    f:function(f){
+      var w = TAU*f, Rs = 20, Rct = 90, Cdl = 2e-5, Rd = 160, td = 3.0;
+      var s = Math.sqrt(w*td/2), cr = Math.cosh(s)*Math.cos(s), ci = Math.sinh(s)*Math.sin(s);
+      var sr = Math.sinh(s)*Math.cos(s), si = Math.cosh(s)*Math.sin(s);
+      var nr = cr, ni = ci, dr = sr, di = si, dd = dr*dr + di*di;
+      var tr = (nr*dr + ni*di)/dd, ti = (ni*dr - nr*di)/dd;
+      var zwr = Rd/(2*s)*(tr + ti), zwi = Rd/(2*s)*(ti - tr);
+      var ar = Rct + zwr, ai = zwi, d = ar*ar + ai*ai;
+      var yr = ar/d, yi = -ai/d + w*Cdl;
+      var n2 = yr*yr + yi*yi;
+      return [Rs + yr/n2, -yi/n2];
+    }, ref:false },
+  { eq:"Z = Rs + jωL + Rct ∥ Cdl",
+    note:"케이블과 집전체의 기생 인덕턴스임. 고주파에서 곡선이 실수축 아래로 내려감. 회로가 아니라 측정 장비의 특성이므로 물리로 해석하면 안 됨.",
+    f:function(f){
+      var w = TAU*f, Rs = 20, Rct = 160, Cdl = 2e-5, L = 3e-6;
+      var den = 1 + Math.pow(w*Rct*Cdl,2);
+      return [Rs + Rct/den, w*L - w*Rct*Rct*Cdl/den];
+    }, ref:false }
+];
+
+var devMode = 0;
+function drawDev(m){
+  devMode = m;
+  var cfg = DEV[m], i, pts = [], refs = [], z;
+  var lo = -1, hi = m===4 ? 6 : 5;
+  for(i=0;i<=220;i++){
+    z = cfg.f(Math.pow(10, lo + i/220*(hi-lo)));
+    pts.push(z);
+    if(cfg.ref) refs.push(cfg.ref(Math.pow(10, lo + i/220*(hi-lo))));
+  }
+  var all = pts.concat(refs);
+  var mr = 0, up = 1, dn = 0;
+  for(i=0;i<all.length;i++){
+    if(all[i][0] > mr) mr = all[i][0];
+    if(-all[i][1] > up) up = -all[i][1];
+    if(all[i][1] > dn) dn = all[i][1];
+  }
+  var xm = mr*1.08, ym = up*1.15, yl = dn*1.35;
+  var sc = Math.min(590/xm, 230/(ym+yl));
+  var base = 40 + ym*sc;
+
+  $("dv-ax").setAttribute("y1", base.toFixed(1));
+  $("dv-ax").setAttribute("y2", base.toFixed(1));
+  $("dv-ay").setAttribute("y1", (base + yl*sc + 8).toFixed(1));
+  $("dv-ay").setAttribute("y2", 34);
+  $("dv-curve").setAttribute("d", poly(pts.map(function(q){ return [70+q[0]*sc, base+q[1]*sc]; })));
+  $("dv-ref").setAttribute("d", cfg.ref ? poly(refs.map(function(q){ return [70+q[0]*sc, base+q[1]*sc]; })) : "");
+  $("dev").setAttribute("viewBox", "0 0 680 " + (base + yl*sc + 56).toFixed(0));
+  $("dev-eq").textContent = cfg.eq;
+  $("dev-note").textContent = cfg.note;
+}
+Array.prototype.forEach.call(document.querySelectorAll(".devbtn"), function(b){
+  b.addEventListener("click", function(){
+    Array.prototype.forEach.call(document.querySelectorAll(".devbtn"), function(o){
+      o.setAttribute("aria-pressed", o === b ? "true" : "false");
+    });
+    drawDev(+b.getAttribute("data-m"));
+  });
+});
+drawDev(0);
+document.addEventListener('themechange', function(){ drawDev(devMode); });
+})();
+
+/* ============ 08. CPE explorer ============ */
+Lab.make({
+  mount:'#lab-cpe',
+  title:'CPE 지수 n이 반원을 어떻게 누르는가',
+  badge:'CPE',
+  controls:[
+    {id:'n', label:'CPE 지수 n', min:0.5, max:1.0, step:0.01, value:0.8, fmt:v=>v.toFixed(2)},
+    {id:'Q', label:'CPE 계수 Q', min:1e-6, max:1e-3, value:6e-5, log:true, unit:'S·sⁿ', fmt:v=>Lab.sci(v,3)},
+    {id:'Rct', label:'전하이동 Rct', min:20, max:400, step:5, value:180, unit:'Ω', fmt:v=>v.toFixed(0)},
+    {id:'Rs', label:'용액 저항 Rs', min:5, max:60, step:1, value:20, unit:'Ω', fmt:v=>v.toFixed(0)}
+  ],
+  presets:[
+    {label:'이상 커패시터 n=1', set:{n:1.0}},
+    {label:'거친 표면 n=0.85', set:{n:0.85}},
+    {label:'다공성 n=0.65', set:{n:0.65}},
+    {label:'확산 극한 n=0.5', set:{n:0.5}}
+  ],
+  stats:[
+    {id:'depress', label:'중심 침하각', fmt:v=>v.toFixed(1), unit:'°'},
+    {id:'phase', label:'CPE 위상', fmt:v=>v.toFixed(1), unit:'°'},
+    {id:'ceff', label:'C_eff (Brug)', fmt:v=>Lab.eng(v,'F',2)},
+    {id:'fpk', label:'정점 주파수', fmt:v=>Lab.eng(v,'Hz',2)}
+  ],
+  plot:{width:640,height:400,xLabel:"Z′ (Ω)",yLabel:"−Z″ (Ω)",
+        autoX:true,autoY:true,yMinFixed:0,equalAspect:true},
+  legend:[{color:'--im',label:'CPE 모델'},{color:'--neutral',label:'이상 반원 (n=1)'}],
+  note:'n을 1에서 내리면 반원의 중심이 실수축 아래로 내려가면서 눌린 호가 됨. ' +
+       '침하각은 (1−n)·90°로 계산되며, 위상은 주파수와 무관하게 −n·90°에 고정됨.',
+  compute(v){
+    const {n, Q, Rct, Rs} = v;
+    const fs = Lab.logspace(1e-2, 1e6, 260);
+    const pts = fs.map(f=>{
+      const w = 2*Math.PI*f;
+      const jr = Math.cos(n*Math.PI/2)*Math.pow(w,n);
+      const ji = Math.sin(n*Math.PI/2)*Math.pow(w,n);
+      const yr = Q*jr + 1/Rct, yi = Q*ji, d = yr*yr+yi*yi;
+      return [Rs + yr/d, yi/d];
+    });
+    // ideal semicircle with same Rct, C chosen so peak freq matches
+    const tau = Math.pow(Q*Rct, 1/n);
+    const Cid = tau/Rct;
+    const ideal = fs.map(f=>{
+      const w = 2*Math.PI*f, den = 1+Math.pow(w*Rct*Cid,2);
+      return [Rs + Rct/den, w*Rct*Rct*Cid/den];
+    });
+    const fpk = 1/(2*Math.PI*tau);
+    const ceff = Math.pow(Q*Math.pow(1/Rs + 1/Rct, n-1), 1/n);
+    return {
+      series:[
+        {points:ideal, color:'--neutral', width:1.4, dash:'4 4'},
+        {points:pts, color:'--im', width:2.6}
+      ],
+      overlays:[
+        {type:'point', x:Rs, y:0, color:'--ink-3', label:'Rs'},
+        {type:'point', x:Rs+Rct, y:0, color:'--ink-3', label:'Rs+Rct'}
+      ],
+      stats:{depress:(1-n)*90, phase:-n*90, ceff:ceff, fpk:fpk}
+    };
+  }
+});
+
+/* ============ 10. 진폭 비선형성 ============ */
+Lab.make({
+  mount:'#lab-lin',
+  title:'진폭이 커지면 응답이 왜곡됨 — Butler–Volmer 국소 선형화',
+  badge:'LINEARITY',
+  controls:[
+    {id:'amp', label:'인가 진폭', min:1, max:200, step:1, value:10, unit:'mV', fmt:v=>v.toFixed(0)},
+    {id:'eta', label:'DC 과전압 η₀', min:-100, max:100, step:5, value:0, unit:'mV', fmt:v=>v.toFixed(0)},
+    {id:'alpha', label:'전달계수 α', min:0.2, max:0.8, step:0.05, value:0.5, fmt:v=>v.toFixed(2)}
+  ],
+  presets:[
+    {label:'표준 EIS 10 mV', set:{amp:10}},
+    {label:'경계 50 mV', set:{amp:50}},
+    {label:'과대 150 mV', set:{amp:150}}
+  ],
+  stats:[
+    {id:'thd', label:'2차 고조파 비', fmt:v=>(v*100).toFixed(2), unit:'%'},
+    {id:'rlin', label:'접선 저항 Rct', fmt:v=>Lab.eng(v,'Ω',2)},
+    {id:'rapp', label:'겉보기 저항', fmt:v=>Lab.eng(v,'Ω',2)},
+    {id:'err', label:'저항 오차', fmt:v=>v.toFixed(1), unit:'%'}
+  ],
+  plot:{width:640,height:340,xLabel:'과전압 η (mV)',yLabel:'전류밀도 i (임의단위)',autoX:false,autoY:true,
+        xMin:-220,xMax:220},
+  legend:[
+    {color:'--accent',label:'Butler–Volmer 실제 곡선'},
+    {color:'--purple',label:'동작점 접선 (선형 근사)'},
+    {color:'--green',label:'인가 진폭 구간'}
+  ],
+  note:'Butler–Volmer 식 i = i₀[exp(αFη/RT) − exp(−(1−α)Fη/RT)]을 그린 것임. ' +
+       'EIS는 동작점 접선의 기울기 역수를 Rct로 잡으므로, 진폭이 커져 곡선의 굽은 구간까지 훑으면 ' +
+       '실제 접선과 겉보기 값이 벌어짐.',
+  compute(v){
+    const F=96485, Rg=8.314, T=298.15, i0=1;
+    const a=v.alpha, k=F/(Rg*T)/1000;   // per mV
+    const bv = e => i0*(Math.exp(a*k*e) - Math.exp(-(1-a)*k*e));
+    const dbv = e => i0*k*(a*Math.exp(a*k*e) + (1-a)*Math.exp(-(1-a)*k*e));
+    const e0 = v.eta, A = v.amp;
+    const curve = Lab.linspace(-220,220,300).map(e=>[e, bv(e)]);
+    const slope = dbv(e0), i00 = bv(e0);
+    const tang = Lab.linspace(-220,220,2).map(e=>[e, i00 + slope*(e-e0)]);
+    // apparent resistance from peak-to-peak response over the applied window
+    const iHi = bv(e0+A), iLo = bv(e0-A);
+    const rApp = (2*A)/(iHi-iLo);
+    const rLin = 1/slope;
+    // second-harmonic content via simple 3-point estimate
+    const i2 = (iHi + iLo - 2*i00);
+    const i1 = (iHi - iLo);
+    const thd = Math.abs(i2)/Math.abs(i1||1e-9)/2;
+    const win = Lab.linspace(e0-A, e0+A, 40).map(e=>[e, bv(e)]);
+    return {
+      series:[
+        {points:curve, color:'--accent', width:2.2},
+        {points:tang, color:'--purple', width:1.6, dash:'5 4'},
+        {points:win, color:'--green', width:5, opacity:0.65}
+      ],
+      overlays:[
+        {type:'point', x:e0, y:i00, color:'--purple'},
+        {type:'vline', x:e0-A, color:'--green', dash:'2 3'},
+        {type:'vline', x:e0+A, color:'--green', dash:'2 3', label:'±'+A+' mV'}
+      ],
+      stats:{thd:thd, rlin:rLin, rapp:rApp, err:(rApp-rLin)/rLin*100}
+    };
+  }
+});
+</script>
+</body>
+</html>

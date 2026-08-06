@@ -1,0 +1,842 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>표면·계면 화학 — 수학·물리·화학 노트</title>
+<meta name="description" content="Young 식의 힘 평형에서 출발해 Owens–Wendt 2액법과 Neumann 상태방정식으로 표면 자유에너지를 산출하고, Dyne 액 판정과 소포제 원리까지 인터랙티브로 다룸.">
+<link rel="stylesheet" href="../assets/css/site.css">
+</head>
+<body>
+
+<div class="topbar">
+  <div class="wrap">
+    <a class="brand" href="../index.html">← 수학·물리·화학 노트</a>
+    <ul class="topnav">
+      <li><a href="#s1">Young 식</a></li>
+      <li><a href="#s2">성분 분해</a></li>
+      <li><a href="#s3">Owens–Wendt</a></li>
+      <li><a href="#s4">Neumann EoS</a></li>
+      <li><a href="#s5">Dyne 액</a></li>
+      <li><a href="#s6">Young–Dupré</a></li>
+      <li><a href="#s7">소포제</a></li>
+    </ul>
+    <button class="theme-btn" type="button">DARK</button>
+  </div>
+</div>
+
+<header class="mast">
+  <div class="wrap">
+    <p class="kicker">Field 06 · 화학 · 표면·계면 화학</p>
+    <h1>접촉각 하나로 <em>표면 자유에너지</em>를 읽는 경로</h1>
+    <p class="lede">
+      물방울이 퍼지느냐 뭉치느냐는 세 계면장력의 힘 평형이 결정함. 이 평형식에는 미지수가 두 개
+      들어 있어 접촉각만으로는 닫히지 않으므로, 두 번째 액체를 쓰거나 상태방정식을 붙여 풀어야 함.
+      이 페이지는 그 두 경로를 각각 수치해로 구현해 같은 표면을 두 방식으로 읽어 봄.
+    </p>
+    <div class="eq" style="border-left-color:var(--accent)">
+      γ<sub>sv</sub> = γ<sub>sl</sub> + γ<sub>lv</sub>·cos θ &nbsp;&nbsp;<span class="cm">— 삼상 접촉선에서의 수평 방향 힘 평형</span>
+    </div>
+  </div>
+</header>
+
+<main>
+
+<!-- ================= 01 ================= -->
+<section id="s1">
+  <div class="wrap">
+    <p class="eyebrow"><span class="num">01</span><span>γ_sv = γ_sl + γ_lv cos θ</span></p>
+    <h2>접촉각은 세 계면장력이 만드는 평형각</h2>
+
+    <p>
+      고체 위에 놓인 액적의 가장자리에는 고체–기체, 고체–액체, 액체–기체 세 계면이 한 선에서 만남.
+      이 선을 삼상 접촉선이라 부르며, 각 계면장력은 자기 계면을 줄이는 방향으로 접촉선을 잡아당김.
+      세 힘의 수평 성분이 서로 상쇄되는 지점에서 접촉선이 멈추고, 그때 액체–기체 계면이 고체면과
+      이루는 각이 접촉각 θ임.
+    </p>
+
+    <div class="eq">
+      γ<sub>sv</sub> = γ<sub>sl</sub> + γ<sub>lv</sub>·cos θ<br>
+      <span class="cm">— γ_sv는 접촉선을 액체 바깥으로, γ_sl과 γ_lv의 수평 성분은 액체 안쪽으로 당김</span>
+    </div>
+
+    <ul class="sym">
+      <li><b>γ_sv</b><span>고체 표면 자유에너지 [dyne/cm]</span></li>
+      <li><b>γ_sl</b><span>고체–액체 계면 에너지 [dyne/cm]</span></li>
+      <li><b>γ_lv</b><span>액체 표면장력 [dyne/cm]. 탈이온수 20 °C 기준 72.8</span></li>
+      <li><b>θ</b><span>접촉각 [°]. 계산에는 라디안으로 환산해 씀</span></li>
+    </ul>
+
+    <p>
+      측정으로 얻는 값은 θ와 γ_lv 두 개뿐인데 식에 남는 미지수는 γ_sv와 γ_sl 두 개임. 방정식은
+      하나이므로 이대로는 풀리지 않으며, 이 미결정 구조가 뒤에 나오는 2액법과 상태방정식이 필요한
+      이유가 됨. 아래 실험대에서는 γ_sv를 Neumann 상태방정식으로 먼저 확정한 뒤 γ_sl을 역산해
+      세 벡터를 함께 그림.
+    </p>
+
+    <div id="lab-drop"></div>
+
+    <p>
+      θ를 키우면 γ_lv 화살표가 위로 서면서 수평 성분 γ_lv·cos θ가 줄고, 90°를 넘으면 이 성분이
+      부호를 바꿔 γ_sl 쪽이 아니라 γ_sv 쪽으로 합쳐짐. 액적 형상도 함께 바뀌는데, 부피를 4 μL로
+      고정했으므로 θ가 작을수록 넓고 얇게, 클수록 좁고 높게 퍼짐.
+    </p>
+
+    <h3 style="font-size:17px;margin-top:34px">Sessile Drop 측정 조건</h3>
+
+    <p>
+      접촉각은 측정 조건이 바뀌면 값도 함께 움직이므로, 조건을 고정하지 않은 수치는 다른 회차와
+      비교할 수 없음. 하이드로젤은 팽윤과 흡수로 θ가 시간에 따라 급감하기 때문에 정적 접촉각이
+      아니라 안착 직후의 초기 접촉각 θ₀만 유효함.
+    </p>
+
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>항목</th><th>조건</th><th>근거</th></tr></thead>
+        <tbody>
+          <tr><td>액체</td><td>탈이온수 γ_lv = 72.8 dyne/cm (20 °C)</td><td>표면장력 기준값</td></tr>
+          <tr><td>드롭 부피</td><td>4 μL (허용 3~5 μL)</td><td>구형 반경 약 0.98 mm로 물의 모세관 길이 κ⁻¹ ≈ 2.7 mm보다 작아 중력 왜곡을 무시함</td></tr>
+          <tr><td>니들 간격</td><td>니들 끝–시료 표면 1~2 mm</td><td>낙하 충격과 재부착을 함께 억제함</td></tr>
+          <tr><td>판독 시점</td><td>안착 후 1~3 초 이내 θ₀</td><td>팽윤·흡수 전의 초기값만 유효함</td></tr>
+          <tr><td>측정 지점</td><td>시료당 서로 다른 3 지점, 좌·우 θ 평균</td><td>표면 불균질에 따른 산포를 흡수함</td></tr>
+          <tr><td>환경</td><td>23 ± 2 °C, RH 40~60 %</td><td>증발 속도와 표면장력의 온도 의존성을 통제함</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p>
+      드롭 부피 조건은 구형 가정이 성립하는 범위에서 나온 값임. 액적이 커지면 중력이 형상을
+      납작하게 눌러 옆모습이 구관에서 벗어나고, 접선을 잡아 각을 재는 계산 자체가 틀어짐.
+      아래 계산기로 부피에 따른 구형 반경과 모세관 길이 대비 비율을 확인할 수 있음.
+    </p>
+
+    <div id="lab-vol"></div>
+
+    <div class="callout note">
+      <p><b>흡수능과 접촉각</b> — 아크릴계 가교 하이드로젤은 물·글리세롤·전해질 수용액을 품은
+      수계 조성이므로, 친수성 판정을 출발 단량체 계열이 아니라 가교 후 최종 젤의 흡수·팽윤
+      거동으로 해야 함. 흡수능 시험은 1X MEM 등 생리학적 매질에 37 °C·24시간 담근 뒤 초기 중량과
+      최종 중량의 차이를 부피로 환산해 Absorption Capacity(mL)로 보고함.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ================= 02 ================= -->
+<section id="s2">
+  <div class="wrap">
+    <p class="eyebrow"><span class="num">02</span><span>γ_sv = γ_s^d + γ_s^p</span></p>
+    <h2>표면 자유에너지의 성분 분해</h2>
+
+    <p>
+      표면 자유에너지를 한 숫자로만 보고하면 같은 값이 서로 다른 표면에서 나올 수 있음.
+      분자 사이에 작용하는 힘이 런던 분산력과 극성 상호작용으로 나뉘므로, 표면에너지도 두 성분의
+      합으로 나눠 쓰는 편이 표면의 성격을 더 좁혀 줌.
+    </p>
+
+    <div class="eq">
+      γ<sub>sv</sub> = γ<sub>s</sub><sup>d</sup> + γ<sub>s</sub><sup>p</sup> &nbsp;&nbsp;<span class="cm">— 고체</span><br>
+      γ<sub>lv</sub> = γ<sub>l</sub><sup>d</sup> + γ<sub>l</sub><sup>p</sup> &nbsp;&nbsp;&nbsp;<span class="cm">— 액체</span>
+    </div>
+
+    <p>
+      계면 에너지 γ_sl은 두 상의 성분끼리 짝을 지어 기하평균으로 결합한다고 놓음. 이 결합 규칙을
+      Young 식에 대입하면 접촉각과 두 성분을 직접 잇는 관계가 나오고, 그것이 다음 절의
+      Owens–Wendt 식임.
+    </p>
+
+    <div class="eq">
+      γ<sub>sl</sub> = γ<sub>sv</sub> + γ<sub>lv</sub> − 2√(γ<sub>s</sub><sup>d</sup>γ<sub>l</sub><sup>d</sup>) − 2√(γ<sub>s</sub><sup>p</sup>γ<sub>l</sub><sup>p</sup>)<br>
+      <span class="cm">— 분산 성분끼리, 극성 성분끼리 기하평균으로 결합함</span>
+    </div>
+
+    <ul class="sym">
+      <li><b>γ_s^d</b><span>고체의 분산 성분 [dyne/cm]</span></li>
+      <li><b>γ_s^p</b><span>고체의 극성 성분 [dyne/cm]</span></li>
+      <li><b>γ_l^d</b><span>액체의 분산 성분 [dyne/cm]</span></li>
+      <li><b>γ_l^p</b><span>액체의 극성 성분 [dyne/cm]</span></li>
+    </ul>
+
+    <p>
+      성분을 분해하려면 성분 구성이 서로 다른 시험액이 두 종 이상 필요함. 물은 극성 성분이 51.0으로
+      전체의 70 %를 차지하고, 다이아이오도메탄은 극성 성분이 0이어서 분산 성분만 남음. 두 액체를
+      짝지으면 미지수 두 개에 방정식 두 개가 되어 계가 닫힘.
+    </p>
+
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>액체</th><th>γ_lv</th><th>γ<sup>d</sup></th><th>γ<sup>p</sup></th><th>성격</th></tr></thead>
+        <tbody>
+          <tr><td>물</td><td>72.8</td><td>21.8</td><td>51.0</td><td>극성 우세</td></tr>
+          <tr><td>다이아이오도메탄(DIM)</td><td>50.8</td><td>50.8</td><td>0.0</td><td>순수 분산</td></tr>
+          <tr><td>에틸렌글리콜</td><td>48.0</td><td>29.0</td><td>19.0</td><td>중간</td></tr>
+        </tbody>
+      </table>
+      <p class="hint" style="padding:0 16px 14px">시험액 표면장력 상수 [dyne/cm].</p>
+    </div>
+  </div>
+</section>
+
+<!-- ================= 03 ================= -->
+<section id="s3">
+  <div class="wrap">
+    <p class="eyebrow"><span class="num">03</span><span>2√(γ_s^d γ_l^d) + 2√(γ_s^p γ_l^p)</span></p>
+    <h2>Owens–Wendt 2액법</h2>
+
+    <p>
+      앞 절의 결합 규칙을 Young 식에 넣고 γ_sl을 소거하면 접촉각과 네 성분만 남는 식이 나옴.
+      액체 쪽 두 성분은 표에서 가져오는 상수이므로, 미지수는 고체의 γ_s^d와 γ_s^p 두 개임.
+    </p>
+
+    <div class="eq">
+      γ<sub>lv</sub>(1 + cos θ) = 2√(γ<sub>s</sub><sup>d</sup>γ<sub>l</sub><sup>d</sup>) + 2√(γ<sub>s</sub><sup>p</sup>γ<sub>l</sub><sup>p</sup>)
+    </div>
+
+    <p>
+      양변을 2√γ_l^d로 나누면 √γ_s^d와 √γ_s^p에 대한 1차식이 됨. 시험액마다 좌변 값 하나와
+      x 좌표 하나가 대응되므로, 액체 두 종의 점을 찍고 그 두 점을 지나는 직선을 그으면 기울기가
+      √γ_s^p, 절편이 √γ_s^d가 됨.
+    </p>
+
+    <div class="eq">
+      <b>y</b> = (1 + cos θ)·γ<sub>lv</sub> / (2√γ<sub>l</sub><sup>d</sup>) &nbsp;&nbsp;<span class="cm">— 세로축</span><br>
+      <b>x</b> = √(γ<sub>l</sub><sup>p</sup> / γ<sub>l</sub><sup>d</sup>) &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="cm">— 가로축</span><br>
+      y = √γ<sub>s</sub><sup>p</sup>·x + √γ<sub>s</sub><sup>d</sup> &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="cm">— 기울기가 극성, 절편이 분산</span>
+    </div>
+
+    <p>
+      DIM은 γ_l^p가 0이라 x = 0에 놓이므로 절편을 곧바로 읽어 γ_s^d를 먼저 확정할 수 있음.
+      그다음 물의 점 하나를 더 쓰면 기울기가 정해져 γ_s^p가 나옴. 두 액체 조합에서는 직선을
+      회귀할 필요 없이 두 점만으로 계가 닫힘.
+    </p>
+
+    <div id="lab-ow"></div>
+
+    <p>
+      극성 비율 γ_s^p / γ_sv는 표면의 친수성이 어디서 오는지 구분해 줌. 하이드로젤처럼 해리된
+      −COO⁻·−SO₃⁻ 사이트를 표면에 내놓는 재료는 이 비율이 크게 나오고, 같은 γ_sv라도 분산 성분이
+      대부분인 표면과는 젖음 거동이 갈림.
+    </p>
+  </div>
+</section>
+
+<!-- ================= 04 ================= -->
+<section id="s4">
+  <div class="wrap">
+    <p class="eyebrow"><span class="num">04</span><span>cos θ = −1 + 2√(γ_sv/γ_lv)·e^(−β(γ_lv−γ_sv)²)</span></p>
+    <h2>Neumann 상태방정식과 이분법 수치해</h2>
+
+    <p>
+      시험액을 한 종만 쓸 수 있는 상황에서는 방정식 하나에 미지수 두 개가 그대로 남음.
+      Neumann 상태방정식은 γ_sl이 γ_sv와 γ_lv만의 함수라는 가정을 도입해 미지수를 하나로 줄이고,
+      그 결과 접촉각 하나에서 γ_sv를 직접 얻는 닫힘식을 만듦.
+    </p>
+
+    <div class="eq">
+      cos θ = −1 + 2√(γ<sub>sv</sub>/γ<sub>lv</sub>) · exp[ −β(γ<sub>lv</sub> − γ<sub>sv</sub>)² ]<br>
+      <span class="cm">— β = 1.057×10⁻⁴ (dyne/cm)⁻², 팩의 대응표를 산출한 값</span>
+    </div>
+
+    <ul class="sym">
+      <li><b>γ_sv</b><span>구하려는 고체 표면 자유에너지 [dyne/cm]</span></li>
+      <li><b>γ_lv</b><span>시험액 표면장력 [dyne/cm]</span></li>
+      <li><b>β</b><span>경험 상수 [(dyne/cm)⁻²]. 지수항의 감쇠 폭을 정함</span></li>
+      <li><b>θ</b><span>측정 접촉각 [°]</span></li>
+    </ul>
+
+    <p>
+      우변은 γ_sv에 대해 닫힌 형태로 뒤집히지 않으므로 수치해가 필요함. γ_sv = γ_lv를 넣으면
+      우변이 +1이 되어 θ = 0°에 대응하고, γ_sv → 0이면 −1로 내려가 θ = 180°에 대응하므로,
+      구간 (0, γ_lv]에서 우변이 −1과 +1 사이를 단조롭게 훑음. 부호가 한 번만 바뀌는 구조이므로
+      이분법으로 안전하게 수렴시킬 수 있음.
+    </p>
+
+    <div class="eq">
+      f(γ<sub>sv</sub>) = −1 + 2√(γ<sub>sv</sub>/γ<sub>lv</sub>)·exp[−β(γ<sub>lv</sub>−γ<sub>sv</sub>)²] − cos θ<br>
+      <span class="cm">— f(0⁺) &lt; 0, f(γ_lv) &gt; 0 이므로 구간을 절반씩 접어 근을 좁힘</span>
+    </div>
+
+    <div id="lab-neumann"></div>
+
+    <p>
+      아래 대응표는 γ_lv = 72.8, β = 1.057×10⁻⁴에서 위 이분법으로 미리 풀어 둔 값임. 위젯의
+      프리셋으로 같은 조건을 부르면 곡선이 이 표의 점들을 그대로 통과함.
+    </p>
+
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>θ</th><th>10°</th><th>20°</th><th>30°</th><th>50°</th><th>70°</th><th>90°</th><th>110°</th></tr></thead>
+        <tbody>
+          <tr><td>γ_sv</td><td>71.7</td><td>68.7</td><td>64.3</td><td>53.3</td><td>40.7</td><td>27.9</td><td>15.7</td></tr>
+        </tbody>
+      </table>
+      <p class="hint" style="padding:0 16px 14px">접촉각 θ ↔ γ_sv 대응 [dyne/cm].</p>
+    </div>
+
+    <p>
+      Zisman 분류에서 γ_sv &gt; 50 dyne/cm 구간이 강친수성 표면에 해당함. 표를 보면 θ가 50°만
+      되어도 53.3으로 이 경계를 넘고, 30° 안쪽으로 들어오면 64.3 이상이 되어 물의 표면장력 72.8에
+      근접한 고표면에너지 영역으로 읽힘.
+    </p>
+  </div>
+</section>
+
+<!-- ================= 05 ================= -->
+<section id="s5">
+  <div class="wrap">
+    <p class="eyebrow"><span class="num">05</span><span>ASTM D2578</span></p>
+    <h2>Dyne 액 판정과 적용 한계</h2>
+
+    <p>
+      현장에서는 접촉각 장비 대신 표면장력을 알고 있는 시험액 계열을 순서대로 발라 판정하는 방법을
+      씀. 액을 칠한 뒤 2초 동안 필름이 끊기지 않고 유지되면 그 액의 표면장력까지는 표면이 견딘다고
+      보고, 필름이 오므라들어 구슬로 뭉치면 표면장력이 표면 에너지를 넘었다고 읽음. 필름이 유지되는
+      가장 높은 액의 값이 그 표면의 습윤장력이 됨.
+    </p>
+
+    <div id="lab-dyne"></div>
+
+    <div class="callout">
+      <p><b>ASTM D2578 절차 요약</b> — 시료 표면을 오염 없이 준비하고, 예상 값 부근의 액부터
+      면봉으로 얇게 칠함. 2초 동안 액막이 끊기지 않으면 한 단계 높은 액으로, 끊기면 한 단계 낮은
+      액으로 옮겨 경계를 좁힘. 상용 세트는 상한 72 dyne/cm, 액 간격 2 dyne/cm로 구성됨.</p>
+    </div>
+
+    <p>
+      이 방법은 하이드로젤에는 적용되지 않음. 사유가 네 가지로 갈리며, 어느 하나만으로도 판정이
+      성립하지 않음.
+    </p>
+
+    <div class="cards">
+      <div class="card">
+        <h5><span class="tag">1</span> 자유수 혼합</h5>
+        <p>표면의 자유수가 Dyne 용액과 즉시 혼합·희석되어, 판정 대상이 표면이 아니라 희석된 용액이 됨.</p>
+      </div>
+      <div class="card">
+        <h5><span class="tag">2</span> 표면 상태 변화</h5>
+        <p>팽윤·흡수로 표면 상태가 계속 변해 2초 판정이 전제하는 정지 상태가 무너짐.</p>
+      </div>
+      <div class="card">
+        <h5><span class="tag">3</span> 구슬화·흡수 혼동</h5>
+        <p>액막이 오므라든 것인지 젤 안으로 흡수된 것인지 눈으로 가르기 어려워 오판 위험이 있음.</p>
+      </div>
+      <div class="card">
+        <h5><span class="tag">4</span> 분해능 부족</h5>
+        <p>상한 72 dyne/cm·간격 2 dyne/cm 구성으로는 68~71 영역에서 값을 갈라내지 못함.</p>
+      </div>
+    </div>
+
+    <p>
+      대체법은 적합도 순으로 세 가지임. 수중에서 기포를 띄워 재는 방식이 표면의 수화 상태를 그대로
+      유지하므로 가장 앞에 오고, 다음이 앞 절의 2액법, 마지막이 단일 액체 초기값과 상태방정식의
+      조합임.
+    </p>
+
+    <ul class="notes">
+      <li><b>Captive Bubble</b><span>수중 기포 접촉각. 시료가 물속에 잠긴 상태에서 재므로 팽윤·건조에 따른 변화를 겪지 않음</span></li>
+      <li><b>Sessile Drop 2액체법</b><span>물 + 다이아이오도메탄으로 Owens–Wendt 식을 풀어 분산·극성 성분까지 분해함</span></li>
+      <li><b>Sessile Drop 단일 액체</b><span>초기 접촉각 θ₀에 Neumann 상태방정식을 붙여 γ_sv를 얻음</span></li>
+    </ul>
+  </div>
+</section>
+
+<!-- ================= 06 ================= -->
+<section id="s6">
+  <div class="wrap">
+    <p class="eyebrow"><span class="num">06</span><span>W_sl = γ_lv(1 + cos θ)</span></p>
+    <h2>젖음과 점착을 잇는 Young–Dupré 관계</h2>
+
+    <p>
+      고체와 액체를 떼어 놓으면 계면 하나가 사라지고 자유 표면 두 개가 생김. 이때 드는 단위 면적당
+      일이 접착일 W_sl이며, Dupré 정의에 Young 식을 대입하면 접촉각과 액체 표면장력만으로 표현됨.
+      측정하기 까다로운 γ_sv와 γ_sl이 소거되므로, 접촉각 하나만 있으면 바로 계산할 수 있음.
+    </p>
+
+    <div class="eq">
+      W<sub>sl</sub> = γ<sub>sv</sub> + γ<sub>lv</sub> − γ<sub>sl</sub> &nbsp;&nbsp;<span class="cm">— Dupré 정의</span><br>
+      W<sub>sl</sub> = γ<sub>lv</sub>(1 + cos θ) &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="cm">— Young 식 대입 후</span>
+    </div>
+
+    <ul class="sym">
+      <li><b>W_sl</b><span>고체–액체 접착일 [erg/cm² = mJ/m²]</span></li>
+      <li><b>θ</b><span>접촉각 [°]. θ = 0에서 W_sl = 2γ_lv로 최대</span></li>
+      <li><b>γ_lv</b><span>액체 표면장력 [dyne/cm]</span></li>
+    </ul>
+
+    <p>
+      θ = 0°이면 W_sl = 2γ_lv로 액체를 스스로 쪼개는 응집일과 같아지고, θ = 180°이면 0이 되어
+      계면이 아예 붙어 있지 않은 상태가 됨. 물을 기준으로 하면 W_sl은 0에서 145.6 erg/cm² 사이를
+      움직이며, 앞 절의 실험대에서 θ를 조작하면 이 값이 함께 바뀌는 것을 볼 수 있음.
+    </p>
+
+    <p>
+      젖음은 점착의 상한을 정할 뿐 점착력 자체를 정하지는 않음. W_sl은 계면을 떼는 데 드는 열역학적
+      최소 일이고, 실제 박리에서 계측되는 값에는 젤의 점탄성 소산이 훨씬 큰 몫으로 더해짐. 그래서
+      접촉각이 낮은 조성이 반드시 높은 박리력을 내지는 않으며, 두 값은 나란히 보되 한쪽으로 다른
+      쪽을 대체하지 않음.
+    </p>
+
+    <div class="callout ok">
+      <p><b>흡수성 재료의 시험 설계</b> — 흡수성이 큰 재료에 ISO 10993-12의 기본 추출비
+      120 cm² : 20 mL를 그대로 적용하면 추출 용매가 시료에 흡수돼 남지 않음. 흡수량을 반영해
+      용매량을 상향한 추출비로 조정해야 생물학적 안전성 시험의 전제가 성립함.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ================= 07 ================= -->
+<section id="s7">
+  <div class="wrap">
+    <p class="eyebrow"><span class="num">07</span><span>시메티콘 에멀젼</span></p>
+    <h2>소포제가 기포를 깨는 원리</h2>
+
+    <p>
+      기포가 유지되려면 기포를 감싼 액막이 국부적으로 늘어났을 때 그 지점의 표면장력이 올라가
+      막을 되돌리는 복원 작용이 있어야 함. 소포제는 액보다 표면장력이 낮은 물질을 액막 표면에
+      퍼뜨려 이 복원 경로를 끊음. 퍼진 지점의 표면장력이 주변보다 낮아지면서 막이 얇은 쪽으로
+      계속 끌려가 결국 뚫림.
+    </p>
+
+    <p>
+      의료기기용 조성에는 실리콘계(시메티콘) 수성 에멀젼을 씀. 선정 단계에서 ISO 10993 생물학적
+      안전성과 USP Class VI 적합 여부를 함께 확인하며, 투입은 희석해서 하되 모든 원재료를 혼합한
+      뒤 마지막에 넣는 순서가 권장됨.
+    </p>
+
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>공정 구간</th><th>기포 발생 정도</th><th>원인</th></tr></thead>
+        <tbody>
+          <tr><td>점증제 투입</td><td>미세기포</td><td>고점도 액에 교반 전단이 걸리며 공기가 말려 들어감</td></tr>
+          <tr><td>중화제 투입</td><td>증가</td><td>중화 반응이 진행되며 기포가 늘어남</td></tr>
+          <tr><td>분말 단량체 투입 직후</td><td>최대</td><td>분말이 빠르게 용해되며 공기를 포집하고, 직후 점도가 올라 포집된 기포가 빠져나가지 못함</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p>
+      발생 지점이 분말 투입 구간에 몰려 있으므로, 소포제 투입량을 늘리기 전에 분말 투입 속도와
+      투입 시점의 점도를 먼저 조정하는 편이 부담을 줄임. 점도가 낮은 시점에 나눠 투입하면 포집된
+      기포가 부상해 빠져나갈 시간이 생기고, 그만큼 소포제에 기대는 몫이 작아짐.
+    </p>
+
+    <p class="hint">
+      기포 제어는 다음 분야의 도공 공정과 이어짐. 잔류 기포는 경화 후 젤 내부에 공동으로 남아
+      면저항과 점착력의 산포를 함께 키움.
+    </p>
+  </div>
+</section>
+
+<div class="wrap">
+  <div class="pager">
+    <a href="polymer.html"><span class="pg-lbl">이전</span>고분자와 하이드로젤</a>
+    <a href="rheology.html" style="text-align:right"><span class="pg-lbl">다음</span>레올로지와 도공 공정</a>
+  </div>
+</div>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <p>Field 06 · 표면·계면 화학</p>
+  </div>
+</footer>
+
+<script src="../assets/js/site.js"></script>
+<script src="../assets/js/lab.js"></script>
+<script>
+/* ===================== 공통 — Neumann EoS 이분법 해 ===================== */
+function neumannGsv(thDeg, glv, beta){
+  const c = Math.cos(thDeg * Math.PI / 180);
+  const f = g => -1 + 2 * Math.sqrt(g / glv) * Math.exp(-beta * Math.pow(glv - g, 2)) - c;
+  let lo = 1e-6, hi = glv;
+  if (f(lo) > 0) return lo;
+  if (f(hi) < 0) return hi;
+  for (let i = 0; i < 120; i++) {
+    const m = 0.5 * (lo + hi);
+    if (f(m) < 0) lo = m; else hi = m;
+  }
+  return 0.5 * (lo + hi);
+}
+const BETA_PACK = 1.057e-4;
+
+/* ===================== 01. 물방울 형상 시뮬레이터 ===================== */
+(function(){
+  function arrow(x, y, dx, dy, color, label, side){
+    const L = Math.hypot(dx, dy);
+    if (L < 1) return '';
+    const ux = dx / L, uy = dy / L;
+    const hx = x + dx, hy = y + dy;
+    const bx = hx - ux * 9, by = hy - uy * 9;
+    const px = -uy * 4.5, py = ux * 4.5;
+    const head = (bx + px).toFixed(1) + ',' + (by + py).toFixed(1) + ' ' +
+                 (bx - px).toFixed(1) + ',' + (by - py).toFixed(1) + ' ' +
+                 hx.toFixed(1) + ',' + hy.toFixed(1);
+    const lx = hx + ux * 8;
+    const ly = side === 'up' ? hy - 8 : hy - 10;
+    return '<line x1="' + x.toFixed(1) + '" y1="' + y.toFixed(1) + '" x2="' + bx.toFixed(1) +
+           '" y2="' + by.toFixed(1) + '" stroke="' + color + '" stroke-width="2.6"/>' +
+           '<polygon points="' + head + '" fill="' + color + '"/>' +
+           '<text class="tm" x="' + lx.toFixed(1) + '" y="' + ly.toFixed(1) +
+           '" fill="' + color + '" text-anchor="middle">' + label + '</text>';
+  }
+
+  Lab.make({
+    mount:'#lab-drop',
+    title:'물방울 형상과 삼상 접촉점의 힘 평형',
+    badge:'YOUNG',
+    plot:false,
+    custom:true,
+    controls:[
+      {id:'th', label:'접촉각 θ', min:5, max:150, step:1, value:60, unit:'°', fmt:v=>v.toFixed(0)},
+      {id:'glv', label:'액체 표면장력 γ_lv', min:40, max:75, step:0.1, value:72.8, unit:'dyne/cm', fmt:v=>v.toFixed(1)}
+    ],
+    presets:[
+      {label:'강친수 30°', set:{th:30, glv:72.8}},
+      {label:'중립 90°', set:{th:90, glv:72.8}},
+      {label:'소수 120°', set:{th:120, glv:72.8}}
+    ],
+    stats:[
+      {id:'cos', label:'cos θ', fmt:v=>v.toFixed(4)},
+      {id:'cls', label:'젖음성 분류'},
+      {id:'gsv', label:'γ_sv (Neumann)', unit:'dyne/cm', fmt:v=>v.toFixed(1)},
+      {id:'gsl', label:'γ_sl 역산', unit:'dyne/cm', fmt:v=>v.toFixed(1)},
+      {id:'wa', label:'부착일 W_a', unit:'erg/cm²', fmt:v=>v.toFixed(1)}
+    ],
+    note:'액적 부피는 4 μL로 고정했고, 옆모습은 구관(spherical cap) 단면으로 그림. ' +
+         'γ_sv는 Neumann 상태방정식(β = 1.057×10⁻⁴ (dyne/cm)⁻²)을 이분법으로 풀어 얻고, ' +
+         'γ_sl은 Young 식 γ_sl = γ_sv − γ_lv·cos θ로 역산함. ' +
+         '화살표 길이는 계면장력 크기에 비례함.',
+    compute(v){
+      const th = v.th, rad = th * Math.PI / 180;
+      const ct = Math.cos(rad), st = Math.sin(rad);
+      const glv = v.glv;
+      const gsv = neumannGsv(th, glv, BETA_PACK);
+      const gsl = gsv - glv * ct;
+      const Wa = glv * (1 + ct);
+      const cls = th < 10 ? '완전 젖음' : th < 90 ? '친수 (젖음)' : th < 150 ? '소수' : '초소수';
+
+      /* --- 구관 기하: V = (π/3)R³(2 − 3cosθ + cos³θ) --- */
+      const V = 4;                                  // μL = mm³
+      const shape = 2 - 3 * ct + ct * ct * ct;
+      const R = Math.pow(3 * V / (Math.PI * Math.max(shape, 1e-9)), 1 / 3);   // mm
+      const a = R * st;                             // 접촉 반경 mm
+      const hgt = R * (1 - ct);                     // 액적 높이 mm
+
+      const W = 700, H = 360, X0 = 350, Y0 = 288;
+      const s = Math.min(150 / a, 190 / hgt);       // px/mm
+      const ap = a * s, hp = hgt * s, Rp = R * s;
+      const cy = Y0 + R * ct * s;                   // 구 중심 y (화면 좌표)
+      const large = th > 90 ? 1 : 0;
+
+      const drop = '<path d="M ' + (X0 - ap).toFixed(1) + ' ' + Y0 +
+        ' A ' + Rp.toFixed(1) + ' ' + Rp.toFixed(1) + ' 0 ' + large + ' 1 ' +
+        (X0 + ap).toFixed(1) + ' ' + Y0 + ' Z" fill="var(--accent)" fill-opacity="0.16" ' +
+        'stroke="var(--accent)" stroke-width="2"/>';
+
+      /* 접촉점(오른쪽)에서의 세 벡터 */
+      const cx = X0 + ap, cyy = Y0;
+      const AS = 1.5;                               // px per dyne/cm
+      const vLV = arrow(cx, cyy, -ct * glv * AS, -st * glv * AS, 'var(--accent)', 'γ_lv', 'up');
+      const vSV = arrow(cx, cyy, gsv * AS, 0, 'var(--green)', 'γ_sv', 'dn');
+      const vSL = arrow(cx, cyy, -gsl * AS, 0, 'var(--purple)', 'γ_sl', 'dn');
+      /* 수평 성분 대조 막대: 왼쪽 γ_sl + γ_lv·cos θ = 오른쪽 γ_sv */
+      const by0 = cyy + 40;
+      const e1 = cx - gsl * AS;
+      const e2 = e1 - glv * ct * AS;
+      const bar = (x1, x2, y, col, w) => '<line x1="' + x1.toFixed(1) + '" y1="' + y + '" x2="' +
+        x2.toFixed(1) + '" y2="' + y + '" stroke="' + col + '" stroke-width="' + w + '"/>';
+      const tick = (x, y) => '<line x1="' + x.toFixed(1) + '" y1="' + (y - 6) + '" x2="' +
+        x.toFixed(1) + '" y2="' + (y + 6) + '" stroke="var(--ink-3)" stroke-width="1"/>';
+      const vPROJ =
+        bar(cx, e1, by0, 'var(--purple)', 6) + bar(e1, e2, by0, 'var(--accent)', 6) +
+        bar(cx, cx + gsv * AS, by0, 'var(--green)', 6) +
+        tick(cx, by0) + tick(e2, by0) + tick(cx + gsv * AS, by0) +
+        '<text class="tm" x="' + (cx - 8).toFixed(1) + '" y="' + (by0 + 20) +
+        '" fill="var(--ink-2)" text-anchor="end">γ_sl + γ_lv·cos θ = ' + (gsl + glv * ct).toFixed(1) + '</text>' +
+        '<text class="tm" x="' + (cx + 8).toFixed(1) + '" y="' + (by0 + 20) +
+        '" fill="var(--green)" text-anchor="start">γ_sv = ' + gsv.toFixed(1) + '</text>';
+
+      /* 접촉각 호 */
+      const arcR = 46;
+      const ax2 = cx - arcR * ct, ay2 = cyy - arcR * st;
+      const arc = '<path d="M ' + (cx - arcR) + ' ' + cyy + ' A ' + arcR + ' ' + arcR +
+        ' 0 0 1 ' + ax2.toFixed(1) + ' ' + ay2.toFixed(1) + '" fill="none" ' +
+        'stroke="var(--ink-3)" stroke-width="1.2"/>' +
+        '<text class="tm" x="' + (cx - (arcR + 20) * Math.cos(rad / 2)).toFixed(1) +
+        '" y="' + (cyy - (arcR + 20) * Math.sin(rad / 2) + 4).toFixed(1) +
+        '" fill="var(--ink-3)" text-anchor="middle">θ = ' + th.toFixed(0) + '°</text>';
+
+      /* 접선 */
+      const tan = '<line x1="' + (cx - ct * 130).toFixed(1) + '" y1="' + (cyy - st * 130).toFixed(1) +
+        '" x2="' + (cx + ct * 26).toFixed(1) + '" y2="' + (cyy + st * 26).toFixed(1) +
+        '" stroke="var(--ink-3)" stroke-width="1" stroke-dasharray="3 4"/>';
+
+      /* 고체 표면 + 해칭 */
+      let hatch = '';
+      for (let x = 20; x < W - 10; x += 14)
+        hatch += '<line x1="' + x + '" y1="' + (Y0 + 2) + '" x2="' + (x - 10) + '" y2="' +
+          (Y0 + 14) + '" stroke="var(--rule)" stroke-width="1"/>';
+      const solid = '<line x1="16" y1="' + Y0 + '" x2="' + (W - 16) + '" y2="' + Y0 +
+        '" stroke="var(--ink)" stroke-width="2"/>' + hatch +
+        '<text class="ts" x="24" y="' + (Y0 + 30) + '" fill="var(--ink-3)">고체 표면</text>' +
+        '<text class="ts" x="24" y="30" fill="var(--ink-3)">기체</text>';
+
+      const dims = '<text class="tm" x="' + X0 + '" y="' + (Y0 - Math.max(hp, 22) - 12).toFixed(1) +
+        '" fill="var(--ink-3)" text-anchor="middle">높이 ' + hgt.toFixed(2) + ' mm</text>' +
+        '<text class="tm" x="' + X0 + '" y="' + (Y0 - 10) +
+        '" fill="var(--ink-3)" text-anchor="middle">접촉 지름 ' + (2 * a).toFixed(2) + ' mm</text>';
+
+      const svg = '<svg viewBox="0 0 ' + W + ' ' + H + '" role="img" aria-label="접촉각에 따른 액적 단면과 삼상 접촉점의 계면장력 벡터">' +
+        solid + drop + dims + tan + arc + vPROJ + vLV + vSV + vSL + '</svg>';
+
+      return {
+        custom: svg,
+        stats:{ cos: ct, cls: cls, gsv: gsv, gsl: gsl, wa: Wa }
+      };
+    }
+  });
+})();
+
+/* ===================== 01b. 액적 부피 — 중력 왜곡 판정 ===================== */
+Lab.make({
+  mount:'#lab-vol',
+  title:'드롭 부피와 중력 왜곡 판정',
+  badge:'DROP SIZE',
+  controls:[
+    {id:'V', label:'드롭 부피 V', min:1, max:10, step:0.1, value:4, unit:'μL', fmt:v=>v.toFixed(1)},
+    {id:'lim', label:'판정 임계 r/κ⁻¹', min:0.2, max:0.8, step:0.01, value:0.4, unit:'', fmt:v=>v.toFixed(2)}
+  ],
+  stats:[
+    {id:'r', label:'구형 반경 r', unit:'mm', fmt:v=>v.toFixed(3)},
+    {id:'ratio', label:'r / κ⁻¹', fmt:v=>v.toFixed(3)},
+    {id:'vmax', label:'임계 부피', unit:'μL', fmt:v=>v.toFixed(2)},
+    {id:'verdict', label:'판정'}
+  ],
+  plot:{width:620, height:330, xLabel:'드롭 부피 V (μL)', yLabel:'구형 반경 r (mm)',
+        autoX:false, autoY:false, xMin:0, xMax:10, yMin:0, yMax:1.6},
+  legend:[{color:'--accent', label:'r = (3V/4π)^(1/3)'}, {color:'--green', label:'임계 반경'}],
+  note:'물의 모세관 길이 κ⁻¹ = 2.7 mm를 기준으로 삼음. 부피 V(μL)는 그대로 mm³와 같으므로 ' +
+       'r = (3V/4π)^(1/3)로 환산함. 4 μL 표준 드롭은 r = 0.985 mm로 비율 0.365가 나옴.',
+  plotNote:'초록 수평선이 판정 임계 반경, 세로 점선이 그 반경에 해당하는 부피임.',
+  compute(v){
+    const K = 2.7;
+    const r = V => Math.pow(3 * V / (4 * Math.PI), 1 / 3);
+    const rc = v.lim * K;
+    const Vmax = 4 * Math.PI * Math.pow(rc, 3) / 3;
+    const pts = [];
+    for (let i = 0; i <= 200; i++){ const V = 0.05 + 9.95 * i / 200; pts.push([V, r(V)]); }
+    const cur = r(v.V), ratio = cur / K;
+    return {
+      series:[{points:pts, color:'--accent', width:2.4}],
+      overlays:[
+        {type:'band', x1:0, x2:Vmax, color:'--green', opacity:0.10, label:'구형 가정 유효'},
+        {type:'hline', y:rc, color:'--green', label:'r = ' + rc.toFixed(2) + ' mm'},
+        {type:'vline', x:Vmax, color:'--green', dash:'3 4'},
+        {type:'point', x:v.V, y:cur, color:'--accent', label:v.V.toFixed(1) + ' μL'}
+      ],
+      stats:{
+        r: cur, ratio: ratio, vmax: Vmax,
+        verdict: ratio < v.lim ? '중력 왜곡 무시 가능' : '구형 가정 이탈'
+      }
+    };
+  }
+});
+
+/* ===================== 03. Owens–Wendt 2액법 ===================== */
+Lab.make({
+  mount:'#lab-ow',
+  title:'Owens–Wendt 2액법 — 선형화 도표에서 성분 읽기',
+  badge:'TWO-LIQUID',
+  controls:[
+    {id:'tw', label:'물 접촉각 θ_w', min:5, max:120, step:1, value:60, unit:'°', fmt:v=>v.toFixed(0)},
+    {id:'td', label:'DIM 접촉각 θ_d', min:5, max:120, step:1, value:40, unit:'°', fmt:v=>v.toFixed(0)}
+  ],
+  presets:[
+    {label:'친수 표면', set:{tw:25, td:38}},
+    {label:'중간 표면', set:{tw:60, td:40}},
+    {label:'소수 표면', set:{tw:100, td:55}}
+  ],
+  stats:[
+    {id:'gd', label:'분산 γ_s^d', unit:'dyne/cm', fmt:v=>v.toFixed(2)},
+    {id:'gp', label:'극성 γ_s^p', unit:'dyne/cm', fmt:v=>v.toFixed(2)},
+    {id:'gsv', label:'총합 γ_sv', unit:'dyne/cm', fmt:v=>v.toFixed(2)},
+    {id:'pol', label:'극성 비율', unit:'%', fmt:v=>v.toFixed(1)},
+    {id:'zis', label:'Zisman 판정'}
+  ],
+  plot:{width:620, height:380, xLabel:'x = √(γ_l^p / γ_l^d)', yLabel:'y = (1+cos θ)γ_lv / (2√γ_l^d)',
+        autoX:false, autoY:false, xMin:-0.1, xMax:2.0, yMin:0, yMax:20},
+  legend:[
+    {color:'--accent', label:'회귀 직선 (기울기 √γ_s^p, 절편 √γ_s^d)'},
+    {color:'--green', label:'DIM (x = 0)'},
+    {color:'--purple', label:'물'}
+  ],
+  note:'액체 상수는 물 γ_lv 72.8 / γ^d 21.8 / γ^p 51.0, DIM γ_lv 50.8 / γ^d 50.8 / γ^p 0.0 dyne/cm로 고정함. ' +
+       'DIM은 x = 0에 놓이므로 절편이 곧 √γ_s^d가 되고, 물의 점이 기울기를 정해 √γ_s^p를 냄. ' +
+       '두 점만으로 계가 닫히므로 회귀가 필요 없음.',
+  plotNote:'직선이 세로축을 자르는 높이의 제곱이 분산 성분, 기울기의 제곱이 극성 성분임.',
+  compute(v){
+    const WATER = {lv:72.8, d:21.8, p:51.0};
+    const DIM   = {lv:50.8, d:50.8, p:0.0};
+    const yv = (th, L) => (1 + Math.cos(th * Math.PI / 180)) * L.lv / (2 * Math.sqrt(L.d));
+    const xv = L => Math.sqrt(L.p / L.d);
+    const xw = xv(WATER), yw = yv(v.tw, WATER);
+    const xd = xv(DIM),   yd = yv(v.td, DIM);
+    const rootD = Math.max(yd, 0);
+    const rootP = Math.max((yw - yd) / (xw - xd), 0);
+    const gd = rootD * rootD, gp = rootP * rootP;
+    const gsv = gd + gp;
+    const line = [[-0.1, rootD + rootP * (-0.1)], [2.0, rootD + rootP * 2.0]];
+    return {
+      series:[
+        {points:line, color:'--accent', width:2.2},
+        {points:[[xd, yd]], color:'--green', type:'scatter', r:6},
+        {points:[[xw, yw]], color:'--purple', type:'scatter', r:6}
+      ],
+      overlays:[
+        {type:'point', x:xd, y:yd, color:'--green', label:'DIM θ=' + v.td.toFixed(0) + '°'},
+        {type:'point', x:xw, y:yw, color:'--purple', label:'물 θ=' + v.tw.toFixed(0) + '°'},
+        {type:'hline', y:rootD, color:'--ink-3', label:'√γ_s^d = ' + rootD.toFixed(2)},
+        {type:'text', x:0.9, y:rootD + rootP * 0.9 + 1.4, color:'--accent',
+         text:'기울기 √γ_s^p = ' + rootP.toFixed(2), anchor:'middle'}
+      ],
+      plot:{yMax: Math.max(20, yw * 1.25)},
+      stats:{
+        gd: gd, gp: gp, gsv: gsv,
+        pol: gsv > 0 ? 100 * gp / gsv : 0,
+        zis: gsv > 50 ? '강친수성 (γ_sv > 50)' : '일반 표면'
+      }
+    };
+  }
+});
+
+/* ===================== 04. Neumann EoS ===================== */
+Lab.make({
+  mount:'#lab-neumann',
+  title:'Neumann 상태방정식 — 이분법으로 γ_sv 풀기',
+  badge:'BISECTION',
+  controls:[
+    {id:'tw', label:'물 접촉각 θ', min:5, max:120, step:1, value:60, unit:'°', fmt:v=>v.toFixed(0)},
+    {id:'beta', label:'경험 상수 β', min:0.0001, max:0.0002, step:0.0000001, value:0.0001247,
+     unit:'(dyne/cm)⁻²', fmt:v=>Lab.sci(v,4)}
+  ],
+  presets:[
+    {label:'팩 대응표 조건 (β = 1.057×10⁻⁴)', set:{tw:50, beta:0.0001057}},
+    {label:'강친수 30°', set:{tw:30, beta:0.0001057}},
+    {label:'중립 90°', set:{tw:90, beta:0.0001057}}
+  ],
+  stats:[
+    {id:'gsv', label:'γ_sv', unit:'dyne/cm', fmt:v=>v.toFixed(2)},
+    {id:'wsl', label:'접착일 W_sl', unit:'erg/cm²', fmt:v=>v.toFixed(1)},
+    {id:'ow', label:'Owens–Wendt γ_sv', unit:'dyne/cm', fmt:v=>v.toFixed(2)},
+    {id:'dif', label:'두 방식 차이', unit:'dyne/cm', fmt:v=>v.toFixed(2)},
+    {id:'res', label:'잔차 |f(γ_sv)|', fmt:v=>Lab.sci(v,2)}
+  ],
+  plot:{width:620, height:380, xLabel:'접촉각 θ (°)', yLabel:'γ_sv (dyne/cm)',
+        autoX:false, autoY:false, xMin:0, xMax:150, yMin:0, yMax:80},
+  legend:[
+    {color:'--accent', label:'현재 β의 θ–γ_sv 곡선'},
+    {color:'--neutral', label:'β = 1.057×10⁻⁴ 곡선'},
+    {color:'--green', label:'팩 대응표 값'}
+  ],
+  note:'γ_lv = 72.8 dyne/cm로 고정함. 구간 (0, γ_lv]에서 f(γ_sv) = 우변 − cos θ의 부호가 한 번만 ' +
+       '바뀌므로 이분법 120회로 근을 좁힘. 비교용 Owens–Wendt 값은 같은 θ에 DIM 접촉각 40°를 짝지어 ' +
+       '계산한 결과임.',
+  plotNote:'초록 점은 팩의 θ ↔ γ_sv 대응표(β = 1.057×10⁻⁴)이며, 회색 곡선이 그 점들을 지남.',
+  compute(v){
+    const glv = 72.8;
+    const gsv = neumannGsv(v.tw, glv, v.beta);
+    const ct = Math.cos(v.tw * Math.PI / 180);
+    const wsl = glv * (1 + ct);
+    const res = Math.abs(-1 + 2 * Math.sqrt(gsv / glv) * Math.exp(-v.beta * Math.pow(glv - gsv, 2)) - ct);
+
+    /* 비교용 Owens–Wendt (θ_DIM = 40° 고정) */
+    const WATER = {lv:72.8, d:21.8, p:51.0}, DIM = {lv:50.8, d:50.8, p:0.0};
+    const yv = (th, L) => (1 + Math.cos(th * Math.PI / 180)) * L.lv / (2 * Math.sqrt(L.d));
+    const rootD = Math.max(yv(40, DIM), 0);
+    const rootP = Math.max((yv(v.tw, WATER) - rootD) / Math.sqrt(WATER.p / WATER.d), 0);
+    const owG = rootD * rootD + rootP * rootP;
+
+    const curve = [], ref = [];
+    for (let i = 0; i <= 150; i++){
+      const th = 1 + 149 * i / 150;
+      curve.push([th, neumannGsv(th, glv, v.beta)]);
+      ref.push([th, neumannGsv(th, glv, BETA_PACK)]);
+    }
+    const TABLE = [[10,71.7],[20,68.7],[30,64.3],[50,53.3],[70,40.7],[90,27.9],[110,15.7]];
+    return {
+      series:[
+        {points:ref, color:'--neutral', width:1.6, dash:'5 4'},
+        {points:curve, color:'--accent', width:2.4},
+        {points:TABLE, color:'--green', type:'scatter', r:4}
+      ],
+      overlays:[
+        {type:'hline', y:50, color:'--purple', label:'Zisman 강친수 경계 50'},
+        {type:'point', x:v.tw, y:gsv, color:'--accent', label:gsv.toFixed(1)}
+      ],
+      stats:{ gsv: gsv, wsl: wsl, ow: owG, dif: gsv - owG, res: res }
+    };
+  }
+});
+
+/* ===================== 05. Dyne 액 판정 ===================== */
+Lab.make({
+  mount:'#lab-dyne',
+  title:'Dyne 액 계열 판정 — 어느 액까지 퍼지는가',
+  badge:'ASTM D2578',
+  controls:[
+    {id:'g', label:'시료 γ_sv', min:25, max:75, step:0.5, value:46, unit:'dyne/cm', fmt:v=>v.toFixed(1)},
+    {id:'lo', label:'세트 하한', min:30, max:44, step:2, value:30, unit:'dyne/cm', fmt:v=>v.toFixed(0)},
+    {id:'hi', label:'세트 상한', min:46, max:72, step:2, value:60, unit:'dyne/cm', fmt:v=>v.toFixed(0)}
+  ],
+  presets:[
+    {label:'미처리 PE (31)', set:{g:31, lo:30, hi:60}},
+    {label:'코로나 처리면 (44)', set:{g:44, lo:30, hi:60}},
+    {label:'하이드로젤 영역 (68)', set:{g:68, lo:30, hi:72}}
+  ],
+  stats:[
+    {id:'wt', label:'습윤장력 판정값', unit:'dyne/cm', fmt:v=>v},
+    {id:'ns', label:'퍼지는 액 수', unit:'종', fmt:v=>v.toFixed(0)},
+    {id:'nb', label:'오므라드는 액 수', unit:'종', fmt:v=>v.toFixed(0)},
+    {id:'edge', label:'경계 구간'},
+    {id:'note', label:'세트 적용성'}
+  ],
+  plot:{width:620, height:360, xLabel:'Dyne 액 표면장력 (dyne/cm)', yLabel:'액 표면장력 (dyne/cm)',
+        autoX:false, autoY:false, xMin:26, xMax:74, yMin:0, yMax:80},
+  legend:[
+    {color:'--green', label:'2초 유지 — 퍼짐'},
+    {color:'--accent', label:'2초 내 수축 — 구슬화'},
+    {color:'--purple', label:'시료 γ_sv'}
+  ],
+  note:'판정 규칙은 액의 표면장력이 시료 표면 자유에너지 이하이면 액막이 유지되고, 넘어서면 ' +
+       '오므라든다는 것임. 상용 세트는 액 간격 2 dyne/cm, 상한 72 dyne/cm로 구성되므로 ' +
+       '68~71 구간에서는 분해능이 두 단계밖에 남지 않음.',
+  plotNote:'막대 높이가 각 액의 표면장력이고, 보라색 수평선이 시료의 γ_sv임. 선 아래 막대가 퍼지는 액임.',
+  compute(v){
+    const lo = Math.min(v.lo, v.hi - 2), hi = Math.max(v.hi, v.lo + 2);
+    const spread = [], bead = [];
+    let wt = null, first = null;
+    for (let g = lo; g <= hi + 1e-9; g += 2){
+      if (g <= v.g){ spread.push([g, g]); wt = g; }
+      else { bead.push([g, g]); if (first === null) first = g; }
+    }
+    return {
+      series:[
+        {points:spread, color:'--green', type:'bars', barWidth:11, opacity:0.8},
+        {points:bead,   color:'--accent', type:'bars', barWidth:11, opacity:0.8}
+      ],
+      overlays:[
+        {type:'hline', y:v.g, color:'--purple', label:'γ_sv = ' + v.g.toFixed(1)},
+        {type:'band', x1:67, x2:73, color:'--amber', opacity:0.12, label:'분해능 부족 구간'}
+      ],
+      stats:{
+        wt: wt === null ? '세트 하한 미만' : wt.toFixed(0),
+        ns: spread.length, nb: bead.length,
+        edge: (wt === null ? '—' : wt.toFixed(0)) + ' / ' + (first === null ? '—' : first.toFixed(0)) + ' dyne/cm',
+        note: v.g > 66 ? '68~71 분해능 부족' : (wt === null || first === null ? '세트 범위 밖' : '세트 범위 내')
+      }
+    };
+  }
+});
+</script>
+</body>
+</html>

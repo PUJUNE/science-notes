@@ -1,0 +1,1417 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>점착·박리와 기계물성 — 수학·물리·화학 노트</title>
+<meta name="description" content="박리각이 측정력을 바꾸는 에너지 균형에서 출발해 시험 모드·통제 조건·요철 평균·로드셀 선정·인장 곡선·마찰계수·데이터 처리까지 UTM 계측 전 과정을 인터랙티브로 다룸.">
+<link rel="stylesheet" href="../assets/css/site.css">
+</head>
+<body>
+
+<div class="topbar">
+  <div class="wrap">
+    <a class="brand" href="../index.html">← 수학·물리·화학 노트</a>
+    <ul class="topnav">
+      <li><a href="#s1">박리 역학</a></li>
+      <li><a href="#s2">시험 모드</a></li>
+      <li><a href="#s3">시험 조건</a></li>
+      <li><a href="#s4">곡선 해석</a></li>
+      <li><a href="#s5">적용 규격</a></li>
+      <li><a href="#s6">UTM·로드셀</a></li>
+      <li><a href="#s7">인장·천공</a></li>
+      <li><a href="#s8">마찰력</a></li>
+      <li><a href="#s9">데이터·밸리데이션</a></li>
+    </ul>
+    <button class="theme-btn" type="button">DARK</button>
+  </div>
+</div>
+
+<header class="mast">
+  <div class="wrap">
+    <p class="kicker">Field 08 · 물리 · 점착·박리와 기계물성</p>
+    <h1>박리력은 물성이 아니라 <em>각도와 조건이 함께 정한 값</em></h1>
+    <p class="lede">
+      같은 하이드로젤을 같은 UTM으로 당겨도 박리각·크로스헤드 속도·부착 시간·데이터 추출 구간이
+      달라지면 값이 통째로 이동함. 이 페이지는 박리선에서 성립하는 에너지 균형에서 출발해 시험 모드,
+      통제 파라미터, 요철 평균, 로드셀 선정, 인장·천공, 마찰계수, 데이터 처리까지 계측 경로 전체를
+      수식과 위젯으로 따라감.
+    </p>
+    <div class="eq" style="border-left-color:var(--accent)">
+      G = (F/b)(1 − cos θ) + F²/(2b²Et) &nbsp;&nbsp;<span class="cm">— 같은 접착 일 G에서도 각도 θ가 측정력 F를 바꿈</span>
+    </div>
+  </div>
+</header>
+
+<main>
+
+<!-- ================= 01 ================= -->
+<section id="s1">
+  <div class="wrap">
+    <p class="eyebrow"><span class="num">01</span><span>P = F / w</span></p>
+    <h2>박리선의 에너지 균형과 박리각</h2>
+
+    <p>
+      하이드로젤 전극의 점착력은 만능재료시험기(UTM)로 측정하며, 시험 모드는 하중극성과 하중방향
+      두 축으로 결정됨. 점착력처럼 시편을 떼어내는 시험은 인장으로 두어 크로스헤드가 위로 당기게
+      하고, 천공·압입처럼 눌러 뚫는 시험은 압축으로 두어 아래로 내리누르게 함. 장비 동작 자체는
+      상승·하강 두 가지뿐이므로 시험 종류를 가르는 실체는 사용하는 지그와 결과 해석 방식이며,
+      같은 크로스헤드 운동에서도 힘이 시편에 전달되는 경로가 지그 형상에 따라 달라짐.
+    </p>
+
+    <p>
+      박리 강도는 단위 폭당 힘으로 정의해 N/cm 계열로 표기하므로 시편 폭이 곧 환산의 분모가 됨.
+      재단 폭이 흔들리거나 가장자리가 들뜨면 유효 폭이 명목 폭과 어긋나 강도 값이 통째로 이동하며,
+      이 오차는 곡선 형상만 봐서는 드러나지 않음.
+    </p>
+
+    <div class="eq">
+      P = F / w &nbsp;&nbsp;<span class="cm">— 박리 강도(단위 폭당 힘)</span>
+    </div>
+
+    <ul class="sym">
+      <li><b>P</b><span>박리 강도 [N/cm]</span></li>
+      <li><b>F</b><span>측정 하중 [N]</span></li>
+      <li><b>w</b><span>시편 폭 [cm]</span></li>
+    </ul>
+
+    <p>
+      박리선에서 크로스헤드가 한 일은 두 갈래로 나뉨. 한쪽은 계면을 새로 만드는 데 쓰여 접착 일
+      G로 남고, 다른 한쪽은 늘어난 시편에 탄성 변형 에너지로 저장됨. 시편을 강체로 두면 두 번째
+      항이 사라져 G = (F/b)(1 − cos θ)만 남고, 이때 90°에서 잰 힘과 180°에서 잰 힘은 정확히
+      2배 차이가 남 — cos 90° = 0이고 cos 180° = −1이므로 괄호 안의 값이 1과 2로 갈리기 때문임.
+      시편이 늘어나는 재료라면 F²/(2b²Et) 항이 더해져 같은 G에서도 필요한 힘이 줄어듦.
+    </p>
+
+    <div class="eq">
+      G = (F/b)(1 − cos θ) &nbsp;<span class="cm">— 강체 근사</span><br>
+      G = (F/b)(1 − cos θ) + <b>F²/(2b²Et)</b> &nbsp;<span class="cm">— 신율(탄성 변형) 보정항 포함</span>
+    </div>
+
+    <ul class="sym">
+      <li><b>G</b><span>접착 일(단위 면적당 에너지) [J/m²]</span></li>
+      <li><b>F</b><span>박리력 [N]</span></li>
+      <li><b>b</b><span>시편 폭 [m]</span></li>
+      <li><b>θ</b><span>박리각 [°]</span></li>
+      <li><b>E</b><span>시편의 인장 탄성계수 [Pa]</span></li>
+      <li><b>t</b><span>시편 두께 [m]</span></li>
+    </ul>
+
+    <div id="lab-kendall"></div>
+
+    <div class="callout">
+      <p><b>읽는 법</b> — 슬라이더로 박리각을 옮기면 접착 일 G는 유지한 채 측정될 힘 F만 바뀜.
+      곡선이 90°와 180°에서 갖는 두 값의 비가 곧 두 시험 모드로 얻은 수치를 직접 비교할 수 없는
+      이유이며, 신율 보정을 켜면 같은 G에서도 필요한 힘이 낮아지는 방향으로 곡선이 내려앉음.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ================= 02 ================= -->
+<section id="s2">
+  <div class="wrap">
+    <p class="eyebrow"><span class="num">02</span><span>90° / 180° / T-peel / 루프 택</span></p>
+    <h2>시험 모드 비교</h2>
+
+    <p>
+      90° 박리는 시편을 강판 등 피착재에 부착한 뒤 박리각을 90°로 유지한 채 당기는 방식이고,
+      180° 박리는 부착한 시편을 되접어 당기는 방식이어서 상부만 경량 지그로 교체하고 하부 판은
+      그대로 활용할 수 있음. 두 방식은 박리선에 걸리는 굽힘 성분이 달라 같은 시료에서도 서로 다른
+      값을 내므로, 박리각을 고정하지 않으면 결과를 비교할 수 없음.
+    </p>
+
+    <p>
+      90° 박리 지그의 와이어는 반복 사용하면 늘어나 박리각을 흐트러뜨리므로 주기적으로 교체하고
+      여분을 확보해야 하며, 박리 중 상부 슬라이드가 끝까지 올라가면 봉에 하중이 걸려 로드셀에 간접
+      영향을 주므로 슬라이드 위치를 관리함. T-peel은 피착재 자체가 유연해 양쪽을 함께 잡아당기는
+      구성이라 박리각이 지그가 아니라 두 시편의 강성 균형으로 정해지고, 루프 택은 고리 모양으로
+      만든 시편을 피착면에 짧게 눌렀다 떼는 구성이라 압착 하중 대신 접촉 시간이 조건을 지배함.
+    </p>
+
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>시험 모드</th><th>지그 구성</th><th>박리각을 정하는 요소</th><th>해석상 유의점</th></tr></thead>
+        <tbody>
+          <tr><td>90° 박리</td><td>하부 판 + 90° 유지 와이어·슬라이드</td><td>지그가 각도를 강제함</td><td>와이어 신장과 슬라이드 위치가 각도·하중에 개입함</td></tr>
+          <tr><td>180° 박리</td><td>하부 판 공용 + 상부 경량 지그</td><td>되접힌 시편 자체</td><td>같은 접착 일에서 90° 대비 낮은 힘이 읽힘</td></tr>
+          <tr><td>T-peel</td><td>양쪽 시편을 각각 물림</td><td>두 시편의 강성 균형</td><td>피착재가 유연해 각도가 고정되지 않음</td></tr>
+          <tr><td>루프 택</td><td>고리형 시편 + 평판 피착면</td><td>고리의 접촉 형상</td><td>압착 하중 대신 접촉 시간이 조건을 지배함</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p>
+      모드가 무엇이든 최종 수치는 폭으로 나눈 값이므로, 재단 오차와 가장자리 들뜸이 그대로 강도
+      값으로 옮겨감. 유효 폭이 명목 폭보다 좁아지면 같은 힘에서도 산출 강도가 커져 실제보다 접착이
+      좋아 보이는 착시가 생김.
+    </p>
+
+    <div id="lab-width"></div>
+  </div>
+</section>
+
+<!-- ================= 03 ================= -->
+<section id="s3">
+  <div class="wrap">
+    <p class="eyebrow"><span class="num">03</span><span>7개 통제 파라미터</span></p>
+    <h2>통제 대상 시험 조건</h2>
+
+    <p>
+      박리 시험 결과는 시료 자체보다 시편 준비와 시험 조건에 더 크게 좌우되므로, 값을 비교하려면
+      아래 파라미터를 시험 간 동일하게 고정해야 함.
+    </p>
+
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>파라미터</th><th>통제해야 하는 이유</th></tr></thead>
+        <tbody>
+          <tr><td>압착 하중·압착 횟수</td><td>점착제가 피착재 요철에 접촉하는 실면적을 결정함</td></tr>
+          <tr><td>피착재 종류와 표면 상태</td><td>표면 에너지·조도가 젖음성과 계면 결합을 좌우함</td></tr>
+          <tr><td>부착 안정화 시간</td><td>점착제가 표면 요철로 젖어 들어가는 데 시간이 걸려, 대기 시간이 다르면 같은 젤에서도 힘이 달라짐</td></tr>
+          <tr><td>크로스헤드 속도</td><td>점착제가 점탄성체여서 박리 속도에 따라 소산 에너지가 달라짐</td></tr>
+          <tr><td>박리각·지그 형상</td><td>박리선에 걸리는 굽힘·전단 성분의 비율을 바꿈</td></tr>
+          <tr><td>시편 재단 치수</td><td>단위 폭당 힘 환산의 전제이자 유효 접착 면적을 정함</td></tr>
+          <tr><td>데이터 추출 구간</td><td>초기 상승부와 종단 이탈부를 포함하면 대표값이 왜곡됨</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p>
+      시편은 재단·이송 과정에서 가장자리가 눌리거나 들뜨기 쉬우므로 양 끝 일정 길이를 절삭해
+      대표성이 확보된 구간만 남기고, 데이터 처리에서도 박리 초기 상승 구간과 종단부 이탈 구간을
+      걷어낸 정상 박리 구간만 평균에 넣는 처리가 통용됨. 코팅 폭 방향·길이 방향 편차를 한 롤 안에서
+      드러내려면 시편을 상단·중단·하단처럼 부위로 나눠 채취하고, 부위별 개수를 동일하게 맞춰
+      대표값 정의가 무너지지 않게 함.
+    </p>
+
+    <div id="lab-params"></div>
+  </div>
+</section>
+
+<!-- ================= 04 ================= -->
+<section id="s4">
+  <div class="wrap">
+    <p class="eyebrow"><span class="num">04</span><span>전 요철 평균 · 피크 · 밸리</span></p>
+    <h2>박리 곡선 해석 — 요철 평균, 구간 선택, 감도</h2>
+
+    <p>
+      점착 시험의 하중-변위 곡선은 초기 상승을 거친 뒤 톱니 모양으로 진동함. 박리가 접착면을 따라
+      균일하게 진행하지 않고 국부적으로 붙었다 떨어지기를 반복하므로 하중이 오르내리며, 시험기
+      제어 소프트웨어(예 TRAPEZIUM X)는 이 진동 구간을 전 요철 평균·피크점 평균·밸리점 평균 세
+      가지 방식으로 환산함. 세 값은 같은 곡선에서 나오면서도 크기가 다르므로, 어느 방식으로 산출한
+      값인지 밝히지 않은 박리 강도는 다른 데이터와 결합할 수 없음.
+    </p>
+
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>해석 방식</th><th>정의</th><th>판독 특성</th></tr></thead>
+        <tbody>
+          <tr><td>전(全) 요철 평균</td><td>진동 구간 전체의 평균 하중</td><td>박리 전 구간을 대표함</td></tr>
+          <tr><td>피크점 평균</td><td>산(peak) 부분만 골라 평균</td><td>국부 응력 집중을 과대평가함</td></tr>
+          <tr><td>밸리점 평균</td><td>골(valley) 부분만 골라 평균</td><td>접착이 약한 지점만 반영해 과소평가함</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div id="lab-peak"></div>
+
+    <p>
+      로우 데이터는 점의 집합이므로 피크와 밸리를 가르려면 감도(sensitivity) 설정이 개입함. 감도가
+      작을수록 피크를 예민하게 검출하고, 감도 값이 과도하게 크면 결괏값이 산출되지 않고 공란으로
+      출력됨. 감도 기준은 로드셀 풀스케일에 연동되므로 100 N에서 10 N으로 로드셀을 바꾸면 같은
+      수치를 넣어도 절대 감도가 달라져 재조정해야 하며, 동일 시료를 감도만 바꿔 재측정하면 해석
+      파라미터가 산출값에 미치는 영향을 직접 분리해 볼 수 있음.
+    </p>
+
+    <div id="lab-sens"></div>
+
+    <p>
+      파단검출은 시험 성격에 따라 반대로 운용함. 점착 시험에서 파단검출을 켜두면 미접합 구간의
+      그래프 튐을 파단으로 오인해 조기 정지하므로 해제하고 대신 목표 이동 거리를 지정해 종료시키며,
+      인장 시험은 목표점을 크게 두고 파단검출로 끊어짐을 감지해 자동 정지시킴.
+    </p>
+
+    <div class="callout note">
+      <p><b>박리 미성립 판정</b> — 초기 상승 이후 하중이 0으로 유지되는 곡선은 접착면이 이미
+      떨어져 있었다는 뜻이므로 박리 미성립으로 기록하고 대표값 산출에서 분리함. 시편별 대표값만
+      남기지 않고 스트로크-하중 시계열을 시편 수만큼 별도 시트로 보관해야 이 구분이 가능함.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ================= 05 ================= -->
+<section id="s5">
+  <div class="wrap">
+    <p class="eyebrow"><span class="num">05</span><span>ASTM D3330 · ASTM D638 · KS L 1619</span></p>
+    <h2>적용 규격</h2>
+
+    <p>
+      점착력은 ASTM D3330의 90° 박리로 평가하고, 인장강도와 신율은 ASTM D638의 인장 시험으로
+      평가함. 두 규격 모두 시편 형상과 시험 속도를 함께 규정하므로, 규격 인용만 하고 시편 치수·속도를
+      임의로 바꾸면 규격 준거성이 성립하지 않음. 인장 물성은 시험편 탭에 입력한 폭·두께를 근거로
+      하중을 응력으로 환산해 산출하므로, 시편 치수 입력이 곧 강도 값의 전제가 됨.
+    </p>
+
+    <p>
+      KS L 1619(2013 개정, 2023 확인)는 「파인 세라믹 박막의 4탐침법에 의한 저항률 시험방법」으로
+      박리·점착 시험 규격이 아니라 전기적 저항률 시험 규격이지만, 제9절의 통계 처리 정의는 기계
+      물성 데이터에도 같은 형태로 적용됨. 점착력 데이터에서 로트별 CV(%)를 산출할 때 쓰는 정의와
+      일치함.
+    </p>
+
+    <ul class="notes">
+      <li><b>적용 범위</b><span>저항률 1×10⁻⁵ Ω·cm ~ 2×10² Ω·cm, 막두께 500 nm 이하. 박막 두께를 알 수 없으면 적용할 수 없음</span></li>
+      <li><b>시험 환경</b><span>온도 (23±2) ℃, 상대습도 (50±5) %, 전자적으로 차폐되고 기계 진동이 없는 조건</span></li>
+      <li><b>전처리</b><span>시료를 시험 환경에 30분 이상 방치해 주위 온도에 도달시킨 뒤 측정함</span></li>
+      <li><b>시료</b><span>한 변 (50±1) mm ~ (200±1) mm 사각 판상, 시료 수 3개 이상, 측정 위치는 시료 중앙부 1점</span></li>
+      <li><b>탐침</b><span>끝 반지름 0.40 mm 이하의 구면 가공봉 4개를 5 mm + 1.0 % 등간격으로 배열하고 각 탐침에 1 N ~ 2 N을 가함</span></li>
+    </ul>
+
+    <div class="eq">
+      s = √( Σ(ρᵢ − ρ̄)² / (n − 1) ) ,&nbsp;&nbsp; CV = (s / ρ̄) × 100 &nbsp;<span class="cm">— 제9절 통계 처리</span><br>
+      ρ = <b>F · t · R</b> &nbsp;<span class="cm">— 4탐침법 저항률</span>
+    </div>
+
+    <ul class="sym">
+      <li><b>ρ</b><span>저항률 [Ω·cm]</span></li>
+      <li><b>F</b><span>시료 한 변 길이 보정계수 — 50 mm 4.221 / 75 mm 4.388 / 100 mm 4.452 / 200 mm 4.512</span></li>
+      <li><b>t</b><span>박막 두께 [cm]</span></li>
+      <li><b>R</b><span>측정 저항 [Ω]</span></li>
+      <li><b>s</b><span>표준편차, ρᵢ 개별 측정 저항률, ρ̄ 평균 저항률, n 측정 개수</span></li>
+      <li><b>CV</b><span>변동계수 [%]</span></li>
+    </ul>
+
+    <div id="lab-fourpoint"></div>
+  </div>
+</section>
+
+<!-- ================= 06 ================= -->
+<section id="s6">
+  <div class="wrap">
+    <p class="eyebrow"><span class="num">06</span><span>보증 하한 = 정격 / 500</span></p>
+    <h2>UTM 운용과 로드셀 선정</h2>
+
+    <p>
+      시마즈 AGS-X 계열 장비는 제어 소프트웨어로 TRAPEZIUM X를 쓰며, 상부 축이 위아래로만 이동해
+      시편을 당기거나 누르는 두 동작만 수행함. 조작은 장비 전원 ON → 프로그램 실행 → 시험 조건
+      불러오기 또는 신규 생성 → 조건 탭 입력 → 실험 실행 화면에서 E-CAL 교정 → 측정 순서로
+      진행하며, 기계 전원을 먼저 켜야 프로그램이 실행되고 E-CAL을 전원 투입 후 최소 1회 실행하지
+      않으면 오류 코드가 발생함. 조건 작성은 시스템 → 센서 → 시험 제어 → 시험편 → 데이터 처리
+      항목 → 그래프 → 출력 7개 탭을 순차 입력하는 구조를 따름.
+    </p>
+
+    <p>
+      로드셀 사양은 Class 1 / 레인지 1/500으로 표기되며, 풀스케일의 1/500 ~ 1/1 구간에서 ±1 %
+      정확도를 보증함. 100 N 로드셀은 0.2 N ~ 100 N, 10 N 로드셀은 0.02 N ~ 10 N 구간이 보증
+      범위에 해당함. 1/500 미만 값도 완전히 무효하지는 않으나 1 % 정확도 보증을 벗어나므로, 예상
+      하중대가 정격의 1/500에 가까워지면 한 단계 작은 로드셀을 검토해야 함. 단위는 N과 kgf를
+      선택할 수 있고 100 N ≒ 10 kgf, 10 N ≒ 1 kgf로 환산됨.
+    </p>
+
+    <div class="eq">
+      보증 하한 = 로드셀 정격 / 500 &nbsp;<span class="cm">— Class 1 / 레인지 1/500</span><br>
+      100 N 로드셀 → <b>0.2 N ~ 100 N</b> &nbsp;·&nbsp; 10 N 로드셀 → <b>0.02 N ~ 10 N</b>
+    </div>
+
+    <p>
+      1~2 N 수준의 저하중 실험은 10 N 로드셀이 가장 정확하지만, 정격이 작아 지그 자중이나 부딪힘만
+      으로도 파손 위험이 커짐. 일반적인 인장 집게지그는 무게가 1.4~1.7 kg에 이르러 자중만으로
+      10 N 로드셀 정격(약 1 kgf)을 넘기므로, 이 지그로 운용 가능한 최소 로드셀은 100 N이 됨.
+      10 N 로드셀을 쓰려면 200 g 이내의 경량 클립 지그를 따로 갖춰야 하며, 로드셀 선정은 시료의
+      예상 하중만 보고 정할 수 없고 지그 자중을 먼저 빼고 남는 여유로 판단하는 구조임.
+    </p>
+
+    <div id="lab-loadcell"></div>
+
+    <p>
+      로드셀에는 정격 대비 약 20 % 갭(마진)이 있어 100 N 로드셀은 약 20 N의 여유를 가짐. 이 갭은
+      지그 제작 시 설계 여유용이므로 실험 중 계획적으로 쓰지 않음. 하중이 완만히 오르는 정상
+      실험에서는 정격 초과 직후 정지해 갭이 안전 마진으로 작동하지만, 충돌·부딪힘처럼 급격히
+      상승하는 경우에는 스톱이 걸려도 관성 오버슈트가 갭을 즉시 넘어섬.
+    </p>
+
+    <div id="lab-gap"></div>
+
+    <p>
+      로드셀 파손의 주 원인은 실험 자체가 아니라 지그 교체·세팅 중 부딪힘, 급격한 하중 상승, 축
+      방향 외의 횡 방향 힘 인가이며, 파손되면 수리가 불가능하고 전량 교체만 가능함. 교체는 프로그램
+      종료 → 지그 분리 → 상부 고정 볼트 해제 → 신호 케이블 분리 → 로드셀 본체 분리 → 신규 로드셀
+      장착(본체 + 케이블 세트 동시) → 장비 재기동 → 용량 자동 인식 → 초기화 및 교정 2차 수행
+      순서로 진행함. 케이블에 캐파시티·클래스 정보가 들어 있으므로 본체만 바꾸고 케이블을 그대로
+      두면 장비가 이전 용량으로 인식해 측정값이 크게 왜곡됨.
+    </p>
+
+    <ul class="notes">
+      <li><b>기계식 리미트 바</b><span>장비 상·하부에 설치되어 충돌 전 강제 정지시킴</span></li>
+      <li><b>소프트웨어 리미트</b><span>하중 리미트(로드셀 용량 기준, 더 낮게 조정 권장)와 스트로크 리미트(이동 거리 제한) 두 종류</span></li>
+      <li><b>데이터 처리 항목 탭</b><span>곡선에서 관심 포인트(최대점·파단점 등)를 먼저 고르고 그 지점의 하중·응력·스트로크를 출력 변수로 지정하는 2단 구조</span></li>
+      <li><b>통계 처리 항목</b><span>선택하면 시험편 N개에 대한 평균·편차를 자동 산출함</span></li>
+      <li><b>그래프 탭 오토 스케일</b><span>확대 방향으로만 동작하므로 초기 실험에서는 최대값을 작게 잡아 자동 확대되게 두는 편이 안전함</span></li>
+    </ul>
+  </div>
+</section>
+
+<!-- ================= 07 ================= -->
+<section id="s7">
+  <div class="wrap">
+    <p class="eyebrow"><span class="num">07</span><span>σ = F / (w · t)</span></p>
+    <h2>인장 시험 — 응력–변형 곡선과 탄성계수</h2>
+
+    <p>
+      인장 모드에서는 이동 목표점을 크게 잡고 파단검출을 켜 시편이 끊어지는 순간 자동 정지시킴.
+      인장강도와 신율은 시험편 탭에 입력한 폭·두께를 근거로 데이터 처리 항목에서 응력으로 환산되므로,
+      시편 치수를 잘못 입력하면 하중 곡선이 정상이어도 강도 값이 통째로 어긋남.
+    </p>
+
+    <div class="eq">
+      σ = F / (w × t) &nbsp;&nbsp;<span class="cm">— 시험편 탭 폭·두께 기반 응력 환산</span>
+    </div>
+
+    <ul class="sym">
+      <li><b>σ</b><span>인장 응력 [MPa = N/mm²]</span></li>
+      <li><b>F</b><span>하중 [N]</span></li>
+      <li><b>w</b><span>시편 폭 [mm]</span></li>
+      <li><b>t</b><span>시편 두께 [mm]</span></li>
+    </ul>
+
+    <p>
+      곡선 자체는 탄성 구간과 소성 구간으로 나뉨. 항복 전에는 응력이 변형률에 비례해 기울기가 곧
+      탄성계수 E가 되고, 항복 후에는 가공경화로 진응력이 계속 오르지만 단면이 줄어드는 효과가
+      더해져 공칭응력은 어느 지점에서 최대를 지나 내려감. 그 최대점이 인장강도이며, 곡선 아래
+      면적은 파단까지 흡수한 에너지인 인성에 해당함.
+    </p>
+
+    <div id="lab-stress"></div>
+
+    <div id="lab-sigma"></div>
+
+    <p>
+      니들의 침 끝 예리도(천공력)는 압축 모드의 별도 계측 축으로 관리함. 계측 정확도는 합불 판정
+      기준값보다 한 자리 아래까지 확보하는 편이 바람직한데, 판정 기준과 같은 자릿수로만 읽으면 경계
+      근처 시료의 합불이 계측 오차에 좌우되기 때문이며 이 정확도 차이가 설비 선정을 가름. 측정은
+      전용 지그에 시편을 고정하고 니들을 스트로크에 물린 뒤 지그 구멍에 맞춰 최대한 시편 가까이
+      고정해 진행하며, 니들과 시편 사이 거리를 좁게 유지해야 니들이 휘면서 생기는 횡 방향 성분이
+      줄어 천공력만 읽힘.
+    </p>
+
+    <div id="lab-puncture"></div>
+  </div>
+</section>
+
+<!-- ================= 08 ================= -->
+<section id="s8">
+  <div class="wrap">
+    <p class="eyebrow"><span class="num">08</span><span>µ = F_f / F_N</span></p>
+    <h2>표면 마찰력 측정</h2>
+
+    <p>
+      표면 마찰력 측정은 성분 분석으로 가릴 수 없는 코팅 등급 차이를 힘 단위로 판별하는 데 쓰임.
+      PTFE 코팅 와이어처럼 재질이 동일하면서 윤활·하드·중간 강도 등급으로만 나뉘는 구조에서는
+      조성 분석이 등급을 구분하지 못하지만, 마찰력은 코팅층의 윤활 특성을 직접 반영하므로 등급
+      차이를 물리적으로 확인하는 수단이 됨.
+    </p>
+
+    <div class="eq">
+      µ = F_f / F_N &nbsp;&nbsp;<span class="cm">— 마찰계수(무차원)</span>
+    </div>
+
+    <ul class="sym">
+      <li><b>µ</b><span>마찰계수 (무차원)</span></li>
+      <li><b>F_f</b><span>마찰력 [N]</span></li>
+      <li><b>F_N</b><span>수직항력 [N]</span></li>
+    </ul>
+
+    <p>
+      측정 조건을 설계할 때는 시료 쪽 사양을 먼저 고정해야 함. 코팅 소재와 등급, 코팅 두께, 코팅 후
+      외경과 그 공차, 절단 길이, 심선 재질과 직선화 여부가 기록 항목에 해당하며, 이 값들이 다르면
+      같은 등급이라도 접촉 면적과 수직항력 분포가 달라져 마찰력이 흔들림. 표면에 버(burr)나 물결
+      형상이 남아 있으면 그 자체가 계측 노이즈로 작용하므로, 표면 상태도 교란 요인으로 함께 기록함.
+    </p>
+
+    <div id="lab-friction"></div>
+  </div>
+</section>
+
+<!-- ================= 09 ================= -->
+<section id="s9">
+  <div class="wrap">
+    <p class="eyebrow"><span class="num">09</span><span>95 % CI = x̄ ± 1.96 × SE</span></p>
+    <h2>데이터 처리와 소프트웨어 밸리데이션</h2>
+
+    <p>
+      로트별 점착력 시험은 생산일·LOT·모델을 식별자로 두고, 부위별 평균과 부위 평균의 범위, 전체
+      측정치의 개별 최소·최대를 함께 남기는 구조로 기록함. 로트 대표값을 부위 평균의 평균으로
+      정의하는 경우 부위별 개수가 어긋나면 정의가 무너지므로, 대표값 산출 규칙과 부위별 시편 수를
+      함께 명시해야 함. 부위 평균 범위는 로트 안에서 위치에 따른 편차를, 개별 최소·최대는 단일 시편
+      수준의 산포를 각각 드러내며, 두 지표가 함께 벌어지면 코팅 편차와 시편 준비 편차를 구분해
+      볼 수 있음.
+    </p>
+
+    <p>
+      기록 시 단위를 반드시 명시해야 함. 원본 시트에 단위를 적지 않으면 kgf·N·gf 어느 계열인지
+      사후에 판별할 수 없어 다른 회차 데이터와 결합할 때 자릿수만으로 추정해야 하는 상황이 생김.
+      시편별 두께를 여러 점에서 함께 측정해 같은 시트에 남기면 조성별 젤 두께대와 점착력 수준을
+      대응시켜 볼 수 있고, 부착 안정화 시간 같은 조건을 측정 블록 라벨로 표기해 두면 조건이 바뀐
+      시점을 데이터 안에서 되짚어 평균 수준과 CV의 이동을 같은 시트에서 비교할 수 있음. 통상 적용
+      하는 값과 다른 항목이 있으면 결과 표 옆에 그 일탈을 명시해야 다른 회차와 직접 비교하는 오독을
+      막을 수 있음.
+    </p>
+
+    <p>
+      타 제품과 나란히 놓고 보는 대조 측정은 시료마다 동일 조건(동일 속도, 동일 지그, 동일 부착
+      시간)에서 같은 횟수로 반복해 요철 평균 하중을 산출하고, 시료별 개별 값과 평균을 같은 표에
+      남기는 방식으로 설계함. 개별 반복 값을 접어두지 않고 그대로 남겨야 평균이 특정 회차에 끌려간
+      것인지 판독할 수 있으며, 같은 시료를 감도만 바꿔 재측정한 시계열을 병기하면 대조 결과의 차이가
+      시료 특성인지 해석 파라미터 때문인지 분리할 수 있음.
+    </p>
+
+    <div class="eq">
+      SE = SD / √n ,&nbsp;&nbsp; 95 % CI = x̄ ± <b>1.96</b> × SE<br>
+      CV(%) = (σ / x̄) × 100 ,&nbsp;&nbsp; 관리한계(하한) = Mean − 3σ<br>
+      <span class="cm">정규분포 포함 비율 — 1σ 68.3 %, 2σ 95.4 %, 3σ 99.7 %</span>
+    </div>
+
+    <ul class="sym">
+      <li><b>SD, σ</b><span>표준편차</span></li>
+      <li><b>n</b><span>표본 수</span></li>
+      <li><b>x̄</b><span>평균</span></li>
+      <li><b>SE</b><span>표준오차 — 평균값의 정밀도</span></li>
+    </ul>
+
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>통계량</th><th>산출식</th><th>용도</th></tr></thead>
+        <tbody>
+          <tr><td>평균</td><td>측정치의 산술평균</td><td>대표값</td></tr>
+          <tr><td>CV(%)</td><td>(σ / 평균) × 100</td><td>군 내 균일성 판정</td></tr>
+          <tr><td>2σ / 3σ</td><td>표준편차의 2배·3배</td><td>관리 폭 설정</td></tr>
+          <tr><td>Mean − 3σ</td><td>평균 − 3σ</td><td>하한 관리한계</td></tr>
+          <tr><td>SE</td><td>SD / √n</td><td>평균값의 정밀도</td></tr>
+          <tr><td>95 % CI</td><td>평균 ± 1.96 × SE</td><td>평균 추정 구간</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p>
+      95 % 신뢰구간은 평균 ± 1.96 × (SD/√n)으로 계산하며, 분석 시트에서는 SE = SD/√n, 구간폭 =
+      SE × 1.96, 하한 = 평균 − 구간폭, 상한 = 평균 + 구간폭 순으로 구현함. 오차막대는 별도 값을
+      만들지 않고 이 95 % 신뢰구간 하한·상한 열을 그대로 쓰는 편이 그래프와 통계량의 정합을
+      유지함. TRAPEZIUM X 자체에도 통계 처리 항목이 있어 시험편 N개에 대한 평균·편차를 자동
+      산출하며, 실험이 끝난 뒤에도 항목을 다시 선택해 재계산할 수 있음.
+    </p>
+
+    <p>
+      표본 수 설계의 근거는 표준오차의 √n 법칙임. 표준편차 5 Ω인 계를 예로 들면 n = 2에서 SE
+      3.54 Ω, n = 10에서 1.58 Ω, n = 30에서 0.91 Ω, n = 100에서 0.5 Ω으로 줄어들며, 정밀도를
+      2배 올리려면 표본을 4배로 늘려야 하는 수확체감 구조임. 95 % 신뢰구간으로 환산하면 n = 2에서
+      ±6.94 Ω, n = 30에서 ±1.78 Ω이 되므로, 허용 범위 ±3 Ω인 품질 기준을 n = 2 데이터로는
+      판정할 수 없음.
+    </p>
+
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>n</th><th>2</th><th>10</th><th>30</th><th>100</th></tr></thead>
+        <tbody>
+          <tr><td>SE (Ω), σ = 5 Ω 가정</td><td>3.54</td><td>1.58</td><td>0.91</td><td>0.5</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div id="lab-se"></div>
+
+    <p>
+      이에 따라 표본 수를 목적별로 층화해 30개(파일럿, 초기 경향 파악) / 100개(정규 모니터링,
+      경제적 최적점) / 300개(정밀 분석)로 두고, 관리 지표는 평균·표준편차·변동계수·3σ 관리한계로
+      구성함. 정규분포에서 1σ 68.3 %, 2σ 95.4 %, 3σ 99.7 %가 포함된다는 성질에 근거해 μ ± 3σ를
+      관리한계로 삼고, 이를 벗어난 데이터는 원인을 조사함. 신규 계측 축을 설계하기 전에 기존
+      장비에서 반복 데이터를 확보해 통계 분석을 선행하는 절차가 이 설계의 출발점이 됨.
+    </p>
+
+    <div id="lab-control"></div>
+
+    <p>
+      이상치 처리 방식은 측정 목적에 따라 두 갈래로 갈림. 시료 특성값을 보고하는 시험에서는 소수
+      반복 중 최대·최소값을 제외하거나 경향성이 확인되는 회차만 골라 평균을 최종 값으로 삼는 제외
+      방식을 쓰고, 공정·로트 관리에서는 값을 제거하는 대신 Mean − 3σ 같은 관리한계를 계산해 한계
+      밖 데이터를 표시하는 관리한계 방식을 씀. 관리 목적에서는 이상치 자체가 공정 이상 신호이므로
+      지우지 않고 남겨 원인을 추적해야 하며, 두 방식을 한 데이터셋에 섞어 적용하면 판정 근거가
+      무너짐.
+    </p>
+
+    <ul class="notes">
+      <li><b>노이즈 데이터 분류 요건</b><span>표본 수가 너무 작아 변동성 평가가 불가능하거나, 동일 조건에서 최소 3회 이상 반복 측정한 기록이 없거나, 극단값이 있어도 원인 분석·제외 기준 없이 평균에 포함되는 경우 중 하나라도 걸리면 해당함</span></li>
+      <li><b>과학·관리 측면 결함 요건</b><span>출처 불명확, 재현 불가, 맥락 단절, 원자료 부재</span></li>
+      <li><b>경시 변화 판정</b><span>조건 구분값별로 초기 점착력과 경과 후 점착력을 짝지어 측정하고, 초기값이 경과 후 95 % 신뢰구간 안에 들어오는지로 판정함. 구간 안에 들어오면 표본 수가 부족해 경시 변화를 유의하다고 말할 수 없는 상태임</span></li>
+    </ul>
+
+    <p>
+      의료기기 인증에 대응하려면 시험 제어 소프트웨어의 밸리데이션 자료와 버전 정보를 확보해야
+      하며, 제조사가 발행한 인증서만으로 요구 수준을 충족하는지 먼저 확인함. TRAPEZIUM X는 상위
+      수준의 데이터 관리 기능을 갖추지 않아 감사 추적·접근 통제가 요구되는 경우에는 별도 프로그램을
+      조합해야 하고, 최소 수준의 자체 검증은 측정한 데이터가 화면 출력과 저장 파일에 그대로
+      반영되는지를 실험 데이터로 확인하는 방식으로 구성함.
+    </p>
+
+    <div id="lab-valid"></div>
+  </div>
+</section>
+
+<div class="wrap">
+  <div class="pager">
+    <a href="rheology.html"><span class="pg-lbl">이전</span>레올로지와 도공 공정</a>
+    <a href="needle.html" style="text-align:right"><span class="pg-lbl">다음</span>니들 기하와 투과역학</a>
+  </div>
+</div>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <p>Field 08 · 점착·박리와 기계물성</p>
+  </div>
+</footer>
+
+<script src="../assets/js/site.js"></script>
+<script src="../assets/js/lab.js"></script>
+<script>
+/* ============================ 공용 유틸 ============================ */
+function mulberry32(a){
+  return function(){
+    a |= 0; a = a + 0x6D2B79F5 | 0;
+    let t = Math.imul(a ^ a >>> 15, 1 | a);
+    t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t;
+    return ((t ^ t >>> 14) >>> 0) / 4294967296;
+  };
+}
+function meanOf(a){ let s=0; for(const v of a) s+=v; return a.length? s/a.length : NaN; }
+function sdOf(a){
+  if(a.length<2) return NaN;
+  const m = meanOf(a); let s=0;
+  for(const v of a) s += (v-m)*(v-m);
+  return Math.sqrt(s/(a.length-1));
+}
+
+/* ============================ 01. 박리각 에너지 균형 ============================ */
+Lab.make({
+  mount:'#lab-kendall',
+  title:'박리각 에너지 균형 — 같은 G, 다른 F',
+  badge:'PEEL ENERGY',
+  custom:true,
+  controls:[
+    {id:'th', label:'박리각 θ', min:5, max:180, step:1, value:90, unit:'°', fmt:v=>v.toFixed(0)},
+    {id:'F',  label:'측정 박리력 F', min:0.1, max:50, step:0.1, value:5, unit:'N', fmt:v=>v.toFixed(1)},
+    {id:'b',  label:'시편 폭 b', min:5, max:50, step:1, value:25, unit:'mm', fmt:v=>v.toFixed(0)},
+    {id:'E',  label:'탄성계수 E', min:0.1, max:1000, value:10, log:true, unit:'MPa', fmt:v=>Lab.sci(v,3)},
+    {id:'t',  label:'시편 두께 t', min:0.02, max:2, step:0.01, value:0.5, unit:'mm', fmt:v=>v.toFixed(2)},
+    {id:'el', type:'toggle', label:'신율 보정항 F²/(2b²Et)',
+     options:[{value:'off',label:'무시 (강체)'},{value:'on',label:'포함'}], value:'off'}
+  ],
+  presets:[
+    {label:'90° 표준', set:{th:90, F:5, b:25}},
+    {label:'180° 되접기', set:{th:180, F:5, b:25}},
+    {label:'저각도 15°', set:{th:15, F:5, b:25}}
+  ],
+  stats:[
+    {id:'G',   label:'접착 일 G', unit:'J/m²', fmt:v=>v.toFixed(2)},
+    {id:'P',   label:'박리 강도 P', unit:'N/cm', fmt:v=>v.toFixed(3)},
+    {id:'F90', label:'90° 환산 F', unit:'N', fmt:v=>v.toFixed(3)},
+    {id:'F180',label:'180° 환산 F', unit:'N', fmt:v=>v.toFixed(3)},
+    {id:'r',   label:'F(90°)/F(180°)', fmt:v=>v.toFixed(3)},
+    {id:'el',  label:'탄성항 기여', unit:'%', fmt:v=>v.toFixed(1)}
+  ],
+  plot:{width:620,height:360,xLabel:'박리각 θ (°)',yLabel:'같은 G에서의 박리력 F (N)',
+        autoX:false,autoY:true,xMin:0,xMax:180,yMinFixed:0,xTicks:6},
+  legend:[{color:'--accent',label:'F(θ) — 현재 G 유지'},{color:'--neutral',label:'강체 근사 F(θ)'}],
+  note:'Kendall 박리 관계를 그대로 계산함. 강체 근사에서는 G = (F/b)(1 − cos θ)이고, 신율을 넣으면 ' +
+       '탄성 저장항 F²/(2b²Et)가 더해짐. 두 항 모두 단위가 J/m²로 맞춰짐.',
+  plotNote:'G를 고정한 채 각도만 바꿨을 때 읽히는 힘. 90°와 180° 지점의 두 값 비가 곧 두 시험 모드의 환산 배수임.',
+  compute(v){
+    const th = v.th * Math.PI/180;
+    const b  = v.b  / 1000;        // m
+    const t  = v.t  / 1000;        // m
+    const E  = v.E  * 1e6;         // Pa
+    const F  = v.F;                // N
+    const useEl = (v.el === 'on');
+
+    const Gadh = (F/b)*(1-Math.cos(th));
+    const Gel  = useEl ? (F*F)/(2*b*b*E*t) : 0;
+    const G    = Gadh + Gel;
+
+    // 같은 G에서 각도 θ에 필요한 힘 F(θ)
+    function Finv(thetaDeg, withEl){
+      const c = (1-Math.cos(thetaDeg*Math.PI/180))/b;
+      if(!withEl) return c>0 ? G/c : NaN;
+      const a = 1/(2*b*b*E*t);
+      return (-c + Math.sqrt(c*c + 4*a*G))/(2*a);
+    }
+    const cur=[], rigid=[];
+    for(let d=3; d<=180; d+=1){
+      const y1 = Finv(d, useEl), y2 = Finv(d, false);
+      if(isFinite(y1) && y1<1e4) cur.push([d,y1]);
+      if(isFinite(y2) && y2<1e4) rigid.push([d,y2]);
+    }
+    const F90 = Finv(90, useEl), F180 = Finv(180, useEl);
+
+    // 박리 기하 SVG
+    const dir = [-Math.cos(th), -Math.sin(th)];
+    const px = 190, py = 168, L = 108;
+    const ax = px + dir[0]*L, ay = py + dir[1]*L;
+    const arw = 22;
+    const svg =
+      '<svg viewBox="0 0 380 220" role="img" aria-label="박리 기하 모식도">' +
+      '<rect x="30" y="168" width="320" height="16" fill="var(--panel-2)" stroke="var(--rule)"/>' +
+      '<text class="tm" x="30" y="200">피착재</text>' +
+      '<line x1="' + px + '" y1="168" x2="350" y2="168" stroke="var(--green)" stroke-width="5"/>' +
+      '<text class="tm" x="' + (px+14) + '" y="162" fill="var(--green)">부착 구간</text>' +
+      '<path d="M' + px + ' 168 Q' + (px+dir[0]*30) + ' ' + (py+dir[1]*30) + ' ' + ax + ' ' + ay + '" ' +
+        'fill="none" stroke="var(--accent)" stroke-width="5" stroke-linecap="round"/>' +
+      '<line x1="' + ax + '" y1="' + ay + '" x2="' + (ax+dir[0]*arw) + '" y2="' + (ay+dir[1]*arw) + '" ' +
+        'stroke="var(--ink)" stroke-width="2"/>' +
+      '<circle cx="' + (ax+dir[0]*arw) + '" cy="' + (ay+dir[1]*arw) + '" r="4" fill="var(--ink)"/>' +
+      '<text class="th" x="' + (ax+dir[0]*arw+8) + '" y="' + (ay+dir[1]*arw-6) + '">F = ' + F.toFixed(1) + ' N</text>' +
+      '<path d="M' + (px-40) + ' 168 A 40 40 0 0 ' + (dir[1]<=0?1:0) + ' ' +
+        (px-40*Math.cos(th)) + ' ' + (168-40*Math.sin(th)) + '" fill="none" stroke="var(--purple)" stroke-width="1.4" stroke-dasharray="3 3"/>' +
+      '<text class="tm" x="' + (px-58) + '" y="' + (168-14-18*Math.sin(th/2)) + '" fill="var(--purple)">θ = ' + v.th.toFixed(0) + '°</text>' +
+      '<circle cx="' + px + '" cy="168" r="4.5" fill="var(--accent)"/>' +
+      '<text class="tm" x="' + (px-30) + '" y="204">박리선</text>' +
+      '</svg>';
+
+    // θ → 0 에서 F가 발산하므로 y축을 실무 구간(30° 이상)에 맞춰 잘라야 90°·180° 대비가 보임
+    const yCap = Math.max(Finv(30, useEl), F, F90 * 1.2) * 1.15;
+
+    return {
+      custom: svg,
+      plot:{ yMin:0, yMax:yCap, autoY:false },
+      series:[
+        {points:rigid, color:'--neutral', width:1.4, dash:'4 4'},
+        {points:cur,   color:'--accent',  width:2.4}
+      ],
+      overlays:[
+        {type:'vline', x:90,  color:'--ink-3', label:'90°'},
+        {type:'vline', x:180, color:'--ink-3', label:'180°'},
+        {type:'point', x:v.th, y:Math.min(F, yCap), color:'--accent', label:'현재'}
+      ],
+      stats:{
+        G:G, P:F/(v.b/10), F90:F90, F180:F180,
+        r: (F180>0 && isFinite(F90)) ? F90/F180 : null,
+        el: G>0 ? 100*Gel/G : 0
+      }
+    };
+  }
+});
+
+/* ============================ 02. 명목 폭 vs 유효 폭 ============================ */
+Lab.make({
+  mount:'#lab-width',
+  title:'명목 폭 vs 유효 폭 — 박리 강도 환산',
+  badge:'WIDTH',
+  controls:[
+    {id:'F', label:'측정 힘 F', min:0, max:50, step:0.1, value:10, unit:'N', fmt:v=>v.toFixed(1)},
+    {id:'w', label:'명목 폭 w', min:5, max:50, step:0.5, value:10, unit:'mm', fmt:v=>v.toFixed(1)},
+    {id:'d', label:'유효 폭 편차', min:-20, max:0, step:0.5, value:-5, unit:'%', fmt:v=>v.toFixed(1)}
+  ],
+  stats:[
+    {id:'pn', label:'명목 폭 기준 P', unit:'N/cm', fmt:v=>v.toFixed(3)},
+    {id:'pe', label:'유효 폭 기준 P', unit:'N/cm', fmt:v=>v.toFixed(3)},
+    {id:'we', label:'유효 폭', unit:'mm', fmt:v=>v.toFixed(2)},
+    {id:'er', label:'오차율', unit:'%', fmt:v=>v.toFixed(2)}
+  ],
+  plot:{width:620,height:330,xLabel:'유효 폭 편차 (%)',yLabel:'산출 박리 강도 P (N/cm)',
+        autoX:false,autoY:true,xMin:-20,xMax:0},
+  legend:[{color:'--accent',label:'유효 폭 기준 P'},{color:'--neutral',label:'명목 폭 기준 P'}],
+  note:'P = F / (w/10)으로 N/cm 환산함. 편차는 재단 오차·가장자리 들뜸으로 유효 폭이 명목보다 좁아지는 ' +
+       '방향만 허용함.',
+  plotNote:'유효 폭이 좁아질수록 같은 힘에서 산출 강도가 올라감. 곡선과 점선의 간격이 그대로 과대평가 폭임.',
+  compute(v){
+    const pn = v.F/(v.w/10);
+    const we = v.w*(1+v.d/100);
+    const pe = v.F/(we/10);
+    const cur=[], nom=[];
+    for(let d=-20; d<=0; d+=0.25){
+      cur.push([d, v.F/((v.w*(1+d/100))/10)]);
+      nom.push([d, pn]);
+    }
+    return {
+      series:[{points:nom, color:'--neutral', width:1.4, dash:'4 4'},
+              {points:cur, color:'--accent', width:2.4}],
+      overlays:[
+        {type:'point', x:v.d, y:pe, color:'--accent', label:'현재'},
+        {type:'hline', y:pn, color:'--ink-3', label:'명목 기준'}
+      ],
+      stats:{pn:pn, pe:pe, we:we, er: (pn>0 && isFinite(pe)) ? 100*(pe-pn)/pn : null}
+    };
+  }
+});
+
+/* ============================ 03. 조건 일탈 영향 ============================ */
+(function(){
+  const PARAMS = [
+    ['p1','압착 하중·압착 횟수','점착제가 피착재 요철에 접촉하는 실면적이 달라짐'],
+    ['p2','피착재 종류와 표면 상태','표면 에너지·조도가 젖음성과 계면 결합을 바꿈'],
+    ['p3','부착 안정화 시간','젖어 들어간 정도가 달라져 같은 젤에서도 힘이 이동함'],
+    ['p4','크로스헤드 속도','점탄성 소산 에너지가 속도에 따라 달라짐'],
+    ['p5','박리각·지그 형상','박리선의 굽힘·전단 성분 비율이 바뀜'],
+    ['p6','시편 재단 치수','단위 폭당 힘 환산의 분모와 유효 접착 면적이 바뀜'],
+    ['p7','데이터 추출 구간','초기 상승부·종단 이탈부 포함 여부로 대표값이 왜곡됨']
+  ];
+  Lab.make({
+    mount:'#lab-params',
+    title:'조건 일탈과 회차 간 비교 가능성',
+    badge:'CONTROL',
+    plot:false,
+    custom:true,
+    controls: PARAMS.map(p=>({
+      id:p[0], type:'toggle', label:p[1],
+      options:[{value:'std',label:'표준값 유지'},{value:'chg',label:'변경'}], value:'std'
+    })),
+    stats:[
+      {id:'n', label:'변경 항목 수', unit:'개', fmt:v=>v.toFixed(0)},
+      {id:'g', label:'비교 가능성', unit:'%', fmt:v=>v.toFixed(0)},
+      {id:'j', label:'판정'}
+    ],
+    note:'변경 1개당 비교 가능성을 15 %p씩 깎아 표시함. 변경으로 표시한 항목은 이전 회차 데이터와 직접 ' +
+         '비교할 수 없는 축이 되며, 두 개 이상이 동시에 바뀌면 원인 분리가 성립하지 않음.',
+    compute(v){
+      const changed = PARAMS.filter(p=>v[p[0]]==='chg');
+      const g = Math.max(0, 100 - 15*changed.length);
+      const W = 340, bw = Math.round(W*g/100);
+      let html = '<svg viewBox="0 0 360 34" role="img" aria-label="비교 가능성 게이지">' +
+        '<rect x="10" y="8" width="' + W + '" height="16" fill="var(--panel-2)" stroke="var(--rule)"/>' +
+        '<rect x="10" y="8" width="' + bw + '" height="16" fill="var(--accent)" fill-opacity="0.65"/>' +
+        '<text class="tm" x="' + (10+W) + '" y="20" text-anchor="end">' + g + ' %</text></svg>';
+      if(changed.length===0){
+        html += '<div class="callout ok" style="margin:12px 0 0"><p>전 항목 표준값 유지 — 이전 회차와 직접 비교 가능함.</p></div>';
+      } else {
+        changed.forEach(p=>{
+          html += '<div class="callout" style="margin:12px 0 0"><p><b>' + p[1] +
+            ' 변경</b> — ' + p[2] + '. 이 회차 데이터는 이전 회차와 직접 비교 불가함.</p></div>';
+        });
+        if(changed.length>=2){
+          html += '<div class="callout note" style="margin:12px 0 0"><p><b>동시 변경 ' + changed.length +
+            '건</b> — 변화 원인을 항목별로 분리할 수 없으므로 한 번에 한 축만 바꿔 재설계함.</p></div>';
+        }
+      }
+      return {custom: html, stats:{
+        n: changed.length, g: g,
+        j: changed.length===0 ? '직접 비교 가능' : (changed.length===1 ? '단일 축 변경' : '원인 분리 불가')
+      }};
+    }
+  });
+})();
+
+/* ============================ 04. 박리 곡선 요철 평균 ============================ */
+Lab.make({
+  mount:'#lab-peak',
+  title:'요철 평균 — 구간 선택이 값을 바꿈',
+  badge:'PEEL CURVE',
+  controls:[
+    {id:'mean', label:'정상 구간 평균 하중', min:1, max:20, step:0.1, value:5, unit:'N', fmt:v=>v.toFixed(1)},
+    {id:'amp',  label:'stick-slip 진폭', min:0, max:10, step:0.1, value:2, unit:'N', fmt:v=>v.toFixed(1)},
+    {id:'teeth',label:'톱니 개수(100 mm당)', min:5, max:50, step:1, value:20, fmt:v=>v.toFixed(0)},
+    {id:'seed', label:'노이즈 seed', min:1, max:100, step:1, value:7, fmt:v=>v.toFixed(0)},
+    {id:'x0',   label:'평균 구간 시작', min:0, max:90, step:0.5, value:15, unit:'mm', fmt:v=>v.toFixed(1)},
+    {id:'x1',   label:'평균 구간 끝', min:10, max:100, step:0.5, value:90, unit:'mm', fmt:v=>v.toFixed(1)}
+  ],
+  presets:[
+    {label:'정상 구간만', set:{x0:15, x1:90}},
+    {label:'초기 피크 포함', set:{x0:0, x1:90}},
+    {label:'종단부까지', set:{x0:0, x1:100}}
+  ],
+  stats:[
+    {id:'m',  label:'선택 구간 평균', unit:'N', fmt:v=>v.toFixed(3)},
+    {id:'sd', label:'표준편차', unit:'N', fmt:v=>v.toFixed(3)},
+    {id:'cv', label:'변동계수 CV', unit:'%', fmt:v=>v.toFixed(2)},
+    {id:'df', label:'전체 평균과 차이', unit:'%', fmt:v=>v.toFixed(2)},
+    {id:'pk', label:'피크점 평균', unit:'N', fmt:v=>v.toFixed(3)},
+    {id:'vl', label:'밸리점 평균', unit:'N', fmt:v=>v.toFixed(3)}
+  ],
+  plot:{width:640,height:380,xLabel:'스트로크 (mm)',yLabel:'하중 (N)',
+        autoX:false,autoY:true,xMin:0,xMax:100,yMinFixed:0},
+  legend:[{color:'--neutral',label:'전 구간 곡선'},{color:'--accent',label:'선택 구간'},
+          {color:'--purple',label:'피크점'},{color:'--green',label:'밸리점'}],
+  note:'seed 값으로 재현 가능한 의사난수를 만들어 곡선을 합성함. 초기 상승부는 지수 포화항과 오버슈트 ' +
+       '봉우리로, 정상 구간은 톱니 진동과 잔류 노이즈로 구성했음.',
+  plotNote:'구간 시작을 0 mm로 내리면 초기 피크가 평균에 들어와 값이 부풀고, CV도 함께 올라감.',
+  compute(v){
+    const N = 601, L = 100;
+    const rnd = mulberry32(Math.round(v.seed)*7919 + 13);
+    const noise = []; for(let i=0;i<N;i++) noise.push(rnd()*2-1);
+    const pts=[];
+    for(let i=0;i<N;i++){
+      const x = L*i/(N-1);
+      const w = 1 - Math.exp(-x/1.6);                          // 초기 상승 포화
+      const bump = 0.85*v.mean*Math.exp(-Math.pow((x-4.5)/2.4,2)); // 초기 오버슈트
+      const osc = v.amp*Math.sin(2*Math.PI*v.teeth*x/L);
+      const nz  = 0.18*v.amp*noise[i];
+      pts.push([x, Math.max(0, v.mean*w + bump + w*(osc+nz))]);
+    }
+    const all = pts.map(p=>p[1]);
+    const lo = Math.min(v.x0, v.x1), hi = Math.max(v.x0, v.x1);
+    const selPts = pts.filter(p=>p[0]>=lo && p[0]<=hi);
+    const sel = selPts.map(p=>p[1]);
+    const m = meanOf(sel), sd = sdOf(sel), mAll = meanOf(all);
+
+    const peaks=[], valleys=[];
+    for(let i=1;i<selPts.length-1;i++){
+      const a=selPts[i-1][1], b=selPts[i][1], c=selPts[i+1][1];
+      if(b>a && b>=c) peaks.push(selPts[i]);
+      if(b<a && b<=c) valleys.push(selPts[i]);
+    }
+    return {
+      series:[
+        {points:pts, color:'--neutral', width:1.2, opacity:0.7},
+        {points:selPts, color:'--accent', width:2},
+        {points:peaks, color:'--purple', type:'scatter', r:2.6},
+        {points:valleys, color:'--green', type:'scatter', r:2.6}
+      ],
+      overlays:[
+        {type:'band', x1:lo, x2:hi, color:'--accent', opacity:0.08, label:'평균 구간'},
+        {type:'hline', y:m, color:'--accent', label:'선택 평균 ' + m.toFixed(2) + ' N'},
+        {type:'hline', y:mAll, color:'--ink-3', label:'전체 평균 ' + mAll.toFixed(2) + ' N'},
+        {type:'vline', x:12, color:'--charcoal', dash:'2 4', label:'초기 상승부 경계'}
+      ],
+      stats:{
+        m: sel.length ? m : null,
+        sd: sel.length>1 ? sd : null,
+        cv: (sel.length>1 && m>0) ? 100*sd/m : null,
+        df: (sel.length && mAll>0) ? 100*(m-mAll)/mAll : null,
+        pk: peaks.length ? meanOf(peaks.map(p=>p[1])) : null,
+        vl: valleys.length ? meanOf(valleys.map(p=>p[1])) : null
+      }
+    };
+  }
+});
+
+/* ============================ 04-b. 감도–풀스케일 연동 ============================ */
+Lab.make({
+  mount:'#lab-sens',
+  title:'감도 설정과 로드셀 풀스케일 연동',
+  badge:'SENSITIVITY',
+  plot:false,
+  controls:[
+    {id:'s',  label:'감도 설정값', min:1, max:100, step:1, value:20, fmt:v=>v.toFixed(0)},
+    {id:'fs', type:'select', label:'로드셀 풀스케일', value:'100',
+     options:[{value:'10',label:'10 N'},{value:'100',label:'100 N'}]},
+    {id:'amp',label:'곡선 진동 진폭', min:0.1, max:10, step:0.1, value:2, unit:'N', fmt:v=>v.toFixed(1)}
+  ],
+  stats:[
+    {id:'abs', label:'절대 감도', unit:'N', fmt:v=>v.toFixed(3)},
+    {id:'rat', label:'진폭 대비 비', fmt:v=>v.toFixed(2)},
+    {id:'j',   label:'판정'}
+  ],
+  note:'절대 감도 = 감도 설정값 × (풀스케일 / 100)로 두어 풀스케일 연동을 표현함. 절대 감도가 곡선 진폭을 ' +
+       '넘어서면 피크·밸리가 검출되지 않아 결괏값이 공란으로 출력됨. 100 N에서 10 N으로 로드셀을 바꾸면 ' +
+       '같은 숫자를 넣어도 절대 감도가 10분의 1로 내려가므로 재조정이 필요함.',
+  compute(v){
+    const fs = parseFloat(v.fs);
+    const abs = v.s * (fs/100);
+    const rat = abs / v.amp;
+    let j;
+    if(rat >= 1) j = '결과 공란 위험';
+    else if(rat >= 0.5) j = '피크 누락 구간';
+    else if(rat <= 0.05) j = '노이즈까지 피크로 검출';
+    else j = '검출 적정';
+    return {stats:{abs:abs, rat:rat, j:j}};
+  }
+});
+
+/* ============================ 05. KS L 1619 4탐침 저항률 ============================ */
+Lab.make({
+  mount:'#lab-fourpoint',
+  title:'KS L 1619 4탐침법 저항률 계산기',
+  badge:'KS L 1619',
+  controls:[
+    {id:'R', label:'측정 저항 R', min:0.001, max:1000, value:1, log:true, unit:'Ω', fmt:v=>Lab.sci(v,3)},
+    {id:'t', label:'박막 두께 t', min:1, max:500, step:1, value:100, unit:'nm', fmt:v=>v.toFixed(0)},
+    {id:'a', type:'select', label:'시료 한 변 길이', value:'100',
+     options:[{value:'50',label:'50 mm (F = 4.221)'},{value:'75',label:'75 mm (F = 4.388)'},
+              {value:'100',label:'100 mm (F = 4.452)'},{value:'200',label:'200 mm (F = 4.512)'}]}
+  ],
+  stats:[
+    {id:'F',  label:'보정계수 F', fmt:v=>v.toFixed(3)},
+    {id:'rho',label:'저항률 ρ', unit:'Ω·cm', fmt:v=>Lab.sci(v,3)},
+    {id:'j',  label:'규격 적용 범위'}
+  ],
+  plot:{width:620,height:340,xLabel:'박막 두께 t (nm)',yLabel:'저항률 ρ (Ω·cm)',
+        autoX:false,autoY:false,xLog:true,yLog:true,xMin:1,xMax:500,yMin:1e-7,yMax:1e4},
+  legend:[{color:'--accent',label:'ρ = F · t · R'},{color:'--neutral',label:'규격 적용 범위 경계'}],
+  note:'F는 시료 한 변 길이로 결정되는 보정계수이며 두께는 cm로 환산해 곱함. 규격 적용 범위는 저항률 ' +
+       '1×10⁻⁵ ~ 2×10² Ω·cm, 막두께 500 nm 이하임.',
+  plotNote:'두께가 커질수록 같은 측정 저항에서도 저항률이 비례해 커짐. 두 점선 밖으로 나간 값은 규격상 적용 대상이 아님.',
+  compute(v){
+    const FTAB = {'50':4.221,'75':4.388,'100':4.452,'200':4.512};
+    const F = FTAB[v.a];
+    const rho = F * (v.t*1e-7) * v.R;     // nm → cm
+    const cur=[];
+    for(const t of Lab.logspace(1,500,120)) cur.push([t, F*(t*1e-7)*v.R]);
+    const inRange = (rho >= 1e-5 && rho <= 2e2);
+    return {
+      series:[{points:cur, color:'--accent', width:2.2}],
+      overlays:[
+        {type:'hline', y:1e-5, color:'--neutral', label:'1×10⁻⁵ Ω·cm'},
+        {type:'hline', y:2e2,  color:'--neutral', label:'2×10² Ω·cm'},
+        {type:'point', x:v.t, y:Math.min(1e4, Math.max(1e-7, rho)), color:'--accent', label:'현재'}
+      ],
+      stats:{F:F, rho:rho, j: inRange ? '적용 범위 내' : '규격 적용 범위 초과'}
+    };
+  }
+});
+
+/* ============================ 06. 로드셀 선정 도우미 ============================ */
+Lab.make({
+  mount:'#lab-loadcell',
+  title:'로드셀 선정 도우미 — 보증 구간과 상대 오차',
+  badge:'LOAD CELL',
+  controls:[
+    {id:'cap', label:'로드셀 정격', min:1, max:10000, value:100, log:true, unit:'N', fmt:v=>Lab.sci(v,3)},
+    {id:'F',   label:'측정 예상 하중', min:0.01, max:2000, value:5, log:true, unit:'N', fmt:v=>Lab.sci(v,3)},
+    {id:'jig', label:'지그 자중', min:0, max:2000, step:10, value:1500, unit:'g', fmt:v=>v.toFixed(0)},
+    {id:'ref', type:'toggle', label:'±1 % 기준(Class 1)',
+     options:[{value:'fs',label:'정격 기준'},{value:'rd',label:'읽음값 기준'}], value:'fs'}
+  ],
+  presets:[
+    {label:'100 N + 집게지그', set:{cap:100, F:5, jig:1500}},
+    {label:'10 N + 경량 클립', set:{cap:10, F:1.5, jig:200}},
+    {label:'정격 대비 극저하중', set:{cap:100, F:0.1, jig:200}}
+  ],
+  stats:[
+    {id:'lo',  label:'보증 하한 (정격/500)', unit:'N', fmt:v=>Lab.sci(v,3)},
+    {id:'abs', label:'절대 오차', unit:'N', fmt:v=>Lab.sci(v,3)},
+    {id:'rel', label:'측정값 대비 상대 오차', unit:'%', fmt:v=>v.toFixed(2)},
+    {id:'jn',  label:'지그 자중', unit:'N', fmt:v=>v.toFixed(2)},
+    {id:'gap', label:'20 % 갭 여유', unit:'N', fmt:v=>v.toFixed(2)},
+    {id:'j',   label:'판정'}
+  ],
+  plot:{width:640,height:360,xLabel:'측정 하중 / 정격',yLabel:'상대 오차 (%)',
+        autoX:false,autoY:false,xLog:true,yLog:true,xMin:1e-4,xMax:1,yMin:0.1,yMax:1e4},
+  legend:[{color:'--accent',label:'정격 기준 ±1 %'},{color:'--neutral',label:'읽음값 기준 ±1 %'}],
+  note:'로드셀 사양은 Class 1 / 레인지 1/500이며 풀스케일의 1/500 ~ 1/1 구간에서 ±1 % 정확도를 보증함. ' +
+       '지그 자중은 9.8 m/s²로 N 환산했고, 정격 대비 갭은 약 20 %로 두었음.',
+  plotNote:'정격 기준으로 오차를 잡으면 하중이 정격에서 멀어질수록 상대 오차가 반비례로 커짐. 세로 점선이 보증 하한 1/500임.',
+  compute(v){
+    const cap=v.cap, F=v.F;
+    const lo = cap/500;
+    const abs = 0.01 * (v.ref==='fs' ? cap : F);
+    const rel = F>0 ? 100*abs/F : NaN;
+    const jn = v.jig*9.8/1000;
+    const gap = cap*1.2 - F;
+    let j;
+    if(jn > cap) j = '지그 자중이 정격 초과 — 사용 불가';
+    else if(F > cap) j = '정격 초과 — 상위 로드셀 필요';
+    else if(F < lo) j = '정확도 미보증 (정격/500 미만)';
+    else if(jn > cap*0.5) j = '±1 % 보증 — 지그 자중 여유 부족';
+    else j = '±1 % 정확도 보증 구간';
+
+    const fs=[], rd=[];
+    for(const r of Lab.logspace(1e-4,1,140)){
+      fs.push([r, 1/r]);
+      rd.push([r, 1]);
+    }
+    return {
+      series:[{points:rd, color:'--neutral', width:1.4, dash:'4 4'},
+              {points:fs, color:'--accent', width:2.2}],
+      overlays:[
+        {type:'vline', x:1/500, color:'--charcoal', label:'1/500'},
+        {type:'point', x:Math.min(1, Math.max(1e-4, F/cap)),
+         y:Math.min(1e4, Math.max(0.1, v.ref==='fs' ? cap/F : 1)), color:'--accent', label:'현재'}
+      ],
+      stats:{lo:lo, abs:abs, rel:rel, jn:jn, gap:gap, j:j}
+    };
+  }
+});
+
+/* ============================ 06-b. 20 % 갭 마진 ============================ */
+Lab.make({
+  mount:'#lab-gap',
+  title:'정격 대비 20 % 갭 마진',
+  badge:'MARGIN',
+  plot:false,
+  controls:[
+    {id:'cap', type:'select', label:'로드셀 정격', value:'100',
+     options:[{value:'10',label:'10 N'},{value:'100',label:'100 N'}]},
+    {id:'F', label:'실측 최대 하중', min:0, max:150, step:0.5, value:80, unit:'N', fmt:v=>v.toFixed(1)},
+    {id:'mode', type:'select', label:'하중 상승 유형', value:'slow',
+     options:[{value:'slow',label:'완만한 정상 실험'},{value:'fast',label:'급격한 충돌·부딪힘'}]}
+  ],
+  stats:[
+    {id:'g',  label:'갭 상한 (정격×1.2)', unit:'N', fmt:v=>v.toFixed(1)},
+    {id:'m',  label:'갭 여유', unit:'N', fmt:v=>v.toFixed(1)},
+    {id:'j',  label:'판정'},
+    {id:'w',  label:'상승 유형 영향'}
+  ],
+  note:'갭은 지그 제작 시 설계 여유용이므로 실험 중 계획적으로 쓰지 않음. 완만한 상승에서는 정격 초과 직후 ' +
+       '정지해 갭이 안전 마진으로 작동하지만, 급격한 상승에서는 스톱이 걸려도 관성 오버슈트가 갭을 즉시 넘어섬.',
+  compute(v){
+    const cap = parseFloat(v.cap);
+    const g = cap*1.2, m = g - v.F;
+    let j;
+    if(v.F > g) j = '갭 초과 — 파손 영역';
+    else if(v.F > cap) j = '정격 초과 — 갭 소모 중';
+    else j = '정격 이내';
+    const w = v.mode==='fast' ? '관성 오버슈트로 갭을 즉시 넘어설 위험' : '정격 초과 직후 정지로 갭이 안전 마진 역할';
+    return {stats:{g:g, m:m, j:j, w:w}};
+  }
+});
+
+/* ============================ 07. 응력–변형 곡선 탐색기 ============================ */
+Lab.make({
+  mount:'#lab-stress',
+  title:'응력–변형 곡선 탐색기',
+  badge:'TENSILE',
+  controls:[
+    {id:'E',  label:'탄성계수 E', min:0.1, max:1000, value:10, log:true, unit:'MPa', fmt:v=>Lab.sci(v,3)},
+    {id:'ey', label:'항복 변형률 ε_y', min:0.005, max:0.2, step:0.001, value:0.05, fmt:v=>(v*100).toFixed(1)+' %'},
+    {id:'n',  label:'가공경화 지수 n', min:0.01, max:0.6, step:0.01, value:0.3, fmt:v=>v.toFixed(2)},
+    {id:'ef', label:'파단 변형률 ε_f', min:0.05, max:5, step:0.01, value:1.0, fmt:v=>(v*100).toFixed(0)+' %'}
+  ],
+  presets:[
+    {label:'연질 하이드로젤', set:{E:0.3, ey:0.05, n:0.4, ef:3.0}},
+    {label:'점착 필름', set:{E:10, ey:0.03, n:0.25, ef:1.2}},
+    {label:'경질 시트', set:{E:800, ey:0.01, n:0.1, ef:0.15}}
+  ],
+  stats:[
+    {id:'sy',  label:'항복강도 σ_y', unit:'MPa', fmt:v=>Lab.sci(v,3)},
+    {id:'uts', label:'인장강도 UTS', unit:'MPa', fmt:v=>Lab.sci(v,3)},
+    {id:'eu',  label:'UTS 변형률', unit:'%', fmt:v=>v.toFixed(1)},
+    {id:'ef',  label:'파단신율', unit:'%', fmt:v=>v.toFixed(0)},
+    {id:'sf',  label:'파단강도', unit:'MPa', fmt:v=>Lab.sci(v,3)},
+    {id:'U',   label:'인성(곡선 아래 면적)', unit:'MJ/m³', fmt:v=>Lab.sci(v,3)}
+  ],
+  plot:{width:640,height:390,xLabel:'변형률 ε (%)',yLabel:'공칭응력 σ (MPa)',
+        autoX:true,autoY:true,yMinFixed:0},
+  legend:[{color:'--accent',label:'σ(ε) 공칭응력'},{color:'--purple',label:'탄성 구간 Eε'},
+          {color:'--amber',label:'인성 면적'}],
+  note:'탄성 구간은 σ = Eε, 항복 이후는 진응력에 멱급수 경화 σ_t = σ_y(ε/ε_y)^n을 적용하고 ' +
+       '공칭응력으로 σ = σ_t(1+ε_y)/(1+ε) 환산했음. 이 형태에서 인장강도는 Considère 조건 ' +
+       'ε* = n/(1−n)에서 나타남. 인성은 사다리꼴 적분으로 계산함.',
+  plotNote:'가공경화 지수를 올리면 UTS 지점이 오른쪽으로 밀리고, 파단 변형률을 늘리면 면적(인성)이 커짐.',
+  compute(v){
+    const E=v.E, ey=v.ey, n=v.n, ef=v.ef;
+    const sy = E*ey;
+    function sig(e){
+      if(e<=ey) return E*e;
+      return sy*Math.pow(e/ey, n)*(1+ey)/(1+e);
+    }
+    const M=400, pts=[], elastic=[];
+    for(let i=0;i<=M;i++){
+      const e = ef*i/M;
+      pts.push([e*100, sig(e)]);
+    }
+    const eEl = Math.min(ef, ey*1.6);
+    for(let i=0;i<=40;i++){ const e=eEl*i/40; elastic.push([e*100, E*e]); }
+
+    // Considère 조건에서의 UTS
+    let eu = n/(1-n);
+    if(!(eu>ey && eu<ef)) eu = ef;
+    const uts = sig(eu), sf = sig(ef);
+
+    // 인성 = ∫σ dε (사다리꼴)
+    let U=0;
+    for(let i=0;i<M;i++){
+      const e1=ef*i/M, e2=ef*(i+1)/M;
+      U += 0.5*(sig(e1)+sig(e2))*(e2-e1);
+    }
+    return {
+      series:[
+        {points:pts, color:'--amber', type:'area', opacity:0.16},
+        {points:elastic, color:'--purple', width:1.4, dash:'4 4'},
+        {points:pts, color:'--accent', width:2.4}
+      ],
+      overlays:[
+        {type:'vline', x:ey*100, color:'--ink-3', label:'항복 ε_y'},
+        {type:'point', x:ey*100, y:sy, color:'--purple', label:'σ_y'},
+        {type:'point', x:eu*100, y:uts, color:'--accent', label:'UTS'},
+        {type:'point', x:ef*100, y:sf, color:'--charcoal', label:'파단'}
+      ],
+      stats:{sy:sy, uts:uts, eu:eu*100, ef:ef*100, sf:sf, U:U}
+    };
+  }
+});
+
+/* ============================ 07-b. 인장 응력 환산기 ============================ */
+Lab.make({
+  mount:'#lab-sigma',
+  title:'인장 응력 환산 — 시편 치수 입력 오차',
+  badge:'σ = F/(w·t)',
+  plot:false,
+  controls:[
+    {id:'F', label:'하중 F', min:0, max:500, step:1, value:50, unit:'N', fmt:v=>v.toFixed(0)},
+    {id:'w', label:'시편 폭 w', min:1, max:50, step:0.5, value:10, unit:'mm', fmt:v=>v.toFixed(1)},
+    {id:'t', label:'시편 두께 t', min:0.05, max:5, step:0.01, value:0.5, unit:'mm', fmt:v=>v.toFixed(2)},
+    {id:'e', label:'두께 입력 오차', min:-10, max:10, step:0.5, value:0, unit:'%', fmt:v=>v.toFixed(1)}
+  ],
+  stats:[
+    {id:'s0', label:'참 두께 기준 σ', unit:'MPa', fmt:v=>v.toFixed(3)},
+    {id:'s1', label:'입력 두께 기준 σ', unit:'MPa', fmt:v=>v.toFixed(3)},
+    {id:'a',  label:'단면적', unit:'mm²', fmt:v=>v.toFixed(3)},
+    {id:'d',  label:'응력 편차', unit:'%', fmt:v=>v.toFixed(2)}
+  ],
+  note:'응력은 시험편 탭에 입력한 폭·두께로 환산되므로, 두께 입력이 x % 어긋나면 산출 응력 전체가 ' +
+       '같은 비율로 반대 방향으로 밀림. 하중 곡선이 정상이어도 강도 값은 통째로 이동함.',
+  compute(v){
+    const a0 = v.w*v.t;
+    const a1 = v.w*v.t*(1+v.e/100);
+    const s0 = a0>0 ? v.F/a0 : null;
+    const s1 = a1>0 ? v.F/a1 : null;
+    return {stats:{s0:s0, s1:s1, a:a1, d: (s0>0 && s1!=null) ? 100*(s1-s0)/s0 : null}};
+  }
+});
+
+/* ============================ 07-c. 천공력 계측 자릿수 ============================ */
+Lab.make({
+  mount:'#lab-puncture',
+  title:'천공력 계측 분해능 자릿수 판정',
+  badge:'RESOLUTION',
+  plot:false,
+  controls:[
+    {id:'ref', label:'합불 판정 기준값', min:0.1, max:50, step:0.1, value:5.0, unit:'N', fmt:v=>v.toFixed(1)},
+    {id:'res', type:'select', label:'계측 분해능', value:'0.01',
+     options:[{value:'0.1',label:'0.1 N'},{value:'0.01',label:'0.01 N'},{value:'0.001',label:'0.001 N'}]}
+  ],
+  stats:[
+    {id:'d1', label:'판정 자릿수', unit:'N', fmt:v=>Lab.sci(v,2)},
+    {id:'req',label:'요구 분해능(한 자리 아래)', unit:'N', fmt:v=>Lab.sci(v,2)},
+    {id:'k',  label:'자릿수 차이', unit:'자리', fmt:v=>v.toFixed(2)},
+    {id:'j',  label:'판정'}
+  ],
+  note:'판정 기준값을 유효숫자 2자리로 읽는다고 두면 판정 자릿수는 10^(⌊log₁₀ 기준값⌋ − 1)이 되고, ' +
+       '한 자리 아래까지 확보하려면 분해능이 그 10분의 1 이하여야 함. 같은 자릿수로만 계측하면 경계 근처 ' +
+       '시료의 합불이 계측 오차만으로 뒤집힘.',
+  compute(v){
+    const res = parseFloat(v.res);
+    const d1 = Math.pow(10, Math.floor(Math.log10(v.ref)) - 1);
+    const req = d1/10;
+    const k = Math.log10(d1/res);
+    return {stats:{
+      d1:d1, req:req, k:k,
+      j: res <= req*1.0000001 ? '분해능 충분 (기준보다 한 자리 이상 아래)' : '분해능 부족 — 경계 판정 신뢰 불가'
+    }};
+  }
+});
+
+/* ============================ 08. 마찰계수 측정 ============================ */
+Lab.make({
+  mount:'#lab-friction',
+  title:'마찰계수 측정 — 정지·운동 구간',
+  badge:'FRICTION',
+  controls:[
+    {id:'N',  label:'추가 수직항력', min:0.1, max:50, step:0.1, value:5, unit:'N', fmt:v=>v.toFixed(1)},
+    {id:'fs', label:'정지 마찰력 F_s', min:0, max:10, step:0.05, value:3.0, unit:'N', fmt:v=>v.toFixed(2)},
+    {id:'fk', label:'운동 마찰력 F_k', min:0, max:10, step:0.05, value:2.0, unit:'N', fmt:v=>v.toFixed(2)},
+    {id:'m',  label:'슬레드 질량', min:0, max:2000, step:10, value:200, unit:'g', fmt:v=>v.toFixed(0)}
+  ],
+  presets:[
+    {label:'윤활 등급', set:{fs:1.8, fk:1.5, N:5}},
+    {label:'중간 등급', set:{fs:3.4, fk:3.0, N:5}},
+    {label:'하드 등급', set:{fs:5.6, fk:5.0, N:5}}
+  ],
+  stats:[
+    {id:'Nt', label:'총 수직항력', unit:'N', fmt:v=>v.toFixed(3)},
+    {id:'us', label:'정지 마찰계수 µ_s', fmt:v=>v.toFixed(4)},
+    {id:'uk', label:'운동 마찰계수 µ_k', fmt:v=>v.toFixed(4)},
+    {id:'r',  label:'µ_s / µ_k', fmt:v=>v.toFixed(3)}
+  ],
+  plot:{width:620,height:320,xLabel:'시간 (s)',yLabel:'마찰력 (N)',
+        autoX:false,autoY:true,xMin:0,xMax:6,yMinFixed:0},
+  legend:[{color:'--accent',label:'마찰력 F_f(t)'},{color:'--neutral',label:'운동 마찰력 수준'}],
+  plot2:{width:620,height:230,xLabel:'코팅 등급 (1 = A, 2 = B, 3 = C)',yLabel:'µ',
+         autoX:false,autoY:true,xMin:0.4,xMax:3.6,yMinFixed:0,xTicks:3},
+  legend2:[{color:'--purple',label:'등급별 µ = F_f / F_N (F_f = 1.5 / 3.0 / 5.0 N)'}],
+  note:'총 수직항력은 추가 하중과 슬레드 자중(9.8 m/s² 환산)의 합으로 두고 µ = F_f / F_N을 계산함. ' +
+       '시간 곡선은 정지 구간에서 힘이 선형으로 올라 F_s에 도달한 뒤 운동 구간의 F_k로 감쇠 진동하며 ' +
+       '수렴하는 stick-slip 거동을 모사한 것임.',
+  plotNote:'아래 막대는 조성 분석으로 갈리지 않는 코팅 등급이 마찰계수에서는 분리되는 것을 같은 수직항력으로 비교한 값임.',
+  compute(v){
+    const Nt = v.N + v.m*9.8/1000;
+    const us = Nt>0 ? v.fs/Nt : null;
+    const uk = Nt>0 ? v.fk/Nt : null;
+    const t1 = 1.2, tau = 0.55, T = 0.45;
+    const pts=[], base=[];
+    for(let i=0;i<=600;i++){
+      const t = 6*i/600;
+      let f;
+      if(t < t1) f = v.fs*(t/t1);
+      else f = v.fk + (v.fs-v.fk)*Math.exp(-(t-t1)/tau)*Math.cos(2*Math.PI*(t-t1)/T);
+      pts.push([t, Math.max(0,f)]);
+      base.push([t, v.fk]);
+    }
+    const grades = [1.5, 3.0, 5.0];
+    const bars = grades.map((f,i)=>[i+1, Nt>0 ? f/Nt : 0]);
+    return {
+      series:[{points:base, color:'--neutral', width:1.4, dash:'4 4'},
+              {points:pts, color:'--accent', width:2.2}],
+      overlays:[
+        {type:'point', x:t1, y:v.fs, color:'--accent', label:'정지 피크 F_s'},
+        {type:'hline', y:v.fk, color:'--ink-3', label:'F_k'}
+      ],
+      series2:[{points:bars, color:'--purple', type:'bars', barWidth:52, opacity:0.7}],
+      overlays2:[
+        {type:'text', x:1, y:bars[0][1], text:'A ' + bars[0][1].toFixed(3), color:'--ink-2', anchor:'middle'},
+        {type:'text', x:2, y:bars[1][1], text:'B ' + bars[1][1].toFixed(3), color:'--ink-2', anchor:'middle'},
+        {type:'text', x:3, y:bars[2][1], text:'C ' + bars[2][1].toFixed(3), color:'--ink-2', anchor:'middle'}
+      ],
+      stats:{Nt:Nt, us:us, uk:uk, r: (uk>0 && us!=null) ? us/uk : null}
+    };
+  }
+});
+
+/* ============================ 09. 표준오차–신뢰구간 표본수 ============================ */
+Lab.make({
+  mount:'#lab-se',
+  title:'표준오차와 95 % 신뢰구간 — 표본 수 설계',
+  badge:'√n LAW',
+  controls:[
+    {id:'sd', label:'모표준편차 σ', min:1, max:20, step:0.1, value:5, unit:'Ω', fmt:v=>v.toFixed(1)},
+    {id:'n',  label:'표본 수 n', min:2, max:300, value:30, log:true, unit:'개', fmt:v=>Math.round(v).toFixed(0)},
+    {id:'tol',label:'허용 범위 ±', min:0.5, max:10, step:0.1, value:3, unit:'Ω', fmt:v=>v.toFixed(1)}
+  ],
+  presets:[
+    {label:'파일럿 30', set:{n:30}},
+    {label:'정규 모니터링 100', set:{n:100}},
+    {label:'정밀 분석 300', set:{n:300}}
+  ],
+  stats:[
+    {id:'n',  label:'표본 수', unit:'개', fmt:v=>v.toFixed(0)},
+    {id:'se', label:'표준오차 SE', unit:'Ω', fmt:v=>v.toFixed(3)},
+    {id:'ci', label:'95 % CI 반폭', unit:'Ω', fmt:v=>v.toFixed(3)},
+    {id:'j',  label:'허용 범위 판정'}
+  ],
+  plot:{width:640,height:360,xLabel:'표본 수 n',yLabel:'SE = σ/√n (Ω)',
+        autoX:false,autoY:false,xLog:true,yLog:false,xMin:2,xMax:300,yMin:0,yMax:16},
+  legend:[{color:'--accent',label:'SE = σ/√n'},{color:'--purple',label:'95 % CI 반폭 = 1.96 SE'}],
+  note:'표본 수 층화는 30개(파일럿, 초기 경향 파악) / 100개(정규 모니터링, 경제적 최적점) / ' +
+       '300개(정밀 분석)로 둠. σ = 5 Ω에서 n = 2 → 3.54, n = 10 → 1.58, n = 30 → 0.91, n = 100 → 0.5 Ω임.',
+  plotNote:'곡선 기울기가 n이 커질수록 완만해짐. 정밀도를 2배 올리려면 표본을 4배로 늘려야 함.',
+  compute(v){
+    const n = Math.round(v.n);
+    const se = v.sd/Math.sqrt(n);
+    const ci = 1.96*se;
+    const cur=[], cur2=[];
+    for(const k of Lab.logspace(2,300,140)){
+      cur.push([k, v.sd/Math.sqrt(k)]);
+      cur2.push([k, 1.96*v.sd/Math.sqrt(k)]);
+    }
+    const marks = [2,10,30,100].map(k=>[k, v.sd/Math.sqrt(k)]);
+    return {
+      series:[
+        {points:cur2, color:'--purple', width:1.6, dash:'4 4'},
+        {points:cur,  color:'--accent', width:2.4},
+        {points:marks, color:'--charcoal', type:'scatter', r:4, fill:false}
+      ],
+      overlays:[
+        {type:'hline', y:v.tol, color:'--green', label:'허용 ±' + v.tol.toFixed(1) + ' Ω'},
+        {type:'point', x:n, y:se, color:'--accent', label:'n = ' + n}
+      ],
+      plot:{yMax: Math.max(6, 1.96*v.sd/Math.sqrt(2)*1.1)},
+      stats:{n:n, se:se, ci:ci, j: ci<=v.tol ? '허용 범위 안에서 판정 가능' : '구간 폭이 허용 범위 초과 — 판정 불가'}
+    };
+  }
+});
+
+/* ============================ 09-b. Mean − 3σ 관리한계 ============================ */
+Lab.make({
+  mount:'#lab-control',
+  title:'관리한계 판정 — Mean − 3σ',
+  badge:'CONTROL LIMIT',
+  controls:[
+    {id:'mu', label:'모평균 μ', min:50, max:150, step:1, value:100, fmt:v=>v.toFixed(0)},
+    {id:'sd', label:'모표준편차 σ', min:1, max:20, step:0.5, value:5, fmt:v=>v.toFixed(1)},
+    {id:'n',  label:'표본 개수 n', min:10, max:200, step:1, value:50, unit:'개', fmt:v=>v.toFixed(0)},
+    {id:'seed', label:'난수 seed', min:1, max:100, step:1, value:11, fmt:v=>v.toFixed(0)}
+  ],
+  stats:[
+    {id:'m',  label:'표본 평균', fmt:v=>v.toFixed(3)},
+    {id:'s',  label:'표본 표준편차', fmt:v=>v.toFixed(3)},
+    {id:'cv', label:'변동계수 CV', unit:'%', fmt:v=>v.toFixed(2)},
+    {id:'lcl',label:'하한 관리한계 Mean − 3σ', fmt:v=>v.toFixed(2)},
+    {id:'out',label:'3σ 이탈', unit:'개', fmt:v=>v.toFixed(0)},
+    {id:'p',  label:'이탈 비율 (이론 0.3 %)', unit:'%', fmt:v=>v.toFixed(2)}
+  ],
+  plot:{width:640,height:370,xLabel:'측정값',yLabel:'도수',autoX:false,autoY:true,yMinFixed:0},
+  legend:[{color:'--accent',label:'표본 히스토그램'},{color:'--green',label:'1σ 68.3 %'},
+          {color:'--amber',label:'2σ 95.4 %'},{color:'--purple',label:'3σ 99.7 %'}],
+  note:'Box–Muller 변환으로 seed 기반 정규 난수를 생성함. 정규분포에서 1σ 68.3 %, 2σ 95.4 %, ' +
+       '3σ 99.7 %가 포함되므로 μ ± 3σ 밖 데이터는 이론상 0.3 % 수준임.',
+  plotNote:'표본 수가 작으면 실제 이탈 비율이 이론값에서 크게 흔들림. seed를 바꿔 여러 표본을 비교할 것.',
+  compute(v){
+    const n = Math.round(v.n);
+    const rnd = mulberry32(Math.round(v.seed)*104729 + 7);
+    const xs=[];
+    for(let i=0;i<n;i++){
+      const u1 = Math.max(1e-12, rnd()), u2 = rnd();
+      xs.push(v.mu + v.sd*Math.sqrt(-2*Math.log(u1))*Math.cos(2*Math.PI*u2));
+    }
+    const m = meanOf(xs), s = sdOf(xs);
+    const lo = v.mu - 4*v.sd, hi = v.mu + 4*v.sd, B = 24;
+    const counts = new Array(B).fill(0);
+    xs.forEach(x=>{
+      let k = Math.floor((x-lo)/(hi-lo)*B);
+      if(k>=0 && k<B) counts[k]++;
+    });
+    const bars = counts.map((c,i)=>[lo + (hi-lo)*(i+0.5)/B, c]);
+    const out = xs.filter(x=>Math.abs(x-v.mu) > 3*v.sd).length;
+    return {
+      series:[{points:bars, color:'--accent', type:'bars', barWidth:19, opacity:0.6}],
+      overlays:[
+        {type:'band', x1:v.mu-3*v.sd, x2:v.mu+3*v.sd, color:'--purple', opacity:0.06},
+        {type:'band', x1:v.mu-2*v.sd, x2:v.mu+2*v.sd, color:'--amber',  opacity:0.07},
+        {type:'band', x1:v.mu-v.sd,   x2:v.mu+v.sd,   color:'--green',  opacity:0.09, label:'1σ'},
+        {type:'vline', x:v.mu-3*v.sd, color:'--purple', label:'Mean − 3σ'},
+        {type:'vline', x:v.mu+3*v.sd, color:'--purple', label:'Mean + 3σ'},
+        {type:'vline', x:m, color:'--accent', dash:'2 3', label:'표본 평균'}
+      ],
+      plot:{xMin:lo, xMax:hi, autoX:false},
+      stats:{m:m, s:s, cv: m!==0 ? 100*s/m : NaN, lcl: v.mu-3*v.sd, out:out, p: 100*out/n}
+    };
+  }
+});
+
+/* ============================ 09-c. 밸리데이션 준비도 ============================ */
+(function(){
+  const ITEMS = [
+    ['v1','제조사 인증서 확보','제조사 발행 인증서만으로 요구 수준을 충족하는지 먼저 확인함'],
+    ['v2','감사 추적·접근 통제 요구 여부 확인','요구되는 경우 TRAPEZIUM X 단독으로는 충족하지 못함'],
+    ['v3','요구 시 별도 프로그램 조합 완료','상위 수준 데이터 관리 기능을 별도 프로그램으로 보완함'],
+    ['v4','화면 출력–저장 파일 일치 확인','측정 데이터가 화면 출력과 저장 파일에 그대로 반영되는지 실험 데이터로 확인함']
+  ];
+  Lab.make({
+    mount:'#lab-valid',
+    title:'시험 소프트웨어 밸리데이션 준비도',
+    badge:'VALIDATION',
+    plot:false,
+    custom:true,
+    controls: ITEMS.map(it=>({
+      id:it[0], type:'toggle', label:it[1],
+      options:[{value:'no',label:'미완료'},{value:'yes',label:'완료'}], value:'no'
+    })),
+    stats:[
+      {id:'d', label:'완료 항목', unit:'/ 4', fmt:v=>v.toFixed(0)},
+      {id:'i', label:'준비도 index', unit:'%', fmt:v=>v.toFixed(0)},
+      {id:'j', label:'판정'}
+    ],
+    note:'준비도 index(%) = 완료 항목 수 / 전체 항목 수 × 100. 감사 추적·접근 통제가 요구되는 경우 ' +
+         '별도 프로그램 조합 항목이 추가로 걸리는 조건부 구조임.',
+    compute(v){
+      const done = ITEMS.filter(it=>v[it[0]]==='yes');
+      const pct = 100*done.length/ITEMS.length;
+      const W = 340, bw = Math.round(W*pct/100);
+      let html = '<svg viewBox="0 0 360 34" role="img" aria-label="준비도 게이지">' +
+        '<rect x="10" y="8" width="' + W + '" height="16" fill="var(--panel-2)" stroke="var(--rule)"/>' +
+        '<rect x="10" y="8" width="' + bw + '" height="16" fill="var(--green)" fill-opacity="0.6"/>' +
+        '<text class="tm" x="' + (10+W) + '" y="20" text-anchor="end">' + pct.toFixed(0) + ' %</text></svg>';
+      ITEMS.forEach(it=>{
+        const on = v[it[0]]==='yes';
+        html += '<div class="callout' + (on?' ok':' note') + '" style="margin:10px 0 0"><p><b>' +
+          it[1] + '</b> — ' + it[2] + '</p></div>';
+      });
+      let j;
+      if(pct===100) j = '최소 수준 자체 검증 구성 완료';
+      else if(v.v2==='yes' && v.v3==='no') j = '별도 프로그램 조합 미완료';
+      else j = '미완료 항목 있음';
+      return {custom:html, stats:{d:done.length, i:pct, j:j}};
+    }
+  });
+})();
+</script>
+</body>
+</html>

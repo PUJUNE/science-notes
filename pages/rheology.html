@@ -1,0 +1,660 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>레올로지와 도공 공정 — 수학·물리·화학 노트</title>
+<meta name="description" content="전단 유동의 정의에서 출발해 멱법칙과 Herschel–Bulkley 모델로 비뉴턴 거동을 기술하고, Brookfield 측정 조건과 도공 두께·모세관 수를 인터랙티브로 계산함.">
+<link rel="stylesheet" href="../assets/css/site.css">
+</head>
+<body>
+
+<div class="topbar">
+  <div class="wrap">
+    <a class="brand" href="../index.html">← 수학·물리·화학 노트</a>
+    <ul class="topnav">
+      <li><a href="#s1">전단 유동</a></li>
+      <li><a href="#s2">뉴턴·비뉴턴</a></li>
+      <li><a href="#s3">멱법칙</a></li>
+      <li><a href="#s4">항복응력</a></li>
+      <li><a href="#s5">점도 측정</a></li>
+      <li><a href="#s6">도공 공정</a></li>
+    </ul>
+    <button class="theme-btn" type="button">DARK</button>
+  </div>
+</div>
+
+<header class="mast">
+  <div class="wrap">
+    <p class="kicker">Field 07 · 물리 · 레올로지와 도공 공정</p>
+    <h1>점도는 상수가 아니라 <em>전단속도의 함수</em></h1>
+    <p class="lede">
+      같은 젤이 노즐에서는 묽게 흐르고 전극 위에서는 굳은 듯 버티는 거동은 두 지점의 전단속도가
+      다르기 때문임. 이 페이지는 전단응력과 전단속도의 관계를 네 가지 모델로 세우고, 그 관계가
+      회전 점도계 판독과 도공 두께 설계로 어떻게 이어지는지 계산으로 따라감.
+    </p>
+    <div class="eq" style="border-left-color:var(--purple)">
+      τ = τ₀ + K·γ̇<sup>n</sup> &nbsp;&nbsp;<span class="cm">— Herschel–Bulkley. n, τ₀의 값에 따라 나머지 세 모델을 모두 포함함</span>
+    </div>
+  </div>
+</header>
+
+<main>
+
+<!-- ================= 01 ================= -->
+<section id="s1">
+  <div class="wrap">
+    <p class="eyebrow"><span class="num">01</span><span>γ̇ = dv/dy</span></p>
+    <h2>전단 유동의 정의</h2>
+
+    <p>
+      두 평행판 사이에 액체를 채우고 위판만 일정 속도로 끌면, 액체 속도가 아래판의 0에서 위판의 U까지
+      두께 방향으로 층층이 달라짐. 이 속도 기울기가 전단속도이고, 위판을 끄는 데 필요한 단위 면적당
+      힘이 전단응력임. 점도는 두 양의 비로 정의되며, 이 정의 자체에는 점도가 상수라는 조건이 들어
+      있지 않음.
+    </p>
+
+    <div class="eq">
+      γ̇ = dv/dy = U / h &nbsp;&nbsp;<span class="cm">— 전단속도 [s⁻¹]</span><br>
+      τ = F / A &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="cm">— 전단응력 [Pa]</span><br>
+      η = τ / γ̇ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="cm">— 겉보기 점도 [Pa·s]</span>
+    </div>
+
+    <ul class="sym">
+      <li><b>γ̇</b><span>전단속도 [s⁻¹]. 속도 기울기이므로 시간의 역수 차원임</span></li>
+      <li><b>τ</b><span>전단응력 [Pa]. 유동 방향으로 층을 미는 단위 면적당 힘</span></li>
+      <li><b>η</b><span>겉보기 점도 [Pa·s]. 1 Pa·s = 1000 cP</span></li>
+      <li><b>U</b><span>위판 속도 [m/s]</span></li>
+      <li><b>h</b><span>판 간격 [m]</span></li>
+    </ul>
+
+    <p>
+      전단속도의 크기는 공정 지점마다 자릿수 단위로 갈림. 통에 담긴 젤이 자중으로 천천히 처지는
+      구간은 0.01 s⁻¹ 아래이고, 스무더 간극을 통과하는 순간은 라인 속도를 간극으로 나눈 값이라
+      수백 s⁻¹에 이름. 같은 재료라도 두 지점에서 잰 점도가 다르게 나오는 이유가 여기 있으므로,
+      점도 값은 전단속도를 함께 적지 않으면 판독이 성립하지 않음.
+    </p>
+
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>공정 지점</th><th>전단속도 규모</th><th>산출 근거</th></tr></thead>
+        <tbody>
+          <tr><td>정치 중 자중 처짐</td><td>낮음</td><td>구동 속도가 없고 중력만 걸림</td></tr>
+          <tr><td>저속 교반·숙성</td><td>중간</td><td>임펠러 선속도를 용기 간극으로 나눔</td></tr>
+          <tr><td>스무더 간극 통과</td><td>높음</td><td>라인 속도 U를 간극 h로 나눈 U/h</td></tr>
+          <tr><td>도포 직후 레벨링</td><td>낮음</td><td>구동력이 표면장력과 자중만 남음</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- ================= 02 ================= -->
+<section id="s2">
+  <div class="wrap">
+    <p class="eyebrow"><span class="num">02</span><span>η = const ?</span></p>
+    <h2>뉴턴 유체와 비뉴턴 유체</h2>
+
+    <p>
+      전단응력이 전단속도에 정비례해 점도가 전단속도와 무관하게 일정한 유체를 뉴턴 유체라 부름.
+      물과 글리세롤 수용액이 여기 가까움. 고분자 사슬이나 입자가 들어가면 유동 중에 사슬이 흐름
+      방향으로 정렬하거나 얽힘이 풀리면서 점도가 전단속도에 따라 움직이고, 이때부터 비뉴턴 거동이 됨.
+    </p>
+
+    <div class="cards">
+      <div class="card">
+        <h5><span class="tag" style="background:var(--mint);color:var(--green)">n = 1</span> 뉴턴</h5>
+        <ul>
+          <li>τ = K·γ̇</li>
+          <li><b>η가 전단속도와 무관</b></li>
+          <li>물, 글리세롤 수용액</li>
+          <li>로그–로그 도표에서 기울기 1</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h5><span class="tag" style="background:var(--warm);color:var(--amber)">n &lt; 1</span> 전단담화</h5>
+        <ul>
+          <li>τ = K·γ̇<sup>n</sup></li>
+          <li><b>전단이 빨라지면 묽어짐</b></li>
+          <li>고분자 용액, 점증제 첨가 젤</li>
+          <li>도공 적성의 근거가 되는 거동</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h5><span class="tag" style="background:var(--lilac);color:var(--purple)">n &gt; 1</span> 전단농후</h5>
+        <ul>
+          <li>τ = K·γ̇<sup>n</sup></li>
+          <li><b>전단이 빨라지면 뻑뻑해짐</b></li>
+          <li>고농도 입자 분산계</li>
+          <li>고속 토출에서 압력이 급증함</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h5><span class="tag">τ₀ &gt; 0</span> 항복응력형</h5>
+        <ul>
+          <li>τ = τ₀ + K·γ̇<sup>n</sup></li>
+          <li><b>임계 응력 전에는 흐르지 않음</b></li>
+          <li>충전제·젤 네트워크가 있는 계</li>
+          <li>도포 후 처짐을 막는 성분</li>
+        </ul>
+      </div>
+    </div>
+
+    <p>
+      네 거동은 별개의 식이 아니라 하나의 식에서 파라미터만 달리 잡은 경우임. τ₀ = 0, n = 1이면
+      뉴턴, τ₀ = 0이면 멱법칙, n = 1이면 Bingham, 둘 다 살아 있으면 Herschel–Bulkley가 됨.
+      다음 절에서 이 관계를 곡선으로 확인함.
+    </p>
+  </div>
+</section>
+
+<!-- ================= 03 ================= -->
+<section id="s3">
+  <div class="wrap">
+    <p class="eyebrow"><span class="num">03</span><span>τ = K·γ̇ⁿ</span></p>
+    <h2>멱법칙과 전단담화</h2>
+
+    <p>
+      멱법칙은 전단응력을 전단속도의 거듭제곱으로 놓는 두 파라미터 모델임. 지수 n이 1에서 얼마나
+      떨어져 있는지가 비뉴턴 정도를 나타내고, K는 같은 전단속도에서의 응력 수준을 정함. 겉보기
+      점도를 다시 쓰면 점도 자체가 γ̇의 거듭제곱이 되어 로그–로그 도표에서 직선이 됨.
+    </p>
+
+    <div class="eq">
+      τ = K·γ̇<sup>n</sup><br>
+      η<sub>app</sub> = τ/γ̇ = K·γ̇<sup>n−1</sup> &nbsp;&nbsp;<span class="cm">— log η = log K + (n−1) log γ̇, 기울기가 n−1</span>
+    </div>
+
+    <ul class="sym">
+      <li><b>K</b><span>점조도 계수 [Pa·sⁿ]. γ̇ = 1 s⁻¹에서의 응력과 같음</span></li>
+      <li><b>n</b><span>유동 지수 [무차원]. n &lt; 1 담화, n = 1 뉴턴, n &gt; 1 농후</span></li>
+      <li><b>η_app</b><span>겉보기 점도 [Pa·s]. 그 전단속도에서만 성립하는 값</span></li>
+    </ul>
+
+    <p>
+      n − 1이 점도 곡선의 기울기이므로, n이 0.5면 전단속도가 100배 오를 때 점도가 10분의 1로
+      떨어짐. 도공에서 필요한 조합이 여기서 나옴. 노즐과 스무더 간극에서는 전단속도가 높아 점도가
+      내려가야 고르게 펴지고, 도포 후 정지 상태에서는 전단속도가 0에 가까워 점도가 다시 올라가야
+      전극 위에서 흐르지 않음.
+    </p>
+
+    <div id="lab-flow"></div>
+
+    <p>
+      실험실 배치에서 점도를 확보한 조성이라도 설비 토출 단계에서 젤이 전극 위에 고르게 펴지지 않고
+      응집된 채 나와 한쪽으로 쏠리거나 두껍게 쌓인 채 경화될 수 있음. 점도 조건은 소량 배치의 물성
+      확인에서 끝내지 말고 스케일업 배치로 토출 거동까지 확인해야 하며, 점도를 올리는 것만으로
+      계면 침투가 막히지 않는 경우에는 pH·Cl⁻ 조정 같은 화학 경로로 전환하는 판단이 필요함.
+    </p>
+  </div>
+</section>
+
+<!-- ================= 04 ================= -->
+<section id="s4">
+  <div class="wrap">
+    <p class="eyebrow"><span class="num">04</span><span>τ &lt; τ₀ → γ̇ = 0</span></p>
+    <h2>항복응력과 Herschel–Bulkley</h2>
+
+    <p>
+      젤 네트워크나 충전제가 만든 구조가 있는 계는 응력이 일정 값을 넘기 전까지 흐르지 않고 탄성체처럼
+      변형만 함. 이 임계값이 항복응력 τ₀이며, 응력을 τ₀만큼 먼저 상쇄한 뒤 남는 몫이 유동을 만든다고
+      보는 것이 Herschel–Bulkley 모델임. n = 1로 두면 Bingham 소성체가 됨.
+    </p>
+
+    <div class="eq">
+      τ = τ₀ + K·γ̇<sup>n</sup> &nbsp;&nbsp;(τ &gt; τ₀)<br>
+      γ̇ = 0 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;(τ ≤ τ₀)<br>
+      η<sub>app</sub> = τ₀/γ̇ + K·γ̇<sup>n−1</sup> &nbsp;&nbsp;<span class="cm">— γ̇ → 0에서 발산함</span>
+    </div>
+
+    <ul class="sym">
+      <li><b>τ₀</b><span>항복응력 [Pa]. 이 값 아래에서는 유동이 시작되지 않음</span></li>
+      <li><b>K</b><span>점조도 계수 [Pa·sⁿ]</span></li>
+      <li><b>n</b><span>유동 지수 [무차원]</span></li>
+    </ul>
+
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>모델</th><th>파라미터 조건</th><th>τ–γ̇ 관계</th><th>저전단 거동</th></tr></thead>
+        <tbody>
+          <tr><td>뉴턴</td><td>τ₀ = 0, n = 1</td><td>τ = K·γ̇</td><td>점도 일정</td></tr>
+          <tr><td>멱법칙</td><td>τ₀ = 0</td><td>τ = K·γ̇<sup>n</sup></td><td>n &lt; 1이면 점도가 계속 상승</td></tr>
+          <tr><td>Bingham</td><td>n = 1, τ₀ &gt; 0</td><td>τ = τ₀ + K·γ̇</td><td>τ₀ 아래에서 정지</td></tr>
+          <tr><td>Herschel–Bulkley</td><td>τ₀ &gt; 0, n 자유</td><td>τ = τ₀ + K·γ̇<sup>n</sup></td><td>τ₀ 아래에서 정지 + 담화</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p>
+      항복응력이 있으면 도포 후 자중으로 인한 처짐을 응력 비교만으로 판정할 수 있음. 두께 h인 젤 층이
+      경사 α의 면 위에 놓였을 때 바닥면에 걸리는 전단응력은 ρ·g·h·sin α이므로, 이 값이 τ₀보다 작으면
+      층이 그대로 멈춰 있음. 점도를 올려 처짐을 막는 방식과 달리, 항복응력은 정지 상태에서만 작동해
+      고전단 구간의 토출 저항을 함께 끌어올리지 않음.
+    </p>
+
+    <div class="callout note">
+      <p><b>측정상의 주의</b> — 회전 점도계로 얻는 값은 그 회전수에 대응하는 한 점의 겉보기 점도이지
+      τ₀와 n을 분리한 값이 아님. 모델 파라미터를 얻으려면 회전수를 바꿔 가며 여러 점을 잡고 곡선을
+      맞춰야 하며, 한 점만 남긴 기록으로는 모델 판별이 되지 않음.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ================= 05 ================= -->
+<section id="s5">
+  <div class="wrap">
+    <p class="eyebrow"><span class="num">05</span><span>η = K<sub>sp</sub> × (100/rpm) × 토크%</span></p>
+    <h2>회전 점도계 측정 조건</h2>
+
+    <p>
+      점도는 Brookfield DV2T·DV2Plus 같은 회전 점도계로 측정하며, 측정값만 남기지 않고 스핀들 번호·
+      회전수·토크·레인지·측정일과 온도를 한 줄로 함께 기록해야 판독이 성립함. 회전 점도계가 실제로
+      계측하는 물리량은 스프링의 비틀림에서 나오는 토크 비율이고, 점도는 스핀들 상수와 회전수로
+      환산한 값임.
+    </p>
+
+    <div class="eq">
+      η [cP] = K<sub>sp</sub> × (100 / rpm) × 토크[%]<br>
+      측정 상한 = K<sub>sp</sub> × 10000 / rpm &nbsp;&nbsp;<span class="cm">— 토크 100 %에 해당하는 점도</span>
+    </div>
+
+    <ul class="sym">
+      <li><b>K_sp</b><span>스핀들 상수. LV-1 = 6, LV-2 = 30, LV-3 = 120, LV-4 = 600</span></li>
+      <li><b>rpm</b><span>회전수 [min⁻¹]. 전단속도를 정함</span></li>
+      <li><b>토크%</b><span>스프링 최대 토크 대비 비율. 유효 판정 구간은 10~90 %</span></li>
+    </ul>
+
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>기록 항목</th><th>판독에서 맡는 몫</th></tr></thead>
+        <tbody>
+          <tr><td>스핀들 번호</td><td>시료 점도대에 맞는 전단 면적을 지정함. 저점도 시료는 LV-02(62), 고점도 용액은 LV-04(64)처럼 계열 내에서 바꿔 잡음</td></tr>
+          <tr><td>회전수(rpm)</td><td>전단 속도를 정함. 같은 스핀들에서 회전수를 낮추면 측정 레인지가 넓어지고 토크는 내려감</td></tr>
+          <tr><td>토크(%)</td><td>측정이 유효한지 판단하는 지표. 토크가 지나치게 낮으면 회전수를 올리거나 작은 레인지 조합으로 바꿔 다시 잡음</td></tr>
+          <tr><td>레인지(cP)</td><td>스핀들·회전수 조합이 만드는 측정 상한. 시료 점도가 상한에 접근하면 조합을 바꿔 여유를 확보함</td></tr>
+          <tr><td>측정일·측정 온도</td><td>점도의 온도 의존성과 숙성 경과를 함께 읽기 위한 기준</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div id="lab-brook"></div>
+
+    <p>
+      토크가 유효 구간을 벗어나면 값 자체를 버리고 조합을 다시 잡아야 함. 토크가 10 % 아래면 스프링
+      변위가 작아 분해능이 떨어지고, 90 %를 넘으면 상한에 붙어 실제 점도가 더 높아도 값이 늘지 않음.
+      조합을 바꾸는 방향은 두 갈래로, 점도가 높으면 큰 상수의 스핀들이나 낮은 회전수를, 점도가 낮으면
+      작은 상수의 스핀들이나 높은 회전수를 고름.
+    </p>
+  </div>
+</section>
+
+<!-- ================= 06 ================= -->
+<section id="s6">
+  <div class="wrap">
+    <p class="eyebrow"><span class="num">06</span><span>h_wet ≈ h/2, Ca = ηU/γ</span></p>
+    <h2>도공 공정과 도포 두께</h2>
+
+    <p>
+      갭 코팅에서 젤은 정지한 블레이드와 움직이는 기재 사이를 통과함. 간극 안의 속도 분포는 기재가
+      끌고 가는 드래그 유동이 지배하므로 단면 평균 속도가 기재 속도의 절반이 되고, 유량 보존에서
+      기재 위에 남는 습윤 도포 두께는 간극의 절반 수준으로 근사됨. 건조·경화 후 두께는 여기에 고형분
+      비율을 곱해 얻음.
+    </p>
+
+    <div class="eq">
+      h<sub>wet</sub> ≈ h / 2 &nbsp;&nbsp;<span class="cm">— 드래그 유동 근사</span><br>
+      h<sub>dry</sub> = h<sub>wet</sub> × φ &nbsp;&nbsp;<span class="cm">— φ는 고형분 비율</span><br>
+      도포량 [g/m²] = h<sub>dry</sub>[μm] × ρ[g/cm³]<br>
+      Ca = ηU / γ &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="cm">— 모세관 수, 점성력 대 표면장력</span>
+    </div>
+
+    <ul class="sym">
+      <li><b>h</b><span>블레이드 간극 [μm]</span></li>
+      <li><b>h_wet</b><span>습윤 도포 두께 [μm]</span></li>
+      <li><b>φ</b><span>고형분 비율 [무차원]</span></li>
+      <li><b>ρ</b><span>건조막 밀도 [g/cm³]</span></li>
+      <li><b>Ca</b><span>모세관 수 [무차원]. 점성력을 표면장력으로 나눈 비</span></li>
+      <li><b>U</b><span>라인 속도 [m/s]. 분당 값은 60으로 나눠 씀</span></li>
+      <li><b>γ</b><span>액체 표면장력 [N/m]. mN/m 값을 1000으로 나눠 씀</span></li>
+    </ul>
+
+    <p>
+      모세관 수는 도포막을 매끄럽게 펴려는 표면장력과 흐름을 끌고 가려는 점성력의 비임. 이 값이
+      커지면 코팅 비드 뒤쪽에서 흐름이 좌우로 갈라지며 진행 방향과 나란한 줄무늬가 남는데, 이 결함을
+      리빙이라 부름. 아래 계산기는 Ca = 0.01과 Ca = 1을 구간 경계로 잡아 안정·전이·리빙 세 구간을
+      표시함.
+    </p>
+
+    <div id="lab-coat"></div>
+
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>공정 변수</th><th>직접 좌우하는 물성</th><th>조정 방향</th></tr></thead>
+        <tbody>
+          <tr><td>습윤 도포 두께</td><td>건조 후 두께, 도포량</td><td>간극과 고형분으로 함께 잡음</td></tr>
+          <tr><td>스무더 간극</td><td>두께 균일도, 통과 전단속도</td><td>간극을 좁히면 전단속도가 올라 점도가 내려감</td></tr>
+          <tr><td>토출압</td><td>비드 안정성, 공급량</td><td>라인 속도에 맞춰 공급 유량을 맞춤</td></tr>
+          <tr><td>라인 스피드</td><td>모세관 수, 누적 광량</td><td>올리면 Ca가 커지고 누적 광량은 줄어듦</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p>
+      UV 경화부는 램프 출력과 개수를 라인 스피드로 나눈 누적 광량으로 경화도가 결정됨. 라인 속도를
+      올려 생산성을 확보하면 같은 램프 구성에서 누적 광량이 줄어들므로, 출력이나 램프 개수를 함께
+      올리지 않으면 경화도가 내려감. 두 변수가 한 분수 안에서 맞물려 있어 속도만 따로 조정할 수 없음.
+    </p>
+
+    <ul class="notes">
+      <li><b>하드라이너 · 소프트라이너</b><span>젤을 떼어낼 때의 박리력 차이를 이용해 나눠 씀. 두 라이너의 박리력이 달라야 한쪽만 먼저 떨어짐</span></li>
+      <li><b>금속박 합지 필름</b><span>금속면이 필요한 구조에 씀</span></li>
+      <li><b>메시</b><span>젤을 붙잡아 두어야 하는 전극에 덧댐</span></li>
+    </ul>
+
+    <p>
+      점도를 올려 얻으려는 효과와 도공 적성은 부딪힐 수 있음. 점증제와 용매를 서로 맞바꾸면 고형분을
+      유지한 채 점도만 움직일 수 있는데, 점도를 올리면 압축변형률이 내려가 경도가 개선되고 점착력은
+      올라가는 대신 면저항이 함께 올라감. 세 물성이 한 변수에 함께 걸려 있어 단일 최적점이 아니라
+      절충 구간이 생김.
+    </p>
+
+    <div id="lab-tradeoff"></div>
+
+    <p class="hint">
+      점증제로 쓰는 PVP–비닐아세테이트 공중합체는 용액형과 분말형이 나뉘므로, 용액형의 고형분 값을
+      기준으로 분말 대 용매 비율을 환산해야 두 형태를 같은 조건으로 비교할 수 있음.
+    </p>
+  </div>
+</section>
+
+<div class="wrap">
+  <div class="pager">
+    <a href="surface.html"><span class="pg-lbl">이전</span>표면·계면 화학</a>
+    <a href="mechanics.html" style="text-align:right"><span class="pg-lbl">다음</span>점착·박리와 기계물성</a>
+  </div>
+</div>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <p>Field 07 · 레올로지와 도공 공정</p>
+  </div>
+</footer>
+
+<script src="../assets/js/site.js"></script>
+<script src="../assets/js/lab.js"></script>
+<script>
+/* ===================== 03. 유동 곡선 탐색기 ===================== */
+Lab.make({
+  mount:'#lab-flow',
+  title:'유동 곡선 탐색기 — τ = τ₀ + K·γ̇ⁿ',
+  badge:'FLOW CURVE',
+  controls:[
+    {id:'model', type:'select', label:'모델', value:'pl', options:[
+      {value:'nt', label:'뉴턴 (τ₀ = 0, n = 1)'},
+      {value:'pl', label:'멱법칙 (τ₀ = 0)'},
+      {value:'bg', label:'Bingham (n = 1)'},
+      {value:'hb', label:'Herschel–Bulkley'}
+    ]},
+    {id:'K', label:'점조도 계수 K', min:0.01, max:100, value:2, log:true,
+     unit:'Pa·sⁿ', fmt:v=>Lab.sci(v,3)},
+    {id:'n', label:'유동 지수 n', min:0.2, max:1.6, step:0.01, value:0.6, unit:'', fmt:v=>v.toFixed(2)},
+    {id:'t0', label:'항복응력 τ₀', min:0, max:200, step:1, value:0, unit:'Pa', fmt:v=>v.toFixed(0)}
+  ],
+  presets:[
+    {label:'뉴턴 기준', set:{model:'nt', K:2, n:1, t0:0}},
+    {label:'전단담화 젤', set:{model:'pl', K:8, n:0.45, t0:0}},
+    {label:'항복형 젤', set:{model:'hb', K:6, n:0.5, t0:40}},
+    {label:'전단농후', set:{model:'pl', K:1, n:1.4, t0:0}}
+  ],
+  stats:[
+    {id:'e1', label:'η at 1 s⁻¹', unit:'Pa·s', fmt:v=>Lab.sci(v,3)},
+    {id:'e10', label:'η at 10 s⁻¹', unit:'Pa·s', fmt:v=>Lab.sci(v,3)},
+    {id:'e100', label:'η at 100 s⁻¹', unit:'Pa·s', fmt:v=>Lab.sci(v,3)},
+    {id:'ratio', label:'η(1)/η(100)', fmt:v=>v.toFixed(2)},
+    {id:'kind', label:'거동 판정'}
+  ],
+  plot:{width:600, height:290, xLabel:'전단속도 γ̇ (s⁻¹)', yLabel:'전단응력 τ (Pa)',
+        xLog:true, yLog:true, autoX:false, autoY:true, xMin:0.01, xMax:1000},
+  plot2:{width:600, height:290, xLabel:'전단속도 γ̇ (s⁻¹)', yLabel:'겉보기 점도 η (Pa·s)',
+        xLog:true, yLog:true, autoX:false, autoY:true, xMin:0.01, xMax:1000},
+  legend:[{color:'--purple', label:'τ = τ₀ + K·γ̇ⁿ'}, {color:'--neutral', label:'같은 K의 뉴턴 기준선'}],
+  legend2:[{color:'--accent', label:'η_app = τ/γ̇'}, {color:'--neutral', label:'뉴턴 기준선'}],
+  note:'모델을 고르면 그에 맞는 파라미터가 강제됨 — 뉴턴은 τ₀ = 0·n = 1, 멱법칙은 τ₀ = 0, ' +
+       'Bingham은 n = 1. 도공에서는 노즐·스무더 간극의 높은 전단에서 점도가 내려가고, ' +
+       '도포 후 정지 상태의 낮은 전단에서 점도가 올라가는 조합이 필요함.',
+  plotNote:'위는 유동 곡선, 아래는 점도 곡선임. 로그–로그 도표에서 점도 곡선의 기울기가 n − 1이 됨.',
+  compute(v){
+    const m = v.model;
+    const n = (m === 'nt' || m === 'bg') ? 1 : v.n;
+    const t0 = (m === 'nt' || m === 'pl') ? 0 : v.t0;
+    const K = v.K;
+    const tau = g => t0 + K * Math.pow(g, n);
+    const gs = Lab.logspace(0.01, 1000, 160);
+    const sTau = gs.map(g => [g, tau(g)]);
+    const sEta = gs.map(g => [g, tau(g) / g]);
+    const sNewt = gs.map(g => [g, K * g]);
+    const sNewtE = gs.map(g => [g, K]);
+    const e1 = tau(1) / 1, e10 = tau(10) / 10, e100 = tau(100) / 100;
+    const kind = n < 0.995 ? '전단담화 (n < 1)' : n > 1.005 ? '전단농후 (n > 1)' : '뉴턴 (n = 1)';
+    const ov = [];
+    if (t0 > 0) ov.push({type:'hline', y:t0, color:'--green', label:'τ₀ = ' + t0.toFixed(0) + ' Pa'});
+    [1, 10, 100].forEach(g => ov.push({type:'point', x:g, y:tau(g), color:'--purple'}));
+    return {
+      series:[
+        {points:sNewt, color:'--neutral', width:1.4, dash:'5 4'},
+        {points:sTau, color:'--purple', width:2.4}
+      ],
+      overlays: ov,
+      series2:[
+        {points:sNewtE, color:'--neutral', width:1.4, dash:'5 4'},
+        {points:sEta, color:'--accent', width:2.4}
+      ],
+      overlays2:[
+        {type:'point', x:1, y:e1, color:'--accent', label:'1 s⁻¹'},
+        {type:'point', x:100, y:e100, color:'--accent', label:'100 s⁻¹'}
+      ],
+      stats:{ e1:e1, e10:e10, e100:e100, ratio:e1 / e100, kind:kind + (t0 > 0 ? ' + 항복응력' : '') }
+    };
+  }
+});
+
+/* ===================== 05. Brookfield 측정 조건 ===================== */
+Lab.make({
+  mount:'#lab-brook',
+  title:'Brookfield 스핀들·회전수 조합 판정',
+  badge:'TORQUE',
+  controls:[
+    {id:'sp', type:'select', label:'스핀들', value:'2', options:[
+      {value:'1', label:'LV-1 (K = 6)'},
+      {value:'2', label:'LV-2 (K = 30)'},
+      {value:'3', label:'LV-3 (K = 120)'},
+      {value:'4', label:'LV-4 (K = 600)'}
+    ]},
+    {id:'rpm', label:'회전수', min:0.3, max:100, value:12, log:true, unit:'rpm', fmt:v=>v.toFixed(2)},
+    {id:'eta', label:'시료 점도', min:10, max:200000, value:5000, log:true, unit:'cP', fmt:v=>Lab.sci(v,3)}
+  ],
+  presets:[
+    {label:'저점도 · LV-1', set:{sp:'1', rpm:60, eta:200}},
+    {label:'중점도 · LV-2', set:{sp:'2', rpm:12, eta:5000}},
+    {label:'고점도 · LV-4', set:{sp:'4', rpm:1.5, eta:120000}}
+  ],
+  stats:[
+    {id:'tq', label:'토크', unit:'%', fmt:v=>v.toFixed(1)},
+    {id:'rng', label:'측정 상한', unit:'cP', fmt:v=>Lab.sci(v,3)},
+    {id:'lo', label:'유효 하한 (10 %)', unit:'cP', fmt:v=>Lab.sci(v,3)},
+    {id:'hi', label:'유효 상한 (90 %)', unit:'cP', fmt:v=>Lab.sci(v,3)},
+    {id:'ok', label:'판정'}
+  ],
+  plot:{width:620, height:380, xLabel:'회전수 (rpm)', yLabel:'토크 (%)',
+        xLog:true, yLog:true, autoX:false, autoY:false, xMin:0.3, xMax:100, yMin:0.1, yMax:1000},
+  legend:[
+    {color:'--green', label:'LV-1'}, {color:'--purple', label:'LV-2'},
+    {color:'--amber', label:'LV-3'}, {color:'--charcoal', label:'LV-4'},
+    {color:'--accent', label:'현재 조합'}
+  ],
+  note:'스핀들 상수는 LV 계열 표준값을 코드에 표로 내장함 — LV-1 = 6, LV-2 = 30, LV-3 = 120, ' +
+       'LV-4 = 600. 점도 = 상수 × (100/rpm) × 토크% 관계를 토크에 대해 풀면 ' +
+       '토크% = 점도 × rpm / (100 × 상수)가 됨. 유효 판정 구간은 토크 10~90 %임.',
+  plotNote:'네 곡선은 지금 시료 점도에서 각 스핀들이 회전수에 따라 내는 토크임. 회색 띠가 유효 구간임.',
+  compute(v){
+    const KS = {'1':6, '2':30, '3':120, '4':600};
+    const K = KS[v.sp];
+    const torque = (eta, rpm, k) => eta * rpm / (100 * k);
+    const tq = torque(v.eta, v.rpm, K);
+    const rng = K * 10000 / v.rpm;
+    const rpms = Lab.logspace(0.3, 100, 120);
+    const cols = {'1':'--green', '2':'--purple', '3':'--amber', '4':'--charcoal'};
+    const series = ['1','2','3','4'].map(k => ({
+      points: rpms.map(r => [r, torque(v.eta, r, KS[k])]),
+      color: cols[k], width: k === v.sp ? 2.6 : 1.3,
+      opacity: k === v.sp ? 1 : 0.5
+    }));
+    return {
+      series: series,
+      overlays:[
+        {type:'band', x1:0.3, x2:100, color:'--neutral', opacity:0},
+        {type:'hline', y:10, color:'--ink-3', label:'10 %'},
+        {type:'hline', y:90, color:'--ink-3', label:'90 %'},
+        {type:'point', x:v.rpm, y:tq, color:'--accent', label:tq.toFixed(1) + ' %'}
+      ],
+      stats:{
+        tq: tq, rng: rng, lo: rng * 0.1, hi: rng * 0.9,
+        ok: tq < 10 ? '토크 부족 — 회전수를 올리거나 작은 상수 스핀들로 교체'
+          : tq > 90 ? '상한 초과 — 회전수를 낮추거나 큰 상수 스핀들로 교체'
+          : '유효 구간'
+      }
+    };
+  }
+});
+
+/* ===================== 06. 도공 두께 예측 ===================== */
+Lab.make({
+  mount:'#lab-coat',
+  title:'도공 두께와 모세관 수 예측',
+  badge:'COATING',
+  controls:[
+    {id:'h', label:'블레이드 간극 h', min:10, max:500, step:5, value:200, unit:'μm', fmt:v=>v.toFixed(0)},
+    {id:'U', label:'라인 속도 U', min:0.5, max:20, step:0.1, value:5, unit:'m/min', fmt:v=>v.toFixed(1)},
+    {id:'eta', label:'점도 η', min:0.01, max:100, value:2, log:true, unit:'Pa·s', fmt:v=>Lab.sci(v,3)},
+    {id:'gam', label:'표면장력 γ', min:20, max:75, step:0.5, value:45, unit:'mN/m', fmt:v=>v.toFixed(1)},
+    {id:'phi', label:'고형분 비율 φ', min:10, max:80, step:1, value:35, unit:'%', fmt:v=>v.toFixed(0)},
+    {id:'rho', label:'건조막 밀도 ρ', min:0.8, max:1.6, step:0.01, value:1.05, unit:'g/cm³', fmt:v=>v.toFixed(2)}
+  ],
+  presets:[
+    {label:'저속 후막', set:{h:400, U:1.5, eta:8, gam:45, phi:35, rho:1.05}},
+    {label:'표준 조건', set:{h:200, U:5, eta:2, gam:45, phi:35, rho:1.05}},
+    {label:'고속 박막', set:{h:60, U:18, eta:0.5, gam:40, phi:30, rho:1.05}}
+  ],
+  stats:[
+    {id:'hw', label:'습윤 두께', unit:'μm', fmt:v=>v.toFixed(1)},
+    {id:'hd', label:'건조 두께', unit:'μm', fmt:v=>v.toFixed(1)},
+    {id:'ga', label:'도포량', unit:'g/m²', fmt:v=>v.toFixed(1)},
+    {id:'ca', label:'모세관 수 Ca', fmt:v=>Lab.sci(v,3)},
+    {id:'sr', label:'간극 전단속도', unit:'s⁻¹', fmt:v=>v.toFixed(1)},
+    {id:'zone', label:'코팅 구간 판정'}
+  ],
+  plot:{width:600, height:290, xLabel:'라인 속도 U (m/min)', yLabel:'모세관 수 Ca',
+        xLog:true, yLog:true, autoX:false, autoY:false, xMin:0.5, xMax:20, yMin:1e-4, yMax:1e2},
+  plot2:{width:600, height:280, xLabel:'블레이드 간극 h (μm)', yLabel:'두께 (μm)',
+        autoX:false, autoY:true, xMin:0, xMax:500, yMinFixed:0},
+  legend:[{color:'--accent', label:'현재 점도의 Ca(U)'}, {color:'--green', label:'Ca = 0.01'}, {color:'--amber', label:'Ca = 1'}],
+  legend2:[{color:'--purple', label:'습윤 두께 h/2'}, {color:'--green', label:'건조 두께 h/2 × φ'}],
+  note:'습윤 도포 두께는 갭 코팅의 드래그 유동 근사 h_wet ≈ h/2를 씀. 건조 두께는 여기에 고형분 ' +
+       '비율을 곱하고, 도포량은 건조 두께[μm] × 밀도[g/cm³]로 환산함. Ca = ηU/γ 계산에서 U는 ' +
+       'm/s로, γ는 N/m로 환산해 넣음. 구간 경계는 이 계산기에서 Ca = 0.01과 Ca = 1로 잡음.',
+  plotNote:'초록 선 아래가 안정 구간, 초록과 주황 사이가 전이 구간, 주황 선 위가 리빙이 나타나는 구간임.',
+  compute(v){
+    const Ums = v.U / 60;                    // m/s
+    const gN = v.gam / 1000;                 // N/m
+    const Ca = v.eta * Ums / gN;
+    const hw = v.h / 2;
+    const hd = hw * v.phi / 100;
+    const ga = hd * v.rho;
+    const sr = Ums / (v.h * 1e-6);           // U/h [s⁻¹]
+    const zone = Ca < 0.01 ? '안정 구간' : Ca < 1 ? '전이 구간' : '리빙 발생 구간';
+    const Us = Lab.logspace(0.5, 20, 100);
+    const curve = Us.map(u => [u, v.eta * (u / 60) / gN]);
+    const hs = Lab.linspace(0, 500, 60);
+    return {
+      series:[{points:curve, color:'--accent', width:2.4}],
+      overlays:[
+        {type:'hline', y:0.01, color:'--green', label:'Ca = 0.01'},
+        {type:'hline', y:1, color:'--amber', label:'Ca = 1'},
+        {type:'point', x:v.U, y:Ca, color:'--accent', label:Lab.sci(Ca,3)}
+      ],
+      series2:[
+        {points:hs.map(x => [x, x / 2]), color:'--purple', width:2.2},
+        {points:hs.map(x => [x, x / 2 * v.phi / 100]), color:'--green', width:2.2}
+      ],
+      overlays2:[
+        {type:'vline', x:v.h, color:'--ink-3', label:'h = ' + v.h.toFixed(0) + ' μm'},
+        {type:'point', x:v.h, y:hw, color:'--purple', label:hw.toFixed(0)},
+        {type:'point', x:v.h, y:hd, color:'--green', label:hd.toFixed(0)}
+      ],
+      stats:{ hw:hw, hd:hd, ga:ga, ca:Ca, sr:sr, zone:zone }
+    };
+  }
+});
+
+/* ===================== 06b. 점증제 함량 절충 구간 ===================== */
+Lab.make({
+  mount:'#lab-tradeoff',
+  title:'점증제 함량과 세 물성의 절충 구간',
+  badge:'TRADE-OFF',
+  controls:[
+    {id:'x', label:'점증제 상대 함량', min:50, max:200, step:5, value:100, unit:'%', fmt:v=>v.toFixed(0)}
+  ],
+  stats:[
+    {id:'c', label:'압축변형률 index', fmt:v=>v.toFixed(1)},
+    {id:'a', label:'점착력 index', fmt:v=>v.toFixed(1)},
+    {id:'r', label:'면저항 index', fmt:v=>v.toFixed(1)},
+    {id:'win', label:'세 조건 동시 만족 구간'},
+    {id:'ok', label:'현재 함량 판정'}
+  ],
+  plot:{width:620, height:380, xLabel:'점증제 상대 함량 (%)', yLabel:'물성 index',
+        autoX:false, autoY:false, xMin:50, xMax:200, yMin:0, yMax:200},
+  legend:[
+    {color:'--green', label:'압축변형률 (목표 80~110)'},
+    {color:'--accent', label:'점착력 (목표 90~130)'},
+    {color:'--purple', label:'면저항 (목표 90~150)'}
+  ],
+  note:'index 산출식은 압축변형률 = clip(100 − 0.3×(함량−100), 10, 150), ' +
+       '점착력 = clip(100 + 0.25×(함량−100), 0, 200), 면저항 = clip(100 + 0.4×(함량−100), 10, 300)임. ' +
+       '이 계수는 세 물성이 한 변수에 함께 걸리는 구조를 보이기 위한 예시 모델이며 실측값이 아님.',
+  plotNote:'세로 띠가 세 목표 구간을 동시에 만족하는 함량 범위임.',
+  compute(v){
+    const clip = (x, lo, hi) => Math.max(lo, Math.min(hi, x));
+    const fc = x => clip(100 - 0.3 * (x - 100), 10, 150);
+    const fa = x => clip(100 + 0.25 * (x - 100), 0, 200);
+    const fr = x => clip(100 + 0.4 * (x - 100), 10, 300);
+    const ok = x => fc(x) >= 80 && fc(x) <= 110 && fa(x) >= 90 && fa(x) <= 130 && fr(x) >= 90 && fr(x) <= 150;
+    const xs = Lab.linspace(50, 200, 302);
+    let lo = null, hi = null;
+    xs.forEach(x => { if (ok(x)) { if (lo === null) lo = x; hi = x; } });
+    const ovs = [
+      {type:'hline', y:80, color:'--green', dash:'2 4'},
+      {type:'hline', y:110, color:'--green', dash:'2 4'},
+      {type:'vline', x:v.x, color:'--ink-3', label:v.x.toFixed(0) + ' %'}
+    ];
+    if (lo !== null) ovs.unshift({type:'band', x1:lo, x2:hi, color:'--green', opacity:0.12,
+      label:lo.toFixed(0) + '~' + hi.toFixed(0) + ' %'});
+    return {
+      series:[
+        {points:xs.map(x => [x, fc(x)]), color:'--green', width:2.2},
+        {points:xs.map(x => [x, fa(x)]), color:'--accent', width:2.2},
+        {points:xs.map(x => [x, fr(x)]), color:'--purple', width:2.2}
+      ],
+      overlays: ovs,
+      stats:{
+        c: fc(v.x), a: fa(v.x), r: fr(v.x),
+        win: lo === null ? '없음' : lo.toFixed(0) + '~' + hi.toFixed(0) + ' %',
+        ok: ok(v.x) ? '세 조건 모두 만족' : '조건 이탈'
+      }
+    };
+  }
+});
+</script>
+</body>
+</html>

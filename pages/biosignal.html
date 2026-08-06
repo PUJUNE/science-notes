@@ -1,0 +1,1664 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>생체신호와 전극 계면 — 수학·물리·화학 노트</title>
+<meta name="description" content="반쪽전지 전위에서 출발해 전극–젤–피부 임피던스 사다리, ECG·EMG 신호와 필터 대역, 하이드로젤 확산과 침투 문턱까지 브라우저에서 직접 계산해 봄.">
+<link rel="stylesheet" href="../assets/css/site.css">
+</head>
+<body>
+
+<div class="topbar">
+  <div class="wrap">
+    <a class="brand" href="../index.html">← 수학·물리·화학 노트</a>
+    <ul class="topnav">
+      <li><a href="#s1">반쪽전지 전위</a></li>
+      <li><a href="#s2">임피던스 사다리</a></li>
+      <li><a href="#s3">ECG</a></li>
+      <li><a href="#s4">EMG 운동단위</a></li>
+      <li><a href="#s5">필터와 노이즈</a></li>
+      <li><a href="#s6">젤 내 물질 전달</a></li>
+      <li><a href="#s7">침투 문턱</a></li>
+      <li><a href="#s8">자극 전극</a></li>
+    </ul>
+    <button class="theme-btn" type="button">DARK</button>
+  </div>
+</div>
+
+<header class="mast">
+  <div class="wrap">
+    <p class="kicker">Field 11 · 물리 · 생체신호와 전극 계면</p>
+    <h1>전극이 잡는 신호는 <em>계면이 정한 크기</em>로 나옴</h1>
+    <p class="lede">
+      피부 위의 전극은 이온 전류를 전자 전류로 바꾸는 계면이며, 그 계면의 반쪽전지 전위와
+      임피던스가 신호의 하한과 잡음의 상한을 함께 정함. 이 페이지는 반쪽전지 평형에서 출발해
+      전극–젤–피부 사다리 회로, ECG·EMG 신호와 필터 대역, 젤 안의 확산과 전도 경로 형성까지를
+      한 줄기로 이음. 모든 곡선은 브라우저에서 방정식을 직접 풀어 그림.
+    </p>
+    <div class="eq" style="border-left-color:var(--green)">
+      Z(ω) = Z<sub>전극</sub> + R<sub>젤</sub> + (R<sub>sc</sub> ∥ 1/jωC<sub>sc</sub>)
+      &nbsp;&nbsp;<span class="cm">— 세 층이 직렬로 쌓이고, 각 층이 서로 다른 주파수 대역을 지배함</span>
+    </div>
+  </div>
+</header>
+
+<main>
+
+<!-- ================= 01 ================= -->
+<section id="s1">
+  <div class="wrap">
+    <p class="eyebrow"><span class="num">01</span><span>AgCl ⇌ Ag⁺ + Cl⁻</span></p>
+    <h2>분극되지 않는 계면이 기준점을 잡음</h2>
+
+    <p>
+      피부 표면 전극이 심전 신호를 읽는 과정은 이온 전류를 전자 전류로 바꾸는 계면 반응이므로,
+      그 계면에서 생기는 반쪽전지 전위의 안정성이 신호 품질을 좌우함. Ag/AgCl 계면은
+      AgCl ⇌ Ag⁺ + Cl⁻ 평형이 전류를 흘려도 빠르게 회복되는 가역 반응이라 분극이 거의 쌓이지 않고,
+      포화 KCl 기준 반쪽전지 전위가 약 +0.22 V vs SHE로 고정되어 비분극성 전극으로 기능함.
+      이 평형이 무너지면 반쪽전지 전위가 시간에 따라 흔들리며, 그 흔들림이 DC offset 증가와
+      noise 상승으로 계측기에 나타남.
+    </p>
+
+    <div class="eq">
+      AgCl ⇌ Ag⁺ + Cl⁻ &nbsp;&nbsp;<span class="cm">— 가역 평형, 전류를 흘려도 빠르게 회복됨</span><br>
+      E<sub>Ag/AgCl</sub> ≈ <b>+0.22 V vs SHE</b> &nbsp;&nbsp;<span class="cm">— 포화 KCl 기준</span><br>
+      4Ag + O₂ → 2Ag₂O &nbsp;&nbsp;<span class="cm">— 부반응. 혼합 전위를 만들어 offset과 noise를 함께 키움</span>
+    </div>
+
+    <ul class="sym">
+      <li><b>E<sub>Ag/AgCl</sub></b><span>Ag/AgCl 반쪽전지 전위(포화 KCl 기준) [V vs SHE]</span></li>
+      <li><b>R<sub>ct</sub></b><span>전하 이동 저항 [Ω]</span></li>
+    </ul>
+
+    <h3>열화 경로 다섯 갈래</h3>
+    <ul class="notes">
+      <li><b>AgCl 용해·재석출</b><span>용해도곱이 온도와 함께 올라 60 °C에서 미세 용해와 재석출이 가속되면 AgCl 층의 실효 면적과 두께가 줄어 임피던스가 오르고 분극 회복 능력이 떨어짐</span></li>
+      <li><b>Ostwald ripening</b><span>Ag 입자가 조대화하면 Ag/gel 계면의 비표면적이 감소해 전하 이동 저항 R<sub>ct</sub>가 오름</span></li>
+      <li><b>Ag₂O 생성</b><span>4Ag + O₂ → 2Ag₂O로 생긴 산화물 층은 Ag/AgCl과 전기화학 특성이 달라 혼합 전위를 형성함</span></li>
+      <li><b>열팽창 박리</b><span>Ag/AgCl 층과 금속 기재의 열팽창 계수 차이로 미세 박리가 누적되면 접촉이 국부적으로 끊겨 개방 회로로 직결됨</span></li>
+      <li><b>유기물 흡착</b><span>gel 내 폴리머·첨가제가 Ag 표면에 흡착해 유전층을 만들면 전하 이동 저항이 오르면서 잡음 특성이 바뀜</span></li>
+    </ul>
+
+    <p>
+      전극 성능은 단일 저항값이 아니라 주파수·시간 축에서 서로 다른 물리량으로 갈라져 나타나므로,
+      ANSI/AAMI EC12는 이를 여섯 갈래 항목으로 나눠 규정함. 10 Hz 교류 임피던스는 심전 대역에서의
+      계면 저항을 재고, DC offset voltage는 두 전극 반쪽전지 전위의 불균형을 재며, combined offset
+      instability and internal noise는 그 불균형이 시간에 따라 흔들리는 정도를 잡아냄. rate of change
+      of polarization은 전류 인가 후 분극이 풀리는 속도를, defibrillation overload recovery는 제세동
+      펄스라는 극단 부하 뒤의 복구 능력을, bias current tolerance는 계측기 입력 바이어스 전류(200 nA)를
+      8시간 흘렸을 때의 offset 변동을 각각 확인함.
+    </p>
+
+    <h3>ANSI/AAMI EC12:2000 전기적 성능 한계값</h3>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>No</th><th>검사 항목</th><th>한계값</th></tr></thead>
+        <tbody>
+          <tr><td>1</td><td>10-Hz Impedance for Individual pair</td><td>Max. 3 kΩ</td></tr>
+          <tr><td>2</td><td>Offset Voltage</td><td>Max. 100 mV</td></tr>
+          <tr><td>3</td><td>Combined offset instability and internal noise</td><td>Max. 150 µV</td></tr>
+          <tr><td>4</td><td>Rate of change of polarization</td><td>Max. 1 mV/s</td></tr>
+          <tr><td>5</td><td>Average of 12 electrode pairs 10 Hz Impedance</td><td>Max. 2 kΩ</td></tr>
+          <tr><td>6</td><td>Defibrillation overload recovery</td><td>Max. 100 mV</td></tr>
+          <tr><td>7</td><td>After test, 10-Hz electrode Impedance</td><td>Max. 3 kΩ</td></tr>
+          <tr><td>8</td><td>Bias current tolerance</td><td>Max. 100 mV</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div id="lab-ec12"></div>
+
+    <p>
+      FAIL 코드마다 대응하는 물리 현상이 다르므로 코드를 읽는 순간 의심 부위가 좁혀짐. Open Circuit
+      계열은 임피던스 측정 중 전류 경로가 끊긴 상태로 스냅-센서 접점, 금속 단자와 Ag/AgCl 계면,
+      Ag/AgCl 층 자체의 파단·탈락을 시사함. NOISE FAIL은 반쪽전지 전위의 시변 불안정을 가리키므로
+      AgCl 층 감소나 Ag₂O/AgCl 비율 변화를 의심하게 함. 제세동 복구 항목에서 ±200 V 펄스 뒤 복구
+      전압이 ±2 V 범위를 벗어나면 표면의 분극 해소 능력이 소실됐음을 뜻하고, 복구 기울기가 1 mV/s를
+      넘는 FAIL은 복구 속도 자체가 늦어진 것이라 AgCl 잔존량 저하로 해석함.
+    </p>
+
+    <div class="callout note">
+      <p><b>시험 배치</b> — EC12 시험은 젤 면끼리 맞댄 전극쌍으로 함. 피부라는 변동 요인을 빼고
+      전극 자체의 반쪽전지 특성만 남기려는 설계이며, Offset Voltage가 두 전극의 반쪽전지 전위
+      차이를 반영하므로 값이 작을수록 비분극에 가까운 거동을 뜻함.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ================= 02 ================= -->
+<section id="s2">
+  <div class="wrap">
+    <p class="eyebrow"><span class="num">02</span><span>R ∥ 1/jωC</span></p>
+    <h2>전극–젤–피부 사다리는 대역마다 다른 층을 드러냄</h2>
+
+    <p>
+      등가회로의 각 소자가 실제 계에서 무엇에 대응하는지를 정리하면, 이온 전도만으로 전류를 전달하는
+      구조에서는 전극과 하이드로젤 계면에 형성되는 전기이중층의 용량 성분이 임피던스를 지배하므로
+      전극 면적을 늘리거나 전해질 농도를 높이는 방법 외에는 임피던스를 낮추기 어려움. 여기에 전자
+      전도 경로를 병존시키는 것이 전도성 고분자를 넣는 이유임.
+    </p>
+
+    <p>
+      전극 쪽에서는 알루미늄 박 표면에 자연 형성되는 수 나노미터 두께의 산화막이 절연성을 띠어 계면
+      임피던스를 올리고, 하이드로젤이 박리되어 알루미늄이 직접 노출되면 좁은 면적에 전류가 몰려
+      산화막의 부분 절연 파괴와 국부 발열을 부름. PEDOT:PSS 코팅층은 체적 정전용량이 크고 가역적
+      산화환원 거동을 나타내므로 이 절연성을 보완함. 다만 코팅층이 두꺼워질수록 층 내부 잔류 용매와
+      흡습 수분의 배출 경로가 길어지고 건조 과정에서 PEDOT 상과 PSS 상의 분리가 진행되어 전자 전도
+      경로가 끊기므로, 임피던스 저감은 어느 두께에서 포화하는 반면 시간 경과 안정성은 얇은 쪽이
+      유리한 상충이 생김.
+    </p>
+
+    <div class="eq">
+      Z<sub>병렬</sub>(ω) = (R<sup>−1</sup> + jωC)<sup>−1</sup> = R / (1 + jωRC)
+      &nbsp;&nbsp;<span class="cm">— 저주파에서 R, 고주파에서 1/jωC로 수렴함</span><br>
+      Z<sub>피부 포함</sub> = (R<sub>e</sub> ∥ 1/jωC<sub>e</sub>) + R<sub>gel</sub> + (R<sub>sc</sub> ∥ 1/jωC<sub>sc</sub>)<br>
+      Z<sub>젤 맞댐</sub> = 2·(R<sub>e</sub> ∥ 1/jωC<sub>e</sub>) + R<sub>gel</sub>
+      &nbsp;&nbsp;<span class="cm">— EC12 시험 배치. 피부 항이 빠짐</span>
+    </div>
+
+    <ul class="sym">
+      <li><b>R<sub>sc</sub></b><span>각질층 저항. 이온이 통과하기 어려운 각질 세포층의 직류 저항 [Ω]</span></li>
+      <li><b>C<sub>sc</sub></b><span>각질층 용량. 얇은 유전층이 만드는 병렬 커패시턴스 [F]</span></li>
+      <li><b>R<sub>gel</sub></b><span>하이드로젤 벌크 저항. 이온 농도와 두께로 정해짐 [Ω]</span></li>
+      <li><b>R<sub>e</sub></b><span>전극 계면 전하 이동 저항 [Ω]</span></li>
+      <li><b>C<sub>e</sub></b><span>전극–젤 계면 전기이중층 용량 [F]</span></li>
+      <li><b>ω</b><span>각주파수 ω = 2πf [rad/s]</span></li>
+    </ul>
+
+    <div id="lab-zladder"></div>
+
+    <p>
+      수십 kHz 대역에서 계면 임피던스가 높으면 전류 밀도가 국부적으로 집중되어 접촉 부위 발열과
+      화상 위험이 커진다는 점이 고주파 수술기 접지 전극에서 임피던스를 낮춰야 하는 이유임. 반대로
+      심전 대역의 하단은 각질층 용량이 개방되는 구간에 걸리므로, 같은 전극이라도 어느 주파수를
+      기준으로 평가하느냐에 따라 결론이 달라짐.
+    </p>
+
+    <div class="callout">
+      <p><b>읽는 법</b> — 각질층 용량 C<sub>sc</sub>를 줄이면 저주파 쪽 |Z|가 통째로 올라가고
+      코너 주파수가 오른쪽으로 밀림. 젤 저항 R<sub>gel</sub>은 전 대역에서 같은 값을 더하므로
+      고주파 평탄부의 높이만 바꿈. 두 조작이 곡선의 서로 다른 부분만 움직인다는 점이 층을 분리해
+      읽을 수 있는 근거임.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ================= 03 ================= -->
+<section id="s3">
+  <div class="wrap">
+    <p class="eyebrow"><span class="num">03</span><span>P–QRS–T</span></p>
+    <h2>ECG 신호와 전극 요구조건</h2>
+
+    <p>
+      심장 근육의 수축은 심근 세포의 전해질 이동, 즉 탈분극과 재분극에 따른 전류 흐름이며, 수축을
+      일으키는 원동력은 동결절에서 나오는 미세한 전류임. 심박동 시 발생한 전류가 심장근육을 지나
+      신체 내에 흐르고, 이 전류를 신체 표면에서 기록하는 장치를 심전도계라 부름. 12 리드 ECG는 전극
+      10개를 사지와 흉부 표면에 배치해 보통 10초간 기록하며, P파(심방 탈분극)·QRS 복합체(심실
+      탈분극)·T파(심실 재분극)의 반복 주기로 나타남.
+    </p>
+
+    <p>
+      1903년 처음 신체표면에서 심장 신호를 기록할 당시에는 저항을 줄여 줄 물질을 찾지 못해 양손과
+      왼쪽 다리를 물통에 넣고 전선을 연결하는 방식을 썼음. 오른쪽팔–왼쪽팔, 왼쪽팔–왼쪽다리,
+      오른쪽팔–왼쪽다리 세 조합의 전압차를 기록한 것이 Standard Lead I, II, III의 시초임. 지금의
+      하이드로젤은 그 물통을 대체해 피부와 전극 사이의 저항을 낮추는 자리에 놓임.
+    </p>
+
+    <h3>전극 구성</h3>
+    <div class="cards">
+      <div class="card">
+        <h5><span class="tag">구성</span> 일반 ECG 전극</h5>
+        <ul>
+          <li><b>하이드로젤</b> — 미세 전류를 잡아내는 전도성과 점착성</li>
+          <li><b>센서</b> — Ag/AgCl을 도금한 A.B.S. 충격 노이즈를 줄임</li>
+          <li><b>스냅</b> — 카본 또는 스테인리스강. 리드 와이어와 연결</li>
+          <li><b>패드</b> — PE foam·cloth·clear tape·micropore</li>
+          <li><b>라이너·로고 스티커</b></li>
+        </ul>
+      </div>
+      <div class="card">
+        <h5><span class="tag">구성</span> TAB 전극</h5>
+        <ul>
+          <li><b>하이드로젤</b></li>
+          <li><b>전도성 필름</b> — Ag/AgCl과 카본을 코팅한 백색 PET</li>
+          <li><b>라이너·로고 스티커</b></li>
+          <li>스냅과 폼 패드를 빼 구조가 단순함</li>
+        </ul>
+      </div>
+    </div>
+
+    <h3>젤 타입 세 갈래</h3>
+    <div class="cards">
+      <div class="card">
+        <h5><span class="tag">Wet</span> 액체 젤</h5>
+        <p>피부 준비가 충분하지 않아도 ECG 신호를 빠르게 잡아내도록 설계되어 단기 시술에 맞음.</p>
+      </div>
+      <div class="card">
+        <h5><span class="tag">Solid · laminated</span> 고체 젤</h5>
+        <p>더 오래 지속되는 성능을 제공해 장기 모니터링에 적합하고, 젤이 마르는 경향이 적으며
+        접착제로 번질 위험 없이 중앙에서 압착할 수 있음.</p>
+      </div>
+      <div class="card">
+        <h5><span class="tag">Solid · curing</span> 경화형</h5>
+        <p>준비가 불충분해도 빠른 픽업이 가능하고, 피부 반응을 최소화하면서 장기 기록을 유지함.</p>
+      </div>
+    </div>
+
+    <p>
+      전도성 매질의 수성 특성이 피부 임피던스를 빠르게 낮춰 안정적인 베이스라인을 만들고, 100% 피부
+      표면 접촉과 반고체 특성이 모션 아티팩트 감소에 기여함. 패드 재질도 용도에 따라 갈리므로,
+      전극을 고르는 일은 젤과 패드를 한 쌍으로 고르는 일이 됨.
+    </p>
+
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>패드 재질</th><th>특성</th><th>용도</th></tr></thead>
+        <tbody>
+          <tr><td>PE foam</td><td>액상에 함침되지 않음</td><td>센서와 젤을 수술·세정액에서 보호</td></tr>
+          <tr><td>Micropore</td><td>미세다공성. 통기성과 증산 촉진</td><td>다한증, 장기간 착용</td></tr>
+          <tr><td>Non-woven (cloth)</td><td>장기간 편안함과 내구성</td><td>스트레스 테스트, 홀터 모니터링</td></tr>
+          <tr><td>Clear tape</td><td>투명해 지속적인 피부 관찰 가능</td><td>피부 질환 환자</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p>
+      스냅은 metal snap이 기본이고, X-ray·MRI·혈관 조영·심초음파처럼 금속이 영상에 방해가 되는
+      곳에는 carbon snap을 씀. ECG 센싱에 직결되는 시험은 세 갈래로 정리됨. AC Impedance(10 Hz)와
+      Offset voltage는 센싱 품질 요건으로, 미달 시 신호가 잡히지 않거나 노이즈가 실림. Defibrillation
+      overload recovery는 응급 요건으로, 제세동 후 신호를 확인하지 못하는 상황을 막기 위해 분극
+      전위의 변화율과 시험 후 10 Hz 전극 임피던스를 함께 봄.
+    </p>
+
+    <h3>ANSI/AAMI EC-12 ECG 센싱 조항</h3>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>조항</th><th>검증 물리량</th><th>시험 조건</th><th>단위</th></tr></thead>
+        <tbody>
+          <tr><td>4.2.2.1</td><td>AC Impedance — 10 Hz 개별 쌍 임피던스</td><td>젤 면끼리 맞대어 연결, 인가 전류 100 µA 이하</td><td>kΩ</td></tr>
+          <tr><td>4.2.2.2</td><td>Offset Voltage</td><td>젤 면끼리 맞대어 연결, 1분 안정화 후</td><td>mV</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div id="lab-ecg"></div>
+
+    <p>
+      점착력은 ASTM D3330으로 재되 피착재를 두 갈래로 나눔. 스테인리스강 시험은 아세톤으로 패널을
+      세척한 뒤 시료를 붙이고 300 mm/min로 박리될 때까지 당겨 평균값을 보고하며, 피부 시험은
+      알코올로 피부를 닦고 약 10분간 부착한 뒤 같은 속도로 당김. 표준 피착재와 실제 피부를 함께
+      재는 이유는 표면 에너지와 거칠기가 달라 같은 점착제라도 박리력이 갈리기 때문임.
+    </p>
+
+    <p>
+      모션 아티팩트를 줄이는 요소로는 피부 밀착 점착 패드·점착제와 젤의 점착 면적이 꼽히고, 반고체
+      젤의 100% 표면 접촉이 아티팩트 감소에 기여함. 여기에 전기화학적 원인이 겹치는데, 이온성
+      전도체는 수분 증발이나 젤 부피 팽창으로 이온 전기전도도가 흔들려 장시간 측정에서 센싱 능력
+      저하와 노이즈를 부름. 나노입자를 분산해 섞은 경우에도 시간이 지나면 내부 입자 농도가 줄어 같은
+      문제가 남음.
+    </p>
+
+    <div class="callout">
+      <p><b>조성 변경과 규격의 충돌</b> — ANSI/AAMI EC12의 Defibrillation overload recovery는 조성 내
+      염화기의 존재에 기대는 항목이므로, 염화기를 배제한 저이온성 조성을 택하면 그 항목을 별도 조성
+      설계로 다시 확보해야 함.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ================= 04 ================= -->
+<section id="s4">
+  <div class="wrap">
+    <p class="eyebrow"><span class="num">04</span><span>Σ MUAP<sub>i</sub>(t − t<sub>ik</sub>)</span></p>
+    <h2>EMG — 운동단위 가산과 표면·침 전극의 분리</h2>
+
+    <p>
+      운동단위는 하나의 전각세포와 그 운동축삭 및 신경 가지, 신경근접합부, 그리고 그 축삭이 지배하는
+      모든 근섬유를 묶은 단위로, 기록되는 모든 신호가 여기서 나옴. 안정된 근육에서 나오는 파형
+      일부는 단일 근섬유에서 생기지만, 수의적 활성화 중 기록되는 파형은 한 운동단위에 속한 다수의
+      근섬유가 함께 만들어 냄. 근육 하나에 든 운동단위 수는 사지 근육에서 100~500개 범위이고,
+      운동단위 하나가 지배하는 근섬유 수는 외안근의 10개 미만에서 내측 비복근의 2000개 이상까지
+      폭이 넓음.
+    </p>
+
+    <p>
+      한 운동단위의 영역은 많은 사지 근육에서 대략 2~10 mm이고, 한 영역 안에는 최소 6개 이상의 서로
+      다른 운동단위의 섬유가 섞여 있으며 밀도는 약 3 섬유/mm²임. 근섬유는 종판 영역 밖에서 안정 시
+      전기적으로 조용하며, 안정막전위는 나트륨과 칼륨의 불균등 분포와 ATP 의존 Na⁺/K⁺ 펌프 때문에
+      약 −90 mV임. 정상 근섬유 직경은 근육에 따라 5~90 µm 범위이고, 전기장은 근섬유 막 가까이에서
+      가장 강하고 거리가 멀어지면 급격히 약해져 전극이 근섬유에서 1 mm까지 멀어지는 동안 스파이크
+      진폭이 선형으로 뚜렷하게 감소함.
+    </p>
+
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>구분</th><th>침·미세선 전극 (근내 EMG)</th><th>표면 전극 (sEMG)</th></tr></thead>
+        <tbody>
+          <tr><td>잡히는 신호</td><td>단일 운동단위 전위(MUAP)</td><td>여러 섬유의 운동단위 활동전위가 겹쳐진 간섭 패턴</td></tr>
+          <tr><td>전극 크기</td><td>약 1 mm² 폭</td><td>0.5~2.5 cm 폭</td></tr>
+          <tr><td>세부 유형</td><td>mono-polar single, single-fiber EMG, concentric EMG</td><td>gelled EMG 전극, dry EMG 전극</td></tr>
+          <tr><td>해석 범위</td><td>개별 운동단위 형태·발화 패턴</td><td>전반적 근활성, 근육 간 협응, 시간에 따른 활동 변화</td></tr>
+          <tr><td>베이스라인</td><td>동심 침은 E1–E2가 가까워 외부 잡음이 균등하게 실려 제거되기 쉬움</td><td>임피던스 불균형에 민감해 재현성이 떨어짐</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p>
+      단극 전극과 동심 침 전극은 E1–E2 기록 지점 사이 거리가 달라 MUP을 이루는 근섬유 수가 달라짐.
+      동심 침 전극에서는 멀리 있는 섬유의 신호가 진폭과 타이밍이 비슷해 E1과 E2에 똑같이 기록되므로
+      차동 증폭으로 상쇄되고, 단극 전극은 E2가 멀리 떨어져 있어 원거리 섬유 신호가 덜 상쇄되므로
+      MUP 크기가 더 커짐.
+    </p>
+
+    <div id="lab-emg"></div>
+
+    <p>
+      sEMG의 약점은 임피던스 불균형에 민감하다는 점임. 임피던스 불일치가 EMG 측정의 정확도와
+      정밀도를 낮추는 주된 원인이 되어 재현성을 떨어뜨림. 전극 간 거리와 위치가 달라지는 것도
+      재현성을 흔들므로 전극 간 거리를 고정하고 템플릿을 써서 부착 위치 변동을 없애야 함. 임피던스
+      불일치를 다루는 가장 흔한 해법은 정규화 절차를 동반한 정량 분석이며, 같은 조건·같은 전극으로
+      기록한 재현성 높은 활동에 대한 백분율로 환산함. 최대수의수축을 기준으로 %MVC를 쓰는 방식이
+      대표적이고, 최대하수의수축 기준값을 쓰는 방식도 병용됨. 교합근과 측두근을 대상으로 80% MVC
+      수의수축을 1주 간격 3회 반복한 연구에서 재현성은 71.9%로 추정됨.
+    </p>
+
+    <p>
+      EMG 신호는 5 Hz에서 2 kHz까지의 대역을 차지하며, ECG와 EEG 신호가 100 Hz 아래에 머무는 것과
+      대비됨. 시간 영역 특성은 양의 피크에서 음의 피크까지의 전압으로 정의되는 진폭, 초기 음의 주기
+      지속시간인 위상, 음·양 피크 사이 간격인 상승시간, 두 음의 주기 사이 전체 시간인 지속시간으로
+      기술하며, 주 신호 뒤에 따라오는 작은 신호를 satellite라 부름. 근섬유에서 기록되는 전기 신호는
+      µV 규모여서 증폭이 필요함.
+    </p>
+
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>항목</th><th>값</th></tr></thead>
+        <tbody>
+          <tr><td>표시 감도 — 세동전위 등 작은 자발 파형</td><td>50 µV/division</td></tr>
+          <tr><td>표시 감도 — 수의적 MUP</td><td>100~200 µV/division</td></tr>
+          <tr><td>표시 감도 — 정량 EMG(정상치 비교)</td><td>100 µV/division</td></tr>
+          <tr><td>sEMG 평균 주파수 — 측두근</td><td>157 Hz</td></tr>
+          <tr><td>sEMG 평균 주파수 — 교합근</td><td>140 Hz</td></tr>
+          <tr><td>sEMG 평균 주파수 — 승모근</td><td>68 Hz</td></tr>
+          <tr><td>인식 정확도 (리뷰 집계)</td><td>68~99.8 %, 다수 문헌에서 90 % 초과</td></tr>
+          <tr><td>신호 포착 효율 (리뷰 집계)</td><td>50~80 %</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p>
+      고밀도 표면 EMG는 특수 설계된 표면 전극을 써서 근내 방식에 근접하는 민감도와 선택성을 얻고,
+      단일 운동단위 분석과 근섬유 전도속도 정보까지 제공함. 설계 지침으로는 침 전극이 표면 전극과
+      동등한 정확도를 주므로 침습성과 혈액 오염 위험을 피해 표면 전극을 택하라는 점, 표면 전극을
+      붙이기 전 알코올로 화장품을 제거하고 기록 부위를 세척하라는 점이 제시됨.
+    </p>
+  </div>
+</section>
+
+<!-- ================= 05 ================= -->
+<section id="s5">
+  <div class="wrap">
+    <p class="eyebrow"><span class="num">05</span><span>|H(f)| = [1+(f/f<sub>c</sub>)<sup>2n</sup>]<sup>−1/2</sup></span></p>
+    <h2>필터 대역이 곧 무엇을 신호로 인정할지의 선언</h2>
+
+    <p>
+      상용 EMG 장비의 증폭기는 차동 증폭기로, 두 기록원 사이의 전압 차를 증폭함. 별도의 접지
+      전극 E0가 E1과 E2의 전기적 기준이 되어 E1−E0와 E2−E0의 차를 증폭하는 구조이며, 차동 증폭기의
+      공통모드 제거 성질을 이용해 60 Hz 전기 아티팩트처럼 두 기록 전극에 공통으로 실리는 신호를 최종
+      출력에서 제거함. 감도는 division당 출력, 이득은 출력을 입력으로 나눈 값으로 구분해 씀.
+    </p>
+
+    <p>
+      필터는 근섬유에서 나온 신호를 선택적으로 증폭하기 위해 들어감. 저주파 차단 필터는 파형의 저주파
+      성분 증폭을 줄이면서 느린 침 이동 아티팩트나 교감신경 피부반응이 만드는 베이스라인 흔들림을
+      함께 억제하고, 고주파 차단 필터는 매우 높은 주파수의 영향을 줄임. 저주파 필터를 낮추면 저주파
+      잡음과 베이스라인 흔들림이 늘고, 반대로 단일섬유 EMG처럼 저주파 필터를 높이면 원거리 근섬유에서
+      기록된 저주파 성분이 제거되어 MUP의 지속시간이 짧아지고 진폭이 약간 낮아짐. 저주파 필터를
+      10 Hz 대비 500·1000·2000 Hz로 올린 비교에서 지속시간·진폭·면적의 감소가 500 Hz 필터링에서 가장
+      크게 나타났고 turn 수에는 거의 영향이 없었음.
+    </p>
+
+    <div class="eq">
+      |H<sub>LP</sub>(f)| = 1 / √(1 + (f/f<sub>c</sub>)<sup>2n</sup>) &nbsp;&nbsp;<span class="cm">— n차 버터워스 저역통과</span><br>
+      |H<sub>HP</sub>(f)| = 1 / √(1 + (f<sub>c</sub>/f)<sup>2n</sup>) &nbsp;&nbsp;<span class="cm">— n차 버터워스 고역통과</span><br>
+      |H<sub>BP</sub>(f)| = |H<sub>HP</sub>(f)| · |H<sub>LP</sub>(f)|
+      &nbsp;&nbsp;<span class="cm">— 두 필터를 종속 연결한 대역통과</span>
+    </div>
+
+    <ul class="sym">
+      <li><b>f<sub>c</sub></b><span>차단 주파수. 이득이 1/√2(−3 dB)로 떨어지는 지점 [Hz]</span></li>
+      <li><b>n</b><span>필터 차수. 통과대역 밖에서 −20n dB/decade로 떨어짐 [무차원]</span></li>
+      <li><b>|H|</b><span>진폭 응답. 입력 대비 출력 진폭의 비 [무차원]</span></li>
+    </ul>
+
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>목적</th><th>저주파 차단</th><th>고주파 차단</th><th>비고</th></tr></thead>
+        <tbody>
+          <tr><td>일상적인 EMG 기록</td><td>20~30 Hz</td><td>10,000~20,000 Hz</td><td>가장 흔히 쓰는 설정</td></tr>
+          <tr><td>정량 MUP 측정</td><td>2~3 Hz</td><td>10,000~20,000 Hz</td><td>과거 정상치와 비교할 때 저주파 차단을 낮춤</td></tr>
+          <tr><td>단일섬유 EMG</td><td>500 Hz 이상</td><td>10,000~20,000 Hz</td><td>원거리 섬유의 저주파 성분을 제거함</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div id="lab-filter"></div>
+
+    <p>
+      포터블 EMG 회로의 예로는 INA121 계기 증폭기에 이득 417을 적용해 표면 EMG 전극에서 받은 신호를
+      DC 결합으로 증폭하는 구성이 제시됨. 입력 신호를 2번·3번 핀 사이에 결합 없이 직접 연결하고,
+      1번과 8번 핀 사이에 필터링용 커패시터 C1·C2 각 100 µF와 저항 120 Ω을 두며, 7번과 4번 핀 사이에
+      9 V DC를 공급하고 6번 핀과 기준 5번 핀에서 출력을 받음.
+    </p>
+
+    <p class="pull">
+      필터를 고르는 일은 잡음을 지우는 일이 아니라 무엇을 신호로 인정할지를 정하는 일임. 저주파
+      차단을 올리면 베이스라인은 잡히지만 같은 조작이 MUP 지속시간과 ST 분절을 함께 깎아 냄.
+    </p>
+  </div>
+</section>
+
+<!-- ================= 06 ================= -->
+<section id="s6">
+  <div class="wrap">
+    <p class="eyebrow"><span class="num">06</span><span>∂C/∂t = D ∂²C/∂x²</span></p>
+    <h2>하이드로젤 내 물질 전달 — 확산이 지배하는 조건</h2>
+
+    <p>
+      전기화학에서 물질이 전극 표면으로 이동하는 경로는 확산·이온 이동·대류 세 가지이며, 어느 것이
+      지배하느냐가 측정 결과를 좌우함. 아가로스 하이드로젤을 전해질로 쓰고 ferrocyanide를 산화-환원
+      probe로 삼으면 이 세 경로를 갈라 볼 수 있음. 아가로스는 1,3-결합 β-D-galactopyranose와
+      1,4-결합 3,4-anhydro-α-L-galactopyranose를 반복 단위로 하는 선형 다당류이고, 농도에 따라
+      1~900 nm에 걸친 넓은 기공 크기 분포를 가진 다공성 구조를 이룸.
+    </p>
+
+    <p>
+      가역성 판정은 CV의 peak-to-peak separation으로 함. 25 ℃ 일전자 가역 반응의 이론값이 57 mV이므로
+      측정한 ΔE가 이 값에 가까우면 가역 일전자 거동으로 읽음. 물질 전달 기구는 스캔 속도의 제곱근과
+      peak current 사이 선형 관계로 판별하며, 선형성이 성립하면 확산이 지배한다는 뜻이고 이 선형성은
+      아가로스 하이드로젤 안에서도 유지됨. 아가로스 농도를 올리면 양극·음극 peak current가 용액 대비
+      감소하는데, 용질과 아가로스 고분자 네트워크 사이의 공간적 방해와 상호작용이 투과성을 막기
+      때문이며, 용액 값과의 차이가 크지 않은 것은 용질이 아가로스 하이드로젤의 물 부분을 잘
+      투과하기 때문임. 아가로스 농도가 2.4 wt% 미만이면 너무 희석되어 단단한 고분자 구조를 이루지
+      못해 실험 자체가 성립하지 않음.
+    </p>
+
+    <div class="eq">
+      J = −D ∂C/∂x &nbsp;&nbsp;<span class="cm">— Fick 제1법칙. 플럭스는 농도 기울기에 비례함</span><br>
+      ∂C/∂t = D ∂²C/∂x² &nbsp;&nbsp;<span class="cm">— Fick 제2법칙</span><br>
+      c(x, t) = c₀ · <b>erfc</b>( x / (2√(Dt)) ) &nbsp;&nbsp;<span class="cm">— 반무한 매질, 표면 농도 c₀ 고정 조건의 해</span><br>
+      침투 깊이 = 2√(Dt) &nbsp;·&nbsp; 특성 시간 = L²/D &nbsp;·&nbsp; 누적 방출량 = 2c₀√(Dt/π)
+    </div>
+
+    <ul class="sym">
+      <li><b>D</b><span>확산계수 [m²/s 또는 cm²/s]</span></li>
+      <li><b>c₀</b><span>표면(경계) 농도 [mol/m³]</span></li>
+      <li><b>L</b><span>젤 두께 [m]</span></li>
+      <li><b>erfc(z)</b><span>여오차함수. erfc(z) = 1 − erf(z) [무차원]</span></li>
+      <li><b>J</b><span>확산 플럭스 [mol/(cm²·s)]</span></li>
+    </ul>
+
+    <div id="lab-fick"></div>
+
+    <h3>Cottrell 감쇠와 Randles–Ševčík 선형성</h3>
+
+    <p>
+      Chronoamperometry는 자연 대류의 영향을 직접 드러냄. 20초를 넘는 CA 측정에는 대류 장애가 섞일 수
+      있고 300초를 넘으면 더 이상 확산이 제어하지 않음. 밀도 구배·열 대류·기계적 진동에서 생기는 자연
+      대류가 확산층을 무너뜨려 Cottrell 방정식이 예측한 것보다 큰 전류를 만듦. 판독 기준은 전류와
+      t<sup>−1/2</sup>의 선형성이며, 용액에서는 수십 초를 넘기면서 전류가 재현 불가능하게 출렁이는
+      반면 아가로스 하이드로젤에서는 농도와 무관하게 이 선형성이 100초를 넘겨서도 유지되고 300초
+      이상에서도 규칙적이고 재현 가능한 CA 반응이 나옴. 고체 전해질로서의 하이드로젤은 장시간 CA와
+      느린 스캔에서 이온 이동·대류 간섭이 무시할 수준이어서 이상적인 매질이 됨.
+    </p>
+
+    <div class="eq">
+      i(t) = n F A D<sup>1/2</sup> C / (π<sup>1/2</sup> t<sup>1/2</sup>)
+      &nbsp;&nbsp;<span class="cm">— Cottrell. log–log에서 기울기 −1/2</span><br>
+      i<sub>p</sub> = 2.69×10⁵ · n<sup>3/2</sup> A D<sup>1/2</sup> C v<sup>1/2</sup>
+      &nbsp;&nbsp;<span class="cm">— Randles–Ševčík. i<sub>p</sub> ∝ √v</span><br>
+      LOD = 3S<sub>b</sub> / m &nbsp;&nbsp;<span class="cm">— 검출한계. LOQ = 10S<sub>b</sub>/m</span>
+    </div>
+
+    <ul class="sym">
+      <li><b>i<sub>p</sub></b><span>peak 전류 [A]</span></li>
+      <li><b>n</b><span>전자 이동 수 [무차원]</span></li>
+      <li><b>A</b><span>전극 면적 [cm²]</span></li>
+      <li><b>C</b><span>벌크 농도 [mol/cm³]</span></li>
+      <li><b>v</b><span>스캔 속도 [V/s]</span></li>
+      <li><b>F</b><span>패러데이 상수 96485 [C/mol]</span></li>
+      <li><b>S<sub>b</sub></b><span>무첨가 조건 반복측정 표준편차</span></li>
+      <li><b>m</b><span>보정곡선 기울기 [신호/농도]</span></li>
+    </ul>
+
+    <div id="lab-cottrell"></div>
+
+    <p>
+      UME는 disk 전극의 직경 또는 band 전극의 폭·길이가 25 µm 이하인 전극을 말함. 잡음은 전극의 전기
+      활성 영역에 비례하지만 패러데이 반응은 활성·비활성을 포함한 전체 전극 영역에 비례하므로 UME는
+      더 높은 S/N 비와 낮은 검출한계를 얻고, 전류가 nA~pA 규모라 iR drop을 무시할 수 있으며, 낮은 셀
+      시간상수와 향상된 물질 전달 특성 덕에 steady-state에서도 쓸 수 있음. UME에서는 반구형 확산이
+      물질 전달을 지배해 E<sub>P</sub>를 넘는 전위에서도 전류가 줄지 않으므로 확산계수를 구하기 편함.
+      다만 UME의 표면적은 macro 전극의 수천분의 일에 불과해 국소 불균일에 민감하므로, 농도를 올려
+      젤의 균일성이 떨어지는 조건에서는 UME를 쓰지 않는 편이 나음.
+    </p>
+
+    <h3>젤 제조 중 기포와 소포제</h3>
+
+    <p>
+      기포는 액상 계면 안에 갇힌 기체의 작은 분포이며, 공기와 액상 사이에 매우 큰 상호계면을 갖는
+      것이 다른 물리적 상태와 구별되는 특징임. 각 액체는 자기 부피를 최소화하려 하고 기포는 높은
+      에너지 상태이므로, 안정화시키는 요소가 있을 때에만 기포가 유지됨. 순수한 액체는 기포를 형성하지
+      않으며, 계면에 존재하는 계면활성제가 기포를 만들고 유지시킴. 기포가 형성되면 즉시 액상 내에서
+      표면으로 떠오르고, 부상 속도는 기포 반경의 제곱에 비례하고 액상의 점도에 반비례함.
+    </p>
+
+    <div class="eq">
+      v<sub>rise</sub> ∝ r² / η &nbsp;&nbsp;<span class="cm">— Stokes 법칙 기반. 고점도 젤에서 부상이 크게 느려짐</span><br>
+      m<sub>원액</sub> = (ppm / 10⁶) × m<sub>총 제조량</sub> &nbsp;·&nbsp;
+      V<sub>희석액</sub> = m<sub>원액</sub> / 희석농도
+    </div>
+
+    <p>
+      표면에 도달하면 액체가 밑으로 흘러내리면서 기포막이 얇아지는데 이를 배수 효과라 하며, 두께가
+      일정 값 이하로 내려가면 기포막이 성질을 잃고 파괴됨. 배수 효과에 맞서 기포를 안정화하는 힘은
+      둘임. 첫째는 정전기적 반발력으로, 수계에서 친수성 그룹들이 이온 구조로 기포막에 나열되므로
+      액체가 흘러내려 기포막이 서로 가까워지면 전하를 띤 물체끼리 밀어내는 현상이 파열을 방해함.
+      둘째는 기포막의 탄성으로, 기포막이 늘어나면 그 부분의 계면활성제 농도가 낮아지고 표면장력이
+      높아져 순간적으로 평형을 되찾으려 다시 채워지는 Gibbs 탄성이 작용함.
+    </p>
+
+    <p>
+      소포제는 표면장력이 낮은 액체이며 액상 내에서 비용해성일 것, 침투계수가 양성일 것, 확산계수가
+      양성일 것 세 성질을 갖춰야 함. 침투계수가 양성이면 소포제가 기포막 속으로 파고들고, 확산계수까지
+      양성이면 계면에서 활발히 퍼짐. 이 확산이 기포를 안정화하던 계면활성제를 밀어내므로, 자체 탄성과
+      안정화 물질로 버티던 기포막이 결합력과 표면장력이 낮은 층으로 바뀌며 무너짐. 선택의 관건은
+      상용성과 비상용성의 균형인데, 상용성이 지나치게 좋은 소포제는 기포막으로 이동하지 않고 액상과
+      그냥 섞여 버려 소포 효과가 극히 약해지고, 반대로 지나치게 비상용적이면 혼탁이나 분화구 현상 같은
+      불량을 일으킴.
+    </p>
+
+    <p>
+      Acrylic acid 분자는 비닐기 쪽의 소수성 부분과 카복실기 쪽의 친수성 부분으로 나뉘며, 젤 표면의
+      기포에서 친수성 그룹이 용액 쪽으로 소수성 그룹이 공기 쪽으로 정렬함. 다른 젤 구성 성분도
+      친수성기와 소수성기를 함께 가지면 같은 현상을 일으키므로, 젤 조성 자체가 기포 안정화 물질을 품고
+      있는 셈이고 외부에서 계면활성제가 들어오지 않아도 기포가 유지됨. 투입 시점은 모든 원재료를 혼합한
+      뒤로 잡음. 기포의 주 발생 요인이 중화반응·고속 교반·고점도 용액 투입 시 공기 혼입이므로, 누적된
+      기포를 한 번에 제거하는 편이 효과적이기 때문임.
+    </p>
+
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>구분</th><th>디메티콘 에멀젼</th><th>시메티콘 에멀젼</th></tr></thead>
+        <tbody>
+          <tr><td>구성</td><td>비이온성 유화제와 물. 물로 희석 가능</td><td>비이온성 수성 에멀젼</td></tr>
+          <tr><td>고점도 용액</td><td>소포 효과가 제한적</td><td>분산성과 거품 억제 효과가 좋음</td></tr>
+          <tr><td>인증</td><td>약전 요구사항 준수</td><td>약전 요구사항 + ISO 10993·USP Class VI 생체적합성 시험 완료 등급 존재</td></tr>
+          <tr><td>적합 용도</td><td>윤활·표면 코팅 쪽</td><td>고점도 젤 소포</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- ================= 07 ================= -->
+<section id="s7">
+  <div class="wrap">
+    <p class="eyebrow"><span class="num">07</span><span>σ = σ₀(p − p<sub>c</sub>)<sup>t</sup></span></p>
+    <h2>전도성 탄소 소재와 침투 문턱</h2>
+
+    <p>
+      전기전도성 고분자 용액에 부도체인 아크릴계 점착제를 섞어 패치로 만들면 면저항이 급격히 올라감.
+      전도성 고분자에 유·무기 형태나 신소재 물질을 섞은 composite 타입은 기계적·전기적 특성을 함께
+      끌어올릴 수 있으므로, 전기적 특성을 보강할 탄소소재를 골라 PEDOT:PSS와 복합화하는 접근이 성립함.
+      소재를 고를 때 따지는 항목은 전기전도도, 전도성 고분자 용액과의 혼화성, 분산 안정성, 코팅면
+      균일성, 관리·비용 부담이며, 복합체 안의 탄소소재 함량은 ISO 11358-1 열분석으로 확인함.
+    </p>
+
+    <h3>탄소 소재 물성 비교</h3>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>소재</th><th>전기 전도도</th><th>기타 물성</th></tr></thead>
+        <tbody>
+          <tr><td>Graphene</td><td>10⁶ S/cm</td><td>열전도 5000 W·m⁻¹·K⁻¹, 영률 1 TPa(강도 약 40 N/m), 투과율 약 97.7%, 비표면적 약 2600 m²/g</td></tr>
+          <tr><td>GO (Graphene Oxide)</td><td>절연~반전도(산화도 의존)</td><td>비표면적 약 890 m²/g, 영률 207.6±23.4 GPa, 파괴강도 약 120 MPa</td></tr>
+          <tr><td>rGO (reduced GO)</td><td>최대 6300 S/cm</td><td>이동도 320 cm²·V⁻¹·s⁻¹, 영률 약 1.0 TPa 회복, 분산성 8→2.5 µg/mL (산소함량 31%→9%)</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p>
+      물 기반 PEDOT:PSS는 신소재와 섞을 때 혼화성이 크게 떨어지지만 IPA 기반으로 바꾸면 개선됨.
+      그래핀은 순수 그래핀보다 GO나 rGO 형태에서 혼화성과 특성이 살아나고, CNT는 IPA 기반 PEDOT:PSS와
+      잘 섞이는 대신 코팅 단계에서 입자 분포 균일성과 탈착을 함께 봐야 함. GO는 sp² 결합 네트워크가
+      깨져 산화 정도에 따라 절연 또는 반전도 거동을 보이지만 산소 함유 작용기 덕에 친수성과 분산성이
+      높고, rGO는 환원으로 sp² 구조를 되살려 전도도가 오르는 대신 C/O 비가 올라가면서 소수성으로
+      돌아서 분산성이 떨어짐. 전도도와 분산성이 서로 반대 방향으로 움직이는 이 구조가 GO·rGO 선택의
+      판단 축임.
+    </p>
+
+    <p>
+      MXene은 MAX 상을 선택적으로 에칭해 얻으며, HF·NH₄HF₂·HCl+LiF 같은 불소 이온 함유 용액으로 A층을
+      제거하면 탄화물 층 표면이 O·OH·F로 종단됨. ZnCl₂ 같은 루이스산 용융염을 쓰면 Cl 종단 MXene을
+      얻을 수 있고, 이 경우 750 ℃까지 구조가 안정함. 같은 소재라도 입자 등급을 나눠 비교하면 상충
+      구조가 드러나는데, 작은 등급(수백 nm) 쪽이 크기가 더 균일해 고른 코팅면을 만드는 반면 전기전도도
+      향상 폭은 큰 등급(수 µm) 입자가 더 큼. 전도도를 우선해 큰 입자를 고르고 코팅법 개선으로 균일성을
+      보완하는 경로가 성립함.
+    </p>
+
+    <div class="eq">
+      σ = σ₀ (p − p<sub>c</sub>)<sup>t</sup> , &nbsp; p &gt; p<sub>c</sub>
+      &nbsp;&nbsp;<span class="cm">— p ≤ p<sub>c</sub>에서는 매트릭스 전도도에 머무름</span>
+    </div>
+
+    <ul class="sym">
+      <li><b>σ</b><span>복합체 전도도 [S/cm]</span></li>
+      <li><b>σ₀</b><span>비례 상수. 필러 자체의 전도도 규모를 반영함 [S/cm]</span></li>
+      <li><b>p</b><span>충전재 부피분율(또는 질량분율) [무차원]</span></li>
+      <li><b>p<sub>c</sub></b><span>침투 임계값 [무차원]</span></li>
+      <li><b>t</b><span>임계 지수. 전형적으로 1.5~2 부근 [무차원]</span></li>
+    </ul>
+
+    <div id="lab-perc"></div>
+
+    <p>
+      같은 물리가 전도성 고분자를 분산한 하이드로젤에서도 나타남. PEDOT:PSS 함량이 지나치게 적으면
+      전자 전도 경로가 연속적으로 형성되지 못한 채 분산 입자가 이온 이동을 막는 장애물로만 작용해,
+      임피던스가 무첨가 조성보다 오히려 상승함. 함량이 늘어 입자 간 접촉이 연속 경로를 이루는 순간부터
+      전자 전도가 발현되어 임피던스가 무첨가 조성 아래로 내려감. 이 전환은 2전극 대칭 EIS로 확인함.
+      동일 면적의 알루미늄 전극 2매를 대칭으로 두고 하이드로젤을 개재한 뒤 100 kHz~1 Hz 구간을 로그
+      스윕으로 훑으며 반복 측정하고, 무첨가 조성과 주파수별로 교차 대비해 전 주파수에서 순서가
+      유지되는지를 봄. 면저항 측정을 병행하면 계면 성분과 벌크 성분의 변화를 갈라 읽을 수 있음.
+    </p>
+
+    <p>
+      반대쪽 한계는 자외선 가교가 결정함. PEDOT:PSS는 함량이 늘면 365 nm 광을 흡수해 경화를 방해하므로
+      같은 조사량에서 점착력이 떨어지고, 조사량을 올리면 점착력이 회복됨. 함량과 조사량을 한 쌍으로
+      놓고 설계해야 하며, 흡광에 따른 흑화가 의료용 전극 외관 요건을 제약하는 요인으로 겹침.
+    </p>
+
+    <h3>점착제 조성과 도핑 상태</h3>
+
+    <p>
+      이온성 하이드로젤은 Acrylic acid와 AMPS를 단량체로, NVP를 보조 단량체로, MBAA를 가교제로 쓰고
+      광개시제와 함께 UV 중합·가교시켜 Poly(acrylic acid)·Poly(AMPS)·Poly(NVP) 네트워크를 만듦. 이
+      조성은 이온 전도로 신호를 전달하므로, 전도성 고분자를 넣더라도 전자 전도의 기여가 이온 전도에
+      가려 드러나지 않을 수 있음. 이온 전도 경로를 줄여 전자 전도의 기여를 분리해 보려면 조성 자체를
+      비이온성 쪽으로 옮기는 설계가 따라오며, HEMA와 Acrylamide를 단량체로 삼고 MBAA로 가교하는 구조가
+      대표적임. 다만 단량체 함량이 낮으면 점도가 매우 낮아 UV 365 nm를 길게 조사해도 제대로 경화되지
+      않고 얇은 필름 형태에 그치므로, 점도를 확보해야 짧은 조사로 젤 형태 경화가 가능해짐.
+    </p>
+
+    <p>
+      PEDOT:PSS in IPA는 산성 조건에서 전도 성능을 발휘하므로, 계가 중성으로 가면 전도성 고분자가
+      디도핑되어 전도성을 잃음. 도핑 상태가 유지되어야 전자 전도가 발현된다는 점이 조성 설계의 제약이
+      되며, 비이온성 중성 조성에서 전도성 고분자를 넣어도 면저항이 움직이지 않는 현상을 이 기전이
+      설명함. Acrylic acid와 AMPS를 넣어 계를 산성으로 되돌리면 점착력은 회복되지만 pH 조건만으로 전도
+      성능이 따라오지는 않으므로, 경화시간과 탄소소재 함량을 바꿔도 같은 결과가 나오는 경우에는 조성
+      성분 자체의 디도핑 유발성을 후보로 좁혀야 함.
+    </p>
+
+    <p>
+      아크릴계 점착제에 PEDOT:PSS in IPA를 비율별로 섞어 LCR meter로 임피던스를 재면, 혼합 젤도
+      전도성을 갖기는 하지만 함량이 늘수록 임피던스가 오히려 커지는 구간이 나타남. IPA가 점착제 제조
+      과정에서 완전히 빠지지 않은 채 남고, 유기용매이자 부도체인 IPA가 이온 전도를 떨어뜨리기 때문임.
+      첨가량이 커지면 같은 광량에서 끓음 현상이 생겨 경화시간을 다시 잡아야 하고, 코팅량이 일정한
+      조건에서 상대적 IPA 함량이 커져 가교 밀도가 낮아짐. 그래서 첨가 범위는 전기적 성능만이 아니라
+      경화 조건과 가교 밀도를 함께 놓고 좁혀야 함.
+    </p>
+
+    <h3>내수성 부여 — 축합반응과 용매치환</h3>
+
+    <p>
+      PEDOT:PSS 필름의 SO₃H는 SO₃⁻와 H⁺로 쉽게 해리되지는 않지만 흡습성이 커서 공기 중 수분을
+      빨아들여 필름 내부에 수용성 산성 환경을 만듦. PEGME의 –OH와 PSS의 술폰산기 사이에서 일어나는
+      축합반응은 자유 술폰산기를 술폰산 에스터로 바꾸면서 물을 내놓으므로, 흡습성과 산성을 동시에
+      낮추고 내수성을 부여함. 이 반응은 150 ℃ 어닐링에서 진행되며 생성된 물은 그 온도에서 곧바로
+      증발함. 다만 PEGME의 일부 에테르 결합이 강산성 PSS와 150 ℃ 고온에서 분해될 수 있어 온도 조건을
+      따로 검증해야 함.
+    </p>
+
+    <div class="eq">
+      PSS-SO₃H + HO-PEGME &nbsp;<span class="cm">—150 °C→</span>&nbsp; PSS-SO₂-O-PEGME + H₂O
+    </div>
+
+    <p>
+      PPGA는 PEGME와 구조가 비슷하되 반복 단위에 탄소 사슬이 하나 더 붙은 소수성 고분자임. 말단 –OH가
+      PSS의 SO₃H와 축합반응을 일으켜 PSS의 친수성과 산성을 비활성화하고, 동시에 반복 단위의 탄소
+      사슬이 산소 원자와 물 분자 사이 수소결합 형성을 입체적으로 방해해 물과의 혼화성을 더 낮춤.
+      그래서 PPGA는 물과 잘 섞이지 않으면서 에탄올과는 안정적으로 섞임. 첨가량은 일정 간격으로 갈라
+      DI Water 침지 전후 면저항 변화율과 코팅면 잔존 여부를 보고, 첨가하지 않은 필름이 침지 즉시
+      지워지는 것을 기준선으로 삼음. 과량 첨가는 오히려 시험 후 벗겨짐을 유발해 계면 안정성을 해치므로,
+      최소 첨가량과 과량 사이에 안정 구간이 존재한다는 전제로 구간을 좁힘.
+    </p>
+
+    <p>
+      수계 PEDOT:PSS는 혼화성이 부족해 첨가제나 다른 물질과 섞으면 응집하고 코팅성이 떨어짐.
+      Evaporation이나 증류 같은 단순 치환은 응집을 부르고 보관 안정성을 떨어뜨리며 점도를 올리므로,
+      ultrafiltration을 써서 용매를 바꿈. 수계 PEDOT:PSS와 교환용 유기용매를 1:1 부피로 섞어 여과하는
+      사이클을 반복하면 알코올계 PEDOT:PSS 용액을 얻으며, 사이클 수는 목표 용매 함유량에 맞춰 정함.
+      교환 과정에서 점도가 오르지 않고 excess PSS가 선택적으로 제거되면서 PEDOT의 연결성이 좋아지는
+      점이 이 방식의 이득임.
+    </p>
+  </div>
+</section>
+
+<!-- ================= 08 ================= -->
+<section id="s8">
+  <div class="wrap">
+    <p class="eyebrow"><span class="num">08</span><span>Q = I · PW</span></p>
+    <h2>자극 전극 — NMES와 TENS</h2>
+
+    <p>
+      연하장애는 음식이나 액체를 구강에서 식도로 넘기는 삼킴 기능이 손상된 상태로 뇌졸중·신경계
+      질환·두경부 수술 뒤에 주로 생기며, 신경근 전기자극으로 삼킴 근육의 수축을 유도해 기능을 재교육하는
+      방식으로 재활함. 전극은 경부 앞쪽 근육 위에 붙이고 피부 친화성 도전성 접착 소재를 씀. 기능적
+      전기자극 치료는 즉각적 근육 활성화로 단기간에 기능 개선을 보이지만, 자극 강도의 개인화가 없으면
+      효과 편차가 커지고 장시간 사용 시 피로도가 쌓여 치료 순응도가 떨어짐. 온·냉 기능을 결합한
+      전기자극은 근육과 조직의 혈류·탄력성을 높이면서 피로 누적을 줄이는 방향으로 이 한계를 보완함.
+    </p>
+
+    <p>
+      이온성 하이드로젤 패치는 장시간 보관 시 이온 함량이 줄고 쓸림이 생겨 점착력이 떨어지고 신호
+      전달에 문제가 생기므로, 전기전도성 고분자를 도입하고 아크릴계 점착제와 혼합해 전기적 특성을
+      유지하면서 장시간 착용 시 물성이 안정되도록 설계함. 센싱 전극과 달리 자극 전극은 전하를 능동적으로
+      밀어 넣는 쪽이므로, 펄스 폭과 주파수와 진폭이 정하는 전하량이 설계 변수로 앞에 나옴.
+    </p>
+
+    <div class="eq">
+      Q<sub>phase</sub> = I · PW &nbsp;&nbsp;<span class="cm">— 한 상(phase)당 주입 전하</span><br>
+      전하 밀도 = Q<sub>phase</sub> / A &nbsp;·&nbsp;
+      듀티비 = PW · f &nbsp;·&nbsp;
+      Ī = I · PW · f &nbsp;&nbsp;<span class="cm">— 평균 전류</span><br>
+      V = I · R<sub>load</sub> &nbsp;·&nbsp;
+      P̄ = I² R<sub>load</sub> · (PW · f) &nbsp;&nbsp;<span class="cm">— 인가 전압과 평균 전력</span>
+    </div>
+
+    <ul class="sym">
+      <li><b>I</b><span>펄스 전류 진폭 [mA]</span></li>
+      <li><b>PW</b><span>펄스 폭 [µs]</span></li>
+      <li><b>f</b><span>펄스 반복 주파수 [Hz]</span></li>
+      <li><b>A</b><span>전극 접촉 면적 [cm²]</span></li>
+      <li><b>R<sub>load</sub></b><span>전극–피부 경로의 등가 부하 저항 [Ω]</span></li>
+    </ul>
+
+    <div id="lab-nmes"></div>
+
+    <p>
+      자극 전극은 정해진 한 점이 아니라 치료 출력 범위 전체에서 저항이 안정적이어야 하므로, 인가 전압을
+      단계별로 올려 가며 쌍 단위로 저항을 기록하는 방식으로 전기적 특성을 확인함. 저항이 특정 전압
+      구간에서만 튀면 전도층이나 젤 계면이 그 전류 밀도에서 비선형으로 거동한다는 뜻이라, 단일 조건
+      측정으로는 잡히지 않던 결함이 드러남. TENS 전극의 계측 항목 자체는 ECG 전극과 동일하게
+      ANSI/AAMI EC12 기준을 적용해 수행함.
+    </p>
+
+    <div class="callout ok">
+      <p><b>정리</b> — 센싱 전극은 계면 임피던스를 낮춰 신호를 끌어올리는 쪽이고, 자극 전극은 같은
+      계면으로 전하를 밀어 넣으면서 국부 전류 밀도를 흩는 쪽임. 두 용도가 같은 Ag/AgCl–하이드로젤
+      구조를 쓰면서도 설계 변수의 우선순위가 갈리는 이유가 여기 있음.</p>
+    </div>
+  </div>
+</section>
+
+<div class="wrap">
+  <div class="pager">
+    <a href="thermal.html"><span class="pg-lbl">이전</span>열분석과 전기수술</a>
+    <a href="standards.html" style="text-align:right"><span class="pg-lbl">다음</span>규격·신뢰성·통계</a>
+  </div>
+</div>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <p>Field 11 · 생체신호와 전극 계면 · 모든 곡선은 브라우저에서 방정식을 직접 풀어 그림</p>
+  </div>
+</footer>
+
+<script src="../assets/js/site.js"></script>
+<script src="../assets/js/lab.js"></script>
+<script>
+"use strict";
+
+/* ========================================================================
+   공통 수치 유틸 — erfc(Abramowitz–Stegun 7.1.26), DFT, IIR 필터
+   ======================================================================== */
+function erf(x){
+  // Abramowitz & Stegun 7.1.26 (|ε| ≤ 1.5×10⁻⁷)
+  var s = x < 0 ? -1 : 1, ax = Math.abs(x);
+  var p = 0.3275911;
+  var a1 = 0.254829592, a2 = -0.284496736, a3 = 1.421413741,
+      a4 = -1.453152027, a5 = 1.061405429;
+  var t = 1 / (1 + p * ax);
+  var y = 1 - (((((a5 * t + a4) * t) + a3) * t + a2) * t + a1) * t * Math.exp(-ax * ax);
+  return s * y;
+}
+function erfc(x){ return 1 - erf(x); }
+
+/* 실수 신호의 DFT — 크기 스펙트럼 (Hann 창) */
+function dftMag(x, N, fs){
+  var out = [], k, n, re, im, w, v;
+  for(k = 0; k <= N / 2; k++){
+    re = 0; im = 0;
+    for(n = 0; n < N; n++){
+      w = 0.5 - 0.5 * Math.cos(2 * Math.PI * n / (N - 1));   // Hann
+      v = x[n] * w;
+      re += v * Math.cos(2 * Math.PI * k * n / N);
+      im -= v * Math.sin(2 * Math.PI * k * n / N);
+    }
+    out.push([k * fs / N, 2 * Math.hypot(re, im) / N]);
+  }
+  return out;
+}
+
+/* 버터워스 계수 (bilinear transform). type: 'lp' | 'hp', order 1 또는 2 */
+function butter(type, fc, fs, order){
+  var K = Math.tan(Math.PI * fc / fs);
+  if(order === 1){
+    var d = K + 1;
+    if(type === 'lp') return {b:[K/d, K/d, 0], a:[1, (K-1)/d, 0]};
+    return {b:[1/d, -1/d, 0], a:[1, (K-1)/d, 0]};
+  }
+  var K2 = K * K, r = Math.SQRT2, nrm = 1 / (1 + r * K + K2);
+  var a1 = 2 * (K2 - 1) * nrm, a2 = (1 - r * K + K2) * nrm;
+  if(type === 'lp') return {b:[K2*nrm, 2*K2*nrm, K2*nrm], a:[1, a1, a2]};
+  return {b:[nrm, -2*nrm, nrm], a:[1, a1, a2]};
+}
+/* 시간영역 IIR (direct form I) */
+function iir(x, f){
+  var y = new Array(x.length), n;
+  var b = f.b, a = f.a;
+  for(n = 0; n < x.length; n++){
+    var acc = b[0] * x[n];
+    if(n >= 1) acc += b[1] * x[n-1] - a[1] * y[n-1];
+    if(n >= 2) acc += b[2] * x[n-2] - a[2] * y[n-2];
+    y[n] = acc;
+  }
+  return y;
+}
+/* 디지털 필터의 주파수 응답 |H(e^{jω})| — Lab.C 사용 */
+function iirMag(f, freq, fs){
+  var w = 2 * Math.PI * freq / fs;
+  var z1 = [Math.cos(-w), Math.sin(-w)];
+  var z2 = [Math.cos(-2*w), Math.sin(-2*w)];
+  var num = Lab.C.add(Lab.C.add([f.b[0],0], [f.b[1]*z1[0], f.b[1]*z1[1]]),
+                      [f.b[2]*z2[0], f.b[2]*z2[1]]);
+  var den = Lab.C.add(Lab.C.add([f.a[0],0], [f.a[1]*z1[0], f.a[1]*z1[1]]),
+                      [f.a[2]*z2[0], f.a[2]*z2[1]]);
+  return Lab.C.abs(Lab.C.div(num, den));
+}
+/* 재현 가능한 난수 (mulberry32) */
+function rng(seed){
+  var a = seed >>> 0;
+  return function(){
+    a |= 0; a = a + 0x6D2B79F5 | 0;
+    var t = Math.imul(a ^ a >>> 15, 1 | a);
+    t = t + Math.imul(t ^ t >>> 7, 61 | t) ^ t;
+    return ((t ^ t >>> 14) >>> 0) / 4294967296;
+  };
+}
+
+/* ========================================================================
+   01. EC12 전기적 성능 판정기
+   ======================================================================== */
+Lab.make({
+  mount:'#lab-ec12',
+  title:'ANSI/AAMI EC12 전기적 성능 판정기',
+  badge:'PASS / FAIL',
+  controls:[
+    {id:'acz',   label:'10 Hz 임피던스',   min:0, max:5000, step:10,  value:2000, unit:'Ω',    fmt:v=>v.toFixed(0)},
+    {id:'aczav', label:'12쌍 평균 임피던스', min:0, max:5000, step:10,  value:1500, unit:'Ω',    fmt:v=>v.toFixed(0)},
+    {id:'dco',   label:'Offset Voltage',   min:0, max:200,  step:1,   value:50,   unit:'mV',   fmt:v=>v.toFixed(0)},
+    {id:'noi',   label:'Offset 불안정+잡음', min:0, max:300,  step:1,   value:100,  unit:'µV',   fmt:v=>v.toFixed(0)},
+    {id:'pol',   label:'분극 변화율',       min:0, max:2,    step:0.01,value:0.5,  unit:'mV/s', fmt:v=>v.toFixed(2)},
+    {id:'sdr',   label:'제세동 복구 전압',   min:0, max:200,  step:1,   value:60,   unit:'mV',   fmt:v=>v.toFixed(0)},
+    {id:'bias',  label:'Bias 후 offset',   min:0, max:200,  step:1,   value:60,   unit:'mV',   fmt:v=>v.toFixed(0)}
+  ],
+  presets:[
+    {label:'전 항목 여유', set:{acz:1200, aczav:900, dco:20, noi:40, pol:0.2, sdr:25, bias:30}},
+    {label:'ACZ 초과',    set:{acz:3600, aczav:2400}},
+    {label:'NOISE 초과',  set:{noi:210, dco:120}}
+  ],
+  stats:[
+    {id:'n_pass', label:'PASS 항목'},
+    {id:'worst',  label:'여유 최소 항목'},
+    {id:'margin', label:'최소 여유', unit:'%', fmt:v=>v.toFixed(0)},
+    {id:'verdict',label:'종합 판정'}
+  ],
+  plot:{width:640, height:340, xLabel:'검사 항목', yLabel:'측정값 / 한계값',
+        autoX:false, autoY:false, xMin:0.4, xMax:7.6, yMin:0, yMax:2, xTicks:7, yTicks:5,
+        xTickFmt:v=>({1:'ACZ',2:'AVG',3:'DCO',4:'NOISE',5:'POL',6:'SDR',7:'BIAS'}[Math.round(v)] || '')},
+  legend:[{color:'--green', label:'한계값 이하'}, {color:'--accent', label:'한계값 초과'}],
+  note:'한계값은 ANSI/AAMI EC12:2000 표를 그대로 씀 — 개별쌍 10 Hz 3 kΩ, 12쌍 평균 2 kΩ, ' +
+       'Offset 100 mV, 잡음 150 µV, 분극 변화율 1 mV/s, 제세동 복구 100 mV, Bias 100 mV. ' +
+       '한 항목만 초과해도 로트 전체가 FAIL로 처리됨.',
+  plotNote:'막대 높이는 측정값을 한계값으로 나눈 비율임. 점선(1.0)을 넘으면 그 항목이 FAIL임.',
+  compute(v){
+    var items = [
+      {k:'ACZ',   x:1, val:v.acz,   lim:3000},
+      {k:'AVG',   x:2, val:v.aczav, lim:2000},
+      {k:'DCO',   x:3, val:v.dco,   lim:100},
+      {k:'NOISE', x:4, val:v.noi,   lim:150},
+      {k:'POL',   x:5, val:v.pol,   lim:1},
+      {k:'SDR',   x:6, val:v.sdr,   lim:100},
+      {k:'BIAS',  x:7, val:v.bias,  lim:100}
+    ];
+    var okPts = [], badPts = [], nPass = 0, worst = items[0], worstR = -1;
+    items.forEach(function(it){
+      var r = it.val / it.lim;
+      if(r > worstR){ worstR = r; worst = it; }
+      if(r <= 1){ nPass++; okPts.push([it.x, r]); } else { badPts.push([it.x, r]); }
+    });
+    return {
+      series:[
+        {points:okPts,  color:'--green',  type:'bars', barWidth:40, opacity:0.72},
+        {points:badPts, color:'--accent', type:'bars', barWidth:40, opacity:0.82}
+      ],
+      overlays:[{type:'hline', y:1, color:'--ink-3', label:'한계값'}],
+      stats:{
+        n_pass: nPass + ' / 7',
+        worst: worst.k,
+        margin: (1 - worstR) * 100,
+        verdict: nPass === 7 ? 'PASS' : 'FAIL'
+      }
+    };
+  }
+});
+
+/* ========================================================================
+   02. 전극–젤–피부 임피던스 사다리
+   ======================================================================== */
+Lab.make({
+  mount:'#lab-zladder',
+  title:'전극–젤–피부 임피던스 사다리',
+  badge:'BODE',
+  controls:[
+    {id:'Rsc', label:'각질층 저항 R_sc', min:1e3, max:1e6, value:1e5, log:true, unit:'Ω', fmt:v=>Lab.eng(v,'',1)},
+    {id:'Csc', label:'각질층 용량 C_sc', min:1e-9, max:1e-6, value:2e-8, log:true, unit:'F', fmt:v=>Lab.eng(v,'',1)},
+    {id:'Rg',  label:'젤 저항 R_gel',    min:10, max:2000, step:5, value:300, unit:'Ω', fmt:v=>v.toFixed(0)},
+    {id:'Re',  label:'전극 계면 저항 R_e', min:10, max:5000, step:10, value:500, unit:'Ω', fmt:v=>v.toFixed(0)},
+    {id:'Ce',  label:'전극 계면 용량 C_e', min:1e-8, max:1e-4, value:1e-6, log:true, unit:'F', fmt:v=>Lab.eng(v,'',1)},
+    {id:'f',   label:'표시 주파수 f',     min:0.1, max:10000, value:10, log:true, unit:'Hz', fmt:v=>Lab.sci(v,3)},
+    {id:'cfg', type:'toggle', label:'측정 구성',
+     options:[{value:'skin', label:'피부 포함'}, {value:'gel', label:'젤 면끼리 맞댐 (EC12)'}], value:'skin'}
+  ],
+  presets:[
+    {label:'건조 피부', set:{Rsc:5e5, Csc:8e-9, Rg:600}},
+    {label:'젤 도포 후', set:{Rsc:4e4, Csc:5e-8, Rg:200}}
+  ],
+  stats:[
+    {id:'z10',  label:'|Z| @ 10 Hz',  fmt:v=>Lab.eng(v,'Ω',2)},
+    {id:'z100', label:'|Z| @ 100 Hz', fmt:v=>Lab.eng(v,'Ω',2)},
+    {id:'z1k',  label:'|Z| @ 1 kHz',  fmt:v=>Lab.eng(v,'Ω',2)},
+    {id:'ph',   label:'표시 주파수 위상', unit:'°', fmt:v=>v.toFixed(1)},
+    {id:'ec12', label:'EC12 ACZ 판정'}
+  ],
+  plot:{width:640, height:300, xLabel:'주파수 f (Hz)', yLabel:'|Z| (Ω)',
+        xLog:true, yLog:true, autoX:false, autoY:true, xMin:0.1, xMax:10000},
+  plot2:{width:640, height:230, xLabel:'주파수 f (Hz)', yLabel:'위상 θ (°)',
+         xLog:true, autoX:false, autoY:false, xMin:0.1, xMax:10000, yMin:-90, yMax:10, yTicks:5},
+  legend:[{color:'--accent', label:'|Z| 전체'}, {color:'--purple', label:'각질층 성분만'}, {color:'--green', label:'전극 계면 성분만'}],
+  legend2:[{color:'--curr', label:'위상 θ'}],
+  note:'각 층은 저항과 용량의 병렬 조합이며, 층끼리는 직렬로 쌓임. 젤 면끼리 맞댄 구성은 EC12 시험 배치와 ' +
+       '같아 전극 계면 두 개와 젤 저항만 남음. 판정 기준은 개별쌍 10 Hz 임피던스 3 kΩ임.',
+  plotNote:'저주파에서 각질층 용량이 개방되어 |Z|가 R_sc 쪽으로 급증하며, ECG 대역의 하단이 이 구간에 걸림.',
+  compute(v){
+    var C = Lab.C;
+    function zPar(R, Cap, w){
+      var zc = [0, -1 / (w * Cap)];
+      return C.par([R, 0], zc);
+    }
+    function ztot(f){
+      var w = 2 * Math.PI * f;
+      var ze = zPar(v.Re, v.Ce, w);
+      if(v.cfg === 'gel') return C.add(C.add(ze, ze), [v.Rg, 0]);
+      return C.add(C.add(ze, [v.Rg, 0]), zPar(v.Rsc, v.Csc, w));
+    }
+    var fs = Lab.logspace(0.1, 10000, 220);
+    var mag = [], pha = [], sc = [], el = [];
+    fs.forEach(function(f){
+      var w = 2 * Math.PI * f, z = ztot(f);
+      mag.push([f, C.abs(z)]);
+      pha.push([f, C.arg(z)]);
+      sc.push([f, C.abs(zPar(v.Rsc, v.Csc, w))]);
+      el.push([f, C.abs(zPar(v.Re, v.Ce, w)) * (v.cfg === 'gel' ? 2 : 1)]);
+    });
+    var series = [{points:mag, color:'--accent', width:2.4}];
+    if(v.cfg === 'skin') series.push({points:sc, color:'--purple', width:1.3, dash:'4 3', opacity:0.8});
+    series.push({points:el, color:'--green', width:1.3, dash:'4 3', opacity:0.8});
+
+    var z10 = C.abs(ztot(10)), z100 = C.abs(ztot(100)), z1k = C.abs(ztot(1000));
+    var zn = ztot(v.f);
+    var verdict = v.cfg === 'gel'
+      ? (z10 <= 3000 ? 'PASS (≤ 3 kΩ)' : 'FAIL (> 3 kΩ)')
+      : '피부 포함 — 해당 없음';
+    return {
+      series: series,
+      overlays:[
+        {type:'vline', x:v.f, color:'--ink-3', label:Lab.sci(v.f,3) + ' Hz'},
+        {type:'hline', y:3000, color:'--charcoal', label:'EC12 3 kΩ'},
+        {type:'point', x:v.f, y:C.abs(zn), color:'--accent'}
+      ],
+      series2:[{points:pha, color:'--curr', width:2.2}],
+      overlays2:[
+        {type:'vline', x:v.f, color:'--ink-3'},
+        {type:'hline', y:-45, color:'--neutral', label:'−45°'}
+      ],
+      stats:{z10:z10, z100:z100, z1k:z1k, ph:C.arg(zn), ec12:verdict}
+    };
+  }
+});
+
+/* ========================================================================
+   03. ECG 파형과 대역통과 필터 (시간영역 IIR)
+   ======================================================================== */
+(function(){
+  var FS = 500, BEATS = 3, N = FS * BEATS;          // 3 s, 500 Hz
+  var GAUSS = [                                      // [진폭 mV, 중심 s, 표준편차 s]
+    [ 0.12, 0.280, 0.0250],   // P
+    [-0.10, 0.375, 0.0080],   // Q
+    [ 1.00, 0.400, 0.0100],   // R
+    [-0.25, 0.425, 0.0120],   // S
+    [ 0.28, 0.600, 0.0450]    // T
+  ];
+  function cleanECG(){
+    var x = new Array(N), n, t, k, s;
+    for(n = 0; n < N; n++){
+      t = (n / FS) % 1.0;                            // 60 bpm
+      s = 0;
+      for(k = 0; k < GAUSS.length; k++){
+        var g = GAUSS[k], d = (t - g[1]) / g[2];
+        s += g[0] * Math.exp(-0.5 * d * d);
+      }
+      x[n] = s;
+    }
+    return x;
+  }
+  function wander(A){
+    var x = new Array(N), n;
+    for(n = 0; n < N; n++) x[n] = A * Math.sin(2 * Math.PI * (1/3) * n / FS);
+    return x;
+  }
+  function mains(A){
+    var x = new Array(N), n;
+    for(n = 0; n < N; n++) x[n] = A * Math.sin(2 * Math.PI * 60 * n / FS);
+    return x;
+  }
+  /* 3 s 파형을 5회 이어 붙여 필터 과도응답을 흘려보낸 뒤 마지막 주기만 취함 */
+  function filt(x, fhp, flp, ord){
+    var REP = 5, long = [], r, n;
+    for(r = 0; r < REP; r++) for(n = 0; n < N; n++) long.push(x[n]);
+    var y = iir(iir(long, butter('hp', fhp, FS, ord)), butter('lp', flp, FS, ord));
+    return y.slice((REP - 1) * N);
+  }
+  function pp(a, i0, i1){
+    var lo = Infinity, hi = -Infinity, i;
+    for(i = i0; i < i1; i++){ if(a[i] < lo) lo = a[i]; if(a[i] > hi) hi = a[i]; }
+    return hi - lo;
+  }
+
+  Lab.make({
+    mount:'#lab-ecg',
+    title:'ECG 파형과 대역통과 필터',
+    badge:'IIR FILTER',
+    controls:[
+      {id:'fhp', label:'고역차단 f_HP', min:0.02, max:2, value:0.5, log:true, unit:'Hz', fmt:v=>v.toFixed(3)},
+      {id:'flp', label:'저역차단 f_LP', min:10, max:200, step:1, value:40, unit:'Hz', fmt:v=>v.toFixed(0)},
+      {id:'ord', type:'toggle', label:'필터 차수',
+       options:[{value:1, label:'1차'}, {value:2, label:'2차 버터워스'}], value:2},
+      {id:'aw', label:'기저선 변동 진폭', min:0, max:0.5, step:0.01, value:0.30, unit:'mV', fmt:v=>v.toFixed(2)},
+      {id:'am', label:'전원 잡음(60 Hz)', min:0, max:0.1, step:0.002, value:0.02, unit:'mV', fmt:v=>v.toFixed(3)}
+    ],
+    presets:[
+      {label:'진단용 설정 (0.05 / 150 Hz)', set:{fhp:0.05, flp:150}},
+      {label:'모니터링 설정 (0.5 / 40 Hz)', set:{fhp:0.5, flp:40}},
+      {label:'과도한 고역차단 (2 Hz)',      set:{fhp:2, flp:40}}
+    ],
+    stats:[
+      {id:'bw',   label:'기저선 변동 잔존', unit:'%',  fmt:v=>v.toFixed(1)},
+      {id:'qrs',  label:'QRS 진폭 감쇠',   unit:'%',  fmt:v=>v.toFixed(1)},
+      {id:'st',   label:'ST 편위',         unit:'mV', fmt:v=>v.toFixed(3)},
+      {id:'mn',   label:'60 Hz 잔존',      unit:'%',  fmt:v=>v.toFixed(1)},
+      {id:'band', label:'대역 판정'}
+    ],
+    plot:{width:640, height:320, xLabel:'시간 t (s)', yLabel:'전압 (mV)',
+          autoX:false, autoY:true, xMin:0, xMax:3},
+    plot2:{width:640, height:210, xLabel:'주파수 f (Hz)', yLabel:'|H(f)|',
+           xLog:true, autoX:false, autoY:false, xMin:0.01, xMax:250, yMin:0, yMax:1.1, yTicks:4},
+    legend:[{color:'--neutral', label:'원 파형 (변동·잡음 포함)'}, {color:'--accent', label:'필터 출력'}],
+    legend2:[{color:'--purple', label:'대역통과 진폭 응답'}],
+    note:'1차·2차 버터워스를 이중선형 변환으로 설계해 시간영역 IIR로 직접 돌림. 필터가 선형이므로 ' +
+         '기저선 변동·전원 잡음·심전 파형을 따로 통과시켜 각 성분의 잔존율을 분리해 계산함. ' +
+         '판정 기준선은 진단용 0.05~150 Hz, 모니터링용 0.5~40 Hz로 둠.',
+    plotNote:'고역차단을 올리면 기저선 변동은 줄지만 위상 왜곡이 ST 분절을 끌어내려 ST 편위가 커짐.',
+    compute(v){
+      var ord = +v.ord;
+      var ecg = cleanECG(), bw = wander(v.aw), mn = mains(v.am);
+      var raw = new Array(N), i;
+      for(i = 0; i < N; i++) raw[i] = ecg[i] + bw[i] + mn[i];
+
+      var fe = filt(ecg, v.fhp, v.flp, ord);
+      var fb = filt(bw,  v.fhp, v.flp, ord);
+      var fm = filt(mn,  v.fhp, v.flp, ord);
+      var out = new Array(N);
+      for(i = 0; i < N; i++) out[i] = fe[i] + fb[i] + fm[i];
+
+      /* 2번째 박동에서 지표 산출 */
+      var base = FS;                                   // 1.0 s
+      var qrs0 = base + Math.round(0.360 * FS), qrs1 = base + Math.round(0.450 * FS);
+      var qA = pp(ecg, qrs0, qrs1), qB = pp(fe, qrs0, qrs1);
+      var iPQ = base + Math.round(0.340 * FS);         // PQ 등전위
+      var iST = base + Math.round(0.480 * FS);         // R + 80 ms
+      var stShift = (fe[iST] - fe[iPQ]) - (ecg[iST] - ecg[iPQ]);
+      var bwRes = v.aw > 0 ? pp(fb, base, base + FS) / pp(bw, base, base + FS) * 100 : 0;
+      var mnRes = v.am > 0 ? pp(fm, base, base + FS) / pp(mn, base, base + FS) * 100 : 0;
+
+      var band = (v.fhp <= 0.0501 && v.flp >= 149.5) ? '진단용 대역 충족'
+               : (v.fhp <= 0.501 && v.flp >= 39.5)   ? '모니터링 대역 충족'
+               : '두 설정 모두 미충족';
+
+      var sRaw = [], sOut = [];
+      for(i = 0; i < N; i++){
+        sRaw.push([i / FS, raw[i]]);
+        sOut.push([i / FS, out[i]]);
+      }
+      var hp = butter('hp', v.fhp, FS, ord), lp = butter('lp', v.flp, FS, ord);
+      var resp = Lab.logspace(0.01, 250, 200).map(function(f){
+        return [f, iirMag(hp, f, FS) * iirMag(lp, f, FS)];
+      });
+
+      return {
+        series:[
+          {points:sRaw, color:'--neutral', width:1.3, opacity:0.85},
+          {points:sOut, color:'--accent',  width:2.1}
+        ],
+        overlays:[
+          {type:'band', x1:1.36, x2:1.45, color:'--warm', opacity:0.22, label:'QRS'},
+          {type:'point', x:iST / FS, y:out[iST], color:'--green', label:'ST'}
+        ],
+        series2:[{points:resp, color:'--purple', width:2.2}],
+        overlays2:[
+          {type:'vline', x:v.fhp, color:'--ink-3', label:'f_HP'},
+          {type:'vline', x:v.flp, color:'--ink-3', label:'f_LP'},
+          {type:'hline', y:0.7071, color:'--neutral', label:'−3 dB'}
+        ],
+        stats:{bw:bwRes, qrs:(1 - qB / qA) * 100, st:stShift, mn:mnRes, band:band}
+      };
+    }
+  });
+})();
+
+/* ========================================================================
+   04. EMG 운동단위 가산 — 간섭 패턴과 스펙트럼
+   ======================================================================== */
+(function(){
+  var FS = 4096, NS = 512, NF = 256;                  // 125 ms 표시, DFT 256점
+  var TAU = 0.0012;                                   // MUAP 시간 상수 1.2 ms
+  function muap(u){                                   // 삼상 파형
+    var z = u / TAU;
+    return (1 - z * z) * Math.exp(-0.5 * z * z);
+  }
+
+  Lab.make({
+    mount:'#lab-emg',
+    title:'EMG 운동단위 가산 — 간섭 패턴',
+    badge:'INTERFERENCE',
+    controls:[
+      {id:'N',    label:'활성 운동단위 수', min:1, max:200, step:1, value:40, unit:'개', fmt:v=>v.toFixed(0)},
+      {id:'rate', label:'발화율',          min:5, max:50, step:1, value:20, unit:'Hz', fmt:v=>v.toFixed(0)},
+      {id:'amp',  label:'MUAP 평균 진폭',   min:50, max:500, step:10, value:150, unit:'µV', fmt:v=>v.toFixed(0)},
+      {id:'cv',   label:'진폭 분포 폭',     min:0, max:1, step:0.05, value:0.5, unit:'', fmt:v=>v.toFixed(2)},
+      {id:'el', type:'toggle', label:'전극 종류',
+       options:[{value:'sfc', label:'표면 (0.5~2.5 cm)'}, {value:'ndl', label:'침 (약 1 mm²)'}], value:'sfc'}
+    ],
+    presets:[
+      {label:'약한 수축',   set:{N:8,   rate:8}},
+      {label:'최대 수축',   set:{N:200, rate:50}}
+    ],
+    stats:[
+      {id:'rms',  label:'신호 RMS',        unit:'µV', fmt:v=>v.toFixed(1)},
+      {id:'det',  label:'검출 운동단위 수',  unit:'개', fmt:v=>v.toFixed(0)},
+      {id:'rad',  label:'검출 반경',        unit:'mm', fmt:v=>v.toFixed(1)},
+      {id:'mnf',  label:'평균 주파수 MNF',  unit:'Hz', fmt:v=>v.toFixed(0)},
+      {id:'pk',   label:'최대 진폭',        unit:'µV', fmt:v=>v.toFixed(0)}
+    ],
+    plot:{width:640, height:300, xLabel:'시간 t (ms)', yLabel:'전압 (µV)',
+          autoX:false, autoY:true, xMin:0, xMax:125},
+    plot2:{width:640, height:230, xLabel:'주파수 f (Hz)', yLabel:'상대 진폭',
+           autoX:false, autoY:true, xMin:0, xMax:2048, yMinFixed:0},
+    legend:[{color:'--accent', label:'합성 EMG (간섭 패턴)'}, {color:'--purple', label:'단일 운동단위 기여'}],
+    legend2:[{color:'--green', label:'크기 스펙트럼 (DFT 256점, Hann 창)'}],
+    note:'운동단위 중심을 20 × 20 mm 단면에 고르게 뿌리고 전극에서의 거리 d로 가중치 max(0, 1 − d/R)를 줌. ' +
+         '침 전극은 기록 폭이 약 1 mm²이고 근섬유에서 1 mm 멀어지는 동안 스파이크 진폭이 뚜렷하게 감소하므로 ' +
+         'R = 1 mm, 표면 전극은 폭 0.5~2.5 cm에 맞춰 R = 10 mm로 둠. 각 운동단위는 무작위 위상으로 발화함.',
+    plotNote:'EMG 대역은 5 Hz~2 kHz임. 참고로 sEMG 평균 주파수는 측두근 157 Hz, 교합근 140 Hz, 승모근 68 Hz로 보고됨.',
+    compute(v){
+      var N = Math.round(v.N), R = (v.el === 'ndl') ? 1 : 10;
+      var rand = rng(20260806);
+      var mus = [], i, k;
+      for(i = 0; i < 200; i++){                       // 고정 배치 (앞 N개만 사용)
+        var x = (rand() - 0.5) * 20, y = (rand() - 0.5) * 20;
+        mus.push({
+          d: Math.hypot(x, y),
+          a: v.amp * (1 + v.cv * (rand() - 0.5) * 2),
+          ph: rand(),
+          jit: 1 + (rand() - 0.5) * 0.1
+        });
+      }
+      var sig = new Array(NS), one = new Array(NS);
+      for(i = 0; i < NS; i++){ sig[i] = 0; one[i] = 0; }
+      var det = 0, T = 1 / v.rate, dur = NS / FS, span = Math.round(0.005 * FS);
+      var firstIdx = -1;
+      for(i = 0; i < N; i++){
+        var mu = mus[i];
+        var w = Math.max(0, 1 - mu.d / R);
+        if(w <= 0.05) continue;
+        det++;
+        if(firstIdx < 0) firstIdx = i;
+        var A = w * Math.max(0.1 * v.amp, mu.a);
+        var per = T * mu.jit;
+        for(var f0 = -per + mu.ph * per; f0 < dur + per; f0 += per){
+          var c = Math.round(f0 * FS);
+          for(k = c - span; k <= c + span; k++){
+            if(k < 0 || k >= NS) continue;
+            var val = A * muap(k / FS - f0);
+            sig[k] += val;
+            if(i === firstIdx) one[k] += val;
+          }
+        }
+      }
+      var ss = 0, pk = 0;
+      for(i = 0; i < NS; i++){ ss += sig[i] * sig[i]; if(Math.abs(sig[i]) > pk) pk = Math.abs(sig[i]); }
+      var rms = Math.sqrt(ss / NS);
+
+      var spec = dftMag(sig.slice(0, NF), NF, FS);
+      var num = 0, den = 0;
+      spec.forEach(function(p){ if(p[0] >= 5){ num += p[0] * p[1] * p[1]; den += p[1] * p[1]; } });
+      var mnf = den > 0 ? num / den : 0;
+
+      var pts = [], pts1 = [];
+      for(i = 0; i < NS; i++){
+        pts.push([i / FS * 1000, sig[i]]);
+        pts1.push([i / FS * 1000, one[i]]);
+      }
+      return {
+        series:[
+          {points:pts1, color:'--purple', width:1.2, opacity:0.65},
+          {points:pts,  color:'--accent', width:1.6}
+        ],
+        overlays:[{type:'hline', y:rms, color:'--green', label:'RMS'}],
+        series2:[{points:spec, color:'--green', width:1.8}],
+        overlays2:[
+          {type:'vline', x:mnf, color:'--accent', label:'MNF'},
+          {type:'band', x1:5, x2:2000, color:'--mint', opacity:0.18, label:'EMG 대역 5 Hz–2 kHz'}
+        ],
+        stats:{rms:rms, det:det, rad:R, mnf:mnf, pk:pk}
+      };
+    }
+  });
+})();
+
+/* ========================================================================
+   05. EMG 대역통과 필터 설계기 (아날로그 버터워스 진폭 응답)
+   ======================================================================== */
+Lab.make({
+  mount:'#lab-filter',
+  title:'대역통과 설계 — 목적별 차단 주파수',
+  badge:'BANDPASS',
+  controls:[
+    {id:'fhp', label:'저주파 차단 f_HP', min:2, max:1000, value:20, log:true, unit:'Hz', fmt:v=>v.toFixed(1)},
+    {id:'flp', label:'고주파 차단 f_LP', min:1000, max:20000, step:100, value:10000, unit:'Hz', fmt:v=>v.toFixed(0)},
+    {id:'n',   label:'필터 차수 n',      min:1, max:4, step:1, value:2, unit:'차', fmt:v=>v.toFixed(0)},
+    {id:'goal', type:'select', label:'기록 목적', value:'daily',
+     options:[{value:'daily', label:'일상적인 EMG 기록 (20~30 Hz)'},
+              {value:'mup',   label:'정량 MUP 측정 (2~3 Hz)'},
+              {value:'sfemg', label:'단일섬유 EMG (500 Hz 이상)'}]}
+  ],
+  presets:[
+    {label:'일상 기록',   set:{fhp:20,  flp:10000}},
+    {label:'정량 MUP',   set:{fhp:2.5, flp:10000}},
+    {label:'단일섬유 EMG', set:{fhp:500, flp:20000}}
+  ],
+  stats:[
+    {id:'bwid', label:'통과 대역폭', fmt:v=>Lab.eng(v,'Hz',1)},
+    {id:'g20',  label:'20 Hz 이득', fmt:v=>v.toFixed(3)},
+    {id:'g157', label:'157 Hz 이득', fmt:v=>v.toFixed(3)},
+    {id:'cov',  label:'EMG 대역 통과율', unit:'%', fmt:v=>v.toFixed(1)},
+    {id:'fit',  label:'목적 설정 일치'}
+  ],
+  plot:{width:640, height:340, xLabel:'주파수 f (Hz)', yLabel:'|H(f)|',
+        xLog:true, autoX:false, autoY:false, xMin:0.5, xMax:50000, yMin:0, yMax:1.1, yTicks:4},
+  legend:[{color:'--accent', label:'대역통과 |H(f)|'}, {color:'--purple', label:'고역통과'}, {color:'--green', label:'저역통과'}],
+  note:'|H_HP| = [1+(f_c/f)^{2n}]^{−1/2}, |H_LP| = [1+(f/f_c)^{2n}]^{−1/2}를 곱해 대역통과 응답을 만듦. ' +
+       '통과율은 EMG 대역 5 Hz~2 kHz 구간에서 |H|²를 로그 주파수로 적분해 전 대역 대비 비율로 낸 값임.',
+  plotNote:'음영 구간이 EMG 대역 5 Hz~2 kHz임. 저주파 차단을 500 Hz로 올리면 대역 하단이 통째로 잘려 ' +
+           'MUP 지속시간이 짧아지고 진폭이 낮아짐.',
+  compute(v){
+    var n = Math.round(v.n);
+    function hp(f){ return 1 / Math.sqrt(1 + Math.pow(v.fhp / f, 2 * n)); }
+    function lp(f){ return 1 / Math.sqrt(1 + Math.pow(f / v.flp, 2 * n)); }
+    var fs = Lab.logspace(0.5, 50000, 320);
+    var bp = [], sh = [], sl = [];
+    fs.forEach(function(f){
+      bp.push([f, hp(f) * lp(f)]);
+      sh.push([f, hp(f)]);
+      sl.push([f, lp(f)]);
+    });
+    /* EMG 대역 5 Hz~2 kHz에서 |H|²를 log f로 적분 */
+    var band = Lab.logspace(5, 2000, 300), num = 0, den = 0, i;
+    for(i = 1; i < band.length; i++){
+      var dl = Math.log10(band[i]) - Math.log10(band[i-1]);
+      var g = hp(band[i]) * lp(band[i]);
+      num += g * g * dl; den += dl;
+    }
+    var GOAL = {daily:[20, 30], mup:[2, 3], sfemg:[500, 20000]};
+    var g = GOAL[v.goal];
+    var fit = (v.fhp >= g[0] && v.fhp <= g[1]) ? '일치' : '권장 범위 ' + g[0] + '~' + g[1] + ' Hz';
+    if(v.goal === 'sfemg') fit = (v.fhp >= 500) ? '일치' : '권장 500 Hz 이상';
+
+    return {
+      series:[
+        {points:sh, color:'--purple', width:1.2, dash:'4 3', opacity:0.8},
+        {points:sl, color:'--green',  width:1.2, dash:'4 3', opacity:0.8},
+        {points:bp, color:'--accent', width:2.4}
+      ],
+      overlays:[
+        {type:'band', x1:5, x2:2000, color:'--mint', opacity:0.2, label:'EMG 5 Hz–2 kHz'},
+        {type:'vline', x:157, color:'--charcoal', label:'측두근 157 Hz'},
+        {type:'vline', x:68,  color:'--neutral',  label:'승모근 68 Hz'},
+        {type:'hline', y:0.7071, color:'--ink-3', label:'−3 dB'}
+      ],
+      stats:{
+        bwid: v.flp - v.fhp,
+        g20: hp(20) * lp(20),
+        g157: hp(157) * lp(157),
+        cov: num / den * 100,
+        fit: fit
+      }
+    };
+  }
+});
+
+/* ========================================================================
+   06a. Fick 확산 프로파일 (erfc)
+   ======================================================================== */
+Lab.make({
+  mount:'#lab-fick',
+  title:'Fick 확산 프로파일 — c(x,t) = c₀ erfc(x/2√(Dt))',
+  badge:'DIFFUSION',
+  controls:[
+    {id:'D',  label:'확산계수 D', min:1e-12, max:1e-8, value:1e-10, log:true, unit:'m²/s', fmt:v=>Lab.sci(v,3)},
+    {id:'L',  label:'젤 두께 L',  min:0.1, max:5, step:0.05, value:1.0, unit:'mm', fmt:v=>v.toFixed(2)},
+    {id:'t',  label:'시간 t',     min:1, max:86400, value:3600, log:true, unit:'s', fmt:v=>Lab.sci(v,3)},
+    {id:'c0', label:'초기 농도 c₀', min:0.1, max:100, step:0.1, value:10, unit:'mol/m³', fmt:v=>v.toFixed(1)}
+  ],
+  presets:[
+    {label:'1분',   set:{t:60}},
+    {label:'1시간', set:{t:3600}},
+    {label:'24시간', set:{t:86400}}
+  ],
+  stats:[
+    {id:'pen',  label:'침투 깊이 2√(Dt)', unit:'mm', fmt:v=>v.toFixed(3)},
+    {id:'tau',  label:'특성 시간 L²/D',   fmt:v=>Lab.eng(v,'s',2)},
+    {id:'rel',  label:'누적 방출량',       fmt:v=>Lab.eng(v,'mol/m²',2)},
+    {id:'ratio',label:'침투 깊이 / 두께',  fmt:v=>v.toFixed(2)},
+    {id:'cL',   label:'반대면 농도 c(L,t)', unit:'mol/m³', fmt:v=>v.toFixed(3)}
+  ],
+  plot:{width:640, height:360, xLabel:'깊이 x (mm)', yLabel:'농도 c (mol/m³)',
+        autoX:false, autoY:false, xMin:0, xMax:1, yMin:0, yMax:1},
+  legend:[{color:'--accent', label:'현재 시간 t'}, {color:'--purple', label:'t/100, t/10, 10t'}],
+  note:'반무한 매질에서 표면 농도를 c₀로 고정한 조건의 해임. erfc는 Abramowitz–Stegun 7.1.26 근사식으로 ' +
+       '직접 구현했고, 오차는 1.5×10⁻⁷ 이내임. 침투 깊이 2√(Dt)는 농도가 c₀의 약 16 %로 떨어지는 위치임.',
+  plotNote:'시간을 100배 늘려도 침투 깊이는 10배만 늘어남. 확산 거리가 √t에 비례하기 때문임.',
+  compute(v){
+    var L = v.L * 1e-3;                                  // mm → m
+    function prof(tt, col, w, op){
+      var pts = [], i, x, z;
+      var s = 2 * Math.sqrt(v.D * tt);
+      for(i = 0; i <= 240; i++){
+        x = L * i / 240;
+        z = s > 0 ? x / s : 1e9;
+        pts.push([x * 1e3, v.c0 * erfc(z)]);
+      }
+      return {points:pts, color:col, width:w, opacity:op};
+    }
+    var pen = 2 * Math.sqrt(v.D * v.t);                  // m
+    var series = [
+      prof(v.t / 100, '--purple', 1.2, 0.45),
+      prof(v.t / 10,  '--purple', 1.4, 0.65),
+      prof(v.t * 10,  '--purple', 1.2, 0.45),
+      prof(v.t,       '--accent', 2.6, 1)
+    ];
+    var cL = v.c0 * erfc(L / (2 * Math.sqrt(v.D * v.t)));
+    return {
+      plot:{xMin:0, xMax:v.L, yMin:0, yMax:v.c0 * 1.05, autoX:false, autoY:false},
+      series: series,
+      overlays:[
+        {type:'vline', x:Math.min(pen * 1e3, v.L), color:'--green', label:'2√(Dt)'},
+        {type:'hline', y:v.c0 * 0.5, color:'--neutral', label:'c₀/2'},
+        {type:'point', x:v.L, y:cL, color:'--accent'}
+      ],
+      stats:{
+        pen: pen * 1e3,
+        tau: L * L / v.D,
+        rel: 2 * v.c0 * Math.sqrt(v.D * v.t / Math.PI),
+        ratio: pen / L,
+        cL: cL
+      }
+    };
+  }
+});
+
+/* ========================================================================
+   06b. Cottrell 전류 감쇠 + Randles–Ševčík 선형성
+   ======================================================================== */
+Lab.make({
+  mount:'#lab-cottrell',
+  title:'Cottrell 감쇠와 Randles–Ševčík 선형성',
+  badge:'CHRONOAMPEROMETRY',
+  controls:[
+    {id:'n', label:'전자 이동 수 n', min:1, max:4, step:1, value:1, unit:'', fmt:v=>v.toFixed(0)},
+    {id:'A', label:'전극 면적 A', min:1e-3, max:1, value:0.07, log:true, unit:'cm²', fmt:v=>Lab.sci(v,3)},
+    {id:'D', label:'확산계수 D', min:1e-7, max:1e-5, value:6.5e-6, log:true, unit:'cm²/s', fmt:v=>Lab.sci(v,3)},
+    {id:'c', label:'농도 C', min:0.1, max:10, step:0.1, value:1, unit:'mM', fmt:v=>v.toFixed(1)}
+  ],
+  presets:[
+    {label:'ferrocyanide 1 mM', set:{n:1, A:0.07, D:6.5e-6, c:1}},
+    {label:'UME 규모 면적',      set:{A:5e-3}}
+  ],
+  stats:[
+    {id:'i1',   label:'i(1 s)',   fmt:v=>Lab.eng(v,'A',2)},
+    {id:'i10',  label:'i(10 s)',  fmt:v=>Lab.eng(v,'A',2)},
+    {id:'slp',  label:'log–log 기울기', fmt:v=>v.toFixed(3)},
+    {id:'ip',   label:'i_p (v = 0.1 V/s)', fmt:v=>Lab.eng(v,'A',2)},
+    {id:'rs',   label:'i_p/√v 기울기', fmt:v=>Lab.sci(v,3)}
+  ],
+  plot:{width:640, height:300, xLabel:'시간 t (s)', yLabel:'전류 i (A)',
+        xLog:true, yLog:true, autoX:false, autoY:true, xMin:0.1, xMax:500},
+  plot2:{width:640, height:230, xLabel:'√v (V/s)^(1/2)', yLabel:'i_p (A)',
+         autoX:false, autoY:true, xMin:0, xMax:1.05, yMinFixed:0},
+  legend:[{color:'--accent', label:'i(t) = nFAD^{1/2}C / (π^{1/2} t^{1/2})'}],
+  legend2:[{color:'--green', label:'i_p = 2.69×10⁵ n^{3/2} A D^{1/2} C √v'}],
+  note:'F = 96485 C/mol을 씀. 농도는 mM로 입력받아 1 mM = 10⁻⁶ mol/cm³로 환산함. ' +
+       'log–log 기울기가 −1/2로 유지되는 구간이 확산 지배 구간임.',
+  plotNote:'용액에서는 20초를 넘기면 자연 대류가 섞이고 300초를 넘으면 확산이 더 이상 제어하지 않음. ' +
+           '아가로스 하이드로젤에서는 이 선형성이 100초를 넘겨서도 유지되고 300초 이상에서도 재현됨.',
+  compute(v){
+    var F = 96485, C = v.c * 1e-6;                       // mM → mol/cm³
+    function cot(t){ return v.n * F * v.A * Math.sqrt(v.D) * C / (Math.sqrt(Math.PI) * Math.sqrt(t)); }
+    var ts = Lab.logspace(0.1, 500, 200);
+    var pts = ts.map(function(t){ return [t, cot(t)]; });
+    var slope = (Math.log10(cot(100)) - Math.log10(cot(1))) / (Math.log10(100) - Math.log10(1));
+
+    function ip(vv){ return 2.69e5 * Math.pow(v.n, 1.5) * v.A * Math.sqrt(v.D) * C * Math.sqrt(vv); }
+    var rsPts = [], k;
+    for(k = 0; k <= 60; k++){
+      var vv = 0.01 + (1 - 0.01) * k / 60;
+      rsPts.push([Math.sqrt(vv), ip(vv)]);
+    }
+    return {
+      series:[{points:pts, color:'--accent', width:2.4}],
+      overlays:[
+        {type:'vline', x:20,  color:'--amber',    label:'20 s 대류 개입'},
+        {type:'vline', x:300, color:'--charcoal', label:'300 s 확산 제어 종료'},
+        {type:'point', x:1, y:cot(1), color:'--accent', label:'i(1 s)'}
+      ],
+      series2:[{points:rsPts, color:'--green', width:2.4}],
+      overlays2:[{type:'point', x:Math.sqrt(0.1), y:ip(0.1), color:'--accent', label:'v = 0.1 V/s'}],
+      stats:{
+        i1: cot(1), i10: cot(10), slp: slope,
+        ip: ip(0.1),
+        rs: 2.69e5 * Math.pow(v.n, 1.5) * v.A * Math.sqrt(v.D) * C
+      }
+    };
+  }
+});
+
+/* ========================================================================
+   07. 침투 문턱 (percolation)
+   ======================================================================== */
+Lab.make({
+  mount:'#lab-perc',
+  title:'침투 문턱 — σ = σ₀(φ − φ_c)^t',
+  badge:'PERCOLATION',
+  controls:[
+    {id:'p',  label:'필러 부피분율 φ', min:0, max:0.4, step:0.002, value:0.08, unit:'', fmt:v=>v.toFixed(3)},
+    {id:'pc', label:'침투 문턱 φ_c',   min:0.01, max:0.3, step:0.002, value:0.06, unit:'', fmt:v=>v.toFixed(3)},
+    {id:'t',  label:'임계 지수 t',     min:1.5, max:2.5, step:0.05, value:1.9, unit:'', fmt:v=>v.toFixed(2)},
+    {id:'s0', label:'필러 고유 전도도 σ₀', min:1e-2, max:1e6, value:6300, log:true, unit:'S/cm', fmt:v=>Lab.sci(v,3)},
+    {id:'sm', label:'매트릭스 전도도 σ_m', min:1e-14, max:1e-6, value:1e-10, log:true, unit:'S/cm', fmt:v=>Lab.sci(v,3)}
+  ],
+  presets:[
+    {label:'Graphene σ₀ = 10⁶ S/cm', set:{s0:1e6}},
+    {label:'rGO σ₀ = 6300 S/cm',     set:{s0:6300}},
+    {label:'문턱 직하 (φ = φ_c − 0.01)', set:{p:0.05, pc:0.06}}
+  ],
+  stats:[
+    {id:'sig',  label:'복합체 전도도 σ', fmt:v=>Lab.sci(v,3) + ' S/cm'},
+    {id:'gap',  label:'φ − φ_c',        fmt:v=>v.toFixed(3)},
+    {id:'gain', label:'매트릭스 대비 배율', fmt:v=>Lab.sci(v,3)},
+    {id:'state',label:'경로 형성 여부'},
+    {id:'need', label:'σ = 10⁻³ S/cm 도달 φ', fmt:v=>v}
+  ],
+  plot:{width:640, height:380, xLabel:'필러 부피분율 φ', yLabel:'전도도 σ (S/cm)',
+        yLog:true, autoX:false, autoY:true, xMin:0, xMax:0.4},
+  legend:[{color:'--accent', label:'σ(φ)'}, {color:'--neutral', label:'매트릭스 전도도'}],
+  note:'φ ≤ φ_c에서는 분산 입자가 연속 경로를 이루지 못해 전도도가 매트릭스 값에 머무르고, ' +
+       'φ가 φ_c를 넘는 순간부터 멱법칙으로 급등함. 임계 지수 t는 전형적으로 1.5~2 부근임. ' +
+       'σ₀ 프리셋 값은 표의 Graphene 10⁶ S/cm, rGO 최대 6300 S/cm에서 가져왔음.',
+  plotNote:'세로축이 로그이므로 문턱 근처의 상승은 수 자릿수 규모임. PEDOT:PSS를 분산한 하이드로젤에서도 ' +
+           '함량이 문턱 아래이면 입자가 이온 이동을 막는 장애물로만 작용해 임피던스가 무첨가 조성보다 오히려 오름.',
+  compute(v){
+    function sig(p){
+      return p > v.pc ? Math.max(v.s0 * Math.pow(p - v.pc, v.t), v.sm) : v.sm;
+    }
+    var pts = [], i, p;
+    for(i = 0; i <= 400; i++){
+      p = 0.4 * i / 400;
+      pts.push([p, sig(p)]);
+    }
+    var base = [[0, v.sm], [0.4, v.sm]];
+    var cur = sig(v.p);
+    /* σ = 10⁻³ S/cm 에 도달하는 φ 역산 */
+    var target = 1e-3, need = '문턱 이하';
+    if(v.s0 > target){
+      need = (v.pc + Math.pow(target / v.s0, 1 / v.t)).toFixed(3);
+    }
+    return {
+      series:[
+        {points:base, color:'--neutral', width:1.2, dash:'4 4'},
+        {points:pts,  color:'--accent',  width:2.6}
+      ],
+      overlays:[
+        {type:'vline', x:v.pc, color:'--charcoal', label:'φ_c'},
+        {type:'point', x:v.p, y:cur, color:'--accent', label:'현재 φ'}
+      ],
+      stats:{
+        sig: cur,
+        gap: v.p - v.pc,
+        gain: cur / v.sm,
+        state: v.p > v.pc ? '연속 전도 경로 형성' : '경로 미형성 — 매트릭스 지배',
+        need: need
+      }
+    };
+  }
+});
+
+/* ========================================================================
+   08. NMES · TENS 자극 파라미터
+   ======================================================================== */
+Lab.make({
+  mount:'#lab-nmes',
+  title:'NMES · TENS 자극 파라미터',
+  badge:'STIMULATION',
+  controls:[
+    {id:'pw', label:'펄스 폭 PW', min:20, max:500, step:5, value:200, unit:'µs', fmt:v=>v.toFixed(0)},
+    {id:'f',  label:'펄스 주파수 f', min:1, max:100, step:1, value:35, unit:'Hz', fmt:v=>v.toFixed(0)},
+    {id:'I',  label:'전류 진폭 I', min:1, max:100, step:1, value:20, unit:'mA', fmt:v=>v.toFixed(0)},
+    {id:'A',  label:'전극 면적 A', min:1, max:50, step:0.5, value:10, unit:'cm²', fmt:v=>v.toFixed(1)},
+    {id:'R',  label:'등가 부하 저항 R', min:200, max:2000, step:10, value:500, unit:'Ω', fmt:v=>v.toFixed(0)}
+  ],
+  presets:[
+    {label:'좁은 펄스 · 고주파', set:{pw:60,  f:80, I:25}},
+    {label:'넓은 펄스 · 저주파', set:{pw:400, f:15, I:15}}
+  ],
+  stats:[
+    {id:'q',    label:'상당 전하 Q', unit:'µC', fmt:v=>v.toFixed(2)},
+    {id:'qd',   label:'전하 밀도', unit:'µC/cm²', fmt:v=>v.toFixed(3)},
+    {id:'duty', label:'듀티비', unit:'%', fmt:v=>v.toFixed(3)},
+    {id:'iav',  label:'평균 전류', unit:'mA', fmt:v=>v.toFixed(3)},
+    {id:'V',    label:'인가 전압', unit:'V', fmt:v=>v.toFixed(1)},
+    {id:'P',    label:'평균 전력', unit:'mW', fmt:v=>v.toFixed(2)}
+  ],
+  plot:{width:640, height:280, xLabel:'시간 t (ms)', yLabel:'전류 (mA)',
+        autoX:false, autoY:true, xMin:0, xMax:100},
+  plot2:{width:640, height:230, xLabel:'펄스 폭 PW (µs)', yLabel:'전하 밀도 (µC/cm²)',
+         autoX:false, autoY:true, xMin:0, xMax:500, yMinFixed:0},
+  legend:[{color:'--accent', label:'이상 펄스열 (biphasic)'}],
+  legend2:[{color:'--purple', label:'전하 밀도 vs 펄스 폭 (현재 I, A)'}],
+  note:'한 상당 주입 전하 Q = I·PW를 전극 면적으로 나눠 전하 밀도를 얻음. 듀티비 PW·f가 매우 작아 ' +
+       '평균 전류는 진폭의 수백분의 일에 머무르지만, 근수축을 일으키는 것은 평균값이 아니라 한 상당 전하량임.',
+  plotNote:'같은 전하량을 좁은 펄스에 몰아넣으면 순간 전류 밀도가 오르고, 넓은 펄스로 펴면 인가 전압을 ' +
+           '낮출 수 있음. 자극 전극의 계측 항목 자체는 ECG 전극과 동일하게 ANSI/AAMI EC12를 적용함.',
+  compute(v){
+    var pwS = v.pw * 1e-6, per = 1 / v.f;
+    var q = v.I * 1e-3 * pwS * 1e6;                      // µC
+    var duty = pwS * v.f;
+    var iav = v.I * duty;
+    var P = v.I * 1e-3 * v.I * 1e-3 * v.R * duty * 1e3;  // mW
+
+    /* biphasic 펄스열 — 양상 PW, 상간 간격 PW, 음상 PW */
+    var pts = [], t, k;
+    var T = 0.100;
+    for(k = 0; k <= 4000; k++){
+      t = T * k / 4000;
+      var ph = t % per;
+      var y = 0;
+      if(ph < pwS) y = v.I;
+      else if(ph >= 2 * pwS && ph < 3 * pwS) y = -v.I;
+      pts.push([t * 1e3, y]);
+    }
+    var qd = [], j, pw2;
+    for(j = 0; j <= 100; j++){
+      pw2 = 500 * j / 100;
+      qd.push([pw2, v.I * 1e-3 * pw2 * 1e-6 * 1e6 / v.A]);
+    }
+    return {
+      series:[{points:pts, color:'--accent', width:1.6}],
+      overlays:[
+        {type:'hline', y:0, color:'--ink-3'},
+        {type:'text', x:5, y:v.I * 0.86, text:'주기 ' + (per * 1e3).toFixed(1) + ' ms', color:'--ink-2'}
+      ],
+      series2:[{points:qd, color:'--purple', width:2.2}],
+      overlays2:[{type:'point', x:v.pw, y:q / v.A, color:'--accent', label:'현재'}],
+      stats:{
+        q: q, qd: q / v.A, duty: duty * 100, iav: iav,
+        V: v.I * 1e-3 * v.R, P: P
+      }
+    };
+  }
+});
+</script>
+</body>
+</html>

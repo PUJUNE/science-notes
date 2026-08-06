@@ -1,0 +1,1199 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>규격·신뢰성·통계 — 수학·물리·화학 노트</title>
+<meta name="description" content="AAMI EC12 판정값과 FAIL 코드, ISO 10993 생물학적 평가 체계, ASTM F1980 가속 수명, MDR 기술문서와 위험관리, 측정 표준과 표본 설계를 인터랙티브로 다룸.">
+<link rel="stylesheet" href="../assets/css/site.css">
+</head>
+<body>
+
+<div class="topbar">
+  <div class="wrap">
+    <a class="brand" href="../index.html">← 수학·물리·화학 노트</a>
+    <ul class="topnav">
+      <li><a href="#s1">EC12 판정값</a></li>
+      <li><a href="#s2">가속 수명</a></li>
+      <li><a href="#s3">ISO 10993 체계</a></li>
+      <li><a href="#s4">자극·독성 판정</a></li>
+      <li><a href="#s5">화학적 특성평가</a></li>
+      <li><a href="#s6">MDR·위험관리</a></li>
+      <li><a href="#s7">측정 표준</a></li>
+      <li><a href="#s8">지표와 표본</a></li>
+    </ul>
+    <button class="theme-btn" type="button">DARK</button>
+  </div>
+</div>
+
+<header class="mast">
+  <div class="wrap">
+    <p class="kicker">Field 12 · 공학 · 규격·신뢰성·통계</p>
+    <h1>규격 판정은 <em>물리량마다 다른 선</em></h1>
+    <p class="lede">
+      전극 하나의 성능을 저항값 하나로 줄이면 주파수 축과 시간 축에서 갈라지는 거동이 사라지므로,
+      규격은 물리량마다 별도의 판정선을 긋고 각각을 독립 항목으로 관리함. 이 페이지는 AAMI EC12의
+      여덟 개 한계값에서 출발해 ISO 10993 생물학적 평가, ASTM F1980 가속 수명, MDR 기술문서와
+      위험관리, 측정 표준과 표본 설계까지 판정선이 어떻게 세워지는지를 따라감. 모든 계산은 브라우저에서
+      직접 수행하며 슬라이더로 조작할 수 있음.
+    </p>
+    <div class="eq" style="border-left-color:var(--accent)">
+      AF₀ = Q₁₀<sup>(T<sub>AA</sub> − T<sub>RT</sub>)/10</sup> &nbsp;<span class="cm">→</span>&nbsp;
+      t<sub>가속</sub> = t<sub>실시간</sub> / AF₀
+      &nbsp;&nbsp;<span class="cm">— 판정선을 시간 축에서 되사는 방식</span>
+    </div>
+  </div>
+</header>
+
+<main>
+
+<!-- ================= 01 ================= -->
+<section id="s1">
+  <div class="wrap">
+    <p class="eyebrow"><span class="num">01</span><span>Max. 3 kΩ · 100 mV · 150 µV</span></p>
+    <h2>EC12는 하나의 전극을 여섯 갈래로 나눠 봄</h2>
+
+    <p>
+      피부 표면 전극이 심전 신호를 읽는 과정은 이온 전류를 전자 전류로 바꾸는 계면 반응이므로,
+      그 계면에서 생기는 반쪽전지 전위의 안정성이 신호 품질을 좌우함. Ag/AgCl 계면은
+      AgCl ⇌ Ag⁺ + Cl⁻ 평형이 전류를 흘려도 빠르게 회복되는 가역 반응이라 분극이 거의 쌓이지 않고,
+      포화 KCl 기준 반쪽전지 전위가 약 +0.22 V vs SHE로 고정되어 비분극성 전극으로 기능함.
+      그러나 이 성능은 주파수 축과 시간 축에서 서로 다른 물리량으로 갈라져 나타나기 때문에,
+      ANSI/AAMI EC12는 이를 여섯 갈래 항목으로 나눠 규정함.
+    </p>
+
+    <ul class="notes">
+      <li><b>10 Hz 교류 임피던스</b><span>심전 대역에서의 계면 저항을 잼</span></li>
+      <li><b>DC offset voltage</b><span>두 전극 반쪽전지 전위의 불균형을 잼</span></li>
+      <li><b>Combined offset instability and internal noise</b><span>그 불균형이 시간에 따라 흔들리는 정도를 잡아냄</span></li>
+      <li><b>Rate of change of polarization</b><span>전류 인가 후 분극이 풀리는 속도를 봄</span></li>
+      <li><b>Defibrillation overload recovery</b><span>제세동 펄스라는 극단 부하 뒤의 복구 능력을 확인함</span></li>
+      <li><b>Bias current tolerance</b><span>계측기 입력 바이어스 전류 200 nA를 8시간 흘렸을 때의 offset 변동을 확인함</span></li>
+    </ul>
+
+    <p class="hint" style="margin-bottom:6px">ANSI/AAMI EC12:2000 전기적 성능 한계값</p>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>No</th><th>검사 항목</th><th>한계값</th></tr></thead>
+        <tbody>
+          <tr><td>1</td><td>10-Hz Impedance for Individual pair</td><td>Max. 3 kΩ</td></tr>
+          <tr><td>2</td><td>Offset Voltage</td><td>Max. 100 mV</td></tr>
+          <tr><td>3</td><td>Combined offset instability and internal noise</td><td>Max. 150 µV</td></tr>
+          <tr><td>4</td><td>Rate of change of polarization</td><td>Max. 1 mV/s</td></tr>
+          <tr><td>5</td><td>Average of 12 electrode pairs 10 Hz Impedance</td><td>Max. 2 kΩ</td></tr>
+          <tr><td>6</td><td>Defibrillation overload recovery</td><td>Max. 100 mV</td></tr>
+          <tr><td>7</td><td>After test, 10-Hz electrode Impedance</td><td>Max. 3 kΩ</td></tr>
+          <tr><td>8</td><td>Bias current tolerance</td><td>Max. 100 mV</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div id="lab-ec12"></div>
+
+    <p>
+      전용 시험 시스템은 1회 run당 5 pair(전극 10개)를 측정하고 규격 한계 초과 여부로 PASS/FAIL을 찍는데,
+      FAIL 코드마다 대응하는 물리 현상이 다르므로 코드를 읽는 순간 의심 부위가 좁혀짐. Open Circuit 계열은
+      임피던스 측정 중 전류 경로가 끊긴 상태로 스냅-센서 접점, 금속 단자와 Ag/AgCl 계면, 혹은 Ag/AgCl 층
+      자체의 파단·탈락을 시사하고, NOISE FAIL은 반쪽전지 전위의 시변 불안정을 가리키므로 AgCl 층 감소나
+      Ag₂O/AgCl 비율 변화를 의심하게 함. 제세동 복구 항목에서 ±200 V 펄스 뒤 복구 전압이 ±2 V 범위를
+      벗어나면 표면의 분극 해소 능력이 소실됐음을 뜻하고, 복구 기울기가 1 mV/s를 넘는 FAIL은 복구 속도
+      자체가 늦어진 것이라 AgCl 잔존량 저하로 해석함.
+    </p>
+
+    <div class="callout note">
+      <p><b>리포트 읽는 순서</b> — 시험기가 화면에 띄우는 한계값은 리포트 헤더에 그대로 기록되므로,
+      DCO·ACZ·SDR(5초 전압, 15/25/35초 기울기)·BIAS·NOISE 각 항목의 적용 한계가 EC12 값과 일치하는지를
+      먼저 확인해야 함.</p>
+    </div>
+
+    <p class="hint" style="margin-bottom:6px">ANSI/AAMI EC-12 ECG 센싱 조항</p>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>조항</th><th>검증 물리량</th><th>시험 조건</th><th>단위</th></tr></thead>
+        <tbody>
+          <tr><td>4.2.2.1</td><td>AC Impedance — 10 Hz 개별 쌍 임피던스</td><td>젤 면끼리 맞대어 연결, 인가 전류 100 µA 이하</td><td>kΩ</td></tr>
+          <tr><td>4.2.2.2</td><td>Offset Voltage</td><td>젤 면끼리 맞대어 연결, 1분 안정화 후</td><td>mV</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p>
+      젤 면끼리 맞대는 배치는 피부라는 변동 요인을 빼고 전극 자체의 반쪽전지 특성만 남기려는 설계이며,
+      Offset Voltage가 두 전극의 반쪽전지 전위 차이를 반영하므로 값이 작을수록 비분극에 가까운 거동을 뜻함.
+      제세동 전극 쪽은 별도 규격이 겹치는데, IEC 60601-2-4가 네 조항으로 전기적 성능을 규정함.
+    </p>
+
+    <p class="hint" style="margin-bottom:6px">IEC 60601-2-4 제세동 전극 규정 조항</p>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>조항</th><th>항목</th></tr></thead>
+        <tbody>
+          <tr><td>201.108.1.1</td><td>AC small signal impedance</td></tr>
+          <tr><td>201.108.1.2</td><td>AC large signal impedance</td></tr>
+          <tr><td>201.108.1.4</td><td>Defibrillation recovery</td></tr>
+          <tr><td>201.108.1.6</td><td>DC offset voltage</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p>
+      규격 시험은 로트마다 반복하는 상시 관리 항목과 설계·자재가 확정된 시점에 한 번 확인하는 초기 검증
+      항목으로 갈라 설계함. 200 nA를 8시간 인가해야 하는 bias current tolerance처럼 소요 시간이 긴 항목은
+      상시 반복이 어려우므로, 더 가혹한 부하를 거는 항목으로 성능을 대신 담보하는 논리를 세워 초기 검증으로
+      돌리는 방식이 쓰임. 이때 대체 근거와 자재·설계 변경 시 재검증 조건을 같은 문서 안에 명시해야 규격 대응
+      자료로 성립함. 샘플링은 KS Q ISO 2859-1로 검사수준과 AQL을 정해 적용하며, 어떤 수준을 왜 골랐는지를
+      함께 남겨야 함.
+    </p>
+  </div>
+</section>
+
+<!-- ================= 02 ================= -->
+<section id="s2">
+  <div class="wrap">
+    <p class="eyebrow"><span class="num">02</span><span>AF₀ = Q₁₀^((T_AA − T_RT)/10)</span></p>
+    <h2>가속 시험은 판정선을 시간 축에서 되사는 절차</h2>
+
+    <p>
+      보존성 시험은 유통기한 종료 시점까지 제품이 특성을 유지하는지를 입증하는 항목이라, 실시간 시험과
+      가속 시험 두 갈래로 나뉨. 가속 시험은 온도를 올려 화학 반응 속도를 키우는 방식이므로 Arrhenius
+      방정식 같은 과학적 근거로 단축 비율을 계산해야 하며, ASTM F1980 계산은 상온 T<sub>RT</sub>와 가속 온도
+      T<sub>AA</sub>, 그리고 10 °C 상승당 반응 속도 배수를 뜻하는 Q₁₀ 세 값으로 성립함.
+    </p>
+
+    <div class="eq">
+      AF₀ = Q₁₀<sup>(T<sub>AA</sub> − T<sub>RT</sub>)/10</sup> &nbsp;&nbsp;<span class="cm">— 가속 계수</span><br>
+      t<sub>accelerated</sub> = t<sub>real</sub> / AF₀ &nbsp;&nbsp;<span class="cm">— 가속 시험 소요 시간</span><br>
+      <b>예시</b> T<sub>RT</sub> = 25 °C, T<sub>AA</sub> = 70 °C, Q₁₀ = 2 → AF₀ = 2<sup>4.5</sup> = 11.31371
+    </div>
+
+    <ul class="sym">
+      <li><b>T_RT</b><span>상온(보관) 온도 [°C]</span></li>
+      <li><b>T_AA</b><span>가속(시험) 온도 [°C]</span></li>
+      <li><b>Q₁₀</b><span>10 °C 상승당 반응 속도 배수 [무차원]</span></li>
+      <li><b>AF₀</b><span>가속 계수 [무차원]</span></li>
+      <li><b>t_real</b><span>목표 실시간(shelf life) [일/주/년]</span></li>
+      <li><b>t_accelerated</b><span>가속 시험 소요 시간 [일/주]</span></li>
+    </ul>
+
+    <p>
+      Q₁₀ = 2는 대부분의 폴리머 계에서 통상적이면서 보수적인 추정값으로 취급하므로, 25 °C·70 °C 조건에서는
+      14주 남짓의 가속 노화가 3년 shelf life에 대응하도록 설계됨. 다만 온도를 올릴수록 시험 기간이
+      Q₁₀배로 줄어드는 대신 실제 열화 기전이 상온과 달라질 여지도 함께 커짐. ECG·AED 전극에서 널리 쓰이는
+      60 °C 조건에서는 광환원이나 AgCl 상전이보다 AgCl 용해도 상승·Ostwald ripening·Ag₂O 생성·유기 흡착
+      쪽이 유효한 경로로 작동하므로, 가속 결과를 해석할 때 어느 기전이 지배적인지를 온도와 함께 놓고 따져야 함.
+    </p>
+
+    <div id="lab-arrhenius"></div>
+
+    <p>
+      60 °C 가속 조건에서 나타나는 전기적 불량은 두 카테고리로 갈림. 부식 기전 쪽은 스테인리스강의 Cr₂O₃
+      부동태막이 pH 4 이하나 Cl⁻ 농축 환경에서 안정성을 잃는 데서 출발하는데, gel의 pH가 부동태 안정 한계에
+      인접하면 60 °C 장기 노출 동안 부동태막의 부분 용해와 재형성이 반복될 수 있음. Cl⁻가 막 결함부에 흡착해
+      국부 파괴를 일으키면 pit 내부에서 Cl⁻ 농축과 가수분해에 의한 산성화가 자가 가속되고, 60 °C는 pitting
+      임계 전위 E_pit를 음의 방향으로 밀어 pit 개시 가능성을 키움.
+    </p>
+
+    <div class="eq">
+      M<sup>n+</sup> + n H₂O → M(OH)<sub>n</sub> + n H⁺
+      &nbsp;&nbsp;<span class="cm">— pit 내부 산성화를 자가 가속시키는 가수분해</span>
+    </div>
+
+    <p>
+      금속 단자와 Ag/AgCl 층의 접합부는 전형적인 crevice 환경이라 간극 내부에서 산소 확산이 제한되면 양극
+      반응만 진행되어 H⁺·Cl⁻가 농축되고, 표면 부식보다 빠르게 진행되면서도 외부 관찰로는 잘 드러나지 않음.
+      Ag/AgCl(약 +0.22 V vs SHE)과 SUS304(pH·Cl⁻ 농도에 따라 약 −0.1~+0.3 V)가 gel을 매개로 전기적으로
+      연결되면 galvanic 쌍이 만들어져 스테인리스 쪽 부식이 가속됨. 치수 항목에서 스냅과 센서 사이 간극을
+      관리하는 이유도 외관이 아니라 이 물리 경로에 있음 — 간극이 벌어지면 젤이 스며들어 금속 스냅의 부식을
+      부르므로, 간극 관리는 그 침투 경로를 차단하는 설계 의도에서 나옴.
+    </p>
+
+    <div class="callout ok">
+      <p><b>두 경로를 가르는 시편 설계</b> — 부식과 무관한 경로도 같은 Fail 패턴을 만들 수 있어 관찰된 전기적
+      Fail만으로는 두 기전을 분리하지 못함. 분리 검증은 gel을 Ag/AgCl 면에만 국소 접촉시키고 금속 단자와는
+      격리한 시편을 60 °C 가속 Aging한 뒤 전기적 성능을 재측정하는 설계로 세움. 이 조건에서도 동일 Fail이
+      재현되면 Ag/AgCl 본체 열화가 주 원인이고, 재현되지 않으면 금속 단자 접촉이 Fail의 필요 조건이라는
+      결론이 성립함.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ================= 03 ================= -->
+<section id="s3">
+  <div class="wrap">
+    <p class="eyebrow"><span class="num">03</span><span>접촉 유형 × 접촉 조직 × 접촉 기간</span></p>
+    <h2>ISO 10993-1은 시험 목록이 아니라 판단의 틀</h2>
+
+    <p>
+      ISO 10993-1은 고정된 시험 목록이 아니라 위험관리 프로세스 안에서 생물학적 평가를 설계하는 틀이므로,
+      규격 서문 자체가 이를 경직된 시험 방법의 집합이 아니라 전문가 판단을 위한 프레임워크로 규정함.
+      시험 선정 논리를 문서로 남길 때는 규격 조항을 근거로 걸어야 하는데, 4.1·4.5항은 안전한 사용 이력이
+      입증되면 모든 위해에 대해 시험할 필요가 없다고 보고, 6.3.1.b항은 용출 화학물질의 존재가 배제되거나
+      기존 문헌·경험이 수용 가능한 독성 프로파일을 제공하면 시험이 정당화되지 않는다고 둠. ISO 10993-2는
+      기존 데이터가 충분하면 동물시험을 줄이는 3R 원칙을 우선하도록 함.
+    </p>
+
+    <p>
+      시험 시료는 worst case 논리로 고름. 환자와 직접 접촉하는 재질이 여럿이면 그 재질을 모두 포함하는
+      구성품을 대표 시료로 지정해 재료 간 누적·상승 효과까지 함께 평가하는 방식이며, 금속 기재에 세라믹
+      코팅과 수지 튜브가 결합된 기구라면 셋을 모두 담은 조립품을 대표 시료로 삼음. 시험은 OECD GLP 인정을
+      보유한 기관에서 수행하고, 접촉 유형·기간에 따라 Pyrogen, Cytotoxicity, Intracutaneous Reactivity,
+      Sensitization, Acute systemic toxicity 항목을 조합함.
+    </p>
+
+    <p>
+      EN ISO 10993-1:2020 Table A.1 분류에서는 접촉 경로·접촉 조직·접촉 기간 세 축이 정해지면 수행할 시험
+      항목이 표에서 바로 도출되고, 표에 걸리지 않는 항목은 왜 필요 없는지를 접촉 경로와 사용 기간으로
+      정당화해 문서에 남김. 아래 표는 전기수술 펜슬을 external communicating medical device / tissue 접촉 /
+      limited(24시간 미만) 조합으로 분류했을 때 도출된 결과임.
+    </p>
+
+    <p class="hint" style="margin-bottom:6px">생체적합성 시험 항목 (EN ISO 10993-1:2020 Table A.1 기준, 전기수술 펜슬 = external communicating / tissue / limited)</p>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>구분</th><th>항목</th><th>적용 규격</th><th>수행 여부</th></tr></thead>
+        <tbody>
+          <tr><td>수행</td><td>세포독성</td><td>ISO 10993-5</td><td>O</td></tr>
+          <tr><td>수행</td><td>감작성</td><td>ISO 10993-10</td><td>O</td></tr>
+          <tr><td>수행</td><td>자극 또는 피내반응</td><td>ISO 10993-10</td><td>O</td></tr>
+          <tr><td>수행</td><td>급성 전신독성</td><td>ISO 10993-11</td><td>O</td></tr>
+          <tr><td>수행</td><td>물질 매개 발열성</td><td>ISO 10993-11</td><td>O</td></tr>
+          <tr><td>미수행</td><td>아만성·아급성 독성</td><td>—</td><td>단기 사용, 장기 노출 없음</td></tr>
+          <tr><td>미수행</td><td>유전독성</td><td>—</td><td>전신 순환 노출 없음</td></tr>
+          <tr><td>미수행</td><td>이식</td><td>—</td><td>영구 이식 기기가 아님</td></tr>
+          <tr><td>미수행</td><td>혈액적합성</td><td>—</td><td>직접 혈액 접촉 없음</td></tr>
+          <tr><td>미수행</td><td>만성 독성</td><td>—</td><td>30일 초과 사용에 해당하지 않음</td></tr>
+          <tr><td>미수행</td><td>발암성</td><td>—</td><td>장기 노출 없음</td></tr>
+          <tr><td>미수행</td><td>생식·발생 독성</td><td>—</td><td>단기 사용</td></tr>
+          <tr><td>미수행</td><td>분해</td><td>—</td><td>사용 중 분해·입자 방출 없음</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div id="lab-iso"></div>
+
+    <p>
+      EO 멸균 제품이면 ISO 10993-7:2008/A1:2019에 따라 EO와 부산물 ECH의 잔류량을 평가하며, 접촉 시간
+      구간에 해당하는 허용 한도 중 성인·소아·신생아를 모두 포괄하는 가장 보수적인 기준을 적용함.
+      MDR Annex I GSPR 10.4는 CMR(Category 1A·1B) 및 내분비계 교란 물질 검토를 요구하므로, 화학적
+      특성평가 결과와 적용 임계값을 대조해 검출 여부를 판단하고 검출되면 별도 정당화와 라벨링을 붙임.
+    </p>
+  </div>
+</section>
+
+<!-- ================= 04 ================= -->
+<section id="s4">
+  <div class="wrap">
+    <p class="eyebrow"><span class="num">04</span><span>PII = Σ(홍반+부종) / 6</span></p>
+    <h2>세포독성·자극성·감작성은 서로 다른 척도를 씀</h2>
+
+    <p>
+      <b>세포독성(ISO 10993-5)</b>은 시료에서 용출된 물질이 세포에 독성을 일으키는지를 보는 항목으로,
+      정성 관찰에 기대는 한천 확산법과 흡광도로 생존율을 계산하는 MTT 정량법 두 갈래를 씀. 한천 확산법은
+      시료 아래·주변에 생기는 반응 구역의 크기로 0~4 등급을 매기며, 음성 대조가 grade 0, 양성 대조가
+      grade 3이어야 하고 시험품은 모든 단층에서 grade 2를 넘지 않아야 통과함.
+    </p>
+
+    <p class="hint" style="margin-bottom:6px">한천 확산법 등급표</p>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>Grade</th><th>Description of reactivity zone</th></tr></thead>
+        <tbody>
+          <tr><td>0</td><td>No detectable zone around or under specimen</td></tr>
+          <tr><td>1</td><td>Some malformed or degenerated cells under specimen</td></tr>
+          <tr><td>2</td><td>Decolorized zone limited to area under specimen</td></tr>
+          <tr><td>3</td><td>Zone extending specimen size up to 1.0 cm</td></tr>
+          <tr><td>4</td><td>Zone extending farther than 1.0 cm beyond specimen</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p>
+      MTT 정량법은 L929 마우스 섬유아세포를 96-well plate에 1×10⁴ cells/100 µL로 파종해 37 °C·5 % CO₂에서
+      24시간 배양한 뒤, 시료 추출물을 100 %·75 %·50 %·25 % 네 농도로 24시간 처리하고 570 nm(참조 650 nm)
+      흡광도로 생존율을 계산함. 생존율이 blank 대비 70 % 미만으로 떨어지면 세포독성 잠재력이 있다고
+      판정하며, 농도-반응 관계가 뒤집혀 50 % 추출물의 생존율이 100 % 추출물보다 낮으면 시험을 다시 함.
+      blank 좌우 평균이 전체 blank 평균에서 15 % 넘게 벗어나면 시험이 무효이므로, 판정 전에 이 두 조건을
+      먼저 확인해야 함.
+    </p>
+
+    <div class="eq">
+      생존율(%) = (A<sub>570,시료</sub> − A<sub>650,시료</sub>) / (A<sub>570,blank</sub> − A<sub>650,blank</sub>) × 100
+      &nbsp;&nbsp;<span class="cm">— 70 % 미만이면 세포독성 잠재력 있음</span>
+    </div>
+
+    <p>
+      <b>자극성(ISO 10993-10 / -23)</b>은 시료를 토끼 피부에 직접 접촉시켜 홍반과 부종을 각각 0~4점으로
+      채점하고, 두 항목을 합해 최대 8점을 만드는 구조임. 패치 제거 뒤 (1 ± 0.1) h, (24 ± 2) h, (48 ± 2) h,
+      (72 ± 2) h에 관찰하되 지표 산출에는 24·48·72시간 관찰만 씀. 동물 한 마리의 1차 자극 점수는 전체
+      점수의 합을 6(시험·관찰 부위 2개 × 시점 3개)으로 나눠 얻고, 이를 동물 수(통상 3마리)로 다시 나눠
+      시료의 1차 자극 지수를 만듦. 음성 대조를 쓴 경우 대조군 점수를 빼서 보정함.
+    </p>
+
+    <div class="eq">
+      PII = (1/N) Σ<sub>i=1..N</sub> [ Σ(홍반 + 부종 점수, 24/48/72 h) / 6 ]
+    </div>
+
+    <ul class="sym">
+      <li><b>A₅₇₀, A₆₅₀</b><span>570 nm(측정), 650 nm(참조) 흡광도 [무차원]</span></li>
+      <li><b>N</b><span>시험 동물 수(통상 3) [마리]</span></li>
+      <li><b>PII</b><span>1차 자극 지수 [0~8]</span></li>
+    </ul>
+
+    <p class="hint" style="margin-bottom:6px">PII 판정 범주</p>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>Mean score</th><th>Response category</th></tr></thead>
+        <tbody>
+          <tr><td>0 ~ 0.4</td><td>Negligible</td></tr>
+          <tr><td>0.5 ~ 1.9</td><td>Slight</td></tr>
+          <tr><td>2 ~ 4.9</td><td>Moderate</td></tr>
+          <tr><td>5 ~ 8</td><td>Severe</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div id="lab-pii"></div>
+
+    <p>
+      <b>감작성(ISO 10993-10)</b>은 기니피그 최대화법(GPMT)으로 수행하며 3단계로 나뉨. 피내 유도에서는
+      FCA와 vehicle의 50:50 혼합액 0.1 mL, 시료 추출물 0.1 mL, 두 가지를 다시 50:50으로 섞은 0.1 mL를
+      각각 주사함. 국소 유도는 피내 유도 7일 뒤 같은 부위를 제모하고 10 % SDS 현탁액을 문질러 가벼운 급성
+      염증을 유발한 다음, 8일째에 시료 추출물을 적신 20 × 40 mm 흡수성 거즈 패치를 48시간 밀폐 부착함.
+      유발 단계는 22일째 좌측 옆구리를 제모하고 23일째 해당 용액을 적신 패치를 24시간 붙인 뒤 제거함.
+    </p>
+
+    <div class="cards">
+      <div class="card">
+        <h5><span class="tag">관찰</span> GPMT 채점 등급</h5>
+        <ul>
+          <li><b>0</b> 변화 없음</li>
+          <li><b>1</b> 산재성 홍반</li>
+          <li><b>2</b> 중등도 융합성 홍반</li>
+          <li><b>3</b> 강한 홍반과 종창</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h5><span class="tag">판정</span> 감작 인정 조건</h5>
+        <ul>
+          <li>드레싱 제거 후 <b>24시간·48시간</b> 두 시점 관찰</li>
+          <li>대조군 동물이 <b>grade 1 미만</b>인 상태에서</li>
+          <li>시험군에 <b>grade 1 이상</b>이 나오면 감작 인정</li>
+          <li>대조군 반응이 올라간 시험은 판정 근거로 쓰지 못함</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= 05 ================= -->
+<section id="s5">
+  <div class="wrap">
+    <p class="eyebrow"><span class="num">05</span><span>0.2 g/mL · 37 ± 1 °C · 24 ± 2 h</span></p>
+    <h2>화학적 특성평가와 규격 개정 Gap analysis</h2>
+
+    <p>
+      화학적 특성평가(ISO 10993-18)는 ISO 10993-17 독성학적 위험평가의 입력 자료를 만드는 단계이므로,
+      어떤 용매로 얼마나 뽑아냈는지와 무엇을 표적으로 정량했는지가 결과의 신뢰도를 결정함. 프로토콜은
+      ISO 10993-12에 따라 시료 조건과 추출비를 잡고, ISO 10993-18에 따라 분석 전략을 세우는 두 축으로
+      구성함. 시료량은 정량에 필요한 최소 추출액을 확보할 만큼 확보하고, 불규칙 형상의 고형 의료기기에는
+      ISO 10993-12 표 1의 중량 기준 추출비 0.2 g/mL를 적용함.
+    </p>
+
+    <p>
+      용매는 극성 쪽에 정제수, 비극성 쪽에 시험기관 표준 비극성 용매를 쓰며, 추출 조건은 37 ± 1 °C에서
+      24 ± 2시간으로 규격 표준 조건과 제품 사용 환경을 함께 반영함. 분석은 200~400 nm UV-Vis full spectrum
+      scan으로 용출물 존재를 정성 스크리닝하고, 증발잔류물 시험으로 총 잔류물량을 정량한 뒤, 원재료 MSDS와
+      제조 공정 검토로 고른 표적 물질을 개별 정량하는 3단 구조로 짬.
+    </p>
+
+    <p class="hint" style="margin-bottom:6px">SiO₂ 기반 세라믹 코팅 기구 화학적 특성평가 표적 물질 예시</p>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>#</th><th>분석 대상 물질</th><th>분석 방법</th></tr></thead>
+        <tbody>
+          <tr><td>1</td><td>이산화규소 (Silicon Dioxide)</td><td>ICP-MS</td></tr>
+          <tr><td>2</td><td>물 (Water)</td><td>Karl Fischer</td></tr>
+          <tr><td>3</td><td>메탄올 (Methanol)</td><td>GC-MS</td></tr>
+          <tr><td>4</td><td>트리메톡시(메틸)실란 (Trimethoxy(methyl)silane)</td><td>GC-MS</td></tr>
+          <tr><td>5</td><td>개미산 (Formic acid)</td><td>LC-MS</td></tr>
+          <tr><td>6</td><td>아세트산 (Acetic acid)</td><td>LC-MS</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p>
+      기존 성적서를 계속 쓰려면 시험 당시 규격판과 현행판의 차이가 결론을 바꾸는지를 따로 입증해야 함.
+      감작성은 ISO 10993-10:2010과 EN ISO 10993-10:2023(GPMT)을, 피내 반응은 ISO 10993-10:2010과
+      EN ISO 10993-23:2021을 항목별로 대조해 변경 사항이 기존 생물학적 데이터의 유효성에 영향을 주는지
+      판단하고, 영향이 없으면 추가 데이터 생성 없이 기존 성적서를 유지함. 제조소가 추가된 경우에도
+      EN ISO 10993-1:2020 Figure 1의 체계적 접근을 다시 밟아 제조소 차이가 생물학적 안전성 결론에 영향을
+      주지 않음을 확인해야 하며, 멸균 적격성 평가에서 선정한 worst case 모델에 대해서는 ISO 10993-11:2017
+      기준 발열성 시험을 별도로 수행함.
+    </p>
+  </div>
+</section>
+
+<!-- ================= 06 ================= -->
+<section id="s6">
+  <div class="wrap">
+    <p class="eyebrow"><span class="num">06</span><span>GSPR → RMF → DHF 추적성</span></p>
+    <h2>MDR 기술문서와 ISO 14971 위험관리</h2>
+
+    <p>
+      MDR은 2012년 프랑스 PIP 실리콘 임플란트 사고를 계기로 5년간 준비를 거쳐 2017년 발효, 2021년부터
+      적용됐으며, MDD 대비 조정그룹(MDCG) 신설, Harmonized Standard의 Common Specification 전환,
+      국가별 개별 승인에서 EU 공통 승인 체계로의 이행이라는 구조 변화를 동반함. 적용 범위도 넓어져
+      컬러렌즈·미용 필러·RF 지방제거 장비·IPL 제모기기·뇌자극기기 등 비의료 목적 제품 6종이 Annex XVI로
+      편입됐음.
+    </p>
+
+    <ul class="notes">
+      <li><b>위험 통제</b><span>허용 불가능한 위험을 제거했음을 입증함</span></li>
+      <li><b>안전성</b><span>남은 위험이 허용 가능한 수준임을 입증함. Zero Risk가 성립하지 않으므로 "위험하지 않음"과 "안전함"을 별개 개념으로 다룸</span></li>
+      <li><b>성능 유지</b><span>제조자가 의도한 성능을 실제로 달성함을 입증함</span></li>
+      <li><b>부작용 최소화</b><span>예상 가능한 부작용을 베네핏과의 균형 안에서 관리함</span></li>
+      <li><b>임상적 이익</b><span>MDR에서 새로 강조된 항목으로, 리스크 대비 베네핏을 정당화함</span></li>
+    </ul>
+
+    <p>
+      체크리스트 작성 실무에서는 항목 1~8번이 모든 의료기기에 적용되어 CER·RMP/RMR·해당 표준 적용 결과로
+      입증하고, 9번은 Annex XVI 미용 목적 제품에만 적용되므로 해당 없으면 상세 사유를 기술하며, 10~22번은
+      Active와 Non-active, 에너지 사용 방식, 삽입형과 비삽입형에 따라 적용성을 판단해 차등 적용함. 대응표는
+      각 조항마다 적용 여부(A / N/A), 관련 표준, 사용 방법 또는 제외 정당화, 참조 관리문서를 한 행으로 묶는
+      형식을 씀.
+    </p>
+
+    <div class="cards">
+      <div class="card">
+        <h5><span class="tag">Annex II</span> 기술문서 6요소</h5>
+        <ul>
+          <li>제품 설명</li>
+          <li>라벨 및 IFU</li>
+          <li>제조 및 설계 정보</li>
+          <li>GSPR 체크리스트</li>
+          <li>위험관리</li>
+          <li>성능 평가</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h5><span class="tag">인증</span> 발급 구조</h5>
+        <ul>
+          <li>1등급 일부·2등급 일반 — <b>단일 인증서</b></li>
+          <li>2등급 임플란트·3등급 전체 — <b>QMS + 기술문서 이중</b></li>
+          <li>Class I 재사용 수술기구 — 인증기관 심사 대상</li>
+          <li>Class III — 전문가 패널 심사 + 연간 SSCP 제출</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h5><span class="tag">성적서</span> MDR 3원칙</h5>
+        <ul>
+          <li>IEC 61000-1이 명시한 <b>SI 단위</b> 사용</li>
+          <li>ISO 2859-1 등으로 <b>샘플 사이즈·AQL 정당화</b></li>
+          <li>신규 시험은 <b>ISO/IEC 17025 또는 GLP</b> 인정 기관에서만 수행</li>
+        </ul>
+      </div>
+    </div>
+
+    <p>
+      적합성 평가 경로는 Annex IX(전체 품질보증)가 설계와 제조 QMS를 함께 심사하는 형태로 가장 널리 쓰이며,
+      Annex X(Type examination)와 XIa(생산품질보증) 또는 XIb(제품검증) 조합, 중소기업 간소화 절차,
+      Generic Device 샘플링이 대안 경로로 존재함. Intended Use는 의학적 적응증, 환자군, 신체 부위, 사용자,
+      사용 환경, 작동 원리를 담아야 하고, 위험관리·사용성평가·임상평가·IFU 전 문서에서 단어와 문장 구조까지
+      동일하게 유지해야 함. 공정 밸리데이션은 공정 흐름 순서대로 진행해야 하며, 선행 공정 밸리데이션을 마친
+      뒤 그 검증된 배치로만 후속 공정을 검증하고, 순서를 역행해 수행하면 부적합으로 지적됨.
+    </p>
+
+    <p>
+      위험관리 파일은 위험관리와 임상평가 데이터 사이의 연계를 분명히 밝히고 잔여위험과 베네핏의 관계를
+      설정해야 하며, 위험통제가 실제로 구현됐는지와 위험 수준이 실제로 낮아졌는지를 불량률·클레임 감소 같은
+      객관적 데이터로 입증해야 함. 잔여위험 허용성은 세 단계로 평가함. 개별 잔여위험은 그린존 기준 설정
+      근거와 허용 기준의 객관적 정당화를 요구하고, 전체 잔여위험은 모든 잔여위험을 합산해 베네핏과 가중치
+      비교로 의학적 허용성을 판단하며, 마지막으로 위험도가 낮은 대체 치료법과 견주어 우월한 베네핏을 입증함.
+    </p>
+
+    <ul class="notes">
+      <li><b>허용가능성 판단 기준</b><span>법규 준수, 국제표준 부합, SOTA(State of the Art) 반영, 이해관계자 동의</span></li>
+      <li><b>위험통제 적용 순서</b><span>설계를 통한 안전성 확보 → 제조과정의 보호조치(QMS 절차) → 사용설명서 및 라벨링 → 사용자 교육(MDR 신규 항목)</span></li>
+      <li><b>위험관리 파일 4종</b><span>특성 질문서, 위해 식별표, FMEA 형식 위험분석표, Risk Management Plan</span></li>
+      <li><b>설계입력 8범주</b><span>제품 사양 / 사용성(IEC 62366 기반 사용자 요구 분석) / 보관·운반 조건 / 법규 및 규제 요구사항 / 기존 유사제품 정보 / 환경 조건 및 소재 안정성 / 위험관리 결과 반영 / GSPR 대응 항목</span></li>
+      <li><b>설계입력의 조건</b><span>명확성, 검증 또는 유효성 확인 가능성, 다른 요구사항과의 무모순, 정량적 수치 또는 명확한 근거 문헌 제시</span></li>
+    </ul>
+
+    <p>
+      MDR 심사에서 부적합이 걸리는 지점도 이 추적성 축임. 설계입력 → 설계출력 → 설계검증·유효성으로 이어지는
+      흐름이 문서상 연속 구조로 설명되지 않으면, 각 단계 문서가 모두 존재하더라도 어떤 입력이 어떤 출력으로
+      구현되고 그 출력이 어떤 검증 자료로 확인됐는지 추적되지 않는다는 지적을 받음. 성격이 다른 제품군을
+      하나의 요구사항·출력 구조로 통합 기술해 데이터 적용 범위가 흐려지는 경우, 상위 체크리스트만 최신화되고
+      연결된 하위 문서의 개정 차수가 이전 상태로 남아 정합성이 깨져 보이는 경우도 같은 축에서 지적됨.
+    </p>
+
+    <p class="pull">
+      CER 작성은 임상근거 식별, 문헌검색 전략 수립, 초록 스크리닝, 비판적 평가, 동등성 평가의 다섯 단계로
+      나뉨. 문헌검색은 PICO 질문을 먼저 세우고 MeSH 용어를 포함한 검색식을 만들되, 사용한 데이터베이스·검색
+      날짜·정확한 검색식·필터를 모두 기록해 재현 가능성을 확보해야 함. 동등성은 미리 가정하지 않고
+      기술적·생물학적·임상적 특성을 항목별로 동일·유사·상이·문서화 불충분으로 나눈 뒤 차이가 안전성·성능에
+      미칠 영향을 설명함.
+    </p>
+  </div>
+</section>
+
+<!-- ================= 07 ================= -->
+<section id="s7">
+  <div class="wrap">
+    <p class="eyebrow"><span class="num">07</span><span>ρ = F · t · R</span></p>
+    <h2>측정 표준 — ISO 7864, KS L 1619, ISO/IEC 17025</h2>
+
+    <p>
+      <b>ISO 7864:2016</b>은 designated metric size 0.18 mm ~ 1.2 mm 범위의 멸균 1회용 피하주사바늘에
+      적용되며, 치과용 바늘이나 펜 니들처럼 자체 규격을 갖는 기기는 제외함. 완제품 시험은 멸균된 상태에서
+      수행하고, 요구되는 정확도(교정)와 정밀도(Gauge R&amp;R)를 확보할 수 있으면 어떤 시험계를 써도 무방함.
+      청결도는 300~700 lx 조도에서 확대 없이 정상 시력으로 관찰했을 때 바늘관 표면에 입자와 이물이 없어야
+      하고, hub socket은 2.5배 확대에서 이물이 없어야 함. 산·알칼리도는 Annex A로 준비한 추출액의 pH가
+      대조액 pH의 ±1 단위 이내여야 함.
+    </p>
+
+    <ul class="notes">
+      <li><b>용출 금속 합계</b><span>대조액 보정 후 납·주석·아연·철의 합계가 5 mg/L를 넘지 않아야 함</span></li>
+      <li><b>카드뮴</b><span>단독 기준으로 0.1 mg/L 미만이어야 함</span></li>
+      <li><b>크기 표시</b><span>designated metric size(밀리미터, 선택적으로 gauge 병기)와 공칭 길이(밀리미터). 필요하면 벽 두께를 RW·TW·ETW·UTW로 덧붙임 (예 0.8 mm × 40 mm TW)</span></li>
+      <li><b>테이퍼 바늘</b><span>OD(tip)/OD(hub) × L 형식으로 표기함</span></li>
+      <li><b>인용 표준</b><span>ISO 9626, ISO 6009, ISO 594-1·2(향후 ISO 80369-7로 대체), ISO 10993-1, ISO 14971, ISO 23908, ISO 15223-1</span></li>
+    </ul>
+
+    <p>
+      <b>KS L 1619</b>는 파인 세라믹 박막의 저항률을 4탐침법으로 측정하는 방법을 규정하며, 적용 저항률
+      범위는 1 × 10⁻⁵ Ω·cm ~ 2 × 10² Ω·cm, 막 두께는 500 nm 이하임. 막 두께를 측정할 수 있거나 공칭값을
+      알 때만 적용 가능하고, 두께를 모르면 적용할 수 없음. 시험 환경은 온도 23 ± 2 °C, 상대습도 50 ± 5 %에서
+      전자적으로 차폐되고 기계 진동이 없는 조건이며, 시료를 30분 이상 방치해 주위 온도에 도달시킨 뒤 측정함.
+    </p>
+
+    <div class="cards">
+      <div class="card">
+        <h5><span class="tag">장치</span> 구성 요건</h5>
+        <ul>
+          <li>정전류원 — 측정 중 전류 변동 <b>±0.05 % 이내</b></li>
+          <li>전위차계 — <b>0.1 mV ~ 2 V</b> 측정, 최대 측정값의 0.05 % 변동 검출, 입력 저항 10¹¹ Ω 이상 권장</li>
+          <li>탐침 — 텅스텐 이하 저항률 재료, 끝 반지름 <b>0.40 mm 이하</b></li>
+          <li>배열 — 4개를 일직선상에 <b>5 mm + 1.0 %</b> 간격, 인접 탐침 간 절연저항 10¹⁰ Ω 이상, 접촉력 1~2 N</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h5><span class="tag">시료</span> 준비와 측정</h5>
+        <ul>
+          <li>한 변 <b>50 ± 1 mm ~ 200 ± 1 mm</b>의 사각 절연 기판 위 막, 3개 이상</li>
+          <li>탐침 A→D로 I₀를 흘려 B–C 전위차 V₁ 측정</li>
+          <li>전환 스위치로 D→A 역방향을 흘려 V₂ 측정</li>
+          <li>측정 위치는 시료 <b>중앙부 한 점</b></li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="eq">
+      R₁ = |V₁ / I₀| , &nbsp; R₂ = |V₂ / I₀| , &nbsp; R = (R₁ + R₂) / 2<br>
+      ρ = F · t · R &nbsp;&nbsp;<span class="cm">— 적용 범위 1×10⁻⁵ ~ 2×10² Ω·cm</span>
+    </div>
+
+    <ul class="sym">
+      <li><b>I₀</b><span>인가 정전류 [A]</span></li>
+      <li><b>V₁</b><span>A→D 방향 전류 시 B–C 전위차 [V]</span></li>
+      <li><b>V₂</b><span>D→A 역방향 전류 시 전위차 [V]</span></li>
+      <li><b>R</b><span>평균 저항 [Ω]</span></li>
+      <li><b>F</b><span>보정 계수(탐침 간격·시료 형상 의존) [무차원]</span></li>
+      <li><b>t</b><span>막 두께 [cm]</span></li>
+      <li><b>ρ</b><span>저항률 [Ω·cm]</span></li>
+    </ul>
+
+    <div id="lab-4probe"></div>
+
+    <p>
+      <b>ISO/IEC 17025</b>는 MDR 체계에서 신규 시험이 수행 가능한 시험기관의 인정 요건임. 외부 분석을
+      의뢰할 때 해당 기관의 인정 분야가 의뢰 항목을 포함하는지를 먼저 확인해야 함. 시험기관의 인정 분야는
+      변경될 수 있으므로 최신 인정서를 받아 생물학적 안전성 평가 문서와 함께 관리하고, 시험 대상 재질과
+      시험 항목이 인정 범위 밖이면 성적서가 기술문서 근거로 인정되지 않으므로 인정서의 분야 목록과 의뢰
+      항목을 대조하는 절차를 의뢰 전에 밟아야 함.
+    </p>
+  </div>
+</section>
+
+<!-- ================= 08 ================= -->
+<section id="s8">
+  <div class="wrap">
+    <p class="eyebrow"><span class="num">08</span><span>SE = s / √n</span></p>
+    <h2>성능지표 설계와 표본 설계</h2>
+
+    <p>
+      정량 성능지표는 개발 단계를 따라 대상을 계열로 나눈 뒤 계열마다 항목·단위·평가방법을 대응시키는
+      구조로 세움. 전도성 하이드로젤 패치의 경우 아크릴계 점착제, 전도성 고분자, 하이브리드 타입 전도성
+      고분자, 전기전도성 점착제의 네 계열로 갈리며, 앞 계열의 지표가 뒤 계열의 입력이 되도록 배열해야
+      중간 산물의 품질이 최종 제품 지표로 이어지는지 추적할 수 있음. 각 항목은 공인기관 시험성적서로
+      검증하도록 평가방법을 명시함.
+    </p>
+
+    <p class="hint" style="margin-bottom:6px">전도성 하이드로젤 패치 성능지표 체계 (계열별)</p>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>대상 계열</th><th>항목</th><th>단위</th><th>평가방법</th></tr></thead>
+        <tbody>
+          <tr><td>아크릴계 점착제</td><td>점착력</td><td>gf/in</td><td>ASTM D3330 (90° 박리)</td></tr>
+          <tr><td>아크릴계 점착제</td><td>전사율</td><td>%</td><td>ASTM D1876</td></tr>
+          <tr><td>전도성 고분자</td><td>용액 알코올계 용매 함유량</td><td>%</td><td>수분 측정</td></tr>
+          <tr><td>전도성 고분자</td><td>필름 면저항</td><td>Ω/sq</td><td>KS L 1619</td></tr>
+          <tr><td>전도성 고분자</td><td>필름 장시간 면저항 변화</td><td>%</td><td>상온 120 h 전후 KS L 1619 비교</td></tr>
+          <tr><td>하이브리드 타입 전도성 고분자</td><td>필름 면저항</td><td>Ω/sq</td><td>KS L 1619</td></tr>
+          <tr><td>전기전도성 점착제</td><td>패치 면저항</td><td>Ω/sq</td><td>KS L 1619</td></tr>
+          <tr><td>전기전도성 점착제</td><td>패치 장시간 면저항 변화</td><td>%</td><td>상온 120 h 전후 KS L 1619 비교</td></tr>
+          <tr><td>전기전도성 점착제</td><td>패치 점착력</td><td>gf/in</td><td>ASTM D3330 (90° 박리)</td></tr>
+          <tr><td>전기전도성 점착제</td><td>패치 장시간 점착력 감소</td><td>%</td><td>상온 120 h 전후 ASTM D3330 비교</td></tr>
+          <tr><td>전기전도성 점착제</td><td>패치 전사율</td><td>%</td><td>ASTM D1876</td></tr>
+          <tr><td>전기전도성 점착제</td><td>패치 연신율 (x-y축 최대 연신)</td><td>%</td><td>ASTM D1708, KS B0801</td></tr>
+          <tr><td>전기전도성 점착제</td><td>생체 적합성</td><td>—</td><td>ISO 10993-5, ISO 10993-10</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p>
+      지표의 목표값은 임의로 정하지 않고 두 갈래 근거로 세움. 하나는 항목별로 보고된 최고 수준의 실적을
+      비교 기준으로 삼아 그것을 넘어서는 값을 잡는 방식이고, 다른 하나는 사용 환경에서 요구되는 물리량을
+      역산하는 방식임. 연신율이 뒤쪽에 해당하는데, 피부 자체의 인장률이 일반적으로 30 % 수준이고
+      팔꿈치·손목처럼 굽힘과 접힘이 큰 부위까지 감당하려면 그보다 큰 여유가 필요하다는 판단에서 목표를 잡음.
+      경시 항목은 별도 규격을 만들지 않고 기준 시험법을 시간 축으로 두 번 적용해 변화율로 환산하는 방식으로
+      설계하므로, 면저항과 점착력 모두 초기값과 유지력을 한 쌍으로 관리할 수 있음.
+    </p>
+
+    <p class="hint" style="margin-bottom:6px">6대 영역 확장 시험 기준 체계</p>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>영역</th><th>항목</th><th>시험 방법</th></tr></thead>
+        <tbody>
+          <tr><td>전기적 성능</td><td>직류 오프셋 전압</td><td>AAMI EC12 — 하이드로젤 면끼리 맞대고 직류 인가 후 전압 측정</td></tr>
+          <tr><td>전기적 성능</td><td>교류 임피던스</td><td>AAMI EC12 — 피부 모사 모델에 전극쌍 부착 후 EIS 분석</td></tr>
+          <tr><td>전기적 성능</td><td>신호대잡음비</td><td>모사 ECG 신호 수집 후 잡음 레벨 분석</td></tr>
+          <tr><td>기계적 특성</td><td>점착력</td><td>ASTM D3330, 스테인리스강 또는 인공 피부에 90° 박리</td></tr>
+          <tr><td>기계적 특성</td><td>인장강도·신율</td><td>ASTM D638 — 규정 두께·폭 시편, 정속 인장</td></tr>
+          <tr><td>생체 적합성</td><td>세포독성</td><td>ISO 10993-5 — 37 ℃·24 h 추출액을 L929 섬유아세포에 노출, MTT assay</td></tr>
+          <tr><td>생체 적합성</td><td>피부 자극·감작성</td><td>ISO 10993-10 — 홍반·부종 평가, GPMT</td></tr>
+          <tr><td>생체 적합성</td><td>급성 전신 독성</td><td>ISO 10993-11</td></tr>
+          <tr><td>화학적 안정성</td><td>잔류 용매·단량체</td><td>ICH Q3C·MFDS 기준, GC-MS</td></tr>
+          <tr><td>화학적 안정성</td><td>pH·삼투압</td><td>ISO 10993-12</td></tr>
+          <tr><td>환경 안정성</td><td>가속 노화</td><td>ASTM F1980 — 고온·고습 챔버 장기 보관 후 전도도·접착력 비교</td></tr>
+          <tr><td>환경 안정성</td><td>습도 안정성</td><td>고습 조건 보관 후 전도도 유지율 측정</td></tr>
+          <tr><td>미생물</td><td>미생물 한도</td><td>USP &lt;61&gt; 또는 ISO 11737-1</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p>
+      전기적 성능 항목이 AAMI EC12에 몰리는 이유는 이 규격이 전극쌍 구성과 인가 조건을 함께 규정해 측정
+      재현성을 확보해 주기 때문이며, 안정성 항목이 ASTM F1980의 가속 노화를 쓰는 이유는 실시간 경시 시험을
+      기다리지 않고 유효기간을 추정하기 위함임. 성능지표 표만으로는 생체적합성·미생물 같은 영역이 빠지므로,
+      여섯 영역 체계를 별도로 두어 개발 중 어느 시점에 어떤 시험을 걸어야 하는지를 고정함.
+    </p>
+
+    <p>
+      지표를 정했다면 그 지표를 몇 개의 시료로 판정할지가 남음. 정규분포에서 μ ± 1σ가 68.3 %, ± 2σ가
+      95.4 %, ± 3σ가 99.7 %를 포함하며, 평균 50 Ω·표준편차 5 Ω인 전극 DCR을 예로 들면 각각 45~55 Ω,
+      40~60 Ω, 35~65 Ω 구간에 해당함. √n 법칙에 따라 샘플 수를 4배 늘려야 정밀도가 2배 오르는 수확체감
+      구조라, 100개에서 400개로 늘려도 정밀도는 2배에 그침.
+    </p>
+
+    <div class="eq">
+      SE = σ / √n &nbsp;&nbsp;<span class="cm">— 표준오차</span><br>
+      95 % 신뢰구간 = x̄ ± 1.96 × SE &nbsp;&nbsp;<span class="cm">— σ를 아는 경우</span><br>
+      CV = (σ / µ) × 100 % &nbsp;&nbsp;<span class="cm">— 변동계수</span>
+    </div>
+
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>샘플 수 n</th><th>표준오차 (σ=5 Ω 기준)</th><th>n=2 대비 정밀도</th><th>95% 신뢰구간 폭</th></tr></thead>
+        <tbody>
+          <tr><td>2</td><td>3.54 Ω</td><td>1.0배</td><td>± 6.94 Ω (43.06 ~ 56.94 Ω)</td></tr>
+          <tr><td>10</td><td>1.58 Ω</td><td>약 2.2배</td><td>—</td></tr>
+          <tr><td>30</td><td>0.91 Ω</td><td>약 3.9배</td><td>± 1.78 Ω (48.22 ~ 51.78 Ω)</td></tr>
+          <tr><td>100</td><td>0.50 Ω</td><td>약 7.1배</td><td>—</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p>
+      목표 50 Ω·허용 범위 ±3 Ω인 기준을 세운다고 가정하면 n=2 데이터의 불확실성 ±6.94 Ω은 허용 범위보다
+      커서 판단 근거가 되지 못하며, n=30 이상이 필요함. 비용-효과로 보면 30개에서 100개로 늘리는 쪽이
+      비용 3.3배에 정밀도 1.8배로 효율적인 반면 100개에서 400개는 비용 4배에 정밀도 2배로 비효율적이라,
+      100개가 경제적 최적점에 가까움. 위 표는 σ를 아는 경우의 1.96 계수를 쓴 값이고, 표본표준편차 s만
+      아는 경우에는 자유도 n−1의 t 값을 대신 씀.
+    </p>
+
+    <div id="lab-ci"></div>
+
+    <p>
+      표본을 늘리기 전에 데이터가 분석 대상인지부터 갈라야 함. 노이즈 데이터는 과학·관리 결함과 통계 요건
+      미충족 두 축으로 판정하며, 다음 항목 중 하나라도 해당하면 통계 분석 이전 단계에서 제외함.
+    </p>
+
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>축</th><th>판정 항목</th></tr></thead>
+        <tbody>
+          <tr><td>과학·관리</td><td>출처 불명확 — 측정 주체·시점·조건 기록 없음</td></tr>
+          <tr><td>과학·관리</td><td>재현 불가 — 동일 조건 재실험에서 같은 결과가 나오지 않음</td></tr>
+          <tr><td>과학·관리</td><td>맥락 단절 — 기존 법칙이나 과거 데이터와 모순</td></tr>
+          <tr><td>과학·관리</td><td>원자료 부재 — 결과값만 있고 원시 데이터 없음</td></tr>
+          <tr><td>통계</td><td>표본 수 부족 — n이 작아 변동성 평가 불가</td></tr>
+          <tr><td>통계</td><td>반복성 부재 — 동일 조건 3회 이상 측정 기록 없음</td></tr>
+          <tr><td>통계</td><td>이상치 처리 부재 — 극단값을 원인 분석·제외 기준 없이 평균에 포함</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p class="hint">
+      통계 분석은 조건이 통제된 독립사건에서만 성립하므로 검사 조건 제어와 측정 수단 확충이 앞 순서에 놓임.
+      비교 대상 샘플도 같은 규모로 확보해 동일 프로토콜로 검사해야 통계적 유의차를 말할 수 있음.
+    </p>
+  </div>
+</section>
+
+<div class="wrap">
+  <div class="pager">
+    <a href="biosignal.html"><span class="pg-lbl">이전</span>생체신호와 전극 계면</a>
+    <a href="ai-tools.html" style="text-align:right"><span class="pg-lbl">다음</span>AI 도구의 작동 원리</a>
+  </div>
+</div>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <p>Field 12 · 규격·신뢰성·통계</p>
+  </div>
+</footer>
+
+<script src="../assets/js/site.js"></script>
+<script src="../assets/js/lab.js"></script>
+<script>
+/* ============================ 01. EC12 판정 대시보드 ============================ */
+(function(){
+  /* ANSI/AAMI EC12:2000 전기적 성능 한계값 — 표의 8개 항목을 그대로 데이터로 둠 */
+  var ITEMS = [
+    {id:'z10',  no:1, name:'10-Hz Impedance for Individual pair',            limit:3,   unit:'kΩ',   code:'ACZ'},
+    {id:'dco',  no:2, name:'Offset Voltage',                                 limit:100, unit:'mV',   code:'DCO'},
+    {id:'nz',   no:3, name:'Combined offset instability and internal noise', limit:150, unit:'µV',   code:'NOISE'},
+    {id:'pol',  no:4, name:'Rate of change of polarization',                 limit:1,   unit:'mV/s', code:'SDR (기울기)'},
+    {id:'zavg', no:5, name:'Average of 12 electrode pairs 10 Hz Impedance',  limit:2,   unit:'kΩ',   code:'ACZ'},
+    {id:'sdr',  no:6, name:'Defibrillation overload recovery',               limit:100, unit:'mV',   code:'SDR (전압)'},
+    {id:'zaft', no:7, name:'After test, 10-Hz electrode Impedance',          limit:3,   unit:'kΩ',   code:'ACZ'},
+    {id:'bias', no:8, name:'Bias current tolerance',                         limit:100, unit:'mV',   code:'BIAS'}
+  ];
+  Lab.make({
+    mount:'#lab-ec12',
+    title:'EC12 8개 항목 PASS/FAIL 대시보드',
+    badge:'EC12',
+    controls:[
+      {id:'z10',  label:'① 10 Hz 임피던스 (개별 쌍)', min:0, max:5,   step:0.05, value:2.0,  unit:'kΩ',   fmt:function(v){return v.toFixed(2);}},
+      {id:'dco',  label:'② Offset Voltage',            min:0, max:200, step:1,    value:50,   unit:'mV',   fmt:function(v){return v.toFixed(0);}},
+      {id:'nz',   label:'③ Offset 불안정 + 내부 노이즈', min:0, max:300, step:1,  value:100,  unit:'µV',   fmt:function(v){return v.toFixed(0);}},
+      {id:'pol',  label:'④ 분극 변화율',                min:0, max:2,   step:0.01, value:0.5,  unit:'mV/s', fmt:function(v){return v.toFixed(2);}},
+      {id:'zavg', label:'⑤ 12쌍 평균 10 Hz 임피던스',   min:0, max:5,   step:0.05, value:1.6,  unit:'kΩ',   fmt:function(v){return v.toFixed(2);}},
+      {id:'sdr',  label:'⑥ 제세동 과부하 복구',         min:0, max:200, step:1,    value:60,   unit:'mV',   fmt:function(v){return v.toFixed(0);}},
+      {id:'zaft', label:'⑦ 시험 후 10 Hz 임피던스',     min:0, max:5,   step:0.05, value:2.4,  unit:'kΩ',   fmt:function(v){return v.toFixed(2);}},
+      {id:'bias', label:'⑧ Bias current 후 offset',     min:0, max:200, step:1,    value:60,   unit:'mV',   fmt:function(v){return v.toFixed(0);}}
+    ],
+    presets:[
+      {label:'전 항목 여유', set:{z10:1.4, dco:20, nz:60, pol:0.3, zavg:1.1, sdr:30, zaft:1.7, bias:25}},
+      {label:'NOISE 초과',   set:{z10:1.4, dco:20, nz:220, pol:0.3, zavg:1.1, sdr:30, zaft:1.7, bias:25}},
+      {label:'ACZ 초과',     set:{z10:3.6, dco:20, nz:60, pol:0.3, zavg:2.4, sdr:30, zaft:4.1, bias:25}}
+    ],
+    stats:[
+      {id:'verdict', label:'종합 판정'},
+      {id:'nfail',   label:'FAIL 항목 수', unit:'개', fmt:function(v){return v.toFixed(0);}},
+      {id:'worst',   label:'최대 한계값 대비', unit:'%', fmt:function(v){return v.toFixed(0);}},
+      {id:'codes',   label:'FAIL 코드'}
+    ],
+    custom:true,
+    plot:{width:640,height:400,xLabel:'EC12 항목 번호',yLabel:'한계값 대비 (%)',
+          autoX:false,xMin:0.4,xMax:8.6,xTicks:8,autoY:false,yMin:0,yMax:260,
+          xTickFmt:function(v){return String(Math.round(v));}},
+    legend:[{color:'--green',label:'한계값 이내'},{color:'--accent',label:'한계값 초과'},{color:'--ink-3',label:'판정선 100 %'}],
+    note:'각 슬라이더는 ANSI/AAMI EC12:2000 표의 해당 항목 측정값임. 막대 높이는 측정값을 그 항목의 한계값으로 나눈 비율이라 ' +
+         '단위가 다른 여덟 항목을 한 축에 올려 비교할 수 있음. 100 % 선을 넘으면 그 항목이 FAIL이며, 항목은 서로 독립적으로 판정되므로 ' +
+         '하나만 초과해도 종합 판정이 FAIL로 바뀜.',
+    plotNote:'막대 번호는 표의 No 열과 같음. Open Circuit 계열 FAIL은 임피던스 측정 중 전류 경로가 끊긴 상태이므로 ①⑤⑦(ACZ)에서 함께 관찰됨.',
+    compute:function(v){
+      var pass=[], fail=[], codes={}, worst=0, nfail=0;
+      ITEMS.forEach(function(it){
+        var r = 100 * v[it.id] / it.limit;
+        if(r > worst) worst = r;
+        if(v[it.id] > it.limit){ fail.push([it.no, r]); nfail++; codes[it.code]=1; }
+        else pass.push([it.no, r]);
+      });
+      var codeList = Object.keys(codes);
+      var rows = ITEMS.map(function(it){
+        var over = v[it.id] > it.limit;
+        return '<div style="display:flex;gap:8px;align-items:baseline;padding:5px 8px;margin-bottom:3px;border-left:3px solid ' +
+          (over ? 'var(--accent)' : 'var(--green)') + ';background:' + (over ? 'var(--warm)' : 'var(--mint)') + '">' +
+          '<b style="font-family:var(--mono);font-size:12px;min-width:14px">' + it.no + '</b>' +
+          '<span style="font-size:12px;color:var(--ink-2);flex:1">' + it.name + '</span>' +
+          '<span style="font-family:var(--mono);font-size:12px">' + v[it.id] + ' / ' + it.limit + ' ' + it.unit + '</span>' +
+          '<b style="font-size:11px;color:' + (over ? 'var(--accent)' : 'var(--green)') + '">' +
+          (over ? 'FAIL · ' + it.code : 'PASS') + '</b></div>';
+      }).join('');
+      return {
+        series:[
+          {points:pass, color:'--green',  type:'bars', barWidth:34, opacity:0.72},
+          {points:fail, color:'--accent', type:'bars', barWidth:34, opacity:0.82}
+        ],
+        overlays:[{type:'hline', y:100, color:'--ink-3', label:'한계값 100 %'}],
+        custom: rows,
+        stats:{
+          verdict: nfail ? 'FAIL' : 'PASS',
+          nfail: nfail,
+          worst: worst,
+          codes: codeList.length ? codeList.join(', ') : '—'
+        }
+      };
+    }
+  });
+})();
+
+/* ============================ 02. Arrhenius 가속 수명 계산기 ============================ */
+Lab.make({
+  mount:'#lab-arrhenius',
+  title:'ASTM F1980 가속 수명 계산기',
+  badge:'ACCELERATED AGING',
+  controls:[
+    {id:'Ta',  label:'가속 온도 T_AA', min:30, max:70, step:0.5, value:70, unit:'°C', fmt:function(v){return v.toFixed(1);}},
+    {id:'Ts',  label:'보관 온도 T_RT', min:20, max:30, step:0.5, value:25, unit:'°C', fmt:function(v){return v.toFixed(1);}},
+    {id:'Q',   label:'Q₁₀', min:1.8, max:2.4, step:0.05, value:2.0, unit:'', fmt:function(v){return v.toFixed(2);}},
+    {id:'yr',  label:'목표 유효기간', min:0.5, max:5, step:0.1, value:3, unit:'년', fmt:function(v){return v.toFixed(1);}}
+  ],
+  presets:[
+    {label:'ASTM F1980 예시 (25 / 70 / Q₁₀ 2 / 3년)', set:{Ta:70, Ts:25, Q:2.0, yr:3}},
+    {label:'ECG·AED 전극 60 °C 오븐', set:{Ta:60, Ts:25, Q:2.0, yr:3}}
+  ],
+  stats:[
+    {id:'AF',   label:'가속 계수 AF₀', fmt:function(v){return v.toFixed(5);}},
+    {id:'days', label:'시험 소요일수', unit:'일', fmt:function(v){return v.toFixed(1);}},
+    {id:'wks',  label:'시험 소요주수', unit:'주', fmt:function(v){return v.toFixed(2);}},
+    {id:'eq',   label:'등가 실시간', unit:'년', fmt:function(v){return v.toFixed(2);}}
+  ],
+  plot:{width:620,height:250,xLabel:'가속 온도 T_AA (°C)',yLabel:'가속 계수 AF₀',
+        autoX:false,xMin:30,xMax:70,autoY:true,yMinFixed:0},
+  plot2:{width:620,height:250,xLabel:'가속 온도 T_AA (°C)',yLabel:'시험 소요일수 (일)',
+         autoX:false,xMin:30,xMax:70,autoY:true,yMinFixed:0},
+  legend:[{color:'--accent',label:'AF₀ = Q₁₀^((T_AA − T_RT)/10)'}],
+  legend2:[{color:'--purple',label:'시험 소요일수 = 365 × 목표년수 / AF₀'}],
+  note:'25 °C · 70 °C · Q₁₀ = 2 조건에서 지수가 4.5이므로 AF₀ = 2<sup>4.5</sup> = 11.31371이며, 3년 shelf life가 14주 남짓의 가속 노화에 ' +
+       '대응함. Q₁₀ = 2는 대부분의 폴리머 계에서 통상적이면서 보수적인 추정값으로 취급함. 활성화 에너지를 직접 쓰는 형태 대신 ' +
+       'Q₁₀ 형태를 쓰는 것이 ASTM F1980 계산 방식임.',
+  plotNote:'온도를 10 °C 올릴 때마다 AF₀가 Q₁₀배가 되어 시험 기간이 그만큼 줄지만, 60 °C 조건에서는 AgCl 용해도 상승·Ostwald ripening·' +
+           'Ag₂O 생성·유기 흡착이 유효 경로로 작동하므로 상온과 지배 기전이 달라질 여지도 함께 커짐.',
+  compute:function(v){
+    var AF = Math.pow(v.Q, (v.Ta - v.Ts) / 10);
+    var days = 365 * v.yr / AF;
+    var s1=[], s2=[];
+    for(var i=0;i<=200;i++){
+      var T = 30 + 40 * i / 200;
+      var af = Math.pow(v.Q, (T - v.Ts) / 10);
+      s1.push([T, af]);
+      s2.push([T, 365 * v.yr / af]);
+    }
+    return {
+      series:[{points:s1, color:'--accent', width:2.4}],
+      overlays:[
+        {type:'point', x:v.Ta, y:AF, color:'--accent', label:'AF₀ = ' + AF.toFixed(3)},
+        {type:'vline', x:v.Ts, color:'--ink-3', label:'T_RT'}
+      ],
+      series2:[{points:s2, color:'--purple', width:2.4}],
+      overlays2:[
+        {type:'point', x:v.Ta, y:days, color:'--purple', label:days.toFixed(1) + ' 일'},
+        {type:'hline', y:98, color:'--green', label:'14주 = 98일'}
+      ],
+      stats:{ AF:AF, days:days, wks:days/7, eq: days * AF / 365 }
+    };
+  }
+});
+
+/* ============================ 03. ISO 10993 시험 항목 선택기 ============================ */
+(function(){
+  /* EN ISO 10993-1:2020 Table A.1을 external communicating / tissue / limited 조합에 적용해
+     문서화된 판정과, 각 미수행 항목이 근거로 든 정당화 문구 */
+  var DONE = [
+    {name:'세포독성',        std:'ISO 10993-5'},
+    {name:'감작성',          std:'ISO 10993-10'},
+    {name:'자극 또는 피내반응', std:'ISO 10993-10'},
+    {name:'급성 전신독성',    std:'ISO 10993-11'},
+    {name:'물질 매개 발열성', std:'ISO 10993-11'}
+  ];
+  /* holds(v) === false 이면 그 조합에서는 미수행 정당화 문구가 성립하지 않음 */
+  var SKIP = [
+    {name:'아만성·아급성 독성', why:'단기 사용, 장기 노출 없음',
+     holds:function(v){ return v.dur === 'A'; }},
+    {name:'유전독성', why:'전신 순환 노출 없음',
+     holds:function(v){ return v.tis !== 'blood' && v.type !== 'implant'; }},
+    {name:'이식', why:'영구 이식 기기가 아님',
+     holds:function(v){ return v.type !== 'implant'; }},
+    {name:'혈액적합성', why:'직접 혈액 접촉 없음',
+     holds:function(v){ return v.tis !== 'blood'; }},
+    {name:'만성 독성', why:'30일 초과 사용에 해당하지 않음',
+     holds:function(v){ return v.dur !== 'C'; }},
+    {name:'발암성', why:'장기 노출 없음',
+     holds:function(v){ return v.dur !== 'C'; }},
+    {name:'생식·발생 독성', why:'단기 사용',
+     holds:function(v){ return v.dur === 'A'; }},
+    {name:'분해', why:'사용 중 분해·입자 방출 없음',
+     holds:function(v){ return true; }}
+  ];
+  var TYPE = {surface:'표면 접촉 (surface)', ext:'외부 연결 (external communicating)', implant:'이식 (implant)'};
+  var TIS  = {skin:'피부', mucosa:'점막', breached:'손상 표면', tissue:'조직·뼈·치수', blood:'혈액'};
+  var DUR  = {A:'A — ≤ 24 h (limited)', B:'B — 24 h ~ 30 d (prolonged)', C:'C — > 30 d (permanent)'};
+
+  Lab.make({
+    mount:'#lab-iso',
+    title:'접촉 3축과 생물학적 평가 항목',
+    badge:'ISO 10993-1',
+    plot:false,
+    custom:true,
+    controls:[
+      {id:'type', type:'select', label:'접촉 유형', value:'ext',
+       options:[{value:'surface',label:'표면 접촉'},{value:'ext',label:'외부 연결'},{value:'implant',label:'이식'}]},
+      {id:'tis', type:'select', label:'접촉 조직', value:'tissue',
+       options:[{value:'skin',label:'피부'},{value:'mucosa',label:'점막'},{value:'breached',label:'손상 표면'},
+                {value:'tissue',label:'조직·뼈·치수'},{value:'blood',label:'혈액'}]},
+      {id:'dur', type:'toggle', label:'접촉 기간',
+       options:[{value:'A',label:'A ≤24 h'},{value:'B',label:'B 24 h~30 d'},{value:'C',label:'C >30 d'}], value:'A'}
+    ],
+    presets:[
+      {label:'문서화된 사례 (외부 연결 / 조직 / A)', set:{type:'ext', tis:'tissue', dur:'A'}}
+    ],
+    stats:[
+      {id:'cls',   label:'선택한 분류'},
+      {id:'ndone', label:'문서화된 수행 항목', unit:'개', fmt:function(v){return v.toFixed(0);}},
+      {id:'nlost', label:'정당화 근거 소멸', unit:'개', fmt:function(v){return v.toFixed(0);}},
+      {id:'match', label:'문서화 사례와 일치 여부'}
+    ],
+    note:'표의 수행·미수행 판정은 EN ISO 10993-1:2020 Table A.1을 external communicating / tissue / limited 조합에 적용해 ' +
+         '문서화한 사례임. 접촉 3축을 바꾸면 각 미수행 항목이 근거로 든 정당화 문구가 그 조합에서도 성립하는지를 점검해 표시함. ' +
+         '정당화가 성립하지 않는 항목은 접촉 경로와 사용 기간으로 다시 정당화하거나 시험으로 채워야 함.',
+    compute:function(v){
+      var lost = 0;
+      var head =
+        '<div style="padding:10px 12px;margin-bottom:10px;background:var(--panel-2);border-left:3px solid var(--purple);font-size:13px">' +
+        '<b>' + TYPE[v.type] + '</b> / <b>' + TIS[v.tis] + '</b> / <b>' + DUR[v.dur] + '</b></div>';
+      var doneRows = DONE.map(function(d){
+        return '<tr><td>수행</td><td>' + d.name + '</td><td>' + d.std + '</td><td>O</td></tr>';
+      }).join('');
+      var skipRows = SKIP.map(function(s){
+        var ok = s.holds(v);
+        if(!ok) lost++;
+        return '<tr><td>' + (ok ? '미수행' : '<b style="color:var(--accent)">재검토</b>') + '</td><td>' + s.name +
+          '</td><td>—</td><td>' + (ok ? s.why : '<b style="color:var(--accent)">' + s.why + ' — 선택한 접촉 조건에서 성립하지 않음</b>') + '</td></tr>';
+      }).join('');
+      var isBase = (v.type === 'ext' && v.tis === 'tissue' && v.dur === 'A');
+      return {
+        custom: head +
+          '<div class="tbl-wrap"><table><thead><tr><th>구분</th><th>항목</th><th>적용 규격</th><th>수행 여부 · 정당화</th></tr></thead>' +
+          '<tbody>' + doneRows + skipRows + '</tbody></table></div>',
+        stats:{
+          cls: TYPE[v.type].split(' ')[0] + ' / ' + TIS[v.tis] + ' / ' + v.dur,
+          ndone: DONE.length,
+          nlost: lost,
+          match: isBase ? '일치' : '다른 조합'
+        }
+      };
+    }
+  });
+})();
+
+/* ============================ 04. PII 자극지수 판정 ============================ */
+Lab.make({
+  mount:'#lab-pii',
+  title:'1차 자극 지수(PII) 계산기',
+  badge:'ISO 10993-10 / -23',
+  controls:[
+    {id:'e24', label:'홍반 24 h', min:0, max:4, step:1, value:1, fmt:function(v){return v.toFixed(0);}},
+    {id:'e48', label:'홍반 48 h', min:0, max:4, step:1, value:1, fmt:function(v){return v.toFixed(0);}},
+    {id:'e72', label:'홍반 72 h', min:0, max:4, step:1, value:0, fmt:function(v){return v.toFixed(0);}},
+    {id:'o24', label:'부종 24 h', min:0, max:4, step:1, value:1, fmt:function(v){return v.toFixed(0);}},
+    {id:'o48', label:'부종 48 h', min:0, max:4, step:1, value:0, fmt:function(v){return v.toFixed(0);}},
+    {id:'o72', label:'부종 72 h', min:0, max:4, step:1, value:0, fmt:function(v){return v.toFixed(0);}},
+    {id:'ctl', label:'음성 대조 점수 보정', min:0, max:4, step:0.1, value:0, fmt:function(v){return v.toFixed(1);}}
+  ],
+  presets:[
+    {label:'Negligible 영역', set:{e24:0, e48:0, e72:0, o24:1, o48:0, o72:0, ctl:0}},
+    {label:'Moderate 영역',   set:{e24:3, e48:2, e72:2, o24:2, o48:1, o72:1, ctl:0}},
+    {label:'Severe 영역',     set:{e24:4, e48:4, e72:3, o24:4, o48:3, o72:2, ctl:0}}
+  ],
+  stats:[
+    {id:'pii',  label:'PII', fmt:function(v){return v.toFixed(2);}},
+    {id:'cat',  label:'판정 범주'},
+    {id:'raw',  label:'보정 전 평균', fmt:function(v){return v.toFixed(2);}},
+    {id:'peak', label:'최고 시점 합계', unit:'점', fmt:function(v){return v.toFixed(0);}}
+  ],
+  plot:{width:620,height:360,xLabel:'관찰 시점',yLabel:'홍반 + 부종 합계 (점)',
+        autoX:false,xMin:0.4,xMax:3.6,xTicks:3,autoY:false,yMin:0,yMax:8.6,
+        xTickFmt:function(v){var i=Math.round(v);return i===1?'24 h':i===2?'48 h':i===3?'72 h':'';}},
+  legend:[{color:'--accent',label:'시점별 홍반 + 부종'},{color:'--green',label:'범주 경계 0.5 / 2 / 5'}],
+  note:'동물 한 마리의 1차 자극 점수는 전체 점수의 합을 6(시험·관찰 부위 2개 × 시점 3개)으로 나눠 얻고, 이를 동물 수로 다시 나눠 PII를 만듦. ' +
+       '두 관찰 부위의 점수가 같다고 두면 PII는 세 시점의 (홍반 + 부종) 평균과 같아짐. 지표 산출에는 24·48·72시간 관찰만 쓰며, ' +
+       '(1 ± 0.1) h 관찰값은 계산에서 제외함. 음성 대조를 쓴 경우 대조군 점수를 빼서 보정함.',
+  plotNote:'막대가 특정 시점에서만 높아도 PII는 세 시점 평균이므로 국소적 고점수가 전체 판정을 자동으로 좌우하지 않음. 판정 범주 경계선은 PII 판정 범주표의 값임.',
+  compute:function(v){
+    var t = [v.e24 + v.o24, v.e48 + v.o48, v.e72 + v.o72];
+    var raw = (t[0] + t[1] + t[2]) / 3;
+    var pii = Math.max(0, raw - v.ctl);
+    var cat = pii <= 0.4 ? 'Negligible (0 ~ 0.4)'
+            : pii <= 1.9 ? 'Slight (0.5 ~ 1.9)'
+            : pii <= 4.9 ? 'Moderate (2 ~ 4.9)'
+            : 'Severe (5 ~ 8)';
+    var col = pii <= 0.4 ? '--green' : pii <= 1.9 ? '--purple' : pii <= 4.9 ? '--amber' : '--accent';
+    return {
+      series:[{points:[[1,t[0]],[2,t[1]],[3,t[2]]], color:col, type:'bars', barWidth:64, opacity:0.78}],
+      overlays:[
+        {type:'hline', y:0.5, color:'--green',    label:'Slight 0.5'},
+        {type:'hline', y:2,   color:'--green',    label:'Moderate 2'},
+        {type:'hline', y:5,   color:'--green',    label:'Severe 5'},
+        {type:'hline', y:pii, color:col, dash:'6 3', label:'PII = ' + pii.toFixed(2)}
+      ],
+      stats:{ pii:pii, cat:cat, raw:raw, peak:Math.max(t[0], t[1], t[2]) }
+    };
+  }
+});
+
+/* ============================ 07. 4탐침법 저항률 계산기 ============================ */
+Lab.make({
+  mount:'#lab-4probe',
+  title:'KS L 1619 4탐침법 저항률 계산기',
+  badge:'KS L 1619',
+  controls:[
+    {id:'I0', label:'인가 정전류 I₀', min:1e-6, max:1e-2, value:1e-3, log:true, unit:'A', fmt:function(v){return Lab.sci(v,3);}},
+    {id:'V1', label:'V₁ (A→D 방향)',  min:1e-4, max:2,    value:0.05, log:true, unit:'V', fmt:function(v){return Lab.sci(v,3);}},
+    {id:'V2', label:'V₂ (D→A 역방향)', min:1e-4, max:2,   value:0.048, log:true, unit:'V', fmt:function(v){return Lab.sci(v,3);}},
+    {id:'F',  label:'보정 계수 F', min:4.0, max:5.0, step:0.001, value:4.532, unit:'', fmt:function(v){return v.toFixed(3);}},
+    {id:'t',  label:'막 두께 t', min:10, max:500, step:1, value:100, unit:'nm', fmt:function(v){return v.toFixed(0);}}
+  ],
+  stats:[
+    {id:'R1',  label:'R₁ = |V₁/I₀|', unit:'Ω', fmt:function(v){return Lab.sci(v,4);}},
+    {id:'R2',  label:'R₂ = |V₂/I₀|', unit:'Ω', fmt:function(v){return Lab.sci(v,4);}},
+    {id:'R',   label:'평균 저항 R',   unit:'Ω', fmt:function(v){return Lab.sci(v,4);}},
+    {id:'rho', label:'저항률 ρ = F·t·R', unit:'Ω·cm', fmt:function(v){return Lab.sci(v,4);}},
+    {id:'chk', label:'적용 범위 판정'}
+  ],
+  plot:{width:620,height:400,xLabel:'막 두께 t (nm)',yLabel:'ρ (Ω·cm)',
+        autoX:false,xMin:0,xMax:520,autoY:false,yLog:true,yMin:1e-10,yMax:1e4},
+  legend:[{color:'--accent',label:'ρ = F·t·R'},{color:'--green',label:'적용 범위 1×10⁻⁵ ~ 2×10² Ω·cm'}],
+  note:'정·역방향으로 두 번 측정해 평균을 내는 이유는 열기전력 같은 계통 오차를 상쇄하기 위함임. 두께를 측정할 수 있거나 공칭값을 ' +
+       '알 때만 이 방법을 적용할 수 있고, 두께를 모르면 저항률 환산 자체가 성립하지 않음. F의 기본값 4.532는 시료 형상에 따라 바꿔 쓰는 값임.',
+  plotNote:'저항률이 막 두께에 정비례하므로 로그 세로축에서는 직선으로 나타남. 규격이 정한 막 두께 상한은 500 nm이며, 두 수평선 사이가 적용 저항률 범위임.',
+  compute:function(v){
+    var R1 = Math.abs(v.V1 / v.I0), R2 = Math.abs(v.V2 / v.I0);
+    var R = (R1 + R2) / 2;
+    var tcm = v.t * 1e-7;
+    var rho = v.F * tcm * R;
+    var pts = [];
+    for(var i=0;i<=120;i++){
+      var tn = 10 + 490 * i / 120;
+      pts.push([tn, v.F * tn * 1e-7 * R]);
+    }
+    var chk = rho < 1e-5 ? '하한 미만 — 적용 범위 밖'
+            : rho > 2e2  ? '상한 초과 — 적용 범위 밖'
+            : '적용 범위 내';
+    return {
+      series:[{points:pts, color:'--accent', width:2.4}],
+      overlays:[
+        {type:'hline', y:1e-5, color:'--green', label:'1×10⁻⁵ Ω·cm'},
+        {type:'hline', y:2e2,  color:'--green', label:'2×10² Ω·cm'},
+        {type:'vline', x:500,  color:'--ink-3', label:'두께 상한 500 nm'},
+        {type:'point', x:v.t, y:rho, color:'--accent', label:'ρ = ' + Lab.sci(rho,3)}
+      ],
+      stats:{ R1:R1, R2:R2, R:R, rho:rho, chk:chk }
+    };
+  }
+});
+
+/* ============================ 08. 표본수와 신뢰구간 ============================ */
+(function(){
+  /* 양측 t 임계값 — 자유도별 표준표. 중간 자유도는 선형보간함 */
+  var TT = {
+    90:[[1,6.314],[2,2.920],[3,2.353],[4,2.132],[5,2.015],[6,1.943],[7,1.895],[8,1.860],[9,1.833],
+        [10,1.812],[12,1.782],[15,1.753],[20,1.725],[25,1.708],[30,1.697],[40,1.684],[50,1.676]],
+    95:[[1,12.706],[2,4.303],[3,3.182],[4,2.776],[5,2.571],[6,2.447],[7,2.365],[8,2.306],[9,2.262],
+        [10,2.228],[12,2.179],[15,2.131],[20,2.086],[25,2.060],[30,2.042],[40,2.021],[50,2.009]],
+    99:[[1,63.657],[2,9.925],[3,5.841],[4,4.604],[5,4.032],[6,3.707],[7,3.499],[8,3.355],[9,3.250],
+        [10,3.169],[12,3.055],[15,2.947],[20,2.845],[25,2.787],[30,2.750],[40,2.704],[50,2.678]]
+  };
+  var ZINF = {90:1.645, 95:1.960, 99:2.576};
+
+  function tval(conf, df){
+    var tb = TT[conf], zi = ZINF[conf];
+    if(df <= tb[0][0]) return tb[0][1];
+    for(var i=0;i<tb.length-1;i++){
+      var d0 = tb[i][0], t0 = tb[i][1], d1 = tb[i+1][0], t1 = tb[i+1][1];
+      if(df <= d1) return t0 + (t1 - t0) * (df - d0) / (d1 - d0);
+    }
+    var dl = tb[tb.length-1][0], tl = tb[tb.length-1][1];
+    return zi + (tl - zi) * (dl / df);
+  }
+
+  Lab.make({
+    mount:'#lab-ci',
+    title:'표본수와 신뢰구간 폭',
+    badge:'SAMPLING',
+    controls:[
+      {id:'n', label:'표본 수 n', min:3, max:50, step:1, value:10, unit:'개', fmt:function(v){return v.toFixed(0);}},
+      {id:'s', label:'표본표준편차 s', min:0.5, max:20, step:0.1, value:5, unit:'Ω', fmt:function(v){return v.toFixed(1);}},
+      {id:'c', type:'select', label:'신뢰수준', value:'95',
+       options:[{value:'90',label:'90 %'},{value:'95',label:'95 %'},{value:'99',label:'99 %'}]},
+      {id:'tol', label:'허용 오차', min:0.5, max:10, step:0.1, value:3, unit:'Ω', fmt:function(v){return v.toFixed(1);}}
+    ],
+    presets:[
+      {label:'σ 5 Ω · 허용 ±3 Ω · 95 %', set:{s:5, tol:3, c:'95', n:10}},
+      {label:'n = 30 확인', set:{s:5, tol:3, c:'95', n:30}}
+    ],
+    stats:[
+      {id:'SE',   label:'표준오차 SE', unit:'Ω', fmt:function(v){return v.toFixed(3);}},
+      {id:'t',    label:'t(α/2, n−1)', fmt:function(v){return v.toFixed(3);}},
+      {id:'half', label:'신뢰구간 반폭', unit:'Ω', fmt:function(v){return v.toFixed(3);}},
+      {id:'wid',  label:'신뢰구간 폭', unit:'Ω', fmt:function(v){return v.toFixed(3);}},
+      {id:'nmin', label:'허용 오차 만족 최소 n'}
+    ],
+    plot:{width:620,height:400,xLabel:'표본 수 n',yLabel:'신뢰구간 반폭 t·SE (Ω)',
+          autoX:false,xMin:3,xMax:50,autoY:true,yMinFixed:0},
+    legend:[{color:'--accent',label:'t·s/√n'},{color:'--green',label:'허용 오차'},{color:'--neutral',label:'z 근사 (σ 기지)'}],
+    note:'σ를 아는 경우에는 95 % 신뢰구간이 x̄ ± 1.96·SE이지만, 표본표준편차 s만 아는 경우에는 자유도 n−1의 t 값을 씀. ' +
+         't 값은 90 · 95 · 99 % 양측 표준표를 자유도별로 내장했고 표에 없는 자유도는 선형보간함. 최소 n은 t(α/2, n−1)·s/√n이 ' +
+         '허용 오차 이하가 되는 첫 n임.',
+    plotNote:'√n 법칙 때문에 곡선이 n이 커질수록 완만해짐 — 표본을 4배 늘려야 반폭이 절반이 되는 수확체감 구조가 곡선 모양에 그대로 나타남.',
+    compute:function(v){
+      var conf = v.c, n = Math.round(v.n), s = v.s;
+      var SE = s / Math.sqrt(n);
+      var t = tval(conf, n - 1);
+      var half = t * SE;
+      var curve = [], zcurve = [];
+      for(var k=3;k<=50;k++){
+        curve.push([k, tval(conf, k - 1) * s / Math.sqrt(k)]);
+        zcurve.push([k, ZINF[conf] * s / Math.sqrt(k)]);
+      }
+      var nmin = null;
+      for(var m=3;m<=20000;m++){
+        if(tval(conf, m - 1) * s / Math.sqrt(m) <= v.tol){ nmin = m; break; }
+      }
+      var ov = [
+        {type:'hline', y:v.tol, color:'--green', label:'허용 오차 ' + v.tol.toFixed(1) + ' Ω'},
+        {type:'point', x:n, y:half, color:'--accent', label:'± ' + half.toFixed(2) + ' Ω'}
+      ];
+      if(nmin && nmin <= 50) ov.push({type:'vline', x:nmin, color:'--purple', label:'n = ' + nmin});
+      return {
+        series:[
+          {points:curve,  color:'--accent',  width:2.4},
+          {points:zcurve, color:'--neutral', width:1.4, dash:'4 4'}
+        ],
+        overlays: ov,
+        stats:{
+          SE:SE, t:t, half:half, wid:2*half,
+          nmin: nmin ? (nmin > 20000 ? '> 20000' : String(nmin) + ' 개') : '> 20000'
+        }
+      };
+    }
+  });
+})();
+</script>
+</body>
+</html>

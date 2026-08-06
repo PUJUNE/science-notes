@@ -1,0 +1,1472 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>금속 부식과 내식성 — 수학·물리·화학 노트</title>
+<meta name="description" content="혼합전위와 Tafel 외삽에서 출발해 갈바닉·공식·틈새 부식, SUS-Ag/AgCl 산소 매개 사이클, Faraday 용해량과 부식 검사 통계까지 인터랙티브로 다룸.">
+<link rel="stylesheet" href="../assets/css/site.css">
+</head>
+<body>
+
+<div class="topbar">
+  <div class="wrap">
+    <a class="brand" href="../index.html">← 수학·물리·화학 노트</a>
+    <ul class="topnav">
+      <li><a href="#s1">부식의 전기화학</a></li>
+      <li><a href="#s2">갈바닉 부식</a></li>
+      <li><a href="#s3">공식·틈새</a></li>
+      <li><a href="#s4">산소 매개 사이클</a></li>
+      <li><a href="#s5">재질 비교</a></li>
+      <li><a href="#s6">산 노출·전해</a></li>
+      <li><a href="#s7">검사 설계</a></li>
+      <li><a href="#s8">통계 분석</a></li>
+    </ul>
+    <button class="theme-btn" type="button">DARK</button>
+  </div>
+</div>
+
+<header class="mast">
+  <div class="wrap">
+    <p class="kicker">Field 03 · 화학 · 금속 부식과 내식성</p>
+    <h1>부식은 한 표면에서 <em>두 반쪽반응이 짝을 이루는</em> 전기화학</h1>
+    <p class="lede">
+      녹이 스는 과정은 화학적 노화가 아니라 양극 반응과 음극 반응이 같은 금속 위에서 전류를 주고받는
+      전지 동작임. 두 반응의 속도가 같아지는 지점에서 부식전위가 잡히고 그때의 전류가 부식속도를 정하므로,
+      전위와 전류를 함께 읽어야 재질·환경·형상 중 어느 쪽이 속도를 지배하는지 갈라짐. 모든 곡선은
+      브라우저에서 실제 식을 적분해 그림.
+    </p>
+    <div class="eq" style="border-left-color:var(--accent)">
+      i<sub>a</sub>(E<sub>corr</sub>) = |i<sub>c</sub>(E<sub>corr</sub>)| = i<sub>corr</sub>
+      &nbsp;&nbsp;<span class="cm">— 외부 전류가 0이어도 내부에서는 i<sub>corr</sub>가 계속 흐름</span>
+    </div>
+  </div>
+</header>
+
+<main>
+
+<!-- ================= 01 ================= -->
+<section id="s1">
+  <div class="wrap">
+    <p class="eyebrow"><span class="num">01</span><span>E<sub>corr</sub>, i<sub>corr</sub></span></p>
+    <h2>부식전위는 두 반응의 속도가 맞물리는 곳에서 정해짐</h2>
+
+    <p>
+      금속이 전해질에 닿으면 금속을 이온으로 내보내는 산화 반응(양극 반응)과 전자를 받아 가는 환원
+      반응(음극 반응)이 같은 표면에서 동시에 돌아감. 두 반응은 전자를 매개로 연결되어 있으므로
+      한쪽이 빨라지면 다른 쪽도 같은 속도로 따라가야 하고, 그 균형이 맞는 전위가 부식전위 E<sub>corr</sub>임.
+      외부 회로로는 전류가 잡히지 않지만 표면 안쪽에서는 i<sub>corr</sub> 만큼의 전류가 계속 흐르므로,
+      전위계로 읽은 값 하나만으로는 부식이 얼마나 빠른지 알 수 없음.
+    </p>
+
+    <div class="eq">
+Fe → Fe<sup>2+</sup> + 2e<sup>−</sup> &nbsp;&nbsp;<span class="cm">— 양극(산화), E° = −0.440 V</span><br>
+O<sub>2</sub> + 4H<sup>+</sup> + 4e<sup>−</sup> → 2H<sub>2</sub>O &nbsp;&nbsp;<span class="cm">— 음극(산소 환원), E° = +1.229 V</span><br>
+2H<sup>+</sup> + 2e<sup>−</sup> → H<sub>2</sub> &nbsp;&nbsp;<span class="cm">— 음극(수소 발생), E° = 0.000 V</span>
+    </div>
+
+    <p>
+      용존 산소가 있는 조건에서는 산소 환원 전위(+1.229 V)가 수소 발생 전위(0.000 V)보다 훨씬 높아
+      산소 환원이 수소 발생을 앞지름. 그래서 산성 용액에 담근 스테인리스강에서도 기포가 보이지 않는 상태로
+      금속 용해가 진행되는 경우가 생기며, 기포 유무를 부식 유무의 지표로 쓰면 어긋남.
+    </p>
+
+    <h3>열역학과 속도론을 갈라 읽음</h3>
+    <p>
+      전위–pH 도표(Pourbaix)는 어떤 상이 열역학적으로 안정한지만 알려 줌. 부동태 영역에 들어 있다는 사실은
+      산화물이 안정하다는 뜻이지 부식이 0이라는 뜻이 아니고, 부식 영역에 있다는 사실도 속도가 빠르다는
+      보장을 주지 않음. 속도는 다음 항목의 Tafel 관계가 결정하므로 두 그림을 짝지어 읽어야 함.
+    </p>
+
+    <div id="lab-pbx"></div>
+
+    <ul class="sym">
+      <li><b>E</b><span>전극 전위 [V vs SHE]</span></li>
+      <li><b>pH</b><span>수소 이온 활동도의 음의 상용로그 [무차원]</span></li>
+      <li><b>수소선</b><span>2H⁺ + 2e⁻ → H₂ 평형, E = −0.059·pH</span></li>
+      <li><b>산소선</b><span>O₂ + 4H⁺ + 4e⁻ → 2H₂O 평형, E = 1.229 − 0.059·pH</span></li>
+    </ul>
+
+    <h3>Tafel 관계와 혼합전위</h3>
+    <p>
+      전위를 평형에서 밀어내면 반응 속도는 과전압에 지수적으로 반응함. 이를 반대수 축에 그리면 직선이
+      되고 그 기울기가 Tafel 기울기 β임. 양극 직선과 음극 직선을 각각 외삽해 만나는 점의 가로 좌표가
+      i<sub>corr</sub>, 세로 좌표가 E<sub>corr</sub>가 됨. 다만 산소 환원은 확산이 공급을 제한하므로 어느
+      전류 이상에서는 전위를 더 내려도 전류가 늘지 않는 한계 전류 i<sub>L</sub> 구간이 나타나고, 실제
+      부식속도는 이 한계 전류가 지배하는 경우가 많음.
+    </p>
+
+    <div class="eq">
+i<sub>a</sub> = i<sub>0a</sub> · 10<sup>(E − E<sub>a</sub>)/β<sub>a</sub></sup> &nbsp;&nbsp;<span class="cm">— 양극 분지</span><br>
+i<sub>c,act</sub> = i<sub>0c</sub> · 10<sup>(E<sub>c</sub> − E)/β<sub>c</sub></sup>,&nbsp;&nbsp;
+1/i<sub>c</sub> = 1/i<sub>c,act</sub> + 1/i<sub>L</sub> &nbsp;&nbsp;<span class="cm">— 활성화와 확산의 직렬 합성</span><br><br>
+CR [mm/year] = 3.27×10<sup>−3</sup> · i<sub>corr</sub>[µA/cm²] · EW / ρ
+    </div>
+    <ul class="sym">
+      <li><b>i<sub>0</sub></b><span>교환전류밀도 [A/cm²]. 평형에서 양방향으로 오가는 전류의 크기</span></li>
+      <li><b>β</b><span>Tafel 기울기 [V/decade]. 전류를 10배 올리는 데 필요한 과전압</span></li>
+      <li><b>i<sub>L</sub></b><span>확산 한계 전류밀도 [A/cm²]. 산소 공급 속도가 정하는 상한</span></li>
+      <li><b>EW</b><span>당량 무게 [g/eq] = 원자량 / 전자수. Fe는 55.85/2 = 27.93</span></li>
+      <li><b>ρ</b><span>밀도 [g/cm³]</span></li>
+      <li><b>CR</b><span>침식 속도 [mm/year]</span></li>
+    </ul>
+
+    <div id="lab-tafel"></div>
+
+    <div class="callout note">
+      <p><b>읽는 법</b> — 양극 i<sub>0a</sub>를 키우면 교점이 오른쪽으로 밀려 부식속도가 오르지만
+      E<sub>corr</sub>는 음의 방향으로 내려감. 반대로 산소 한계 전류 i<sub>L</sub>만 낮추면 E<sub>corr</sub>는
+      음으로 내려가면서 i<sub>corr</sub>도 함께 떨어짐. 전위가 낮아진 사실 하나만으로 부식이 심해졌다고
+      읽으면 두 경우를 구분하지 못함.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ================= 02 ================= -->
+<section id="s2">
+  <div class="wrap">
+    <p class="eyebrow"><span class="num">02</span><span>ΔE = E<sub>c</sub> − E<sub>a</sub></span></p>
+    <h2>갈바닉 부식 — 전위차가 방향을, 면적비가 속도를 정함</h2>
+
+    <p>
+      전위가 다른 두 금속이 전해질을 통해 연결되면 전위가 낮은 쪽이 양극이 되어 녹고 높은 쪽은 음극이 되어
+      환원 반응만 담당함. SUS 스냅과 Ag/AgCl 센서가 맞물린 계에서는 SUS 쪽에서 Fe → Fe²⁺ + 2e⁻ 산화가,
+      AgCl 쪽에서 AgCl + e⁻ → Ag + Cl⁻ 환원이 짝을 이뤄 진행됨. 표면에서 전위를 높게 붙들던 산화수 +1의
+      Ag⁺ 층이 산화수 0의 금속 Ag로 환원되어 사라지고 전자를 밀어내는 금속 Fe의 노출 면적이 넓어지므로,
+      진행될수록 전체 OCP가 음의 영역에 머무름. 두 반쪽반응의 표준 전위 차는 0.222 − (−0.440) = 0.662 V임.
+    </p>
+
+    <p>
+      전위차는 구동력만 정하고 실제 속도는 회로 저항이 나눠 가짐. 양극 쪽 분극저항, 음극 쪽 분극저항,
+      전해질 저항이 직렬로 놓이는데 각 전극의 저항은 면적에 반비례하므로, 음극 면적이 넓어지면 음극 몫이
+      작아지면서 양극 한 점에 전류가 몰림. 작은 양극과 큰 음극의 조합에서 침식이 국부적으로 깊어지는 이유임.
+    </p>
+
+    <div class="eq">
+I = ΔE / ( r<sub>a</sub>/A<sub>a</sub> + r<sub>c</sub>/A<sub>c</sub> + R<sub>s</sub> )<br>
+i<sub>a</sub> = I / A<sub>a</sub> = ΔE / ( r<sub>a</sub> + r<sub>c</sub>·(A<sub>a</sub>/A<sub>c</sub>) + R<sub>s</sub>A<sub>a</sub> )<br>
+R<sub>s</sub> = d / (κ · A<sub>a</sub>) &nbsp;&nbsp;<span class="cm">— 전극 간격 d, 전해질 전도도 κ</span>
+    </div>
+    <ul class="sym">
+      <li><b>ΔE</b><span>구동 전위차 [V] = 음극 전위 − 양극 전위</span></li>
+      <li><b>r<sub>a</sub>, r<sub>c</sub></b><span>단위 면적 분극저항 [Ω·cm²]</span></li>
+      <li><b>A<sub>a</sub>, A<sub>c</sub></b><span>양극·음극 면적 [cm²]</span></li>
+      <li><b>R<sub>s</sub></b><span>전해질 저항 [Ω]</span></li>
+      <li><b>κ</b><span>전해질 전도도 [S/m]</span></li>
+    </ul>
+
+    <h3>갈바닉 계열 — 표준 환원 전위 기준</h3>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>재질 / 반쪽반응</th><th>E [V vs SHE]</th><th>EW [g/eq]</th><th>밀도 [g/cm³]</th><th>계에서의 역할</th></tr></thead>
+        <tbody>
+          <tr><td>Cu²⁺ / Cu</td><td>+0.34</td><td>31.77</td><td>8.96</td><td>음극. 전해 시험의 카운터 전극</td></tr>
+          <tr><td>AgCl / Ag</td><td>+0.222</td><td>107.87</td><td>10.49</td><td>음극. 센서 코팅면</td></tr>
+          <tr><td>SUS304 부동태</td><td>−0.05</td><td>25.12</td><td>7.90</td><td>부동태 피막이 살아 있는 상태</td></tr>
+          <tr><td>Ti (부동태)</td><td>−0.10</td><td>11.97</td><td>4.51</td><td>부동태 안정성이 높은 대체 재질</td></tr>
+          <tr><td>Ni²⁺ / Ni</td><td>−0.25</td><td>29.35</td><td>8.90</td><td>SUS304 구성 원소</td></tr>
+          <tr><td>SUS304 활성</td><td>−0.35</td><td>25.12</td><td>7.90</td><td>피막이 벗겨진 상태. 양극으로 전환됨</td></tr>
+          <tr><td>Fe²⁺ / Fe</td><td>−0.440</td><td>27.93</td><td>7.87</td><td>양극. 생금속이 드러난 SUS 표면</td></tr>
+          <tr><td>Cr³⁺ / Cr</td><td>−0.74</td><td>17.33</td><td>7.19</td><td>부동태 피막을 만드는 원소</td></tr>
+          <tr><td>Zn²⁺ / Zn</td><td>−0.76</td><td>32.69</td><td>7.14</td><td>희생양극</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div id="lab-galv"></div>
+
+    <p class="pull">
+      같은 전위차라도 면적비를 뒤집으면 양극 전류밀도가 두 자릿수 넘게 달라짐. 재질 선정만으로 갈바닉
+      위험을 통제했다고 보기 어려우며, 어느 쪽 면적이 넓은지와 전해질이 두 전극을 얼마나 가깝게 잇는지를
+      함께 지정해야 조건이 고정됨.
+    </p>
+  </div>
+</section>
+
+<!-- ================= 03 ================= -->
+<section id="s3">
+  <div class="wrap">
+    <p class="eyebrow"><span class="num">03</span><span>M<sup>n+</sup> + H<sub>2</sub>O → MOH<sup>(n−1)+</sup> + H<sup>+</sup></span></p>
+    <h2>공식과 틈새 부식 — 자기 자신을 가속하는 산성화</h2>
+
+    <p>
+      부동태 피막이 염화물 이온에 국부적으로 뚫리면 그 지점만 양극이 되고 주변 넓은 부동태면 전체가 음극이 됨.
+      공식 내부에서는 녹아 나온 금속 이온이 물과 반응해 수소 이온을 내놓으므로 pH가 떨어지고, 전기적 중성을
+      맞추기 위해 염화물 이온이 안쪽으로 이동해 농축됨. 낮아진 pH와 높아진 염화물 농도는 다시 용해 속도를
+      올리므로 되먹임이 닫히며, 개구부가 좁아 벌크와의 물질 교환이 약할수록 이 되먹임이 끊기지 않음.
+      틈새 부식도 같은 기전이며, 개구 형상이 처음부터 좁게 주어져 있다는 점만 다름.
+    </p>
+
+    <p>
+      전위를 양의 방향으로 훑어 올리면 어느 값에서 전류가 급격히 상승하는데 이 값을 임계 공식 전위
+      E<sub>pit</sub>로 정의함. 반대로 전위를 되돌려 내릴 때 전류가 다시 부동태 수준으로 떨어지는 전위는
+      재부동태화 전위 E<sub>prot</sub>이고, 두 값의 간격이 넓을수록 한번 생긴 공식이 스스로 멈추기 어려움.
+      염화물 농도가 높아지거나 온도가 오르면 E<sub>pit</sub>가 음의 방향으로 이동해 부동태 구간이 좁아짐.
+    </p>
+
+    <div class="eq">
+Fe → Fe<sup>2+</sup> + 2e<sup>−</sup> &nbsp;&nbsp;<span class="cm">— pit 내부, 양극</span><br>
+Fe<sup>2+</sup> + H<sub>2</sub>O → FeOH<sup>+</sup> + H<sup>+</sup> &nbsp;&nbsp;<span class="cm">— 가수분해로 산성화</span><br>
+Cl<sup>−</sup> 이동 → 전하 균형 유지 &nbsp;&nbsp;<span class="cm">— 내부 염화물 농축</span><br><br>
+[H<sup>+</sup>]<sub>pit</sub> = [H<sup>+</sup>]<sub>bulk</sub> + √(K<sub>h</sub>·C<sub>M</sub>) &nbsp;&nbsp;<span class="cm">— 가수분해 평형</span><br>
+dC<sub>M</sub>/dt = i·(A/V)/(nF) − k<sub>out</sub>·C<sub>M</sub> &nbsp;&nbsp;<span class="cm">— 생성과 유출의 수지</span><br>
+i = i<sub>0</sub> · 10<sup>(pH<sub>b</sub> − pH<sub>pit</sub>)/b</sup> · ([Cl<sup>−</sup>]/C<sub>ref</sub>)
+    </div>
+    <ul class="sym">
+      <li><b>C<sub>M</sub></b><span>pit 내부 금속 이온 농도 [mol/L]</span></li>
+      <li><b>K<sub>h</sub></b><span>가수분해 평형상수 [무차원]. 값이 클수록 같은 농도에서 더 산성이 됨</span></li>
+      <li><b>k<sub>out</sub></b><span>벌크 교환 속도상수 [1/s]. 개구가 넓을수록 큼</span></li>
+      <li><b>A/V</b><span>pit 내부 표면적 대 부피 비 [1/cm]</span></li>
+      <li><b>b</b><span>pH 감소 1단위당 전류 증가 폭을 정하는 계수 [pH/decade]</span></li>
+    </ul>
+
+    <div id="lab-pit"></div>
+
+    <h3>염화물 저항성 지표</h3>
+    <p>
+      염화물 환경에서는 몰리브덴을 함유한 SUS316이 SUS304보다 공식 부식에 훨씬 강한 면모를 보임. 조성으로
+      저항성을 가늠할 때는 공식 저항 당량수 PREN을 씀. 다만 전극 계면 임피던스 관점에서는 두 재질 모두
+      분극 전극이라 은 전극 대비 훨씬 높은 값을 나타내므로, 내식성 순위와 임피던스 순위는 별개로 다뤄야 함.
+    </p>
+    <div class="eq">
+PREN = %Cr + 3.3 × %Mo + 16 × %N<br>
+<span class="cm">— SUS304 조성(Cr 18.0~20.0, Mo 없음, N 최대 0.10)을 넣으면 18.0 ~ 21.6 범위가 나옴</span>
+    </div>
+
+    <div class="callout">
+      <p><b>코팅과 국부 부식</b> — 절연 코팅을 입힌 금속에서는 인산이 부동태 피막을 공격해 국부 부식을
+      일으키고, 코팅이 남아 있는 부위와 박리된 부위 사이의 전기적 불균형이 국소 전위차를 만들어 갈바닉
+      커플링 위험을 키움. 박리 면적이 작을수록 그 지점이 좁은 양극이 되어 앞 항목의 면적비 효과가 겹침.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ================= 04 ================= -->
+<section id="s4">
+  <div class="wrap">
+    <p class="eyebrow"><span class="num">04</span><span>O<sub>2</sub> → Fe<sup>3+</sup> → Ag</span></p>
+    <h2>SUS-Ag/AgCl 접촉 부식 — 산소가 끌고 가는 네 단계 사이클</h2>
+
+    <p>
+      스테인리스강 스냅과 Ag/AgCl 센서가 산성 조건에서 접촉하면 네 단계가 맞물려 돌아가는 부식 사이클이
+      성립함. 표준 환원 전위가 사이클의 방향을 정하며 산소(+1.229 V)가 최상단에서 전체 반응을 끌고 감.
+      전체 흐름은 산소 → 철 산화 유도 → Fe³⁺ 생성 → Ag 공격 → AgCl 형성으로 이어지고, 수소 기포가
+      관찰되지 않는 이유도 산소 환원 반응이 수소 발생 반응을 앞지르기 때문임.
+    </p>
+
+    <figure>
+      <svg viewBox="0 0 680 320" role="img" aria-label="표준 환원 전위 사다리 위에서 전자가 이동하는 방향">
+        <text class="th" x="120" y="24" text-anchor="middle">E° [V vs SHE]</text>
+        <line x1="120" y1="40" x2="120" y2="290" stroke="var(--rule)" stroke-width="1.4"/>
+        <line x1="112" y1="49.5" x2="128" y2="49.5" stroke="var(--im)" stroke-width="2.5"/>
+        <text class="tm" x="104" y="54" text-anchor="end">+1.229</text>
+        <text class="th" x="140" y="46">O₂ + 4H⁺ + 4e⁻ → 2H₂O</text>
+        <text class="ts" x="140" y="62" fill="var(--ink-2)">최상단 산화제. 사이클 전체를 구동함</text>
+        <line x1="112" y1="110.5" x2="128" y2="110.5" stroke="var(--re)" stroke-width="2.5"/>
+        <text class="tm" x="104" y="115" text-anchor="end">+0.771</text>
+        <text class="th" x="140" y="107">Fe³⁺ + e⁻ → Fe²⁺</text>
+        <text class="ts" x="140" y="123" fill="var(--ink-2)">Fe²⁺/Fe 대비 +1.211 V 상승. Ag를 공격할 산화력 확보</text>
+        <line x1="112" y1="183.7" x2="128" y2="183.7" stroke="var(--accent)" stroke-width="2.5"/>
+        <text class="tm" x="104" y="188" text-anchor="end">+0.222</text>
+        <text class="th" x="140" y="180">AgCl + e⁻ → Ag + Cl⁻</text>
+        <text class="ts" x="140" y="196" fill="var(--ink-2)">Fe³⁺보다 낮으므로 역방향(Ag 산화)이 성립함</text>
+        <line x1="112" y1="213.3" x2="128" y2="213.3" stroke="var(--neutral)" stroke-width="2"/>
+        <text class="tm" x="104" y="217" text-anchor="end">0.000</text>
+        <text class="ts" x="140" y="218" fill="var(--ink-2)">2H⁺ + 2e⁻ → H₂ — 산소에 밀려 진행되지 않음</text>
+        <line x1="112" y1="272" x2="128" y2="272" stroke="var(--green)" stroke-width="2.5"/>
+        <text class="tm" x="104" y="276" text-anchor="end">−0.440</text>
+        <text class="th" x="140" y="269">Fe²⁺ + 2e⁻ → Fe</text>
+        <text class="ts" x="140" y="285" fill="var(--ink-2)">최하단. 전자를 내놓는 쪽이므로 Fe가 녹음</text>
+        <path d="M600 268 L600 60" fill="none" stroke="var(--ink-3)" stroke-width="1.4" stroke-dasharray="5 4"/>
+        <path d="M594 70 L600 56 L606 70" fill="none" stroke="var(--ink-3)" stroke-width="1.4"/>
+        <text class="ts" x="612" y="170" fill="var(--ink-3)" transform="rotate(-90 612 170)" text-anchor="middle">전자 이동 방향</text>
+      </svg>
+      <figcaption>
+        반응이 이 방향으로만 진행되는 근거는 표준 환원 전위의 크기 순서 O₂ &gt; Fe³⁺/Fe²⁺ &gt; AgCl/Ag &gt; Fe²⁺/Fe에
+        있음. 산소가 사라지면 3단계에서 Fe²⁺를 Fe³⁺로 되돌리는 경로가 끊기고 사이클도 함께 멈춤.
+      </figcaption>
+    </figure>
+
+    <h3>단계별 반응식</h3>
+    <p>
+      1단계는 산성 용액의 수소 이온이 SUS 표면의 크로뮴 산화막을 녹이는 반응임. 산화·환원이 아닌 단순 용해라
+      전자 이동도 기포도 생기지 않지만 보호막이 사라지고 생금속 Fe가 드러남.
+    </p>
+    <div class="eq">
+<b>1단계</b> — Cr₂O₃ 용해 (산화환원 아님)<br>
+Cr<sub>2</sub>O<sub>3</sub> + 6H<sup>+</sup> → 2Cr<sup>3+</sup> + 3H<sub>2</sub>O
+    </div>
+    <p>
+      2단계에서는 피막이 벗겨진 생금속 Fe가 전해질에 노출되고, 용존 산소가 H⁺보다 강하게 전자를 끌어당기므로
+      수소 기체가 발생하지 않는 상태로 Fe 용해가 진행되며 용액 내 Fe²⁺ 농도가 올라감.
+    </p>
+    <div class="eq">
+<b>2단계</b> — SUS 1차 부식 + 산소 환원<br>
+산화(SUS): Fe(s) → Fe<sup>2+</sup>(aq) + 2e<sup>−</sup><br>
+환원(산소): O<sub>2</sub> + 4H<sup>+</sup> + 4e<sup>−</sup> → 2H<sub>2</sub>O &nbsp;&nbsp;<span class="cm">E° = +1.229 V</span>
+    </div>
+    <p>
+      3단계에서는 녹아 나온 Fe²⁺가 산소와 프로톤이 풍부한 산성 환경에서 Fe³⁺로 산화되면서, 용액이 Ag/AgCl을
+      공격할 수 있는 산화력을 확보함. Fe²⁺/Fe(−0.440 V)에서 Fe³⁺/Fe²⁺(+0.771 V)로 전위가 +1.211 V 올라감.
+    </p>
+    <div class="eq">
+<b>3단계</b> — 철 이온의 전위 점프<br>
+4Fe<sup>2+</sup> + O<sub>2</sub> + 4H<sup>+</sup> → 4Fe<sup>3+</sup> + 2H<sub>2</sub>O<br>
+<span class="cm">Fe²⁺/Fe: E° = −0.440 V → Fe³⁺/Fe²⁺: E° = +0.771 V, ΔE = +1.211 V</span>
+    </div>
+    <p>
+      4단계에서는 Fe³⁺(+0.771 V)가 Ag/AgCl(+0.222 V)보다 전위가 높으므로 열역학적으로 Ag 금속을 산화시킬 수
+      있으며, Ag가 AgCl로 변하면서 전극 표면이 두꺼워지거나 변질됨. 소모된 Fe³⁺는 Fe²⁺로 되돌아갔다가 산소에
+      의해 다시 Fe³⁺가 되므로, 산소가 남아 있는 한 순환이 끊기지 않음.
+    </p>
+    <div class="eq">
+<b>4단계</b> — Ag 강제 산화, 루프 형성<br>
+산화(전극): Ag(s) + Cl<sup>−</sup>(aq) → AgCl(s) + e<sup>−</sup> &nbsp;&nbsp;<span class="cm">E°<sub>Ag/AgCl</sub> = +0.222 V</span><br>
+환원(이온): Fe<sup>3+</sup>(aq) + e<sup>−</sup> → Fe<sup>2+</sup>(aq)
+    </div>
+
+    <p>
+      같은 계를 OCP로 보면 갈바닉 부식이 진행될수록 전위가 음으로 밀리고, CV로 보면 −0.8 V ~ −1.1 V의
+      환원 피크로 Fe 산화물의 존재가 드러남. 아래 시뮬레이터는 AgCl 잔존량이 줄어드는 만큼 표면 전위가
+      Ag/AgCl(+0.222 V)에서 Fe²⁺/Fe(−0.440 V) 쪽으로 끌려가는 면적 가중 혼합전위를 계산함.
+    </p>
+
+    <div id="lab-cycle"></div>
+  </div>
+</section>
+
+<!-- ================= 05 ================= -->
+<section id="s5">
+  <div class="wrap">
+    <p class="eyebrow"><span class="num">05</span><span>SUS304 · SUS304V · 분극/비분극</span></p>
+    <h2>재질 비교 — 기계 물성과 계면 거동을 나눠 봄</h2>
+
+    <p>
+      SUS304는 오스테나이트계 스테인리스강으로 우수한 연성과 내식성을 가지며, 냉간 가공 시 강도가 증가하고
+      연신율이 감소함. 진공 용해(VIM, VAR)로 탄소와 개재물을 낮춘 SUS304V는 강도와 경도가 크게 올라가지만
+      연신율은 떨어지며, 내식성은 304와 같은 수준으로 평가함.
+    </p>
+
+    <h3>SUS304 화학 조성</h3>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>원소</th><th>범위 (wt%)</th></tr></thead>
+        <tbody>
+          <tr><td>크롬 (Cr)</td><td>18.0 ~ 20.0</td></tr>
+          <tr><td>니켈 (Ni)</td><td>8.0 ~ 10.5</td></tr>
+          <tr><td>탄소 (C)</td><td>최대 0.08</td></tr>
+          <tr><td>망간 (Mn)</td><td>최대 2.0</td></tr>
+          <tr><td>규소 (Si)</td><td>최대 1.0</td></tr>
+          <tr><td>인 (P)</td><td>최대 0.045</td></tr>
+          <tr><td>황 (S)</td><td>최대 0.03</td></tr>
+          <tr><td>질소 (N)</td><td>최대 0.10</td></tr>
+          <tr><td>철 (Fe)</td><td>잔량</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>SUS304 기계·물리 물성</h3>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>물성</th><th>값</th></tr></thead>
+        <tbody>
+          <tr><td>인장 강도</td><td>540 ~ 750 MPa</td></tr>
+          <tr><td>항복 강도</td><td>205 ~ 230 MPa</td></tr>
+          <tr><td>연신율</td><td>최소 45% (50 mm 기준)</td></tr>
+          <tr><td>탄성 계수</td><td>193 ~ 200 GPa</td></tr>
+          <tr><td>전단 계수</td><td>74 ~ 81 GPa</td></tr>
+          <tr><td>밀도</td><td>8.00 g/cm³</td></tr>
+          <tr><td>재질 특징</td><td>오스테나이트계, 우수한 연성 및 내식성</td></tr>
+          <tr><td>냉간 가공 시</td><td>강도 증가, 연신율 감소</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>SUS304와 SUS304V</h3>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>항목</th><th>SUS304</th><th>SUS304V</th></tr></thead>
+        <tbody>
+          <tr><td>공정 방식</td><td>일반 용해 (AOD 등)</td><td>진공 용해 (VIM, VAR)</td></tr>
+          <tr><td>탄소 함량 (C)</td><td>≤ 0.08%</td><td>≤ 0.03%</td></tr>
+          <tr><td>인장강도 (TS)</td><td>약 515 ~ 700 MPa</td><td>약 850 ~ 965 MPa (냉간 가공 20%)</td></tr>
+          <tr><td>항복강도 (YS)</td><td>약 205 MPa</td><td>약 483 MPa 이상 (냉간 가공 20%)</td></tr>
+          <tr><td>연신율</td><td>≥ 40%</td><td>20 ~ 35%</td></tr>
+          <tr><td>경도 (HV)</td><td>140 ~ 160</td><td>200 ~ 300</td></tr>
+          <tr><td>자성</td><td>비자성</td><td>비자성</td></tr>
+          <tr><td>내식성</td><td>우수</td><td>우수 (동등 수준)</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>분극 전극과 비분극 전극</h3>
+    <p>
+      동심형 바늘 전극의 중심 심선을 은에서 스테인리스강으로 바꿀 때 쟁점은 분극 특성에 있음. 스테인리스강은
+      계면을 통한 실제 전하 이동이 억제되고 주로 변위 전류로 신호가 전달되는 분극 전극이라 저주파에서
+      임피던스가 급격히 오르는 반면, Ag/AgCl 처리된 은 와이어는 가역적 산화·환원으로 이온 전하와 전자 전하를
+      자유롭게 교환하는 비분극 전극이라 분극 저항이 낮고 전위가 안정적임. SUS 바늘 전극의 위상각은 문헌에서
+      −45° ~ −71° 범위로 보고되어 이상적 커패시터(−90°)에서 벗어나며, 이 편차가 표면 불균일에 기인한
+      CPE 거동을 시사함. 임상에서는 식염수·계면활성제 용액에 20분 담그는 프리소킹으로 임피던스를 낮추거나,
+      1 μA 수준 음극 전류를 흘려 전극 분극 임피던스와 드리프트를 줄이는 기법을 씀.
+    </p>
+
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>비교 항목</th><th>Ag/AgCl 중심 전극</th><th>SUS 중심 전극</th></tr></thead>
+        <tbody>
+          <tr><td>전극 유형</td><td>비분극</td><td>분극</td></tr>
+          <tr><td>전하 이동 경로</td><td>계면 산화·환원(패러데이 전류)</td><td>이중층 충·방전(변위 전류)</td></tr>
+          <tr><td>분극 저항 Rd</td><td>낮음</td><td>높음</td></tr>
+          <tr><td>주파수 응답</td><td>광대역에서 안정</td><td>저주파 대역 임피던스 급증</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="eq">
+X<sub>c</sub> = 1 / (2πfC)<br>
+Z<sub>CPE</sub> = 1 / [ Q(jω)<sup>n</sup> ]
+    </div>
+    <ul class="sym">
+      <li><b>X<sub>c</sub></b><span>리액턴스 [Ω]</span></li>
+      <li><b>f</b><span>주파수 [Hz]</span></li>
+      <li><b>C</b><span>커패시턴스 [F]</span></li>
+      <li><b>Z<sub>CPE</sub></b><span>CPE 임피던스 [Ω]</span></li>
+      <li><b>Q</b><span>CPE 계수 [S·s<sup>n</sup>]</span></li>
+      <li><b>n</b><span>0~1 지수. n=1이면 이상적 커패시터, n이 작아질수록 표면 불균일이 커짐</span></li>
+      <li><b>ω</b><span>각주파수 [rad/s], ω = 2πf</span></li>
+    </ul>
+
+    <div id="lab-bode"></div>
+
+    <h3>배율 주장 전 검토 항목</h3>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>검토 항목</th><th>판정 기준</th></tr></thead>
+        <tbody>
+          <tr><td>절대 커패시턴스(nF)와 비커패시턴스(nF/cm²) 혼동</td><td>면적을 나누지 않은 값을 단위 면적값으로 바꿔 쓰면 안 됨. 전환하려면 실제 노출 단면적을 명시해 나눠야 함</td></tr>
+          <tr><td>문헌 비커패시턴스와의 정합성</td><td>금속-전해질 계면의 문헌값(약 35 μF/cm² 수준)과 역산값을 대조해 자릿수가 맞는지 확인</td></tr>
+          <tr><td>비교 물리량의 일치</td><td>한쪽은 리액턴스 Xc, 다른 쪽은 임피던스 크기 |Z|로 비교하면 배율이 왜곡됨. Xc는 Xc끼리, |Z|는 |Z|끼리만 비교</td></tr>
+          <tr><td>커패시터 모델 적정성</td><td>위상각이 −90°에서 벗어나면 이상적 커패시터 모델 대신 CPE를 적용</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- ================= 06 ================= -->
+<section id="s6">
+  <div class="wrap">
+    <p class="eyebrow"><span class="num">06</span><span>m = M·Q / (n·F)</span></p>
+    <h2>산 노출과 전해 반응 — 전하량이 용해량을 정함</h2>
+
+    <p>
+      전해연마 환경을 모사할 때는 실제 연마욕이 쓰는 고농도 인산에 시료를 완전히 침지하고 상온에서 일정 시간
+      유지하는 구성을 잡음. 침지 전후로 같은 배율·같은 조명에서 광학현미경 이미지를 찍어야 코팅 경계부와
+      금속 접합부의 변화를 같은 축에서 비교할 수 있고, 침지 후에는 증류수 세척과 자연 건조로 잔여 산을
+      제거해야 건조 과정에서 석출한 산 결정이 표면 결함으로 오독되지 않음. 관찰 항목은 코팅막 탈락·기포·균열,
+      금속 표면의 부식 흔적·산화물·미세 패임, 색상과 광택 변화로 나눔.
+    </p>
+
+    <p>
+      저전압 직류를 인가하고 구리판 등을 카운터 전극으로 삼아 인산 전해질에서 반응시키는 구성에서는 인가 전압의
+      명목값과 실측값이 어긋나므로, 반응 중 전위와 전류를 함께 기록해 두어야 이후 전하량 계산의 입력이 확보됨.
+      관찰 항목은 금속 edge와 모서리의 형상 변화, 팁 예리도 변화, 절연 코팅층의 변화 유무로 나누며, 코팅 박리가
+      관찰되면 전해 작용에 의한 것인지 취급 중 기계적 마찰에 의한 것인지 분리해 확인함.
+    </p>
+
+    <p>
+      전해 조건의 금속 용해량은 전류×시간 → 전하량 → 몰 수 → 질량 → 부피 → 길이 경로로 산출함. 이 값은
+      순수 Fe를 가정한 이상 조건이라, Cr·Ni·Mo가 섞인 SUS는 내산성이 훨씬 강해 실제 용해량이 이보다 작게 나옴.
+    </p>
+
+    <div class="eq">
+Q = I · t<br>
+m = M·Q / (n·F)<br>
+V = m / ρ<br>
+L = V / A<sub>cross</sub> &nbsp;&nbsp;<span class="cm">— 와이어 축방향 용해 길이</span><br>
+Δh = V / A<sub>exp</sub> &nbsp;&nbsp;<span class="cm">— 평판 균일 감육 두께</span>
+    </div>
+    <ul class="sym">
+      <li><b>Q</b><span>전하량 [C]</span></li>
+      <li><b>I, t</b><span>전류 [A], 시간 [s]</span></li>
+      <li><b>M</b><span>원자량 [g/mol]. Fe 55.85, Cr 52.00, Ni 58.69</span></li>
+      <li><b>n</b><span>이온화 전자 수. Fe → Fe²⁺는 2, Cr → Cr³⁺는 3</span></li>
+      <li><b>F</b><span>Faraday 상수 96,485 C/mol</span></li>
+      <li><b>A<sub>cross</sub></b><span>와이어 단면적 [mm²]</span></li>
+      <li><b>A<sub>exp</sub></b><span>노출 면적 [cm²]</span></li>
+    </ul>
+
+    <h3>계산 예 — 28G 철 와이어</h3>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>단계</th><th>식</th><th>값</th></tr></thead>
+        <tbody>
+          <tr><td>총 전하량</td><td>Q = I·t = 0.0025 A × 1800 s</td><td>4.5 C</td></tr>
+          <tr><td>용해된 철 질량</td><td>m = (M·Q)/(n·F) = (55.85 × 4.5)/(2 × 96485)</td><td>0.0013 g</td></tr>
+          <tr><td>용해 길이</td><td>L = V/A = 0.165 mm³ / 0.102 mm²</td><td>1.62 mm</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="hint">외경 0.36 mm, 인가전류 2.5 mA, 인가시간 1,800초 조건임.</p>
+
+    <div id="lab-far"></div>
+
+    <h3>PTFE 코팅의 산 내성</h3>
+    <p>
+      PTFE 코팅의 산 내성을 보는 시험은 산 농도·온도·노출 시간을 축으로 조건을 배치하며, 온도를 올려 가속
+      조건을 만들되 PTFE와 기재 금속의 열팽창 거동이 달라지는 영역까지 올리지 않는 선에서 상한을 잡음.
+      전처리는 IPA 또는 DI water 세척·건조로 표면 오염을 없애고, 노출 후에는 DI water와 IPA 세척 뒤 질소
+      건조를 거쳐 여러 부위를 관찰함.
+    </p>
+    <ul class="notes">
+      <li><b>Pinhole</b><span>≤10 µm 점상 결함</span></li>
+      <li><b>박리</b><span>PTFE 층 lifting·탈락</span></li>
+      <li><b>균열</b><span>연속 crack 패턴</span></li>
+      <li><b>마모</b><span>스크래치 흔적·깊이 변화</span></li>
+    </ul>
+    <ul class="notes">
+      <li><b>화학적 경로</b><span>산이 PTFE 표면 미세결함을 통해 침투해 내부 응력을 만들거나, 코팅층 팽윤으로 미세 균열을 형성함</span></li>
+      <li><b>열적 경로</b><span>전류 인가에 따른 국소 발열로 PTFE와 스테인리스강 사이의 열팽창 계수 차이가 박리를 부름</span></li>
+      <li><b>기계적 경로</b><span>코팅 시 생긴 pinhole·마모 흔적에서 열화가 시작됨</span></li>
+    </ul>
+    <p>
+      PTFE가 일부 탈착되면 금속이 노출되어 전류 누설 경로가 생기고 화학 반응이 가속되므로, 전류 인가 조건을
+      빼고 화학적·열적 경로만 분리해 보는 설계가 원인 귀속에 유리함.
+    </p>
+  </div>
+</section>
+
+<!-- ================= 07 ================= -->
+<section id="s7">
+  <div class="wrap">
+    <p class="eyebrow"><span class="num">07</span><span>OCP · R<sub>contact</sub></span></p>
+    <h2>부식 검사 설계 — 계면을 나눠 재야 출처가 잡힘</h2>
+
+    <p>
+      개로 전위(OCP)는 전류를 걸지 않은 상태에서 작업전극이 스스로 잡는 전위를 추적하는 측정이라, 부식 진행
+      여부를 비파괴로 살피는 1차 수단이 됨. 기준전극으로는 3 M KCl을 내장한 Ag/AgCl 전극을 두고, 단기 거동을
+      볼 때와 장시간 표류를 볼 때 측정 구간 길이를 달리 잡음. 전극 하나를 통째로 재면 어느 계면이 전위를 끌고
+      가는지 분리되지 않으므로, 측정 부위를 계면별로 나눠 각각 측정한 뒤 비교함.
+    </p>
+
+    <ul class="notes">
+      <li><b>E<sub>initial</sub></b><span>측정 구간 시작 전위. 초기 계면 상태를 반영함</span></li>
+      <li><b>E<sub>final</sub></b><span>측정 구간 종료 전위</span></li>
+      <li><b>ΔE</b><span>종료와 초기의 차. 부식이 없는 계면은 0에 수렴하고, 진행 중인 계면은 한 방향으로 벌어짐</span></li>
+      <li><b>E<sub>mean</sub></b><span>구간 평균 전위. 요동의 중심을 잡아 시료 간 비교에 씀</span></li>
+    </ul>
+
+    <p>
+      부식이 없는 계면은 측정 구간 내내 전위가 좁은 폭에 머물러 ΔE가 거의 0에 수렴하지만, 부식이 진행 중인
+      계면은 산화 생성물이 계속 바뀌면서 전위가 한 방향으로 밀리거나 크게 요동하므로 ΔE와 평균값이 함께 벌어짐.
+      조립체 전체 채널만 수백~수천 mV로 요동치고 코팅 단독 채널이 수 mV 이내에 머무르면, 전위 불안정의 출처는
+      Ag/AgCl 코팅이 아니라 SUS 스냅 접점임. 채널을 분해하지 않고 전체만 재면 코팅 불량으로 오진할 수 있음.
+    </p>
+
+    <h3>접촉 저항의 분리 측정</h3>
+    <p>
+      접촉 저항은 Edge to Edge 방식으로 재되, 기계적 체결이 지배하는 면과 전해질 성분에 장기간 노출되는 면을
+      나눠 각각 기록함. 두 면을 구분하는 이유는 열화 경로가 다르기 때문으로, 한쪽은 접촉 압력과 마모가 다른
+      쪽은 이온 침투와 계면 반응이 저항 상승을 이끎. 초기 상태와 가속 열화 후를 같은 부위·같은 방식으로
+      짝지어 비교하면 저항 상승이 어느 면에서 일어났는지 분리됨.
+    </p>
+
+    <div id="lab-rc"></div>
+
+    <h3>결과를 뒤집는 해석 오류</h3>
+    <ul class="notes">
+      <li><b>밀도 차이가 만드는 착시</b><span>AgCl은 Cl을 품어 밀도가 5.56 g/cm³로 Ag의 10.49 g/cm³보다 낮으므로 같은 몰 수라도 부피를 더 차지함. 몰 비에서 Ag가 우세한 시료에서도 두께 비에서는 AgCl이 앞설 수 있으므로, 조성은 몰 비로 적층은 두께 비로 각각 제시함</span></li>
+      <li><b>면적 정의가 비교를 좌우함</b><span>인쇄형 전극은 외형 면적 기준 등가 두께가 도금·압착형보다 한두 자릿수 작게 나오지만, 실제 활성 면적이 외형 면적보다 작으면 국부 도막 두께는 표기값보다 큼. 형상이 다른 시료군을 나란히 놓을 때는 면적 기준과 등가 두께라는 성격을 함께 밝힘</span></li>
+      <li><b>종료 전위의 시료군 간 비교</b><span>인쇄형처럼 계면 저항이 큰 시료군은 같은 전류에서도 종료 전위가 훨씬 높게 치솟으므로, 시료군을 가로질러 종료 전위를 그대로 비교하지 말고 시료군 안에서만 비교함</span></li>
+      <li><b>실패 모드의 구분</b><span>임피던스가 판정선에 크게 못 미치는 시료도 제세동 과부하 이후 개방 회로로 전환되면 실패로 떨어짐. 초기 ACZ가 양호했다는 사실만으로 접점 건전성을 결론짓지 말고 종료 ACZ와 SDR 반복 결과를 함께 봄</span></li>
+      <li><b>색과 전도성의 분리</b><span>육안으로 은색이 나와도 저항이 MΩ 단위이거나 통전되지 않을 수 있고, 원인은 코팅 유무가 아니라 입자 간 연결성임. 표면 색은 은 입자의 존재만 알려 주므로 색 판정과 저항 측정을 항상 짝지어 수행함</span></li>
+    </ul>
+  </div>
+</section>
+
+<!-- ================= 08 ================= -->
+<section id="s8">
+  <div class="wrap">
+    <p class="eyebrow"><span class="num">08</span><span>SE = σ / √n</span></p>
+    <h2>통계 분석 — 표본 수가 결론의 해상도를 정함</h2>
+
+    <p>
+      정규분포에서 μ ± 1σ가 68.3%, ± 2σ가 95.4%, ± 3σ가 99.7%를 포함하며, 평균 50 Ω·표준편차 5 Ω인 전극
+      DCR을 예로 들면 각각 45~55 Ω, 40~60 Ω, 35~65 Ω 구간에 해당함. √n 법칙에 따라 샘플 수를 4배 늘려야
+      정밀도가 2배 올라가는 수확체감 구조라, 100개에서 400개로 늘려도 정밀도는 2배에 그침.
+    </p>
+
+    <div class="eq">
+SE = σ / √n<br>
+CI(1−α) = x̄ ± t<sub>(α/2, n−1)</sub> · SE &nbsp;&nbsp;<span class="cm">— 소표본은 t 분포를 씀</span><br>
+95% 신뢰구간 ≈ x̄ ± 1.96 × SE &nbsp;&nbsp;<span class="cm">— n이 충분히 클 때의 정규근사</span><br>
+CV = (σ / μ) × 100%
+    </div>
+    <ul class="sym">
+      <li><b>σ</b><span>표준편차 [측정량 단위]</span></li>
+      <li><b>n</b><span>표본 수 [개]</span></li>
+      <li><b>μ, x̄</b><span>모평균, 표본평균</span></li>
+      <li><b>SE</b><span>표준오차. 평균 추정치의 흔들림 폭</span></li>
+      <li><b>t<sub>(α/2, n−1)</sub></b><span>자유도 n−1의 양측 임계값 [무차원]</span></li>
+      <li><b>CV</b><span>변동계수 [%]</span></li>
+    </ul>
+
+    <h3>표본 수에 따른 정밀도</h3>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>샘플 수 n</th><th>표준오차 (σ=5 Ω 기준)</th><th>n=2 대비 정밀도</th><th>95% 신뢰구간 폭</th></tr></thead>
+        <tbody>
+          <tr><td>2</td><td>3.54 Ω</td><td>1.0배</td><td>± 6.94 Ω (43.06 ~ 56.94 Ω)</td></tr>
+          <tr><td>10</td><td>1.58 Ω</td><td>약 2.2배</td><td>—</td></tr>
+          <tr><td>30</td><td>0.91 Ω</td><td>약 3.9배</td><td>± 1.78 Ω (48.22 ~ 51.78 Ω)</td></tr>
+          <tr><td>100</td><td>0.50 Ω</td><td>약 7.1배</td><td>—</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="hint">표의 신뢰구간 폭은 z = 1.96 정규근사로 계산한 값임. 아래 계산기는 자유도 n−1의 t 분포와 정규근사를 모두 제공함.</p>
+
+    <p>
+      목표 50 Ω·허용 범위 ±3 Ω인 기준을 세운다고 가정하면 n=2 데이터의 불확실성(±6.94 Ω)은 허용 범위보다 커서
+      판단 근거가 되지 못하며 n=30 이상이 필요함. 비용-효과로 보면 30개→100개가 비용 3.3배에 정밀도 1.8배로
+      효율적인 반면 100개→400개는 비용 4배에 정밀도 2배로 비효율적이라, 100개가 경제적 최적점에 가까움.
+    </p>
+
+    <div id="lab-ci"></div>
+
+    <div class="callout">
+      <p><b>소표본의 위험</b> — n=2 샘플은 하나의 이상치가 전체를 왜곡함. [48 Ω, 62 Ω]이면 평균이 55 Ω으로
+      편향되고, 실제 σ=5 Ω인데 n=2로 σ=1 Ω으로 오판하면 잘못된 관리한계 때문에 불량 유출과 과도한 폐기가
+      함께 일어남. n=2에서 "평균 50 Ω, 범위 49~51 Ω → 우수 공정"으로 읽었던 판단이 n=100 확인에서
+      "평균 50 Ω, 범위 40~60 Ω → 높은 변동성"으로 뒤집히는 경우가 전형임.</p>
+    </div>
+
+    <h3>노이즈 데이터 판정</h3>
+    <p>
+      노이즈 데이터는 과학·관리 결함과 통계 요건 미충족 두 축으로 판정하며, 다음 항목 중 하나라도 해당하면
+      통계 분석 이전 단계에서 제외함. 단일 임계치가 아니라 OR 조건이라는 점에서 통상적인 이상치 제거와 다름.
+    </p>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>축</th><th>판정 항목</th></tr></thead>
+        <tbody>
+          <tr><td>과학·관리</td><td>출처 불명확 — 측정 주체·시점·조건 기록 없음</td></tr>
+          <tr><td>과학·관리</td><td>재현 불가 — 동일 조건 재실험에서 같은 결과가 나오지 않음</td></tr>
+          <tr><td>과학·관리</td><td>맥락 단절 — 기존 법칙이나 과거 데이터와 모순</td></tr>
+          <tr><td>과학·관리</td><td>원자료 부재 — 결과값만 있고 원시 데이터 없음</td></tr>
+          <tr><td>통계</td><td>표본 수 부족 — n이 작아 변동성 평가 불가</td></tr>
+          <tr><td>통계</td><td>반복성 부재 — 동일 조건 3회 이상 측정 기록 없음</td></tr>
+          <tr><td>통계</td><td>이상치 처리 부재 — 극단값을 원인 분석·제외 기준 없이 평균에 포함</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>결론에 다가서는 절차</h3>
+    <p>
+      대조군·비교군 확보, 충분한 표본 수 확보, 순환전압전류법(CV)과 정전류법(CA)을 통한 환원 전하량 측정,
+      평균·표준편차·신뢰구간 분석, 가설 설정과 실험 검증, 확인된 원인 기반 대응책 설계를 순서로 밟음.
+      접근 가능한 수단으로 먼저 재보고 조건을 통제한 프로토콜을 문서화한 뒤 정밀 측정으로 넘기는 경로가
+      현실적이며, 비교 대상 샘플도 같은 규모로 확보해 동일 프로토콜로 검사해야 통계적 유의차를 말할 수 있음.
+      통계 분석은 조건이 통제된 독립사건에서만 성립하므로 검사 조건 제어와 측정 수단 확충이 앞 순서에 놓임.
+    </p>
+
+    <p class="pull">
+      같은 비율 지표를 서로 다른 데이터셋에서 산출했을 때 손상군의 값이 1보다 크게 나오는 쪽과 작게 나오는
+      쪽으로 갈리는 일이 생김. 지표의 방향이 뒤집히는 현상은 계면 면적이 늘어난 위치가 tip 쪽인지 body 쪽인지에
+      따라 갈리므로, 시료 제작 방식이 다르면 같은 지표가 반대 방향을 가리키는 것이 정상임. 두 데이터셋을 같은
+      축에 올리려면 시료 정의·손상 부위·침지 길이·측정 주파수·반복수를 표로 맞대어 통일한 뒤 재측정함.
+    </p>
+  </div>
+</section>
+
+<div class="wrap">
+  <div class="pager">
+    <a href="electrochem.html"><span class="pg-lbl">이전</span>전기화학과 Ag/AgCl 전극</a>
+    <a href="eis.html" style="text-align:right"><span class="pg-lbl">다음</span>임피던스와 EIS</a>
+  </div>
+</div>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <p>Field 03 · 금속 부식과 내식성 · 모든 그림은 브라우저에서 직접 계산해 그림</p>
+  </div>
+</footer>
+
+<script src="../assets/js/site.js"></script>
+<script src="../assets/js/lab.js"></script>
+<script>
+(function(){
+"use strict";
+
+var F = 96485;
+
+/* ============================================================
+   01-a. Pourbaix 개념도 (Fe–H2O)
+   ============================================================ */
+function eOx(pH){ return 1.229 - 0.059*pH; }      /* 산소선 */
+function eH(pH){ return -0.059*pH; }               /* 수소선 */
+function ePass(pH){ return 1.08 - 0.1774*pH; }     /* Fe2+ / Fe2O3 경계 */
+var E_FE = -0.44;                                  /* Fe / Fe2+ 경계 */
+
+function region(pH, E){
+  if(E < E_FE) return 'immune';
+  if(E >= ePass(pH)) return 'passive';
+  return 'active';
+}
+
+Lab.make({
+  mount:'#lab-pbx',
+  title:'Pourbaix 개념도 — Fe–H₂O 계의 세 영역',
+  badge:'THERMODYNAMICS',
+  controls:[
+    {id:'pH', label:'pH', min:0, max:14, step:0.1, value:7.0, fmt:function(v){return v.toFixed(1);}},
+    {id:'E', label:'전극 전위 E', min:-1.2, max:1.6, step:0.01, value:-0.10, unit:'V vs SHE',
+     fmt:function(v){return (v>=0?'+':'') + v.toFixed(2);}}
+  ],
+  presets:[
+    {label:'중성 수용액 · 자연 전위', set:{pH:7.0, E:-0.10}},
+    {label:'산성 인산욕', set:{pH:1.5, E:-0.20}},
+    {label:'양극 분극 (부동태)', set:{pH:7.0, E:0.60}},
+    {label:'음극 방식', set:{pH:7.0, E:-0.80}}
+  ],
+  stats:[
+    {id:'reg', label:'영역 판정'},
+    {id:'dpass', label:'부동태 경계까지', unit:'V', fmt:function(v){return (v>=0?'+':'')+v.toFixed(3);}},
+    {id:'dh', label:'수소선 대비', unit:'V', fmt:function(v){return (v>=0?'+':'')+v.toFixed(3);}},
+    {id:'do2', label:'산소선 대비', unit:'V', fmt:function(v){return (v>=0?'+':'')+v.toFixed(3);}}
+  ],
+  plot:{width:640,height:420,xLabel:'pH',yLabel:'E (V vs SHE)',
+        autoX:false,autoY:false,xMin:0,xMax:14,yMin:-1.2,yMax:1.6,xTicks:7,yTicks:7},
+  legend:[
+    {color:'--green',label:'면역 (금속 Fe 안정)'},
+    {color:'--accent',label:'부식 (Fe²⁺ 용출)'},
+    {color:'--purple',label:'부동태 (Fe₂O₃ 안정)'},
+    {color:'--neutral',label:'물의 안정 영역 경계'}
+  ],
+  note:'경계선은 Fe/Fe²⁺ = −0.44 V, Fe²⁺/Fe₂O₃ = 1.08 − 0.1774·pH를 씀. ' +
+       '점선은 물의 안정 한계로, 위쪽은 산소 발생 아래쪽은 수소 발생 영역임. ' +
+       '이 도표는 어떤 상이 안정한지만 알려 주고 속도는 알려 주지 않음.',
+  plotNote:'부동태 영역에 들어 있어도 피막이 염화물로 국부 파괴되면 그 지점만 부식 영역처럼 거동함.',
+  compute:function(v){
+    var xs = Lab.linspace(0,14,141);
+    var immTop=[], actTop=[], passLo=[];
+    xs.forEach(function(p){
+      immTop.push([p, E_FE]);
+      actTop.push([p, Math.min(1.6, Math.max(E_FE, ePass(p)))]);
+      passLo.push([p, Math.min(1.6, Math.max(E_FE, ePass(p)))]);
+    });
+    var series = [
+      {points:immTop, color:'--green', type:'area', opacity:0.16, baseline:-1.2},
+      {points:actTop, color:'--accent', type:'area', opacity:0.16, baseline:E_FE},
+      {points:passLo, color:'--purple', type:'area', opacity:0.16, baseline:1.6},
+      {points:immTop, color:'--green', width:2},
+      {points:passLo, color:'--purple', width:2},
+      {points:xs.map(function(p){return [p, eH(p)];}), color:'--neutral', width:1.4, dash:'5 4'},
+      {points:xs.map(function(p){return [p, eOx(p)];}), color:'--neutral', width:1.4, dash:'5 4'}
+    ];
+    var r = region(v.pH, v.E);
+    var names = {immune:'면역 — 금속 Fe 안정', active:'부식 — Fe²⁺ 용출', passive:'부동태 — Fe₂O₃ 안정'};
+    var cols  = {immune:'--green', active:'--accent', passive:'--purple'};
+    var overlays = [
+      {type:'text', x:1.0, y:0.95, text:'부동태', color:'--purple'},
+      {type:'text', x:1.0, y:-0.15, text:'부식', color:'--accent'},
+      {type:'text', x:1.0, y:-0.85, text:'면역', color:'--green'},
+      {type:'text', x:13.6, y:1.45, text:'O₂ 발생', color:'--ink-3', anchor:'end'},
+      {type:'text', x:13.6, y:-1.10, text:'H₂ 발생', color:'--ink-3', anchor:'end'},
+      {type:'point', x:v.pH, y:v.E, color:cols[r], r:7, label:names[r].split(' ')[0]}
+    ];
+    return {
+      series:series, overlays:overlays,
+      stats:{
+        reg: names[r],
+        dpass: v.E - ePass(v.pH),
+        dh: v.E - eH(v.pH),
+        do2: v.E - eOx(v.pH)
+      }
+    };
+  }
+});
+
+/* ============================================================
+   01-b. Tafel 외삽 / 혼합전위 도표
+   ============================================================ */
+var MET = {
+  fe:  {name:'Fe',      EW:27.93, rho:7.87},
+  sus: {name:'SUS304',  EW:25.12, rho:7.90},
+  ni:  {name:'Ni',      EW:29.35, rho:8.90},
+  cr:  {name:'Cr',      EW:17.33, rho:7.19},
+  cu:  {name:'Cu',      EW:31.77, rho:8.96},
+  zn:  {name:'Zn',      EW:32.69, rho:7.14}
+};
+
+Lab.make({
+  mount:'#lab-tafel',
+  title:'Tafel 외삽 — 두 직선의 교점에서 E_corr와 i_corr를 읽음',
+  badge:'MIXED POTENTIAL',
+  controls:[
+    {id:'i0a', label:'양극 교환전류밀도 i₀ₐ', min:1e-9, max:1e-4, value:1e-6, log:true,
+     unit:'A/cm²', fmt:function(v){return Lab.sci(v,2);}},
+    {id:'ba', label:'양극 Tafel 기울기 βₐ', min:20, max:200, step:1, value:60,
+     unit:'mV/dec', fmt:function(v){return v.toFixed(0);}},
+    {id:'Ea', label:'양극 평형전위 Eₐ', min:-1.2, max:0.2, step:0.01, value:-0.44,
+     unit:'V', fmt:function(v){return v.toFixed(2);}},
+    {id:'i0c', label:'음극 교환전류밀도 i₀c', min:1e-12, max:1e-5, value:1e-9, log:true,
+     unit:'A/cm²', fmt:function(v){return Lab.sci(v,2);}},
+    {id:'bc', label:'음극 Tafel 기울기 βc', min:20, max:250, step:1, value:120,
+     unit:'mV/dec', fmt:function(v){return v.toFixed(0);}},
+    {id:'Ec', label:'음극 평형전위 Ec', min:-0.2, max:1.4, step:0.01, value:0.80,
+     unit:'V', fmt:function(v){return v.toFixed(2);}},
+    {id:'iL', label:'산소 확산 한계 전류 i_L', min:1, max:2000, value:50, log:true,
+     unit:'µA/cm²', fmt:function(v){return v.toFixed(1);}},
+    {id:'met', type:'select', label:'용해되는 금속 (EW/ρ)', value:'fe',
+     options:Object.keys(MET).map(function(k){return {value:k,label:MET[k].name};})}
+  ],
+  presets:[
+    {label:'통기 중성수 · 활성 Fe', set:{i0a:1e-6, ba:60, Ea:-0.44, i0c:1e-9, bc:120, Ec:0.80, iL:50}},
+    {label:'탈기 조건 (한계전류 급감)', set:{iL:2}},
+    {label:'부동태 표면 (i₀ₐ 감소)', set:{i0a:1e-8, Ea:-0.10}},
+    {label:'산성 · 수소 발생', set:{i0c:1e-7, bc:120, Ec:0.00, iL:2000}}
+  ],
+  stats:[
+    {id:'Ecorr', label:'부식전위 E_corr', unit:'V', fmt:function(v){return (v>=0?'+':'')+v.toFixed(3);}},
+    {id:'icorr', label:'부식전류밀도 i_corr', unit:'µA/cm²', fmt:function(v){return Lab.sci(v,3);}},
+    {id:'cr', label:'부식속도', unit:'mm/year', fmt:function(v){return Lab.sci(v,3);}},
+    {id:'thick', label:'1년 감육', unit:'µm', fmt:function(v){return Lab.sci(v,3);}},
+    {id:'ctrl', label:'속도 지배 요인'}
+  ],
+  plot:{width:660,height:440,xLabel:'전류밀도 |i| (µA/cm²)',yLabel:'E (V vs SHE)',
+        xLog:true, autoX:false, autoY:false, xMin:1e-3, xMax:1e6},
+  legend:[
+    {color:'--accent',label:'양극 분지 iₐ'},
+    {color:'--purple',label:'음극 분지 |i_c| (확산 한계 포함)'},
+    {color:'--charcoal',label:'실측 전류 |iₐ − i_c|'}
+  ],
+  note:'음극 전류는 활성화 지배분과 확산 한계분을 직렬로 합성함 (1/i_c = 1/i_act + 1/i_L). ' +
+       '부식속도는 ASTM 환산식 CR = 3.27×10⁻³ · i_corr[µA/cm²] · EW/ρ 를 씀.',
+  plotNote:'교점의 가로 좌표가 i_corr, 세로 좌표가 E_corr임. 음극 분지가 수직으로 서는 구간이 확산 한계 구간이며, 이 구간에서 교점이 잡히면 산소 공급이 부식속도를 정함.',
+  compute:function(v){
+    var ba = v.ba/1000, bc = v.bc/1000;
+    var iL = v.iL*1e-6;
+    var ia = function(E){ return v.i0a*Math.pow(10,(E - v.Ea)/ba); };
+    var ic = function(E){
+      var act = v.i0c*Math.pow(10,(v.Ec - E)/bc);
+      return 1/(1/act + 1/iL);
+    };
+    /* 이분법으로 ia = ic 인 E 탐색 */
+    var lo = -2.0, hi = 2.0, mid = 0;
+    for(var k=0;k<120;k++){
+      mid = (lo+hi)/2;
+      if(ia(mid) - ic(mid) < 0) lo = mid; else hi = mid;
+    }
+    var Ecorr = mid, icorr = ia(Ecorr);
+    var M = MET[v.met];
+    var icorr_u = icorr*1e6;
+    var cr = 3.27e-3*icorr_u*M.EW/M.rho;
+
+    var Emin = Ecorr - 0.30, Emax = Ecorr + 0.30;
+    var Es = Lab.linspace(Emin, Emax, 240);
+    var pa = [], pc = [], pn = [];
+    Es.forEach(function(E){
+      pa.push([ia(E)*1e6, E]);
+      pc.push([ic(E)*1e6, E]);
+      pn.push([Math.abs(ia(E) - ic(E))*1e6, E]);
+    });
+    /* 확산 한계 구간에 걸렸는지 판정 */
+    var act = v.i0c*Math.pow(10,(v.Ec - Ecorr)/bc);
+    var ctrl = (act > 3*iL) ? '산소 확산 (한계전류)' : (act < iL/3 ? '음극 활성화' : '활성화·확산 혼합');
+
+    return {
+      series:[
+        {points:pa, color:'--accent', width:2.2},
+        {points:pc, color:'--purple', width:2.2},
+        {points:pn, color:'--charcoal', width:1.4, dash:'4 3'}
+      ],
+      overlays:[
+        {type:'point', x:icorr_u, y:Ecorr, color:'--im', r:6, label:'E_corr, i_corr'},
+        {type:'hline', y:Ecorr, color:'--ink-3'},
+        {type:'vline', x:v.iL, color:'--purple', label:'i_L'}
+      ],
+      plot:{yMin:Emin, yMax:Emax},
+      stats:{Ecorr:Ecorr, icorr:icorr_u, cr:cr, thick:cr*1000, ctrl:ctrl}
+    };
+  }
+});
+
+/* ============================================================
+   02. 갈바닉 부식 계산기
+   ============================================================ */
+var GALV = {
+  cu:   {name:'Cu (+0.34)',            E:0.34,  EW:31.77,  rho:8.96},
+  agcl: {name:'Ag/AgCl (+0.222)',      E:0.222, EW:107.87, rho:10.49},
+  susp: {name:'SUS304 부동태 (−0.05)', E:-0.05, EW:25.12,  rho:7.90},
+  ti:   {name:'Ti (−0.10)',            E:-0.10, EW:11.97,  rho:4.51},
+  ni:   {name:'Ni (−0.25)',            E:-0.25, EW:29.35,  rho:8.90},
+  susa: {name:'SUS304 활성 (−0.35)',   E:-0.35, EW:25.12,  rho:7.90},
+  fe:   {name:'Fe (−0.440)',           E:-0.440, EW:27.93, rho:7.87},
+  cr:   {name:'Cr (−0.74)',            E:-0.74, EW:17.33,  rho:7.19},
+  zn:   {name:'Zn (−0.76)',            E:-0.76, EW:32.69,  rho:7.14}
+};
+var GOPT = Object.keys(GALV).map(function(k){ return {value:k, label:GALV[k].name}; });
+
+Lab.make({
+  mount:'#lab-galv',
+  title:'갈바닉 부식 계산기 — 전위차와 면적비',
+  badge:'GALVANIC',
+  controls:[
+    {id:'an', type:'select', label:'양극 재질 (녹는 쪽)', value:'fe', options:GOPT},
+    {id:'ca', type:'select', label:'음극 재질', value:'agcl', options:GOPT},
+    {id:'S', label:'면적비 A_음극 / A_양극', min:0.01, max:100, value:1, log:true,
+     unit:'배', fmt:function(v){return Lab.sci(v,3);}},
+    {id:'kap', label:'전해질 전도도 κ', min:0.01, max:10, value:1.6, log:true,
+     unit:'S/m', fmt:function(v){return v.toFixed(2);}},
+    {id:'ra', label:'양극 분극저항 rₐ', min:10, max:5000, value:500, log:true,
+     unit:'Ω·cm²', fmt:function(v){return v.toFixed(0);}},
+    {id:'rc', label:'음극 분극저항 r_c', min:10, max:20000, value:2000, log:true,
+     unit:'Ω·cm²', fmt:function(v){return v.toFixed(0);}}
+  ],
+  presets:[
+    {label:'SUS 스냅 · Ag/AgCl 센서', set:{an:'fe', ca:'agcl', S:1, kap:1.6}},
+    {label:'작은 양극 · 큰 음극', set:{an:'fe', ca:'agcl', S:100}},
+    {label:'큰 양극 · 작은 음극', set:{an:'fe', ca:'agcl', S:0.01}},
+    {label:'Zn 희생양극', set:{an:'zn', ca:'susp', S:0.05}}
+  ],
+  stats:[
+    {id:'dE', label:'구동 전위차 ΔE', unit:'V', fmt:function(v){return v.toFixed(3);}},
+    {id:'ia', label:'양극 전류밀도 iₐ', unit:'µA/cm²', fmt:function(v){return Lab.sci(v,3);}},
+    {id:'cr', label:'양극 부식속도', unit:'mm/year', fmt:function(v){return Lab.sci(v,3);}},
+    {id:'rel', label:'면적비 1 대비', unit:'배', fmt:function(v){return v.toFixed(2);}},
+    {id:'Rs', label:'전해질 저항 R_s', unit:'Ω', fmt:function(v){return Lab.sci(v,3);}},
+    {id:'msg', label:'짝의 방향'}
+  ],
+  plot:{width:640,height:400,xLabel:'면적비 A_c / A_a',yLabel:'양극 전류밀도 iₐ (µA/cm²)',
+        xLog:true, yLog:true, autoX:false, autoY:true, xMin:0.01, xMax:100},
+  legend:[{color:'--accent',label:'현재 조건'},{color:'--neutral',label:'전해질 저항 없는 극한'}],
+  note:'양극 면적 1 cm², 전극 간격 1 mm 기준임. R_s = d/(κ·A_a)로 계산하며 0.9% 식염수의 전도도는 약 1.6 S/m임. ' +
+       '면적비가 커지면 음극 저항 몫 r_c/S가 줄어 양극 한 점에 전류가 몰림.',
+  plotNote:'log-log 축에서 오른쪽으로 갈수록 곡선이 평평해지는 구간이 양극 저항과 전해질 저항이 속도를 넘겨받는 지점임.',
+  compute:function(v){
+    var a = GALV[v.an], c = GALV[v.ca];
+    var dE = c.E - a.E;
+    var Aa = 1;                       /* cm2 */
+    var Rs = 0.1/((v.kap/100)*Aa);    /* d=0.1 cm, kappa[S/m] -> S/cm */
+    function iA(S){
+      if(dE <= 0) return 0;
+      return dE/(v.ra + v.rc/S + Rs*Aa)*1e6;   /* µA/cm2 */
+    }
+    function iA0(S){
+      if(dE <= 0) return 0;
+      return dE/(v.ra + v.rc/S)*1e6;
+    }
+    var Ss = Lab.logspace(0.01, 100, 160);
+    var cur = Ss.map(function(S){ return [S, Math.max(iA(S), 1e-6)]; });
+    var lim = Ss.map(function(S){ return [S, Math.max(iA0(S), 1e-6)]; });
+    var i_now = iA(v.S);
+    var cr = 3.27e-3*i_now*a.EW/a.rho;
+    var msg = dE > 0 ? (a.name.split(' ')[0] + ' 가 녹음')
+                     : (a.name.split(' ')[0] + ' 가 보호받음 (방향 역전)');
+    return {
+      series:[
+        {points:lim, color:'--neutral', width:1.4, dash:'4 4'},
+        {points:cur, color:'--accent', width:2.4}
+      ],
+      overlays:[
+        {type:'point', x:v.S, y:Math.max(i_now,1e-6), color:'--im', r:6,
+         label:Lab.sci(i_now,3)+' µA/cm²'},
+        {type:'vline', x:1, color:'--ink-3', label:'면적비 1'}
+      ],
+      stats:{dE:dE, ia:i_now, cr:cr, rel:(iA(1)>0 ? i_now/iA(1) : 0), Rs:Rs, msg:msg}
+    };
+  }
+});
+
+/* ============================================================
+   03. 공식 자기촉매 사이클 시뮬레이터
+   ============================================================ */
+Lab.make({
+  mount:'#lab-pit',
+  title:'공식 자기촉매 사이클 — pH 강하와 Cl⁻ 농축의 되먹임',
+  badge:'ODE',
+  controls:[
+    {id:'pHb', label:'벌크 pH', min:2, max:9, step:0.1, value:7.0, fmt:function(v){return v.toFixed(1);}},
+    {id:'Clb', label:'벌크 [Cl⁻]', min:0.005, max:1.0, value:0.154, log:true,
+     unit:'mol/L', fmt:function(v){return v.toFixed(3);}},
+    {id:'op', label:'산소·벌크 교환 접근성', min:0.03, max:1.5, step:0.01, value:0.20,
+     fmt:function(v){return v.toFixed(2);}},
+    {id:'T', label:'관찰 시간', min:1, max:24, step:0.5, value:6, unit:'h',
+     fmt:function(v){return v.toFixed(1);}},
+    {id:'Kh', label:'가수분해 상수 K_h', min:1e-5, max:1e-1, value:1e-3, log:true,
+     fmt:function(v){return Lab.sci(v,2);}}
+  ],
+  presets:[
+    {label:'생리 식염수 · 좁은 개구', set:{pHb:7.0, Clb:0.154, op:0.20, T:6}},
+    {label:'개구가 넓은 표면 공식', set:{op:1.2}},
+    {label:'고염화물 (해수 수준)', set:{Clb:0.6, op:0.30}},
+    {label:'산성 벌크', set:{pHb:3.0, Clb:0.154, op:0.30}}
+  ],
+  stats:[
+    {id:'pHf', label:'종료 pit pH', fmt:function(v){return v.toFixed(2);}},
+    {id:'Clf', label:'종료 pit [Cl⁻]', unit:'mol/L', fmt:function(v){return v.toFixed(2);}},
+    {id:'iF', label:'종료 용해 전류밀도', unit:'µA/cm²', fmt:function(v){return Lab.sci(v,3);}},
+    {id:'amp', label:'초기 대비 증폭', unit:'배', fmt:function(v){return Lab.sci(v,3);}},
+    {id:'verdict', label:'되먹임 판정'}
+  ],
+  plot:{width:640,height:300,xLabel:'시간 (h)',yLabel:'pit 내부 pH',
+        autoX:true, autoY:false, yMin:0, yMax:9},
+  legend:[{color:'--accent',label:'pit 내부 pH'},{color:'--neutral',label:'벌크 pH'}],
+  plot2:{width:640,height:300,xLabel:'시간 (h)',yLabel:'i [µA/cm²] · [Cl⁻] [mmol/L] (로그 공용축)',
+         yLog:true, autoX:true, autoY:true},
+  legend2:[{color:'--im',label:'용해 전류밀도 i (µA/cm²)'},{color:'--purple',label:'pit 내부 [Cl⁻] (mmol/L)'}],
+  note:'금속 이온 수지 dC/dt = i·(A/V)/(nF) − k_out·C 를 Euler 법으로 적분함. ' +
+       'A/V = 20 cm⁻¹, n = 2, 부동태 전류 i₀ = 1 µA/cm², pH 감도 b = 2, Cl⁻ 이동수 0.6을 씀. ' +
+       '접근성이 클수록 k_out이 커져 산과 염화물이 벌크로 빠져나감.',
+  plotNote:'접근성을 1.0 이상으로 올리면 곡선이 평평한 준정상 상태로 수렴하고, 0.2 근처로 내리면 후반부가 위로 휘며 자기촉매가 성립함.',
+  compute:function(v){
+    var n = 2, av = 20, i0 = 1e-6, b = 2.0, tCl = 0.6, Cref = 0.1;
+    var kout = 3e-3*v.op;
+    var T = v.T*3600, N = 6000, dt = T/N;
+    var C = 0, Hb = Math.pow(10, -v.pHb);
+    function st(Cm){
+      var H = Hb + Math.sqrt(v.Kh*Cm);
+      var pH = -Math.log10(H);
+      var Cl = Math.min(6, v.Clb + n*tCl*Cm);
+      var i = Math.min(0.5, i0*Math.pow(10,(v.pHb - pH)/b)*(Cl/Cref));
+      return {i:i, pH:pH, Cl:Cl};
+    }
+    var pH_t = [], i_t = [], cl_t = [], bulk = [];
+    var every = Math.round(N/300), i_start = st(0).i;
+    for(var k=0;k<=N;k++){
+      var r = st(C);
+      if(k % every === 0){
+        var th = k*dt/3600;
+        pH_t.push([th, r.pH]);
+        bulk.push([th, v.pHb]);
+        i_t.push([th, r.i*1e6]);
+        cl_t.push([th, r.Cl*1000]);
+      }
+      C = Math.max(0, Math.min(5, C + (1000*r.i*av/(n*F) - kout*C)*dt));
+    }
+    var last = st(C);
+    var half = i_t[Math.floor(i_t.length/2)][1];
+    var end  = i_t[i_t.length-1][1];
+    var verdict = (end/half > 1.5) ? '가속 진행 (자기촉매 성립)'
+                : (end/half > 1.05 ? '완만한 성장' : '준정상 상태 (재부동태화 경향)');
+    return {
+      series:[
+        {points:bulk, color:'--neutral', width:1.4, dash:'5 4'},
+        {points:pH_t, color:'--accent', width:2.4}
+      ],
+      overlays:[
+        {type:'hline', y:4, color:'--ink-3', label:'pH 4'}
+      ],
+      series2:[
+        {points:cl_t, color:'--purple', width:2},
+        {points:i_t, color:'--im', width:2.4}
+      ],
+      stats:{
+        pHf:last.pH, Clf:last.Cl, iF:last.i*1e6,
+        amp:last.i/i_start, verdict:verdict
+      }
+    };
+  }
+});
+
+/* ============================================================
+   04. 산소 매개 사이클 — OCP와 AgCl 소모
+   ============================================================ */
+Lab.make({
+  mount:'#lab-cycle',
+  title:'사이클 진행에 따른 AgCl 소모와 OCP 이동',
+  badge:'CYCLE',
+  controls:[
+    {id:'d0', label:'초기 Ag/AgCl 두께', min:1, max:20, step:0.5, value:5, unit:'µm',
+     fmt:function(v){return v.toFixed(1);}},
+    {id:'o2', label:'산소 공급 속도 (지표)', min:0, max:10, step:0.1, value:5,
+     fmt:function(v){return v.toFixed(1);}},
+    {id:'T', label:'노출 시간', min:1, max:72, step:1, value:24, unit:'h',
+     fmt:function(v){return v.toFixed(0);}}
+  ],
+  presets:[
+    {label:'기준 조건', set:{d0:5, o2:5, T:24}},
+    {label:'탈기 (산소 차단)', set:{o2:0.5}},
+    {label:'산소 포화 · 장시간', set:{o2:10, T:72}}
+  ],
+  stats:[
+    {id:'dF', label:'잔존 AgCl 두께', unit:'µm', fmt:function(v){return v.toFixed(2);}},
+    {id:'loss', label:'소모율', unit:'%', fmt:function(v){return v.toFixed(1);}},
+    {id:'E0', label:'초기 OCP', unit:'V', fmt:function(v){return (v>=0?'+':'')+v.toFixed(3);}},
+    {id:'EF', label:'종료 OCP', unit:'V', fmt:function(v){return (v>=0?'+':'')+v.toFixed(3);}},
+    {id:'dEv', label:'ΔE (종료 − 초기)', unit:'V', fmt:function(v){return v.toFixed(3);}},
+    {id:'thalf', label:'반감 시각', unit:'h', fmt:function(v){return isFinite(v)?v.toFixed(1):'—';}}
+  ],
+  plot:{width:640,height:280,xLabel:'시간 (h)',yLabel:'잔존 AgCl 두께 (µm)',
+        autoX:true, autoY:true, yMinFixed:0},
+  legend:[{color:'--accent',label:'잔존 AgCl 두께'}],
+  plot2:{width:640,height:280,xLabel:'시간 (h)',yLabel:'OCP (V vs SHE)', autoX:true, autoY:true},
+  legend2:[{color:'--im',label:'면적 가중 혼합 OCP'},{color:'--neutral',label:'AgCl/Ag = +0.222 V'}],
+  note:'두께는 d(t) = d₀·exp(−k·t), k = 0.02·(산소 지표/5) [1/h]의 지수 감쇠로 두었음. ' +
+       'OCP는 남은 AgCl 면적 분율 θ = d/d₀에 대해 E = E_Fe + (E_AgCl − E_Fe)·θ 로 계산하며, ' +
+       'E_AgCl = +0.222 V, E_Fe = −0.440 V를 씀.',
+  plotNote:'산소 공급을 올리면 두 곡선이 함께 가팔라짐. OCP 저하가 AgCl 소모의 간접 지표로 쓰일 수 있는 근거가 이 동조에 있음.',
+  compute:function(v){
+    var EA = 0.222, EF = -0.440;
+    var k = 0.02*(v.o2/5);
+    var ts = Lab.linspace(0, v.T, 240);
+    var dd = ts.map(function(t){ return [t, v.d0*Math.exp(-k*t)]; });
+    var oc = ts.map(function(t){
+      var th = Math.exp(-k*t);
+      return [t, EF + (EA - EF)*th];
+    });
+    var ref = [[0, EA],[v.T, EA]];
+    var thF = Math.exp(-k*v.T);
+    var dF = v.d0*thF;
+    var E0 = EA, Ef = EF + (EA - EF)*thF;
+    return {
+      series:[{points:dd, color:'--accent', width:2.4}],
+      overlays:[{type:'point', x:v.T, y:dF, color:'--im', r:5, label:dF.toFixed(2)+' µm'}],
+      series2:[
+        {points:ref, color:'--neutral', width:1.4, dash:'5 4'},
+        {points:oc, color:'--im', width:2.4}
+      ],
+      overlays2:[{type:'point', x:v.T, y:Ef, color:'--im', r:5,
+                  label:(Ef>=0?'+':'')+Ef.toFixed(3)+' V'}],
+      stats:{
+        dF:dF, loss:(1-thF)*100, E0:E0, EF:Ef, dEv:Ef-E0,
+        thalf: k>0 ? Math.LN2/k : Infinity
+      }
+    };
+  }
+});
+
+/* ============================================================
+   05. 분극 / 비분극 전극 주파수 응답 비교
+   ============================================================ */
+Lab.make({
+  mount:'#lab-bode',
+  title:'분극 전극과 비분극 전극의 주파수 응답',
+  badge:'BODE',
+  controls:[
+    {id:'Rp', label:'분극 전극 분극저항 Rd', min:1e3, max:1e6, value:1e5, log:true,
+     unit:'Ω', fmt:function(v){return Lab.eng(v,'',2);}},
+    {id:'Rn', label:'비분극 전극 분극저항 Rd', min:10, max:1000, value:200, log:true,
+     unit:'Ω', fmt:function(v){return v.toFixed(0);}},
+    {id:'C', label:'이중층 용량 Cdl', min:0.1, max:50, value:5, log:true,
+     unit:'µF', fmt:function(v){return v.toFixed(2);}},
+    {id:'f0', label:'판독 주파수', min:0.1, max:1e5, value:10, log:true,
+     unit:'Hz', fmt:function(v){return Lab.eng(v,'',2);}}
+  ],
+  presets:[
+    {label:'기준 조건', set:{Rp:1e5, Rn:200, C:5, f0:10}},
+    {label:'생체신호 대역 (0.5 Hz)', set:{f0:0.5}},
+    {label:'프리소킹 후 (Rd 감소)', set:{Rp:2e4}}
+  ],
+  stats:[
+    {id:'zp', label:'분극 전극 |Z|', unit:'Ω', fmt:function(v){return Lab.eng(v,'',2);}},
+    {id:'zn', label:'비분극 전극 |Z|', unit:'Ω', fmt:function(v){return Lab.eng(v,'',2);}},
+    {id:'ratio', label:'|Z| 비 (분극/비분극)', unit:'배', fmt:function(v){return Lab.sci(v,3);}},
+    {id:'php', label:'분극 전극 위상', unit:'°', fmt:function(v){return v.toFixed(1);}},
+    {id:'fcp', label:'분극 전극 코너 주파수', unit:'Hz', fmt:function(v){return Lab.sci(v,3);}}
+  ],
+  plot:{width:640,height:300,xLabel:'주파수 f (Hz)',yLabel:'|Z| (Ω)',
+        xLog:true, yLog:true, autoX:false, autoY:true, xMin:0.1, xMax:1e5},
+  legend:[{color:'--accent',label:'분극 전극 (SUS)'},{color:'--green',label:'비분극 전극 (Ag/AgCl)'}],
+  plot2:{width:640,height:280,xLabel:'주파수 f (Hz)',yLabel:'위상각 θ (°)',
+         xLog:true, autoX:false, autoY:false, xMin:0.1, xMax:1e5, yMin:-95, yMax:5},
+  legend2:[{color:'--accent',label:'분극 전극'},{color:'--green',label:'비분극 전극'},{color:'--neutral',label:'문헌 보고 −45° ~ −71°'}],
+  note:'단순 R∥C 모델 |Z| = R / √(1 + (2πfRC)²), θ = −atan(2πfRC)를 씀. ' +
+       '두 전극의 차이는 분극저항 Rd 하나로 표현되며 이중층 용량은 같다고 두었음.',
+  plotNote:'저주파로 갈수록 분극 전극의 |Z|만 치솟음. 심전도·근전도처럼 대역 하한이 1 Hz 아래로 내려가는 계측에서 Ag/AgCl을 쓰는 근거가 이 격차임.',
+  compute:function(v){
+    var C = v.C*1e-6;
+    var fs = Lab.logspace(0.1, 1e5, 220);
+    function z(R,f){ var w = 2*Math.PI*f; return R/Math.sqrt(1 + Math.pow(w*R*C,2)); }
+    function ph(R,f){ var w = 2*Math.PI*f; return -Math.atan(w*R*C)*180/Math.PI; }
+    var zp = fs.map(function(f){ return [f, z(v.Rp,f)]; });
+    var zn = fs.map(function(f){ return [f, z(v.Rn,f)]; });
+    var pp = fs.map(function(f){ return [f, ph(v.Rp,f)]; });
+    var pn = fs.map(function(f){ return [f, ph(v.Rn,f)]; });
+    return {
+      series:[
+        {points:zn, color:'--green', width:2.2},
+        {points:zp, color:'--accent', width:2.2}
+      ],
+      overlays:[
+        {type:'vline', x:v.f0, color:'--ink-3', label:Lab.eng(v.f0,'Hz',2)},
+        {type:'point', x:v.f0, y:z(v.Rp,v.f0), color:'--accent', r:5},
+        {type:'point', x:v.f0, y:z(v.Rn,v.f0), color:'--green', r:5}
+      ],
+      series2:[
+        {points:pn, color:'--green', width:2.2},
+        {points:pp, color:'--accent', width:2.2}
+      ],
+      overlays2:[
+        {type:'hline', y:-45, color:'--neutral', label:'−45°'},
+        {type:'hline', y:-71, color:'--neutral', label:'−71°'},
+        {type:'vline', x:v.f0, color:'--ink-3'}
+      ],
+      stats:{
+        zp:z(v.Rp,v.f0), zn:z(v.Rn,v.f0),
+        ratio:z(v.Rp,v.f0)/z(v.Rn,v.f0),
+        php:ph(v.Rp,v.f0),
+        fcp:1/(2*Math.PI*v.Rp*C)
+      }
+    };
+  }
+});
+
+/* ============================================================
+   06. Faraday 용해량 계산기
+   ============================================================ */
+var FMET = {
+  fe: {name:'Fe (M=55.85, z=2, ρ=7.87)', M:55.85, z:2, rho:7.87},
+  cr: {name:'Cr (M=52.00, z=3, ρ=7.19)', M:52.00, z:3, rho:7.19},
+  ni: {name:'Ni (M=58.69, z=2, ρ=8.90)', M:58.69, z:2, rho:8.90}
+};
+
+Lab.make({
+  mount:'#lab-far',
+  title:'전해 용해량 계산기 — Faraday 법칙',
+  badge:'FARADAY',
+  controls:[
+    {id:'I', label:'인가 전류 I', min:0.1, max:20, step:0.1, value:2.5, unit:'mA',
+     fmt:function(v){return v.toFixed(2);}},
+    {id:'t', label:'인가 시간 t', min:10, max:3600, step:10, value:1800, unit:'s',
+     fmt:function(v){return v.toFixed(0);}},
+    {id:'d', label:'와이어 외경', min:0.1, max:1.0, step:0.01, value:0.36, unit:'mm',
+     fmt:function(v){return v.toFixed(2);}},
+    {id:'A', label:'평판 노출 면적', min:0.01, max:10, value:1, log:true, unit:'cm²',
+     fmt:function(v){return v.toFixed(3);}},
+    {id:'met', type:'select', label:'금속', value:'fe',
+     options:Object.keys(FMET).map(function(k){return {value:k,label:FMET[k].name};})},
+    {id:'mode', type:'toggle', label:'용해 형태',
+     options:[{value:'wire',label:'와이어 축방향'},{value:'plate',label:'평판 균일 감육'}], value:'wire'}
+  ],
+  presets:[
+    {label:'28G 철 와이어 · 2.5 mA · 30분', set:{I:2.5, t:1800, d:0.36, met:'fe'}},
+    {label:'전류 2배', set:{I:5.0, t:1800}},
+    {label:'시간 2배', set:{I:2.5, t:3600}}
+  ],
+  stats:[
+    {id:'Q', label:'전하량 Q', unit:'C', fmt:function(v){return v.toFixed(3);}},
+    {id:'m', label:'용해 질량 m', unit:'g', fmt:function(v){return Lab.sci(v,3);}},
+    {id:'V', label:'용해 부피 V', unit:'mm³', fmt:function(v){return v.toFixed(4);}},
+    {id:'out', label:'용해 길이 · 감육', unit:'mm', fmt:function(v){return v.toFixed(4);}},
+    {id:'Ac', label:'와이어 단면적', unit:'mm²', fmt:function(v){return v.toFixed(4);}}
+  ],
+  plot:{width:640,height:380,xLabel:'인가 시간 t (s)',yLabel:'용해 길이 · 감육 (mm)',
+        autoX:false, autoY:true, xMin:0, xMax:3600, yMinFixed:0},
+  legend:[{color:'--accent',label:'Fe'},{color:'--purple',label:'Cr'},{color:'--green',label:'Ni'}],
+  note:'Q = I·t → m = M·Q/(z·F) → V = m/ρ → 길이 또는 감육으로 환산함. F = 96,485 C/mol을 씀. ' +
+       '이 값은 순수 금속을 가정한 이상 조건이라, Cr·Ni·Mo가 섞인 SUS는 내산성이 강해 실제 용해량이 더 작게 나옴.',
+  plotNote:'세 곡선 모두 시간에 정비례하는 직선임. 전류나 시간을 2배로 올리면 용해량도 정확히 2배가 됨.',
+  compute:function(v){
+    var I = v.I/1000;
+    var Ac = Math.PI*Math.pow(v.d/2, 2);        /* mm2 */
+    var Aexp = v.A*100;                          /* cm2 -> mm2 */
+    function lenAt(met, t){
+      var M = FMET[met];
+      var Q = I*t;
+      var m = M.M*Q/(M.z*F);                     /* g */
+      var V = (m/M.rho)*1000;                    /* cm3 -> mm3 */
+      return v.mode === 'wire' ? V/Ac : V/Aexp;  /* mm */
+    }
+    var ts = Lab.linspace(0, 3600, 120);
+    var mk = function(key){ return ts.map(function(t){ return [t, lenAt(key,t)]; }); };
+    var M = FMET[v.met];
+    var Q = I*v.t;
+    var m = M.M*Q/(M.z*F);
+    var V = (m/M.rho)*1000;
+    var out = v.mode === 'wire' ? V/Ac : V/Aexp;
+    return {
+      series:[
+        {points:mk('fe'), color:'--accent', width:2.2},
+        {points:mk('cr'), color:'--purple', width:2},
+        {points:mk('ni'), color:'--green', width:2}
+      ],
+      overlays:[
+        {type:'vline', x:v.t, color:'--ink-3'},
+        {type:'point', x:v.t, y:out, color:'--im', r:6, label:out.toFixed(3)+' mm'}
+      ],
+      stats:{Q:Q, m:m, V:V, out:out, Ac:Ac}
+    };
+  }
+});
+
+/* ============================================================
+   07. 부위별 접촉저항 열화 추적기
+   ============================================================ */
+Lab.make({
+  mount:'#lab-rc',
+  title:'부위별 접촉저항 열화 추적',
+  badge:'CONTACT R',
+  controls:[
+    {id:'R1', label:'기계적 체결면 초기저항', min:0.1, max:10, step:0.05, value:1, unit:'Ω',
+     fmt:function(v){return v.toFixed(2);}},
+    {id:'R2', label:'전해질 노출면 초기저항', min:0.1, max:10, step:0.05, value:1, unit:'Ω',
+     fmt:function(v){return v.toFixed(2);}},
+    {id:'r1', label:'마모 열화율', min:0, max:40, step:0.5, value:5, unit:'%/100h',
+     fmt:function(v){return v.toFixed(1);}},
+    {id:'r2', label:'이온침투 열화율', min:0, max:60, step:0.5, value:15, unit:'%/100h',
+     fmt:function(v){return v.toFixed(1);}},
+    {id:'t', label:'가속열화 시간', min:0, max:500, step:5, value:100, unit:'h',
+     fmt:function(v){return v.toFixed(0);}}
+  ],
+  presets:[
+    {label:'기준 조건', set:{R1:1, R2:1, r1:5, r2:15, t:100}},
+    {label:'500 h 종점', set:{t:500}},
+    {label:'건식 환경 (이온침투 억제)', set:{r2:3, t:500}}
+  ],
+  stats:[
+    {id:'a', label:'기계적 체결면 저항', unit:'Ω', fmt:function(v){return v.toFixed(3);}},
+    {id:'b', label:'전해질 노출면 저항', unit:'Ω', fmt:function(v){return v.toFixed(3);}},
+    {id:'rat', label:'두 면의 저항비', unit:'배', fmt:function(v){return v.toFixed(2);}},
+    {id:'a5', label:'500 h 체결면', unit:'Ω', fmt:function(v){return v.toFixed(3);}},
+    {id:'b5', label:'500 h 노출면', unit:'Ω', fmt:function(v){return v.toFixed(3);}}
+  ],
+  plot:{width:640,height:380,xLabel:'가속열화 시간 (h)',yLabel:'접촉 저항 (Ω)',
+        autoX:false, autoY:true, xMin:0, xMax:500, yMinFixed:0},
+  legend:[{color:'--accent',label:'기계적 체결면 (마모)'},{color:'--purple',label:'전해질 노출면 (이온침투)'}],
+  note:'R(t) = R₀·(1 + 열화율/100)^(t/100)의 복리 증가로 두었음. 같은 초기 저항에서 출발해도 ' +
+       '열화 경로가 다르면 시간에 따라 벌어지는 폭이 달라지므로, 부위를 나눠 재지 않으면 이 차이가 뭉개짐.',
+  compute:function(v){
+    var ts = Lab.linspace(0, 500, 200);
+    function f(R0, r, t){ return R0*Math.pow(1 + r/100, t/100); }
+    var c1 = ts.map(function(t){ return [t, f(v.R1, v.r1, t)]; });
+    var c2 = ts.map(function(t){ return [t, f(v.R2, v.r2, t)]; });
+    var a = f(v.R1, v.r1, v.t), b = f(v.R2, v.r2, v.t);
+    return {
+      series:[
+        {points:c1, color:'--accent', width:2.4},
+        {points:c2, color:'--purple', width:2.4}
+      ],
+      overlays:[
+        {type:'vline', x:v.t, color:'--ink-3', label:v.t.toFixed(0)+' h'},
+        {type:'point', x:v.t, y:a, color:'--accent', r:5},
+        {type:'point', x:v.t, y:b, color:'--purple', r:5}
+      ],
+      stats:{
+        a:a, b:b, rat:(a>0 ? b/a : 0),
+        a5:f(v.R1, v.r1, 500), b5:f(v.R2, v.r2, 500)
+      }
+    };
+  }
+});
+
+/* ============================================================
+   08. 표본 수와 신뢰구간
+   ============================================================ */
+var TTAB = {
+  '90': {1:6.314,2:2.920,3:2.353,4:2.132,5:2.015,6:1.943,7:1.895,8:1.860,9:1.833,
+         10:1.812,15:1.753,20:1.725,25:1.708,30:1.697,40:1.684,50:1.676,1000:1.645},
+  '95': {1:12.706,2:4.303,3:3.182,4:2.776,5:2.571,6:2.447,7:2.365,8:2.306,9:2.262,
+         10:2.228,15:2.131,20:2.086,25:2.060,30:2.042,40:2.021,50:2.009,1000:1.960},
+  '99': {1:63.657,2:9.925,3:5.841,4:4.604,5:4.032,6:3.707,7:3.499,8:3.355,9:3.250,
+         10:3.169,15:2.947,20:2.845,25:2.787,30:2.750,40:2.704,50:2.678,1000:2.576}
+};
+var ZTAB = {'90':1.645, '95':1.960, '99':2.576};
+
+function tCrit(level, df){
+  var tab = TTAB[level];
+  var keys = Object.keys(tab).map(Number).sort(function(a,b){ return a-b; });
+  if(df <= keys[0]) return tab[keys[0]];
+  for(var i=0;i<keys.length-1;i++){
+    if(df >= keys[i] && df <= keys[i+1]){
+      var lo = keys[i], hi = keys[i+1];
+      return tab[lo] + (tab[hi] - tab[lo])*(df - lo)/(hi - lo);
+    }
+  }
+  return tab[keys[keys.length-1]];
+}
+
+Lab.make({
+  mount:'#lab-ci',
+  title:'표본 수와 신뢰구간 — SE = σ/√n',
+  badge:'STATISTICS',
+  controls:[
+    {id:'n', label:'표본 수 n', min:3, max:50, step:1, value:30,
+     unit:'개', fmt:function(v){return v.toFixed(0);}},
+    {id:'sd', label:'표준편차 σ', min:1, max:20, step:0.1, value:5, unit:'Ω',
+     fmt:function(v){return v.toFixed(1);}},
+    {id:'mu', label:'표본평균 x̄', min:10, max:200, step:1, value:50, unit:'Ω',
+     fmt:function(v){return v.toFixed(0);}},
+    {id:'tol', label:'허용 반폭', min:0.5, max:10, step:0.1, value:3, unit:'Ω',
+     fmt:function(v){return v.toFixed(1);}},
+    {id:'lv', type:'select', label:'신뢰수준', value:'95',
+     options:[{value:'90',label:'90 %'},{value:'95',label:'95 %'},{value:'99',label:'99 %'}]},
+    {id:'dist', type:'toggle', label:'임계값',
+     options:[{value:'t',label:'t 분포 (df = n−1)'},{value:'z',label:'정규근사 z'}], value:'t'}
+  ],
+  presets:[
+    {label:'전극 DCR 기준 (50 Ω, σ 5 Ω)', set:{mu:50, sd:5, n:30, tol:3, lv:'95'}},
+    {label:'n = 3 소표본', set:{n:3}},
+    {label:'n = 50', set:{n:50}}
+  ],
+  stats:[
+    {id:'se', label:'표준오차 SE', unit:'Ω', fmt:function(v){return v.toFixed(3);}},
+    {id:'k', label:'임계값', fmt:function(v){return v.toFixed(3);}},
+    {id:'hw', label:'신뢰구간 반폭', unit:'Ω', fmt:function(v){return v.toFixed(3);}},
+    {id:'ci', label:'신뢰구간'},
+    {id:'cv', label:'변동계수 CV', unit:'%', fmt:function(v){return v.toFixed(2);}},
+    {id:'need', label:'허용 반폭 판정'}
+  ],
+  plot:{width:640,height:300,xLabel:'표본 수 n',yLabel:'신뢰구간 반폭 (Ω)',
+        autoX:false, autoY:true, xMin:3, xMax:50, yMinFixed:0},
+  legend:[{color:'--accent',label:'t 분포 기준'},{color:'--neutral',label:'정규근사 z 기준'},{color:'--green',label:'허용 반폭'}],
+  plot2:{width:640,height:300,xLabel:'측정값 (Ω)',yLabel:'확률밀도',
+         autoX:true, autoY:true, yMinFixed:0},
+  legend2:[{color:'--charcoal',label:'모집단 정규분포'}],
+  note:'t 값은 자유도별 양측 임계값 표를 내장하고 중간 자유도는 선형보간함. ' +
+       'σ는 표본표준편차로 두었고, 정규근사 z는 90 %에서 1.645, 95 %에서 1.960, 99 %에서 2.576을 씀.',
+  plotNote:'아래 그림은 3σ 노이즈 판정의 기준이 되는 구간임. ± 1σ가 68.3 %, ± 2σ가 95.4 %, ± 3σ가 99.7 %를 포함하며, 3σ 밖 값은 원인 분석 없이 평균에 포함하지 않음.',
+  compute:function(v){
+    var n = Math.round(v.n);
+    var se = v.sd/Math.sqrt(n);
+    var k = v.dist === 't' ? tCrit(v.lv, n-1) : ZTAB[v.lv];
+    var hw = k*se;
+    var ns = [];
+    for(var m=3;m<=50;m++) ns.push(m);
+    var ct = ns.map(function(m){ return [m, tCrit(v.lv, m-1)*v.sd/Math.sqrt(m)]; });
+    var cz = ns.map(function(m){ return [m, ZTAB[v.lv]*v.sd/Math.sqrt(m)]; });
+
+    var xs = Lab.linspace(v.mu - 4*v.sd, v.mu + 4*v.sd, 220);
+    var pdf = xs.map(function(x){
+      var z = (x - v.mu)/v.sd;
+      return [x, Math.exp(-z*z/2)/(v.sd*Math.sqrt(2*Math.PI))];
+    });
+
+    return {
+      series:[
+        {points:cz, color:'--neutral', width:1.6, dash:'4 4'},
+        {points:ct, color:'--accent', width:2.4}
+      ],
+      overlays:[
+        {type:'hline', y:v.tol, color:'--green', label:'허용 ±'+v.tol.toFixed(1)+' Ω'},
+        {type:'point', x:n, y:hw, color:'--im', r:6, label:'±'+hw.toFixed(2)+' Ω'}
+      ],
+      series2:[
+        {points:pdf, color:'--charcoal', type:'area', opacity:0.10},
+        {points:pdf, color:'--charcoal', width:2.2}
+      ],
+      overlays2:[
+        {type:'band', x1:v.mu-3*v.sd, x2:v.mu-2*v.sd, color:'--amber', opacity:0.12},
+        {type:'band', x1:v.mu+2*v.sd, x2:v.mu+3*v.sd, color:'--amber', opacity:0.12, label:'99.7 %'},
+        {type:'band', x1:v.mu-2*v.sd, x2:v.mu-v.sd, color:'--purple', opacity:0.14},
+        {type:'band', x1:v.mu+v.sd, x2:v.mu+2*v.sd, color:'--purple', opacity:0.14, label:'95.4 %'},
+        {type:'band', x1:v.mu-v.sd, x2:v.mu+v.sd, color:'--accent', opacity:0.16, label:'68.3 %'},
+        {type:'vline', x:v.mu-hw, color:'--im'},
+        {type:'vline', x:v.mu+hw, color:'--im', label:'신뢰구간'}
+      ],
+      stats:{
+        se:se, k:k, hw:hw,
+        ci:(v.mu-hw).toFixed(2)+' ~ '+(v.mu+hw).toFixed(2)+' Ω',
+        cv:v.sd/v.mu*100,
+        need: hw <= v.tol ? '충족 (n = '+n+')' : '미달 — n을 늘려야 함'
+      }
+    };
+  }
+});
+
+})();
+</script>
+</body>
+</html>

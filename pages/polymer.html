@@ -1,0 +1,1104 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>고분자와 하이드로젤 — 수학·물리·화학 노트</title>
+<meta name="description" content="조성 설계에서 출발해 UV 광개시 라디칼 중합 동역학, Flory–Huggins 상거동과 Flory–Rehner 팽윤 평형, 고무탄성 가교 밀도, 이온 전도와 PEDOT:PSS 하이브리드까지 인터랙티브로 다룸.">
+<link rel="stylesheet" href="../assets/css/site.css">
+</head>
+<body>
+
+<div class="topbar">
+  <div class="wrap">
+    <a class="brand" href="../index.html">← 수학·물리·화학 노트</a>
+    <ul class="topnav">
+      <li><a href="#s1">조성 설계</a></li>
+      <li><a href="#s2">UV 중합</a></li>
+      <li><a href="#s3">Flory–Huggins</a></li>
+      <li><a href="#s4">Flory–Rehner</a></li>
+      <li><a href="#s5">고무탄성</a></li>
+      <li><a href="#s6">이온 전도</a></li>
+      <li><a href="#s7">PEDOT:PSS</a></li>
+      <li><a href="#s8">물성 평가</a></li>
+    </ul>
+    <button class="theme-btn" type="button">DARK</button>
+  </div>
+</div>
+
+<header class="mast">
+  <div class="wrap">
+    <p class="kicker">Field 05 · 재료 · 고분자와 하이드로젤</p>
+    <h1>망목 하나가 <em>전도·점착·경도</em>를 동시에 결정함</h1>
+    <p class="lede">
+      전도성 하이드로젤은 아크릴계 단량체를 UV로 중합해 3차원 망목을 세우고, 그 망목이 물·글리세롤·전해질
+      수용액을 붙잡아 이온 전도와 점착을 함께 내는 수계 시스템임. 가교 밀도 하나를 올리면 경도가 오르고
+      점착력이 떨어지며 팽윤비가 줄어드는데, 이 연동 관계는 Flory–Huggins 혼합 자유에너지와 Flory–Rehner
+      팽윤 평형, 고무탄성 관계식으로 정량화됨. 아래 그림은 모두 브라우저에서 방정식을 직접 풀어 그림.
+    </p>
+    <div class="eq" style="border-left-color:var(--accent)">
+      ln(1 − v₂) + v₂ + χv₂² + V₁ν(v₂<sup>1/3</sup> − v₂/2) = 0
+      &nbsp;&nbsp;<span class="cm">— 혼합과 탄성이 평형을 이루는 지점이 팽윤도를 정함</span>
+    </div>
+  </div>
+</header>
+
+<main>
+
+<!-- ================= 01 ================= -->
+<section id="s1">
+  <div class="wrap">
+    <p class="eyebrow"><span class="num">01</span><span>기능 계열 → 시약 배정</span></p>
+    <h2>조성 설계 — 성분 계열과 역할</h2>
+
+    <p>
+      조성 설계는 원재료를 기능별 계열로 묶어 각 계열이 담당하는 물성을 먼저 배정하고, 그다음 계열 안에서
+      구체 시약을 고르는 순서로 진행함. 주 단량체가 주사슬과 전하 담체를 만들고, 가교제가 망목을 닫아
+      기계적 물성을 정하며, 전해질과 중화제가 자유 이온을 공급해 전기적 성능을 담당하는 식으로 역할이
+      갈림. 계열이 겹치는 지점에서 물성이 상충하므로 배정 단계에서 우선순위를 정해 둬야 함.
+    </p>
+
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>기능 구분</th><th>성분 계열</th><th>역할</th></tr></thead>
+        <tbody>
+          <tr><td>주 단량체</td><td>Acrylic Acid(AA), AMPS(2-아크릴아미도-2-메틸프로판설폰산), 설포알킬 아크릴레이트</td><td>주사슬을 만들고, 중화 후 –COO⁻·–SO₃⁻로 해리해 전하 담체와 친수 사이트를 공급함</td></tr>
+          <tr><td>보조 단량체·친수성 부여제</td><td>NVP, PVP 등 락탐계</td><td>사슬에 친수성과 유연성을 더함</td></tr>
+          <tr><td>가교제</td><td>MBAA(N,N′-메틸렌비스아크릴아미드)</td><td>이관능 비닐기로 사슬 사이를 이어 망목을 닫고 가교 밀도를 결정함</td></tr>
+          <tr><td>광개시제</td><td>α-하이드록시케톤계(1-하이드록시시클로헥실 페닐 케톤 계열, 수용성 하이드록시에톡시 치환 계열)</td><td>UV를 흡수해 라디칼로 분해되며 중합을 개시함</td></tr>
+          <tr><td>열·산화환원 개시제</td><td>과황산염(APS 등)</td><td>광개시제와 병용해 중합률을 끌어올리고 경도를 보완함</td></tr>
+          <tr><td>중합금지제</td><td>MEHQ(하이드로퀴논 모노메틸에테르)</td><td>저장 중 자발 중합을 억제하고 보관 중 황변 진행을 늦춤</td></tr>
+          <tr><td>전해질</td><td>KCl 등 염화물염</td><td>Cl⁻ 공급원이자 자유 이온원으로 이온 전도를 담당함</td></tr>
+          <tr><td>중화제·pH 조절제</td><td>KOH, NaOH 등 무기 염기, 3급 아민계 유기 염기</td><td>산성 단량체를 중화해 고분자 전해질 염을 만들고 양이온을 공급함</td></tr>
+          <tr><td>보습제(가소제)</td><td>Glycerol</td><td>수분을 붙잡아 건조를 늦추고 젤을 무르게 유지함</td></tr>
+          <tr><td>점증제</td><td>셀룰로스 유도체(CMC 계열), PVP–비닐아세테이트 공중합체 계열</td><td>도공 전 용액 점도를 올려 토출 거동과 경화 후 점착·경도를 함께 움직임</td></tr>
+          <tr><td>소포제</td><td>실리콘계(시메티콘) 에멀젼</td><td>교반·중화 중 생긴 기포를 깨뜨림</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>양이온 선택이 두 물성에 동시에 개입함</h3>
+    <p>
+      수용액에서 K⁺의 극한 이온 이동도가 Na⁺보다 높으므로 같은 몰 농도라면 Na 기반 조성의 저항이 다소
+      높게 나오며, 저항을 되돌리려면 해리 가능한 이온기 밀도를 높이는 보완이 필요함. 반면 Na⁺는 수화
+      에너지가 커 흡습에 유리한 대신, 농도를 과하게 올리면 사슬 간 정전 차폐가 강해져 젤이 단단해지고
+      깨지기 쉬워짐. 이 상반 특성 때문에 두 양이온을 섞어 쓰는 설계가 물성 조정의 여지를 남김.
+    </p>
+
+    <div class="eq">
+      Λ<sub>cation</sub> = x<sub>K</sub>·λ°<sub>K⁺</sub> + x<sub>Na</sub>·λ°<sub>Na⁺</sub>
+      &nbsp;&nbsp;<span class="cm">— Kohlrausch 이온 독립 이동 법칙</span><br>
+      상대 면저항 = λ°<sub>K⁺</sub> / Λ<sub>cation</sub>
+      &nbsp;&nbsp;<span class="cm">— 순수 K⁺ 조성을 100으로 둔 비</span>
+    </div>
+    <ul class="sym">
+      <li><b>λ°<sub>K⁺</sub></b><span>K⁺의 극한 몰전도도 73.5 S·cm²/mol (25 ℃)</span></li>
+      <li><b>λ°<sub>Na⁺</sub></b><span>Na⁺의 극한 몰전도도 50.1 S·cm²/mol (25 ℃)</span></li>
+      <li><b>x<sub>K</sub>, x<sub>Na</sub></b><span>양이온 몰분율 [무차원], x<sub>K</sub> + x<sub>Na</sub> = 1</span></li>
+    </ul>
+
+    <div id="lab-cation"></div>
+
+    <div class="callout note">
+      <p><b>교반·투입 설계</b> — 산성 단량체의 중화는 발열 반응이므로 액온 상한을 정해 염기를 나눠
+      투입해야 국부 발열과 급격한 pH 점프를 피할 수 있음. 점증제 함량이 큰 조성은 완전 용해에 걸리는
+      시간이 길어지므로 투입 후 저속 장시간 교반으로 용해와 탈포를 함께 마무리하는 숙성 단계를 둠.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ================= 02 ================= -->
+<section id="s2">
+  <div class="wrap">
+    <p class="eyebrow"><span class="num">02</span><span>R<sub>p</sub> = k<sub>p</sub>[M](fφI<sub>abs</sub>/k<sub>t</sub>)<sup>1/2</sup></span></p>
+    <h2>UV 광개시 라디칼 중합 — 개시·전파·종결</h2>
+
+    <p>
+      젤 용액은 라이너 위에 도공된 뒤 UV 램프 아래를 통과하며 경화됨. 개시제가 UV를 흡수해 라디칼로
+      분해되고, 그 라디칼이 AA·AMPS의 비닐기를 공격해 사슬을 성장시키며, MBAA의 이관능 비닐기가 성장하는
+      사슬 사이를 연결해 3차원 망목을 완성함. 광개시제는 계열에 따라 분해 속도와 수용성이 갈리므로,
+      라인 스피드가 높아 노출 시간이 짧은 공정에는 분해가 빠른 계열을, 균일한 경화 프로파일을 원하는
+      조성에는 느린 계열을 배정함.
+    </p>
+    <p>
+      과황산염을 제2 개시제로 병용하면 광경화만으로 남는 미반응 단량체를 줄여 중합률을 끌어올리고,
+      그 결과 경도가 올라가면서 고온·고습 보관 중의 젤 퍼짐도 억제됨. 경화 조건은 광량(mJ/cm²)과
+      라인 스피드로 통제하며, 두 값은 노출 시간을 매개로 묶임. 광량을 올리면 가교와 중합이 더 진행돼
+      압축변형률이 낮아지고 그 대가로 점착력이 떨어지는 상반 관계가 나타나므로, 경도와 점착력 요구치를
+      동시에 만족하는 광량 창을 찾는 것이 조건 설정의 목표임. 착색 성분이 UV를 흡수하는 조성에서는
+      같은 설정 광량으로도 경화가 덜 진행되므로 광량을 상향해 보정함.
+    </p>
+
+    <h3>세 단계의 속도식</h3>
+    <div class="eq">
+      개시 &nbsp;&nbsp; R<sub>i</sub> = 2 f φ I<sub>abs</sub>
+      &nbsp;&nbsp;<span class="cm">— 흡수 광자당 라디칼 두 개</span><br>
+      전파 &nbsp;&nbsp; R<sub>p</sub> = k<sub>p</sub>[M][M·]<br>
+      종결 &nbsp;&nbsp; R<sub>t</sub> = 2 k<sub>t</sub>[M·]²<br><br>
+      <span class="cm">정상상태 R<sub>i</sub> = R<sub>t</sub> 를 대입하면</span><br>
+      <b>R<sub>p</sub> = k<sub>p</sub>[M] (f φ I<sub>abs</sub> / k<sub>t</sub>)<sup>1/2</sup></b><br><br>
+      I<sub>abs</sub> = (I₀ / E<sub>λ</sub>) · (1 − 10<sup>−ε[I]ℓ</sup>) / ℓ
+      &nbsp;&nbsp;<span class="cm">— Beer–Lambert 흡수, 단위 부피당 광자 흡수율</span><br><br>
+      [M](t) = [M]₀ exp(−k<sub>obs</sub>·t),
+      &nbsp; k<sub>obs</sub> = k<sub>p</sub>(f φ I<sub>abs</sub>/k<sub>t</sub>)<sup>1/2</sup><br>
+      전환율 &nbsp; X(t) = 1 − exp(−k<sub>obs</sub>·t)<br>
+      동역학 사슬길이 &nbsp; ν̄ = R<sub>p</sub> / R<sub>i</sub>
+    </div>
+    <ul class="sym">
+      <li><b>R<sub>p</sub></b><span>중합 속도 [mol/(L·s)]</span></li>
+      <li><b>k<sub>p</sub>, k<sub>t</sub></b><span>전파·종결 속도상수 [L/(mol·s)]. 수계 아크릴계 기준 k<sub>p</sub> = 2.0×10⁴, k<sub>t</sub> = 1.0×10⁷</span></li>
+      <li><b>[M]</b><span>단량체 농도 [mol/L]</span></li>
+      <li><b>f</b><span>개시제 효율 [무차원], 생성 라디칼 중 실제 개시에 쓰이는 분율</span></li>
+      <li><b>φ</b><span>광분해 양자수율 [무차원], α-하이드록시케톤계 0.6</span></li>
+      <li><b>I<sub>abs</sub></b><span>단위 부피당 흡수 광자 유속 [einstein/(L·s)]</span></li>
+      <li><b>I₀</b><span>입사 UV 조사 강도 [W/cm²]</span></li>
+      <li><b>E<sub>λ</sub></b><span>광자 1 mol의 에너지 [J/mol]. 365 nm에서 3.28×10⁵</span></li>
+      <li><b>ε</b><span>광개시제 몰흡광계수 [L/(mol·cm)], 365 nm에서 60</span></li>
+      <li><b>ℓ</b><span>젤 층 두께 [cm], 0.05</span></li>
+      <li><b>ν̄</b><span>동역학 사슬길이 [무차원], 라디칼 하나가 소비하는 단량체 수</span></li>
+    </ul>
+
+    <div id="lab-kinetics"></div>
+
+    <h3>중화가 전파를 늦추는 경로</h3>
+    <p>
+      전파 속도 상수 k<sub>p</sub>는 단량체의 이온화 상태에 크게 의존해, 해리도가 올라가면 음이온 라디칼과
+      음이온 단량체 사이의 정전기 반발이 전파를 저해함. 이온 강도가 낮아지면 Debye 길이가 늘어나 전하
+      차폐가 약해지고 반발의 유효 반경이 커지므로 전파는 느려지고 종결도 함께 억제됨. 여기에
+      Norrish–Trommsdorff(겔) 효과가 겹치면 점도 상승으로 종결 확산이 제한되는 반면 전파는 계속돼
+      자가 가속과 국소 발열 폭주, 비가역 겔화로 이어짐.
+    </p>
+    <ul class="notes">
+      <li><b>사슬이동제(CTA)</b><span>thiol 계열을 개시제 대비 1~2 / 100 mol% 넣어 사슬 길이를 끊고 점도 상승을 늦춤.</span></li>
+      <li><b>계면활성제 안정화</b><span>국부 상분리와 응집을 억제해 점도 급증 구간을 완화함.</span></li>
+      <li><b>반회분식 투입</b><span>단량체를 나눠 넣어 순간 농도를 낮추고 전파·발열의 자가 가속을 억제함.</span></li>
+      <li><b>MEHQ</b><span>저장 중 자발 중합을 억제함. 60 ℃ 건조 오븐에 주 단위로 보관하며 색과 경도·점착 상태를 함께 관찰하는 가속 시험에서, 중합금지제를 뺀 조건은 이른 시점부터 황변이 시작되는 반면 넣은 조건은 발생 시점이 뒤로 밀림.</span></li>
+    </ul>
+
+    <p class="pull">
+      가교제와 열 개시제는 자유 이온을 새로 공급하지 않으므로, 가교·중합 조정은 전기적 성능을 크게 흔들지
+      않고 <strong>기계적 물성만 바꾸는 경로</strong>로 쓸 수 있음. 반대로 중화도와 전해질을 건드리면
+      전기와 기계 양쪽이 함께 움직임.
+    </p>
+  </div>
+</section>
+
+<!-- ================= 03 ================= -->
+<section id="s3">
+  <div class="wrap">
+    <p class="eyebrow"><span class="num">03</span><span>ΔG<sub>mix</sub>/k<sub>B</sub>T</span></p>
+    <h2>Flory–Huggins 이론 — χ 파라미터와 상분리</h2>
+
+    <p>
+      Flory–Huggins는 고분자와 용매가 섞일 때의 혼합 자유에너지 변화를 부피분율과 상호작용 계수 χ로
+      기술함. 앞의 두 항은 섞임을 돕는 조합 엔트로피이고 마지막 항은 접촉 에너지인데, 고분자는 중합도 N에
+      비례해 엔트로피 항이 1/N로 눌리므로 저분자 혼합보다 훨씬 작은 χ에서도 상분리가 일어남. 그래서 같은
+      용매라도 사슬이 길어질수록 잘 섞이지 않음.
+    </p>
+
+    <div class="eq">
+      ΔG<sub>mix</sub> / (k<sub>B</sub>T) = (φ/N)·lnφ + ((1−φ)/N₁)·ln(1−φ) + χ·φ(1−φ)<br><br>
+      <span class="cm">임계점 — 스피노달과 이항선이 만나는 지점</span><br>
+      χ<sub>c</sub> = ½ · (1/√N + 1/√N₁)²<br>
+      φ<sub>c</sub> = √N₁ / (√N + √N₁)<br><br>
+      <span class="cm">스피노달 — 곡률이 뒤집히는 조성</span><br>
+      ∂²ΔG/∂φ² = 1/(Nφ) + 1/(N₁(1−φ)) − 2χ = 0
+    </div>
+    <ul class="sym">
+      <li><b>φ</b><span>고분자 부피분율 [무차원], 용매 부피분율은 1−φ</span></li>
+      <li><b>N</b><span>고분자 중합도 [무차원]</span></li>
+      <li><b>N₁</b><span>용매 분자의 중합도 [무차원], 단분자 용매는 1</span></li>
+      <li><b>χ</b><span>Flory–Huggins 상호작용 계수 [무차원]</span></li>
+      <li><b>χ<sub>c</sub></b><span>임계 상호작용 계수 [무차원]. N₁ = 1, N → ∞ 에서 0.5로 수렴함</span></li>
+      <li><b>k<sub>B</sub>, T</b><span>Boltzmann 상수, 절대온도 [K]</span></li>
+    </ul>
+
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>χ 값</th><th>상태</th><th>사슬 거동</th></tr></thead>
+        <tbody>
+          <tr><td>χ ≪ 0.5</td><td>좋은 용매(good solvent), 열역학적으로 안정한 혼합</td><td>사슬이 용매 내에서 확장됨</td></tr>
+          <tr><td>χ ≈ 0.5</td><td>θ 조건, 고분자–고분자와 고분자–용매 상호작용이 균형</td><td>이상 사슬 상태, 상전이 경계</td></tr>
+          <tr><td>χ &gt; 0.5</td><td>나쁜 용매(poor solvent), 상분리 발생</td><td>사슬이 수축하고 고분자와 용매가 분리됨</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div id="lab-fh"></div>
+
+    <p>
+      χ = 0.45는 수계 아크릴 네트워크의 출발 가정으로 쓰이며 θ 조건(0.5) 바로 아래에 놓임. 곧 물이
+      아크릴 네트워크에 대해 좋은 용매 쪽에 가깝다는 뜻이고, 이 값이 다음 절의 팽윤 계산에 그대로
+      들어감. 공중합체는 각 블록의 분율 f<sub>A</sub>·f<sub>B</sub>와 블록별 상호작용 계수
+      χ<sub>A-s</sub>·χ<sub>B-s</sub>로 유효 상호작용 계수를 조합해 다룸.
+    </p>
+  </div>
+</section>
+
+<!-- ================= 04 ================= -->
+<section id="s4">
+  <div class="wrap">
+    <p class="eyebrow"><span class="num">04</span><span>ΔG<sub>mix</sub> + ΔG<sub>elastic</sub> = 0</span></p>
+    <h2>Flory–Rehner 모델 — 팽윤 평형과 가교 밀도</h2>
+
+    <p>
+      Flory–Rehner는 가교 네트워크가 용매를 흡수해 팽윤할 때 네트워크의 탄성 복원력과 혼합 자유에너지가
+      평형을 이루는 지점에서 팽윤도가 결정된다고 봄. 용매가 들어오면 혼합 항이 자유에너지를 낮추지만
+      사슬이 늘어나며 탄성 항이 올라가고, 두 기여의 화학퍼텐셜이 상쇄되는 조성이 평형 부피분율 v₂임.
+      이 평형식을 M<sub>c</sub>에 대해 풀면 팽윤도만 재고도 가교점 간 평균 분자량을 얻을 수 있음.
+    </p>
+
+    <div class="eq">
+      ln(1 − v₂) + v₂ + χv₂² + V₁ν(v₂<sup>1/3</sup> − v₂/2) = 0
+      &nbsp;&nbsp;<span class="cm">— v₂에 대해 수치해로 풀음</span><br><br>
+      <span class="cm">M<sub>c</sub>에 대해 정리한 원문 표기</span><br>
+      1/M<sub>c</sub> = 2/M<sub>n</sub> − (V₁/v̄) · [ln(1−v₂) + v₂ + χv₂²] / (v₂<sup>1/3</sup> − v₂/2)<br><br>
+      ν = 1 / (v̄ · M<sub>c</sub>) = ρ / M<sub>c</sub>
+      &nbsp;&nbsp;<span class="cm">— 가교 밀도와 M<sub>c</sub>의 환산</span><br>
+      팽윤비 Q = 1 / v₂ ,&nbsp;&nbsp; 함수율 = (1 − v₂) × 100 %
+    </div>
+    <ul class="sym">
+      <li><b>v₂</b><span>팽윤 평형 상태의 젤 내 고분자 부피분율 [무차원]</span></li>
+      <li><b>χ</b><span>Flory–Huggins 상호작용 계수 [무차원], 수계 아크릴 네트워크 출발 가정 0.45</span></li>
+      <li><b>V₁</b><span>용매의 몰부피 [cm³/mol], 물 18</span></li>
+      <li><b>ν</b><span>가교 밀도 [mol/cm³], 단위 부피당 탄성 유효 사슬 몰수</span></li>
+      <li><b>M<sub>c</sub></b><span>가교점 간 평균 분자량 [g/mol]</span></li>
+      <li><b>M<sub>n</sub></b><span>가교 전 선형 고분자의 수평균 분자량 [g/mol]. 무한 네트워크 가정에서 2/M<sub>n</sub> → 0</span></li>
+      <li><b>v̄, ρ</b><span>고분자의 비부피 [cm³/g]와 밀도 [g/cm³], v̄ = 1/ρ</span></li>
+    </ul>
+
+    <div id="lab-fr"></div>
+
+    <h3>모델이 깔고 있는 가정 네 가지</h3>
+    <ul class="notes">
+      <li><b>단일 무한 네트워크</b><span>사슬 끝단이 전부 망목에 묶여 있다고 봄. 미가교 사슬이 남으면 이 가정이 깨짐.</span></li>
+      <li><b>균일한 가교 구조</b><span>가교점이 공간에 고르게 분포한다고 봄. 국부 불균일은 반영되지 않음.</span></li>
+      <li><b>열역학적 평형</b><span>팽윤이 끝난 정상 상태에서만 성립함. 측정은 무게 변화가 멈춘 뒤에 함.</span></li>
+      <li><b>가우시안 사슬 통계</b><span>탄성 기여를 가우시안 사슬로 계산함. 팽윤이 커져 사슬이 완전히 펴지면 어긋남.</span></li>
+    </ul>
+
+    <div class="callout">
+      <p><b>Sol fraction 처리</b> — 미가교 사슬은 단일 네트워크 가정을 깨므로 추출로 제거하거나 보정해야 함.
+      Sol fraction은 용매에 녹으므로 젤 잔류물을 필터로 걸러낸 뒤 GPC로 Mn·Mw·PDI를 측정할 수 있으나,
+      용매에 녹지 않는 Gel fraction의 M<sub>c</sub>와 가교 밀도는 GPC로 직접 분석되지 않아 팽윤 평형
+      측정과 Flory–Rehner 계산으로 우회해야 함.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ================= 05 ================= -->
+<section id="s5">
+  <div class="wrap">
+    <p class="eyebrow"><span class="num">05</span><span>G = νRT</span></p>
+    <h2>고무탄성과 가교 밀도 — G와 M<sub>c</sub>의 환산</h2>
+
+    <p>
+      가교된 망목의 탄성은 에너지가 아니라 엔트로피에서 나옴. 사슬을 늘이면 가능한 배열 수가 줄어
+      엔트로피가 떨어지고, 그 감소분이 복원력으로 나타남. 그래서 전단탄성률이 온도에 비례해 오르며,
+      금속·유리가 온도를 올릴수록 무르게 되는 것과 반대 방향으로 움직임. 이 관계가 팽윤 측정과 역학
+      측정을 연결해, 같은 가교 밀도를 두 경로로 교차 검증하게 해 줌.
+    </p>
+
+    <div class="eq">
+      아핀 망목 &nbsp;&nbsp; G = ν R T &nbsp;&nbsp;<span class="cm">— ν는 mol/m³ 단위</span><br>
+      팬텀 망목 &nbsp;&nbsp; G = (1 − 2/f) ν R T &nbsp;&nbsp;<span class="cm">— f는 가교점 관능도, f = 4 이면 계수 ½</span><br><br>
+      M<sub>c</sub> = ρ R T / G = ρ / ν<br>
+      E = 3G &nbsp;&nbsp;<span class="cm">— 비압축성(포아송비 0.5) 가정</span><br><br>
+      σ = G (λ − λ<sup>−2</sup>) &nbsp;&nbsp;<span class="cm">— 단축 인장의 공칭 응력, neo-Hookean</span><br>
+      G<sub>swollen</sub> = ν R T · v₂<sup>1/3</sup> &nbsp;&nbsp;<span class="cm">— 팽윤 상태 보정</span>
+    </div>
+    <ul class="sym">
+      <li><b>G</b><span>전단탄성률 [Pa]</span></li>
+      <li><b>ν</b><span>탄성 유효 사슬의 몰농도 [mol/m³ 또는 mol/cm³]</span></li>
+      <li><b>R</b><span>기체상수 8.314 J/(mol·K)</span></li>
+      <li><b>T</b><span>절대온도 [K]</span></li>
+      <li><b>ρ</b><span>고분자 밀도 [g/cm³]</span></li>
+      <li><b>M<sub>c</sub></b><span>가교점 간 평균 분자량 [g/mol]</span></li>
+      <li><b>λ</b><span>연신비 [무차원], λ = L/L₀</span></li>
+      <li><b>f</b><span>가교점 관능도 [무차원]. MBAA 가교점은 f = 4</span></li>
+    </ul>
+
+    <div id="lab-nu"></div>
+
+    <p>
+      MBAA를 늘리면 망목이 촘촘해져 압축변형률이 낮아지지만 사슬 유동성이 줄어 점착력이 함께 떨어지므로,
+      배율 단계별 경도 개선폭과 점착력 손실폭을 같은 표에서 대조해 허용 배율의 상한을 정함. 위 그래프에서
+      G와 팽윤비가 같은 ν 축 위에서 반대 방향으로 갈라지는 것이 그 상충의 열역학적 근거임.
+    </p>
+
+    <div class="callout note">
+      <p><b>두 경로의 교차 검증</b> — 팽윤 평형에서 얻은 ν와 인장·압축 시험에서 얻은 G/(RT)가 크게
+      어긋나면 가정 중 하나가 깨진 상태임. 값이 팽윤 쪽에서 더 낮게 나오면 미가교 사슬이 남아 있을
+      가능성이 있고, 역학 쪽에서 더 낮게 나오면 얽힘 기여가 아닌 결함(고리·말단)이 많은 망목일 수 있음.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ================= 06 ================= -->
+<section id="s6">
+  <div class="wrap">
+    <p class="eyebrow"><span class="num">06</span><span>κ = Λ·c, &nbsp;Λ = Λ° − K√c</span></p>
+    <h2>이온 전도와 pH — 자유 이온 농도와 이동성</h2>
+
+    <p>
+      젤의 전도는 이온 이동으로 일어나므로 자유 이온 농도와 매질의 이동성이 함께 지배함. 염화물염은
+      Cl⁻ 공급원이자 전해질이고, KOH·NaOH는 AA의 –COOH와 AMPS의 –SO₃H를 중화해 R–COOK, R–SO₃K 같은
+      고분자 전해질 염을 만들면서 K⁺ 또는 Na⁺를 공급함. 중화도를 올려 pH를 중성 쪽으로 옮기면 고분자의
+      이온화가 늘고 자유 이온이 증가해 면저항이 내려가며, –OH기와 대이온이 늘어나는 조성 변경도 같은
+      방향으로 작용함.
+    </p>
+    <p>
+      점도와 이온 전도도는 상충 관계에 놓임. 점증제를 줄이고 그만큼 용매를 늘리면 이온 이동성이 살아나
+      면저항이 내려가고, 반대로 점도를 올리면 매질 저항이 커져 면저항이 올라감. 이 경향은 조성 계열을
+      바꿔도 같은 방향으로 나타나므로 점도 설계와 전기적 성능 설계를 따로 잡을 수 없음.
+    </p>
+
+    <div class="eq">
+      κ = Λ · c &nbsp;&nbsp;<span class="cm">— c는 mol/cm³ 단위로 환산해 씀</span><br>
+      Λ = Λ° − K√c &nbsp;&nbsp;<span class="cm">— Kohlrausch 제곱근 법칙, 1가–1가 전해질에서 K ≈ 60</span><br><br>
+      ρ = 1/κ ,&nbsp;&nbsp; R<sub>bulk</sub> = ρ · ℓ / A<br><br>
+      <span class="cm">전도도 최대점 — dκ/dc = 0</span><br>
+      c<sub>max</sub> = (Λ° / 1.5K)²
+    </div>
+    <ul class="sym">
+      <li><b>κ</b><span>전도도 [S/cm], 실무 표기는 mS/cm</span></li>
+      <li><b>Λ, Λ°</b><span>몰전도도와 극한 몰전도도 [S·cm²/mol]</span></li>
+      <li><b>c</b><span>염 농도 [mol/L]</span></li>
+      <li><b>K</b><span>Kohlrausch 계수 [S·cm²·mol⁻¹·(mol/L)⁻¹ᐟ²], 1가–1가 전해질 60</span></li>
+      <li><b>ℓ, A</b><span>전극 간 갭 [cm]과 단면적 [cm²]</span></li>
+    </ul>
+
+    <div id="lab-cond"></div>
+
+    <h3>중성화의 대가 — KCl 석출</h3>
+    <p>
+      pH를 중성으로 올리는 조정은 금속 계면의 갈바닉 부식을 줄이지만 백색 석출·변색이라는 부작용을 부를
+      수 있음. 용해도곱으로 판단하면, 용매를 줄인 상태에서 중화용 알칼리를 크게 늘릴 때 시스템 내 K⁺
+      총량이 급증해 이온곱 Q<sub>KCl</sub>이 적은 Cl⁻만으로도 K<sub>sp,KCl</sub>을 넘김. Glycerol은
+      무기염 용해도가 물보다 낮으므로 물 대비 Glycerol 비율이 높은 조성에서는 60 ℃ 에이징 중
+      salting-out이 가속되고, Poly-AMPS 곁사슬의 –SO₃⁻는 K⁺ 농도가 임계치를 넘으면 정전 차폐로 사슬을
+      수축시켜 국부 Q<sub>local</sub>이 용해도 한계를 넘는 결정성 도메인을 만듦.
+    </p>
+
+    <div class="eq">
+      [K⁺]<sub>total</sub> = [K⁺]<sub>KOH</sub> + [K⁺]<sub>KCl</sub> + [K⁺]<sub>polymer salt</sub><br><br>
+      Q<sub>KCl</sub> = [K⁺]<sub>total</sub> × [Cl⁻] &nbsp;&nbsp;vs.&nbsp;&nbsp;
+      K<sub>sp,KCl</sub> ≈ 18.5 (25 ℃)<br>
+      <span class="cm">참고 — K<sub>sp,NaCl</sub> ≈ 37.3 (25 ℃)</span><br><br>
+      E = E⁰ − (RT/F)·ln a<sub>Cl⁻</sub>
+      &nbsp;&nbsp;<span class="cm">— Ag/AgCl 기준전극 전위</span>
+    </div>
+    <ul class="sym">
+      <li><b>Q</b><span>이온곱 [mol²/L²]</span></li>
+      <li><b>K<sub>sp</sub></b><span>용해도곱 [mol²/L²]. KCl 18.5, NaCl 37.3 (25 ℃)</span></li>
+      <li><b>a<sub>Cl⁻</sub></b><span>Cl⁻ 활동도 [무차원]</span></li>
+      <li><b>F</b><span>Faraday 상수 96,485 C/mol</span></li>
+      <li><b>이온 반지름</b><span>K⁺ 약 138 pm, Na⁺ 약 102 pm</span></li>
+    </ul>
+
+    <div id="lab-ksp"></div>
+
+    <p>
+      석출을 억제하는 전략은 두 축임. 첫째는 용매 복구로, 물을 되돌리고 늘어난 만큼 Glycerol을 줄여
+      고형분을 유지하면서 염 용해도를 확보함. 둘째는 혼합 양이온 전략으로, 중화용 KOH의 일부를 NaOH로
+      치환함. K⁺와 Na⁺의 크기 차이가 결정 격자 형성을 교란하고, 수화 에너지 차이로 물 분자가 특정 염에
+      집중되지 않으며, 각 성분의 Q를 개별 K<sub>sp</sub> 아래로 유지하기 쉬워지는 데다, 혼합 이온계의 높은
+      엔트로피가 결정화 회귀 경향을 약화시킴. NaCl은 K<sub>sp</sub>가 KCl의 두 배 수준이고 Cl⁻ 절대량도
+      적으므로 Na⁺를 더해 NaCl이 석출될 가능성은 낮음.
+    </p>
+    <p>
+      다만 알칼리가 전체 이온 강도를 지배하는 조성에서는 전해질 함량만 낮춰서는 변색 기여를 분리해 내기
+      어려우므로, 단량체 투입량을 줄여 필요한 염기량 자체를 낮추거나 용매 비율을 올려 용해도를 확보하거나
+      유기 염기로 pH를 맞춰 무기염 생성량을 줄이는 식으로 인자를 갈라 설계해야 함. 중화로 이온 강도가
+      달라지면 개시 효율도 함께 움직이므로 개시제량 조정을 같이 검토함.
+    </p>
+
+    <div class="callout">
+      <p><b>전기화학적 파급</b> — Ag/AgCl 기준전극의 전위는 Cl⁻ 활동도에 로그 의존하므로, Cl⁻가 고체로
+      상변화하면 유효 [Cl⁻]가 줄어 전위가 드리프트함. 결정이 전극 표면을 덮으면 이온 교환 유효 면적이
+      줄어 임피던스가 급증하고, 하이드로젤은 액체 전해질보다 이온 확산이 느려 국부 농도 구배도 더 심하게
+      남음.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ================= 07 ================= -->
+<section id="s7">
+  <div class="wrap">
+    <p class="eyebrow"><span class="num">07</span><span>이온 전도 + 전자 전도</span></p>
+    <h2>PEDOT:PSS 하이브리드 젤</h2>
+
+    <p>
+      PEDOT:PSS는 이온 전도에만 기대던 젤에 전자 전도 경로를 겹쳐 놓는 역할을 함. 분산 매질에 따라
+      수분산액과 알코올 분산액으로 나뉘며, 수계 조성에는 수분산액을 그대로 섞고, 알코올 분산액은 용매 치환
+      공정과 함께 다룸. 혼합량을 올리면 색이 검게 진해지면서 면저항이 내려가 전도성 기여를 확인할 수
+      있으나, 두 가지 문제가 따라옴.
+    </p>
+    <ul class="notes">
+      <li><b>분산 균일도</b><span>경화 후 국부에 뭉치면 면저항의 위치 편차가 커짐.</span></li>
+      <li><b>광 흡수</b><span>검은 입자가 UV를 가로채 같은 설정 광량에서도 경화가 덜 진행되고 그 결과 점착력이 떨어짐. 광량을 올려 경화도를 회복시키면 무첨가 대조군 수준의 점착력으로 되돌아오므로, 첨가량을 바꿀 때는 광량을 고정하지 말고 함께 재설정함.</span></li>
+    </ul>
+
+    <p>
+      |Z|는 첨가 중량비에 단조로 대응하지 않아, 낮은 함량 구간에서 오히려 대조군보다 높아졌다가 일정
+      함량을 넘어서면서 내려가는 형태가 나올 수 있음. UV 파워도 마찬가지로 단조 관계가 아니므로, 중량비와
+      광 조건을 교차한 격자를 세워 두 인자를 분리해 읽어야 함. 시트화가 어려운 저점도 용액 중합 샘플은
+      Petri dish에 정량 분주해 60 ℃에서 시간을 갈라 열건조하는 우회 경로를 쓸 수 있으나, 건조 균일도가
+      확보되지 않으면 물성 측정 시료로 쓰기 어려움.
+    </p>
+
+    <h3>EIS 측정 조건과 로그 보간</h3>
+    <p>
+      임피던스는 EIS로 봄. 측정은 전기화학 워크스테이션에서 2전극 대칭 구성(WE·CE·RE를 모두 같은 bare
+      금속으로 묶음), 진폭 1 V, 100 kHz → 1 Hz log sweep(10 points/decade) 조건으로 함. 심전도 계측에서
+      관심 대상인 36 kHz·60 kHz는 스윕 격자에 직접 걸리지 않으므로 인접 측정점을 log f – log|Z| 좌표에서
+      선형 보간해 산출함.
+    </p>
+
+    <div class="eq">
+      log|Z(f)| = log|Z(f₁)| + [(log f − log f₁) / (log f₂ − log f₁)] · [log|Z(f₂)| − log|Z(f₁)|]
+      <br><br>
+      <span class="cm">36 kHz → f₁ = 31,623 Hz, f₂ = 39,811 Hz</span><br>
+      <span class="cm">60 kHz → f₁ = 50,119 Hz, f₂ = 63,096 Hz</span>
+    </div>
+    <ul class="sym">
+      <li><b>f</b><span>목표 주파수 [Hz], 36,000 또는 60,000</span></li>
+      <li><b>f₁, f₂</b><span>스윕 격자 상 인접 측정점 [Hz]</span></li>
+      <li><b>|Z(f₁)|, |Z(f₂)|</b><span>인접 측정점의 임피던스 크기 [Ω]</span></li>
+    </ul>
+
+    <div id="lab-interp"></div>
+
+    <p>
+      두 주파수 사이에서 |Z|가 내려가는 것은 용량 성분(−Z<sub>im</sub>)이 줄어드는 데서 오므로, 저항
+      성분만 비교하려면 같은 주파수끼리 맞대야 함.
+    </p>
+  </div>
+</section>
+
+<!-- ================= 08 ================= -->
+<section id="s8">
+  <div class="wrap">
+    <p class="eyebrow"><span class="num">08</span><span>ΔT = T<sub>m,onset</sub> − T<sub>c,onset</sub></span></p>
+    <h2>물성 평가 항목과 판독</h2>
+
+    <p>
+      조성이나 경화 조건을 바꾸면 면저항·압축변형률·점착력·숙성 경과 네 항목을 한 세트로 재서 서로 맞물린
+      변화를 함께 봄. 한 항목만 개선된 조건은 다른 항목에서 대가를 치르는 경우가 많으므로, 표는 항상 같은
+      배치의 대조군과 나란히 놓고 읽음.
+    </p>
+
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>측정 항목</th><th>단위</th><th>무엇을 읽는가</th></tr></thead>
+        <tbody>
+          <tr><td>면저항</td><td>Ω/sq</td><td>자유 이온 농도와 매질 이동성의 합. 점증제 증량과 고형분 상승은 값을 올리고, 중화도 상승과 용매 증량은 값을 내림</td></tr>
+          <tr><td>압축변형률</td><td>무차원</td><td>경도의 역지표. 값이 낮을수록 단단하며, 가교제 배율·광량·중합률 상승이 값을 낮춤</td></tr>
+          <tr><td>점착력</td><td>kgf/inch</td><td>피부 부착과 박리 거동을 좌우함. 가교 밀도와 광량이 올라가면 함께 떨어져 경도와 상반됨</td></tr>
+          <tr><td>숙성 경과</td><td>1일·1주·2주</td><td>제조 직후 값이 최종 값이 아니므로 같은 시료를 기간별로 재측정해 물성이 안정되는 시점과 되돌아가는 시점을 확인함</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>DSC 판독</h3>
+    <p>
+      열적 특성은 DSC로 봄. 승온·냉각 속도를 10 ℃/min으로 맞추고 불활성 분위기에서 냉각–승온–재냉각을
+      이어 붙인 프로그램을 쓰며, 시료는 8~10 mg 수준으로 잡아 중량당 열류(mW/mg)를 비교 가능하게 만듦.
+      저온 전이를 봐야 하는 조성은 냉각 유닛의 도달 하한이 측정 범위를 제한하므로, 전기식 냉각과 액체
+      질소 냉각 중 어느 쪽을 쓰는지에 따라 관측 가능한 하한이 달라짐.
+    </p>
+    <p>
+      판독은 승온·냉각 곡선과 그 1차 미분(DDSC)을 함께 놓고 함. Tg는 열류 곡선의 단차 onset과 DDSC 극값
+      위치를 각각 기록하는데, 두 값이 크게 벌어지면 전이가 넓게 퍼져 있다는 뜻임. 냉각 시 뚜렷한 결정화
+      피크 없이 완만한 발열만 나타나면 비정질 특성이 우세하다고 보고, 승온 쪽에 Tm onset·peak·end와 냉각
+      쪽 Tc onset·peak가 함께 잡히면 반결정성으로 분류하며 둘의 차이로 과냉각도 ΔT를 냄.
+    </p>
+
+    <div class="eq">
+      ΔT = T<sub>m,onset</sub> − T<sub>c,onset</sub>
+      &nbsp;&nbsp;<span class="cm">— 과냉각도</span>
+    </div>
+    <ul class="sym">
+      <li><b>T<sub>m,onset</sub></b><span>승온 곡선의 융해 개시 온도 [℃]</span></li>
+      <li><b>T<sub>c,onset</sub></b><span>냉각 곡선의 결정화 개시 온도 [℃]</span></li>
+    </ul>
+
+    <ul class="notes">
+      <li><b>냉각 하한 근처의 Tg</b><span>Tg가 냉각 유닛 하한(전기식 기준 약 −85 ℃) 부근에 걸리면 기기 응답이 섞이므로 MDSC나 측정 하한을 넓힌 재측정으로 확인해야 함.</span></li>
+      <li><b>2차 전이 오판</b><span>승온 저온~중온 구간의 기울기 변화와 100 ℃ 안팎의 흡열 피크는 1차 Tg가 아니라 엔탈피 이완이나 수분 탈착 같은 2차 전이일 수 있으므로, 이를 Tg로 잡으면 실제보다 100 ℃ 이상 높은 값을 보고하게 됨.</span></li>
+      <li><b>UV 광량 기록</b><span>경화기 설정 광량, 라인 스피드에서 환산한 노출 시간, 램프 실측 광량을 따로 남겨 설정과 실제의 차이를 확인함. 착색 성분을 넣은 조성은 같은 설정에서도 실효 광량이 줄어들므로 별도 조건표를 둠.</span></li>
+      <li><b>파장·파워</b><span>파장 조건(365 nm 단파장 대 전파장)과 램프 파워(%)도 함께 기록해야 같은 광량에서 나온 물성 차이를 파장 탓으로 돌릴지 판단할 수 있음.</span></li>
+    </ul>
+
+    <p class="pull">
+      네 항목은 독립 변수가 아님. 가교 밀도 하나를 올리면 압축변형률이 내려가고 점착력이 함께 떨어지며
+      팽윤비가 줄어드는데, 세 변화가 모두 같은 ν에서 나옴. 그래서 조건을 비교할 때는 개선된 항목이 아니라
+      <strong>대가를 치른 항목</strong>을 먼저 확인함.
+    </p>
+  </div>
+</section>
+
+<div class="wrap">
+  <div class="pager">
+    <a href="eis.html"><span class="pg-lbl">이전</span>임피던스와 EIS</a>
+    <a href="surface.html" style="text-align:right"><span class="pg-lbl">다음</span>표면·계면 화학</a>
+  </div>
+</div>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <p>Field 05 · 고분자와 하이드로젤 · 모든 그림은 브라우저에서 직접 계산해 그림</p>
+  </div>
+</footer>
+
+<script src="../assets/js/site.js"></script>
+<script src="../assets/js/lab.js"></script>
+<script>
+(function(){
+"use strict";
+
+/* ---------- shared numerics ---------- */
+var Rgas = 8.314;          /* J/(mol·K) */
+
+/* bisection on a monotone-signed bracket */
+function bisect(fn, lo, hi, iters){
+  var flo = fn(lo), fhi = fn(hi), i, m, fm;
+  if(!isFinite(flo) || !isFinite(fhi) || flo*fhi > 0) return NaN;
+  for(i = 0; i < (iters || 160); i++){
+    m = 0.5*(lo + hi); fm = fn(m);
+    if(!isFinite(fm)) return NaN;
+    if(fm === 0) return m;
+    if(flo*fm < 0){ hi = m; fhi = fm; } else { lo = m; flo = fm; }
+  }
+  return 0.5*(lo + hi);
+}
+
+/* Flory–Rehner residual: f(v2) = 0 at swelling equilibrium */
+function frResidual(v2, chi, nu, V1){
+  return Math.log(1 - v2) + v2 + chi*v2*v2 + V1*nu*(Math.pow(v2, 1/3) - v2/2);
+}
+/* solve for equilibrium polymer volume fraction v2 by bisection */
+function solveV2(chi, nu, V1){
+  var lo = 1e-7, hi = 1 - 1e-9;
+  var flo = frResidual(lo, chi, nu, V1);
+  if(!(flo > 0)) return lo;
+  var m, fm, i;
+  for(i = 0; i < 200; i++){
+    m = 0.5*(lo + hi); fm = frResidual(m, chi, nu, V1);
+    if(fm > 0) lo = m; else hi = m;
+  }
+  return 0.5*(lo + hi);
+}
+
+/* ============ 01. 양이온 혼합 설계기 ============ */
+Lab.make({
+  mount:'#lab-cation',
+  title:'양이온 혼합비가 이론 저항에 미치는 영향',
+  badge:'MIXING',
+  controls:[
+    {id:'xK', label:'K⁺ 몰분율 x_K', min:0, max:100, step:5, value:100, unit:'%', fmt:function(v){return v.toFixed(0);}}
+  ],
+  presets:[
+    {label:'순수 K⁺', set:{xK:100}},
+    {label:'K:Na = 1:1', set:{xK:50}},
+    {label:'순수 Na⁺', set:{xK:0}}
+  ],
+  stats:[
+    {id:'lam', label:'혼합 극한 몰전도도', unit:'S·cm²/mol', fmt:function(v){return v.toFixed(1);}},
+    {id:'ridx', label:'상대 면저항 index', unit:'%', fmt:function(v){return v.toFixed(1);}},
+    {id:'xna', label:'Na⁺ 몰분율', unit:'%', fmt:function(v){return v.toFixed(0);}},
+    {id:'dl', label:'순수 K⁺ 대비 증가분', unit:'%', fmt:function(v){return v.toFixed(1);}}
+  ],
+  plot:{width:620, height:340, xLabel:'K⁺ 몰분율 x_K (%)', yLabel:'상대 면저항 index (%)',
+        autoX:false, autoY:true, xMin:0, xMax:100},
+  legend:[{color:'--green', label:'상대 면저항 index'}, {color:'--accent', label:'현재 조성'}],
+  note:'Kohlrausch 이온 독립 이동 법칙으로 혼합 양이온의 극한 몰전도도를 가중 평균한 값임. ' +
+       'λ°(K⁺) = 73.5, λ°(Na⁺) = 50.1 S·cm²/mol (25 ℃). ' +
+       'Na⁺ 비율을 올리면 이론 저항이 오르지만, 정전 차폐로 인한 취성 증가는 이 지표에 들어가지 않음.',
+  plotNote:'순수 K⁺ 조성을 100으로 둔 상대 지표임. x_K = 0에서 146.7 %로, Na 단독 조성의 저항이 약 1.47배임.',
+  compute:function(v){
+    var lK = 73.5, lNa = 50.1;
+    var pts = [], i, x, lam;
+    for(i = 0; i <= 100; i++){
+      x = i/100;
+      lam = x*lK + (1 - x)*lNa;
+      pts.push([i, 100*lK/lam]);
+    }
+    var xk = v.xK/100;
+    var lamNow = xk*lK + (1 - xk)*lNa;
+    var idx = 100*lK/lamNow;
+    return {
+      series:[{points:pts, color:'--green', width:2.4}],
+      overlays:[{type:'point', x:v.xK, y:idx, color:'--accent',
+                 label:idx.toFixed(1) + ' %'}],
+      stats:{lam:lamNow, ridx:idx, xna:100 - v.xK, dl:idx - 100}
+    };
+  }
+});
+
+/* ============ 02. 라디칼 중합 동역학 ============ */
+Lab.make({
+  mount:'#lab-kinetics',
+  title:'광개시 라디칼 중합 — 전환율 곡선',
+  badge:'KINETICS',
+  controls:[
+    {id:'Iw', label:'광개시제 [I]', min:0.1, max:2, step:0.05, value:1.0, unit:'wt%', fmt:function(v){return v.toFixed(2);}},
+    {id:'I0', label:'UV 강도 I₀', min:1, max:100, step:1, value:20, unit:'mW/cm²', fmt:function(v){return v.toFixed(0);}},
+    {id:'M0', label:'단량체 [M]₀', min:0.5, max:8, step:0.1, value:4.0, unit:'mol/L', fmt:function(v){return v.toFixed(1);}},
+    {id:'f', label:'개시제 효율 f', min:0.1, max:1.0, step:0.05, value:0.6, fmt:function(v){return v.toFixed(2);}},
+    {id:'t', label:'경화 시간 t', min:1, max:120, step:1, value:30, unit:'s', fmt:function(v){return v.toFixed(0);}}
+  ],
+  presets:[
+    {label:'표준 조건', set:{Iw:1.0, I0:20, M0:4.0, f:0.6, t:30}},
+    {label:'고속 라인', set:{Iw:1.5, I0:80, M0:4.0, f:0.6, t:10}},
+    {label:'저광량 착색 조성', set:{Iw:1.0, I0:5, M0:4.0, f:0.4, t:120}}
+  ],
+  stats:[
+    {id:'rp', label:'초기 중합속도 R_p0', unit:'mol/(L·s)', fmt:function(v){return Lab.sci(v,3);}},
+    {id:'t50', label:'50 % 전환 시간', unit:'s', fmt:function(v){return v.toFixed(1);}},
+    {id:'nu', label:'동역학 사슬길이 ν̄', fmt:function(v){return v.toFixed(0);}},
+    {id:'xnow', label:'현재 전환율 X(t)', unit:'%', fmt:function(v){return v.toFixed(1);}},
+    {id:'abs', label:'광 흡수율', unit:'%', fmt:function(v){return v.toFixed(1);}}
+  ],
+  plot:{width:640, height:380, xLabel:'시간 t (s)', yLabel:'전환율 X (%)',
+        autoX:false, autoY:false, xMin:0, xMax:120, yMin:0, yMax:100},
+  legend:[
+    {color:'--neutral', label:'[I] × 0.5'},
+    {color:'--accent', label:'현재 [I]'},
+    {color:'--purple', label:'[I] × 2'}
+  ],
+  note:'k_p = 2.0×10⁴, k_t = 1.0×10⁷ L/(mol·s), 광분해 양자수율 φ = 0.6, 365 nm, ' +
+       '광개시제 분자량 204 g/mol, 몰흡광계수 ε = 60 L/(mol·cm), 젤 층 두께 ℓ = 0.05 cm를 상수로 씀. ' +
+       'Beer–Lambert로 흡수 광자 유속을 구한 뒤 정상상태 가정에서 R_p를 계산함.',
+  plotNote:'개시제를 두 배로 올려도 전환 곡선이 두 배 빨라지지 않음. R_p가 흡수 광량의 제곱근에 비례하기 때문임.',
+  compute:function(v){
+    var kp = 2.0e4, kt = 1.0e7, phi = 0.6;
+    var hPl = 6.62607015e-34, cLight = 2.99792458e8, NA = 6.02214076e23;
+    var lam = 365e-9;
+    var Ephoton = hPl*cLight/lam;              /* J */
+    var Einstein = Ephoton*NA;                 /* J per mol photon */
+    var eps = 60, L = 0.05, MWpi = 204;
+
+    function kobsOf(Iwt){
+      var cI = (Iwt/100)*1000/MWpi;            /* mol/L, 밀도 1.0 g/cm³ 가정 */
+      var flux = (v.I0/1000)/Einstein;         /* einstein/(cm²·s) */
+      var absF = 1 - Math.pow(10, -eps*cI*L);
+      var Iabs = flux*absF/L*1000;             /* einstein/(L·s) */
+      var Ri = 2*v.f*phi*Iabs;
+      var k = kp*Math.sqrt(v.f*phi*Iabs/kt);
+      return {k:k, Ri:Ri, absF:absF};
+    }
+
+    var cur = kobsOf(v.Iw), lo = kobsOf(Math.max(0.05, v.Iw*0.5)), hi = kobsOf(Math.min(4, v.Iw*2));
+
+    function curve(k){
+      var out = [], i, tt;
+      for(i = 0; i <= 240; i++){
+        tt = i/240*120;
+        out.push([tt, 100*(1 - Math.exp(-k*tt))]);
+      }
+      return out;
+    }
+
+    var Rp0 = cur.k*v.M0;
+    var Xnow = 1 - Math.exp(-cur.k*v.t);
+    var nuBar = cur.Ri > 0 ? Rp0/cur.Ri : NaN;
+
+    return {
+      series:[
+        {points:curve(lo.k), color:'--neutral', width:1.6, dash:'5 4'},
+        {points:curve(hi.k), color:'--purple', width:1.8},
+        {points:curve(cur.k), color:'--accent', width:2.6}
+      ],
+      overlays:[
+        {type:'vline', x:v.t, color:'--ink-3', label:'t = ' + v.t.toFixed(0) + ' s'},
+        {type:'hline', y:50, color:'--green', label:'50 %'},
+        {type:'point', x:v.t, y:100*Xnow, color:'--accent', label:(100*Xnow).toFixed(1) + ' %'}
+      ],
+      stats:{rp:Rp0, t50:Math.LN2/cur.k, nu:nuBar, xnow:100*Xnow, abs:100*cur.absF}
+    };
+  }
+});
+
+/* ============ 03. Flory–Huggins 자유에너지 곡선 ============ */
+Lab.make({
+  mount:'#lab-fh',
+  title:'Flory–Huggins 혼합 자유에너지와 스피노달',
+  badge:'PHASE',
+  controls:[
+    {id:'chi', label:'상호작용 계수 χ', min:0, max:3, step:0.02, value:0.5, fmt:function(v){return v.toFixed(2);}},
+    {id:'N', label:'고분자 중합도 N', min:1, max:2000, value:100, log:true, fmt:function(v){return v.toFixed(0);}},
+    {id:'N1', label:'용매 중합도 N₁', min:1, max:10, step:1, value:1, fmt:function(v){return v.toFixed(0);}}
+  ],
+  presets:[
+    {label:'수계 아크릴 χ=0.45', set:{chi:0.46, N:100, N1:1}},
+    {label:'θ 조건 χ=0.5', set:{chi:0.5, N:100, N1:1}},
+    {label:'상분리 χ=1.2', set:{chi:1.2, N:100, N1:1}},
+    {label:'저분자 혼합 N=1', set:{chi:2.4, N:1, N1:1}}
+  ],
+  stats:[
+    {id:'chic', label:'임계 계수 χ_c', fmt:function(v){return v.toFixed(4);}},
+    {id:'phic', label:'임계 조성 φ_c', fmt:function(v){return v.toFixed(4);}},
+    {id:'sp1', label:'스피노달 φ (좌)', fmt:function(v){return v.toFixed(4);}},
+    {id:'sp2', label:'스피노달 φ (우)', fmt:function(v){return v.toFixed(4);}},
+    {id:'state', label:'용매 판정'}
+  ],
+  plot:{width:660, height:400, xLabel:'고분자 부피분율 φ', yLabel:'ΔG_mix / (k_B T)',
+        autoX:false, autoY:true, xMin:0, xMax:1},
+  legend:[
+    {color:'--accent', label:'ΔG_mix / (k_B T)'},
+    {color:'--neutral', label:'χ = χ_c 기준 곡선'}
+  ],
+  note:'ΔG/(k_BT) = (φ/N)lnφ + ((1−φ)/N₁)ln(1−φ) + χφ(1−φ) 를 φ ∈ (0.001, 0.999)에서 그림. ' +
+       '스피노달 조성은 ∂²ΔG/∂φ² = 1/(Nφ) + 1/(N₁(1−φ)) − 2χ = 0 을 이분법으로 푼 값이며, ' +
+       'χ &gt; χ_c 일 때만 두 개의 실근이 존재함.',
+  plotNote:'χ_c 아래에서는 곡선 전체가 아래로 볼록해 어떤 조성에서도 완전 혼화됨. χ_c를 넘으면 두 극소 사이에 위로 볼록한 구간이 생기고, 그 경계인 스피노달 안쪽에서는 미소 요동만으로도 상분리가 진행됨.',
+  compute:function(v){
+    var chi = v.chi, N = v.N, N1 = v.N1;
+
+    function g(p, c){
+      if(p <= 0 || p >= 1) return NaN;
+      return (p/N)*Math.log(p) + ((1 - p)/N1)*Math.log(1 - p) + c*p*(1 - p);
+    }
+    function d2(p){ return 1/(N*p) + 1/(N1*(1 - p)) - 2*chi; }
+
+    var sN = Math.sqrt(N), sN1 = Math.sqrt(N1);
+    var chic = 0.5*Math.pow(1/sN + 1/sN1, 2);
+    var phic = sN1/(sN + sN1);
+
+    var pts = [], ref = [], i, p;
+    for(i = 1; i <= 599; i++){
+      p = i/600;
+      pts.push([p, g(p, chi)]);
+      ref.push([p, g(p, chic)]);
+    }
+
+    var ov = [{type:'vline', x:phic, color:'--ink-3', label:'φ_c'}];
+    var s1 = null, s2 = null;
+    if(chi > chic){
+      s1 = bisect(d2, 1e-9, phic);
+      s2 = bisect(d2, phic, 1 - 1e-9);
+      if(isFinite(s1)) ov.push({type:'vline', x:s1, color:'--purple', label:'스피노달'});
+      if(isFinite(s2)) ov.push({type:'vline', x:s2, color:'--purple', label:'스피노달'});
+      if(isFinite(s1) && isFinite(s2)) ov.push({type:'band', x1:s1, x2:s2, color:'--purple', opacity:0.10});
+    }
+
+    var state = chi < 0.48 ? 'good solvent' : (chi <= 0.52 ? 'θ 조건' : 'poor solvent');
+
+    return {
+      series:[
+        {points:ref, color:'--neutral', width:1.4, dash:'5 4'},
+        {points:pts, color:'--accent', width:2.6}
+      ],
+      overlays:ov,
+      stats:{chic:chic, phic:phic, sp1:(s1 != null && isFinite(s1)) ? s1 : '—',
+             sp2:(s2 != null && isFinite(s2)) ? s2 : '—', state:state}
+    };
+  }
+});
+
+/* ============ 04. Flory–Rehner 팽윤 계산기 ============ */
+Lab.make({
+  mount:'#lab-fr',
+  title:'Flory–Rehner 팽윤 평형 계산기',
+  badge:'SWELLING',
+  controls:[
+    {id:'chi', label:'상호작용 계수 χ', min:0.1, max:0.9, step:0.01, value:0.45, fmt:function(v){return v.toFixed(2);}},
+    {id:'nu', label:'가교 밀도 ν', min:1e-5, max:1e-2, value:1e-3, log:true, unit:'mol/cm³', fmt:function(v){return Lab.sci(v,3);}}
+  ],
+  presets:[
+    {label:'수계 아크릴 기준', set:{chi:0.45, nu:1e-3}},
+    {label:'저가교 고팽윤', set:{chi:0.45, nu:3e-5}},
+    {label:'고가교 저팽윤', set:{chi:0.45, nu:6e-3}},
+    {label:'나쁜 용매 χ=0.7', set:{chi:0.7, nu:1e-3}}
+  ],
+  stats:[
+    {id:'v2', label:'평형 부피분율 v₂', fmt:function(v){return v.toFixed(4);}},
+    {id:'Q', label:'팽윤비 Q = 1/v₂', fmt:function(v){return v.toFixed(2);}},
+    {id:'wc', label:'함수율', unit:'%', fmt:function(v){return v.toFixed(2);}},
+    {id:'Mc', label:'M_c = ρ/ν', unit:'g/mol', fmt:function(v){return Lab.sci(v,3);}},
+    {id:'res', label:'잔차 f(v₂)', fmt:function(v){return Lab.sci(v,2);}}
+  ],
+  plot:{width:640, height:380, xLabel:'가교 밀도 ν (mol/cm³)', yLabel:'팽윤비 Q = 1/v₂',
+        xLog:true, yLog:true, autoX:false, autoY:true, xMin:1e-5, xMax:1e-2},
+  legend:[{color:'--green', label:'현재 χ'}, {color:'--neutral', label:'χ = 0.45 기준'},
+          {color:'--accent', label:'현재 조건'}],
+  note:'용매 몰부피 V₁ = 18 cm³/mol(물)로 고정하고, 고분자 밀도 ρ = 1.10 g/cm³ 로 M_c를 환산함. ' +
+       'ln(1−v₂) + v₂ + χv₂² + V₁ν(v₂<sup>1/3</sup> − v₂/2) = 0 을 이분법(200회 분할)으로 풀어 v₂를 구함. ' +
+       '무한 네트워크 가정으로 2/M_n 항은 0으로 둠.',
+  plotNote:'로그–로그 축에서 두 곡선이 거의 직선으로 나타남. 가교 밀도가 10배 오르면 팽윤비가 대략 절반 수준으로 떨어지는 관계임.',
+  compute:function(v){
+    var V1 = 18, rho = 1.10;
+    var v2 = solveV2(v.chi, v.nu, V1);
+    var nus = Lab.logspace(1e-5, 1e-2, 80);
+    var cur = nus.map(function(n){ return [n, 1/solveV2(v.chi, n, V1)]; });
+    var ref = nus.map(function(n){ return [n, 1/solveV2(0.45, n, V1)]; });
+    return {
+      series:[
+        {points:ref, color:'--neutral', width:1.4, dash:'5 4'},
+        {points:cur, color:'--green', width:2.6}
+      ],
+      overlays:[
+        {type:'point', x:v.nu, y:1/v2, color:'--accent', label:'Q = ' + (1/v2).toFixed(1)}
+      ],
+      stats:{v2:v2, Q:1/v2, wc:(1 - v2)*100, Mc:rho/v.nu,
+             res:frResidual(v2, v.chi, v.nu, V1)}
+    };
+  }
+});
+
+/* ============ 05. 가교 밀도 ↔ 물성 ============ */
+Lab.make({
+  mount:'#lab-nu',
+  title:'가교 밀도가 강성과 팽윤을 반대로 밀어냄',
+  badge:'ELASTICITY',
+  controls:[
+    {id:'nu', label:'가교 밀도 ν', min:1e-5, max:1e-2, value:1e-3, log:true, unit:'mol/cm³', fmt:function(v){return Lab.sci(v,3);}},
+    {id:'T', label:'온도 T', min:283, max:323, step:1, value:298, unit:'K', fmt:function(v){return v.toFixed(0);}},
+    {id:'rho', label:'고분자 밀도 ρ', min:0.9, max:1.5, step:0.01, value:1.10, unit:'g/cm³', fmt:function(v){return v.toFixed(2);}}
+  ],
+  presets:[
+    {label:'상온 기준', set:{nu:1e-3, T:298, rho:1.10}},
+    {label:'저온 10 ℃', set:{nu:1e-3, T:283, rho:1.10}},
+    {label:'체온 근처 37 ℃', set:{nu:1e-3, T:310, rho:1.10}},
+    {label:'MBAA 2배 상당', set:{nu:2e-3, T:298, rho:1.10}}
+  ],
+  stats:[
+    {id:'G', label:'전단탄성률 G = νRT', unit:'Pa', fmt:function(v){return Lab.eng(v,'',2);}},
+    {id:'E', label:'인장탄성률 E = 3G', unit:'Pa', fmt:function(v){return Lab.eng(v,'',2);}},
+    {id:'Mc', label:'가교점 간 M_c', unit:'g/mol', fmt:function(v){return Lab.sci(v,3);}},
+    {id:'Q', label:'예상 팽윤비 Q', fmt:function(v){return v.toFixed(2);}},
+    {id:'Gph', label:'팬텀 망목 G (f=4)', unit:'Pa', fmt:function(v){return Lab.eng(v,'',2);}}
+  ],
+  plot:{width:640, height:300, xLabel:'가교 밀도 ν (mol/cm³)', yLabel:'전단탄성률 G (Pa)',
+        xLog:true, yLog:true, autoX:false, autoY:true, xMin:1e-5, xMax:1e-2},
+  plot2:{width:640, height:300, xLabel:'가교 밀도 ν (mol/cm³)', yLabel:'팽윤비 Q',
+        xLog:true, yLog:true, autoX:false, autoY:true, xMin:1e-5, xMax:1e-2},
+  legend:[{color:'--purple', label:'G = νRT (아핀)'}, {color:'--neutral', label:'팬텀 망목 (f = 4)'}],
+  legend2:[{color:'--green', label:'팽윤비 Q (χ = 0.45)'}],
+  note:'G = νRT 에서 ν를 mol/m³ 로 환산해 계산함(1 mol/cm³ = 10⁶ mol/m³). ' +
+       '팽윤비는 같은 ν를 Flory–Rehner 식에 넣어 χ = 0.45, V₁ = 18 cm³/mol 조건으로 푼 값임. ' +
+       'M_c = ρ/ν 이므로 ν를 10배 올리면 M_c는 1/10로 줄어듦.',
+  plotNote:'위 그래프는 오른쪽 위로, 아래 그래프는 오른쪽 아래로 감. 같은 ν 조작이 강성은 올리고 흡수 능력은 낮춘다는 뜻임.',
+  compute:function(v){
+    var V1 = 18;
+    var nuSI = v.nu*1e6;                 /* mol/m³ */
+    var G = nuSI*Rgas*v.T;               /* Pa */
+    var Gph = 0.5*G;                     /* (1 − 2/f), f = 4 */
+    var Mc = v.rho/v.nu;
+    var v2 = solveV2(0.45, v.nu, V1);
+
+    var nus = Lab.logspace(1e-5, 1e-2, 80);
+    var gs = nus.map(function(n){ return [n, n*1e6*Rgas*v.T]; });
+    var gph = nus.map(function(n){ return [n, 0.5*n*1e6*Rgas*v.T]; });
+    var qs = nus.map(function(n){ return [n, 1/solveV2(0.45, n, V1)]; });
+
+    return {
+      series:[
+        {points:gph, color:'--neutral', width:1.5, dash:'5 4'},
+        {points:gs, color:'--purple', width:2.6}
+      ],
+      overlays:[{type:'point', x:v.nu, y:G, color:'--accent', label:Lab.eng(G,'Pa',2)}],
+      series2:[{points:qs, color:'--green', width:2.6}],
+      overlays2:[{type:'point', x:v.nu, y:1/v2, color:'--accent', label:'Q = ' + (1/v2).toFixed(1)}],
+      stats:{G:G, E:3*G, Mc:Mc, Q:1/v2, Gph:Gph}
+    };
+  }
+});
+
+/* ============ 06. 이온 전도도 계산기 ============ */
+Lab.make({
+  mount:'#lab-cond',
+  title:'염 농도–전도도 곡선과 최대점',
+  badge:'CONDUCTIVITY',
+  controls:[
+    {id:'c', label:'염 농도 c', min:0.01, max:5, value:1.0, log:true, unit:'mol/L', fmt:function(v){return v.toFixed(3);}},
+    {id:'salt', type:'select', label:'이온 종', value:'KCl',
+     options:[{value:'KCl', label:'KCl (Λ° = 149.8)'},
+              {value:'NaCl', label:'NaCl (Λ° = 126.4)'},
+              {value:'LiCl', label:'LiCl (Λ° = 115.0)'}]},
+    {id:'T', label:'온도 T', min:5, max:60, step:1, value:25, unit:'℃', fmt:function(v){return v.toFixed(0);}}
+  ],
+  presets:[
+    {label:'0.1 M KCl 표준', set:{c:0.1, salt:'KCl', T:25}},
+    {label:'생리식염 0.154 M', set:{c:0.154, salt:'NaCl', T:25}},
+    {label:'전도도 최대 근방', set:{c:2.8, salt:'KCl', T:25}}
+  ],
+  stats:[
+    {id:'lam', label:'몰전도도 Λ', unit:'S·cm²/mol', fmt:function(v){return v.toFixed(1);}},
+    {id:'kap', label:'전도도 κ', unit:'mS/cm', fmt:function(v){return v.toFixed(2);}},
+    {id:'rho', label:'저항률 ρ', unit:'Ω·cm', fmt:function(v){return v.toFixed(1);}},
+    {id:'Rb', label:'벌크 저항 (1 cm², 1 mm)', unit:'Ω', fmt:function(v){return v.toFixed(2);}},
+    {id:'cmax', label:'전도도 최대 농도', unit:'mol/L', fmt:function(v){return v.toFixed(2);}}
+  ],
+  plot:{width:640, height:380, xLabel:'염 농도 c (mol/L)', yLabel:'전도도 κ (mS/cm)',
+        autoX:false, autoY:true, xMin:0, xMax:5, yMinFixed:0},
+  legend:[{color:'--accent', label:'선택한 염'}, {color:'--neutral', label:'KCl 기준'},
+          {color:'--green', label:'현재 조건'}],
+  note:'Kohlrausch 식 Λ = Λ° − K√c 에 K = 60 S·cm²·mol⁻¹·(mol/L)⁻¹ᐟ² 을 씀. ' +
+       '25 ℃ 극한 몰전도도 Λ° 는 KCl 149.8, NaCl 126.4, LiCl 115.0 S·cm²/mol 이고, ' +
+       '온도 보정은 25 ℃ 대비 K당 2 %의 선형 계수로 반영함. 벌크 저항은 갭 1 mm, 전극 면적 1 cm² 기준임.',
+  plotNote:'농도를 올릴수록 전도도가 계속 오르지 않음. Λ° − K√c 항이 c에 곱해지므로 c^{3/2} 항이 이겨서 c_max = (Λ°/1.5K)² 에서 최대가 되고 그 위에서는 다시 내려감. Λ가 0에 닿는 고농도 구간은 √c 법칙의 적용 범위를 벗어나므로 0으로 잘라 표시함.',
+  compute:function(v){
+    var L0 = {KCl:149.8, NaCl:126.4, LiCl:115.0};
+    var K = 60;
+    var l0 = L0[v.salt], tc = 1 + 0.02*(v.T - 25);
+
+    function kappa(c, lam0){
+      var lam = Math.max(0, lam0 - K*Math.sqrt(c))*tc;
+      return lam*c/1000*1000;   /* S/cm × 1000 = mS/cm */
+    }
+    var pts = [], ref = [], i, c;
+    for(i = 1; i <= 300; i++){
+      c = i/300*5;
+      pts.push([c, kappa(c, l0)]);
+      ref.push([c, kappa(c, 149.8)]);
+    }
+    var lamNow = Math.max(0, l0 - K*Math.sqrt(v.c))*tc;
+    var kapNow = lamNow*v.c/1000;            /* S/cm */
+    var cmax = Math.pow(l0/(1.5*K), 2);
+
+    return {
+      series:[
+        {points:ref, color:'--neutral', width:1.4, dash:'5 4'},
+        {points:pts, color:'--accent', width:2.6}
+      ],
+      overlays:[
+        {type:'vline', x:cmax, color:'--purple', label:'c_max'},
+        {type:'point', x:v.c, y:kapNow*1000, color:'--green', label:(kapNow*1000).toFixed(1) + ' mS/cm'}
+      ],
+      stats:{lam:lamNow, kap:kapNow*1000,
+             rho:kapNow > 0 ? 1/kapNow : '—',
+             Rb:kapNow > 0 ? 0.1/kapNow : '—',
+             cmax:cmax}
+    };
+  }
+});
+
+/* ============ 06b. KCl 석출 판별기 ============ */
+Lab.make({
+  mount:'#lab-ksp',
+  title:'이온곱 Q와 용해도곱 K_sp 비교',
+  badge:'SOLUBILITY',
+  controls:[
+    {id:'cat', label:'양이온 농도 [K⁺] 또는 [Na⁺]', min:0.1, max:8, step:0.1, value:3.0, unit:'mol/L', fmt:function(v){return v.toFixed(1);}},
+    {id:'cl', label:'염화물 농도 [Cl⁻]', min:0.1, max:8, step:0.1, value:3.0, unit:'mol/L', fmt:function(v){return v.toFixed(1);}},
+    {id:'salt', type:'select', label:'비교 염', value:'KCl',
+     options:[{value:'KCl', label:'KCl (K_sp ≈ 18.5)'},
+              {value:'NaCl', label:'NaCl (K_sp ≈ 37.3)'}]}
+  ],
+  presets:[
+    {label:'용해 상태', set:{cat:2.0, cl:2.0, salt:'KCl'}},
+    {label:'경계 근방', set:{cat:4.3, cl:4.3, salt:'KCl'}},
+    {label:'알칼리 과투입', set:{cat:7.0, cl:3.0, salt:'KCl'}}
+  ],
+  stats:[
+    {id:'Q', label:'이온곱 Q', unit:'mol²/L²', fmt:function(v){return v.toFixed(2);}},
+    {id:'ksp', label:'용해도곱 K_sp', unit:'mol²/L²', fmt:function(v){return v.toFixed(1);}},
+    {id:'ratio', label:'Q / K_sp', fmt:function(v){return v.toFixed(3);}},
+    {id:'verdict', label:'판정'}
+  ],
+  plot:{width:620, height:380, xLabel:'양이온 농도 (mol/L)', yLabel:'[Cl⁻] (mol/L)',
+        autoX:false, autoY:false, xMin:0, xMax:8, yMin:0, yMax:8},
+  legend:[{color:'--accent', label:'선택 염의 포화 곡선 Q = K_sp'},
+          {color:'--neutral', label:'다른 염의 포화 곡선'},
+          {color:'--green', label:'현재 조성'}],
+  note:'Q = [양이온] × [Cl⁻] 를 25 ℃ 용해도곱과 직접 비교함. K_sp,KCl ≈ 18.5, K_sp,NaCl ≈ 37.3 이므로 ' +
+       '같은 총 이온강도에서 K⁺의 일부를 Na⁺로 치환하면 각 성분의 Q를 개별 K_sp 아래로 유지하기 쉬워짐.',
+  plotNote:'곡선 위쪽이 과포화 영역임. NaCl 곡선이 KCl 곡선보다 바깥에 놓이므로 같은 농도에서 NaCl 쪽 여유가 큼.',
+  compute:function(v){
+    var KSP = {KCl:18.5, NaCl:37.3};
+    var ksp = KSP[v.salt], other = v.salt === 'KCl' ? 37.3 : 18.5;
+    var Q = v.cat*v.cl;
+    var main = [], alt = [], i, x;
+    for(i = 1; i <= 400; i++){
+      x = i/400*8;
+      main.push([x, ksp/x]);
+      alt.push([x, other/x]);
+    }
+    var over = Q > ksp;
+    return {
+      series:[
+        {points:alt, color:'--neutral', width:1.4, dash:'5 4'},
+        {points:main, color:'--accent', width:2.4}
+      ],
+      overlays:[
+        {type:'point', x:v.cat, y:v.cl, color:'--green',
+         label:over ? '과포화' : '용해'}
+      ],
+      stats:{Q:Q, ksp:ksp, ratio:Q/ksp, verdict:over ? '석출 위험 (Q > K_sp)' : '용해 상태 (Q < K_sp)'}
+    };
+  }
+});
+
+/* ============ 07. EIS 로그 보간기 ============ */
+Lab.make({
+  mount:'#lab-interp',
+  title:'log f – log|Z| 좌표 선형 보간',
+  badge:'INTERPOLATION',
+  controls:[
+    {id:'tgt', type:'select', label:'목표 주파수', value:'36k',
+     options:[{value:'36k', label:'36 kHz (f₁ 31,623 / f₂ 39,811 Hz)'},
+              {value:'60k', label:'60 kHz (f₁ 50,119 / f₂ 63,096 Hz)'}]},
+    {id:'Z1', label:'|Z(f₁)|', min:1, max:2000, value:120, log:true, unit:'Ω', fmt:function(v){return v.toFixed(1);}},
+    {id:'Z2', label:'|Z(f₂)|', min:1, max:2000, value:95, log:true, unit:'Ω', fmt:function(v){return v.toFixed(1);}}
+  ],
+  presets:[
+    {label:'무첨가 대조군', set:{Z1:120, Z2:95}},
+    {label:'PEDOT:PSS 첨가', set:{Z1:74, Z2:61}},
+    {label:'평탄 구간', set:{Z1:100, Z2:100}}
+  ],
+  stats:[
+    {id:'zf', label:'보간 |Z(f)|', unit:'Ω', fmt:function(v){return v.toFixed(2);}},
+    {id:'zlin', label:'선형 보간 비교값', unit:'Ω', fmt:function(v){return v.toFixed(2);}},
+    {id:'diff', label:'두 보간의 차', unit:'%', fmt:function(v){return v.toFixed(3);}},
+    {id:'slope', label:'구간 기울기 dlog|Z|/dlog f', fmt:function(v){return v.toFixed(3);}}
+  ],
+  plot:{width:640, height:360, xLabel:'주파수 f (Hz)', yLabel:'|Z| (Ω)',
+        xLog:true, yLog:true, autoX:true, autoY:true},
+  legend:[{color:'--accent', label:'log–log 보간선'},
+          {color:'--neutral', label:'선형 f 보간선'},
+          {color:'--green', label:'목표 주파수'}],
+  note:'스윕 격자가 10 points/decade 이므로 36 kHz·60 kHz는 격자점에 걸리지 않음. ' +
+       '보간은 log f – log|Z| 좌표에서 이뤄져야 임피던스가 주파수에 대해 멱함수적으로 변하는 구간의 곡률을 반영함. ' +
+       'EIS 측정 조건은 2전극 대칭 구성(WE = CE = RE, bare 금속), 진폭 1 V, 100 kHz → 1 Hz 스윕임.',
+  plotNote:'두 격자점 사이 간격이 한 decade의 1/10에 불과해 두 보간법의 차이는 작지만, 기울기가 가파른 구간일수록 차이가 벌어짐.',
+  compute:function(v){
+    var f1 = v.tgt === '36k' ? 31623 : 50119;
+    var f2 = v.tgt === '36k' ? 39811 : 63096;
+    var ft = v.tgt === '36k' ? 36000 : 60000;
+    var lf1 = Math.log10(f1), lf2 = Math.log10(f2), lft = Math.log10(ft);
+    var lz1 = Math.log10(v.Z1), lz2 = Math.log10(v.Z2);
+    var slope = (lz2 - lz1)/(lf2 - lf1);
+    var lzt = lz1 + (lft - lf1)*slope;
+    var zt = Math.pow(10, lzt);
+    var zlin = v.Z1 + (ft - f1)/(f2 - f1)*(v.Z2 - v.Z1);
+
+    var logLine = [], linLine = [], i, f;
+    for(i = 0; i <= 120; i++){
+      f = Math.pow(10, lf1 + (lf2 - lf1)*i/120);
+      logLine.push([f, Math.pow(10, lz1 + (Math.log10(f) - lf1)*slope)]);
+      linLine.push([f, v.Z1 + (f - f1)/(f2 - f1)*(v.Z2 - v.Z1)]);
+    }
+
+    return {
+      series:[
+        {points:linLine, color:'--neutral', width:1.6, dash:'5 4'},
+        {points:logLine, color:'--accent', width:2.4},
+        {points:[[f1, v.Z1], [f2, v.Z2]], color:'--purple', type:'scatter', r:5}
+      ],
+      overlays:[
+        {type:'vline', x:ft, color:'--green', label:(ft/1000).toFixed(0) + ' kHz'},
+        {type:'point', x:ft, y:zt, color:'--green', label:zt.toFixed(1) + ' Ω'}
+      ],
+      stats:{zf:zt, zlin:zlin, diff:(zt - zlin)/zlin*100, slope:slope}
+    };
+  }
+});
+
+})();
+</script>
+</body>
+</html>

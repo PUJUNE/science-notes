@@ -1,0 +1,594 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>미분방정식과 적분법 — 수학·물리·화학 노트</title>
+<meta name="description" content="변수분리법이 성립하는 이유를 치환적분과 연쇄법칙까지 거슬러 확인하고, 방향장 위에 해곡선을 그려 적분상수의 의미를 봄.">
+<link rel="stylesheet" href="../assets/css/site.css">
+</head>
+<body>
+
+<div class="topbar">
+  <div class="wrap">
+    <a class="brand" href="../index.html">← 수학·물리·화학 노트</a>
+    <ul class="topnav">
+      <li><a href="#separation">변수분리법</a></li>
+      <li><a href="#substitution">치환적분</a></li>
+      <li><a href="#chainrule">연쇄법칙 역추적</a></li>
+      <li><a href="#slopefield">방향장과 해곡선</a></li>
+      <li><a href="#constant">적분상수</a></li>
+    </ul>
+    <button class="theme-btn" type="button">DARK</button>
+  </div>
+</div>
+
+<header class="mast">
+  <div class="wrap">
+    <p class="kicker">Field 01 · 수학 · 미분방정식과 적분법</p>
+    <h1>변수분리는 <em>약분이 아니라 치환적분</em></h1>
+    <p class="lede">
+      <code>dy/dx</code>를 분수처럼 갈라 놓고 양변을 각각 적분하는 절차는 계산으로는 익숙하지만,
+      왜 그래도 되는지는 따로 설명되지 않는 경우가 많음. 이 페이지는 그 절차를 연쇄법칙까지
+      거슬러 올라가 정당화하고, 얻은 해가 방향장 위에서 어떤 곡선족을 이루는지 그려 봄.
+    </p>
+    <div class="eq">
+      ∫ (y′/y) dx = ∫ dx  <span class="cm">→</span>  ln|y| = x + c  <span class="cm">→</span>  |y| = e<sup>x+c</sup>
+    </div>
+  </div>
+</header>
+
+<main>
+
+<section id="separation">
+  <div class="wrap">
+    <p class="eyebrow"><span class="num">01</span> 변수분리법</p>
+    <h2>같은 식을 두 갈래로 풀어도 결과가 같음</h2>
+
+    <p>
+      다루는 방정식은 <code>y′ = y</code>임. 이 식을 <code>y</code>로 나누면 좌변이
+      <code>y′/y</code> 형태가 되는데, 여기서부터 두 갈래의 풀이가 갈라짐. 하나는 양변을 그대로
+      <code>x</code>에 대해 적분한 뒤 좌변에만 치환적분을 적용하는 정공법이고, 다른 하나는
+      <code>dy/dx</code>를 분수처럼 취급해 <code>dx</code>를 넘긴 뒤 양변을 각각 적분하는
+      변수분리법임. 두 갈래는 표기만 다르고 실제로 수행하는 연산은 같음.
+    </p>
+
+    <div class="cards">
+      <div class="card">
+        <h5><span class="tag">경로 A</span> 양변을 x로 적분</h5>
+        <ul>
+          <li><b>1.</b> 양변을 <code>x</code>로 적분 — <code>∫(y′/y)dx = ∫1dx</code></li>
+          <li><b>2.</b> 좌변에 치환적분 적용 — <code>∫(1/y)dy</code>로 변환</li>
+          <li><b>3.</b> 각각 적분 — <code>ln|y| + C₁ = x + C₂</code></li>
+          <li><b>4.</b> 상수 통합 — <code>ln|y| = x + c</code></li>
+        </ul>
+      </div>
+      <div class="card">
+        <h5><span class="tag">경로 B</span> 변수분리</h5>
+        <ul>
+          <li><b>1.</b> <code>y′ → dy/dx</code> — <code>(1/y)(dy/dx) = 1</code></li>
+          <li><b>2.</b> 양변에 <code>dx</code>를 곱함 — <code>(1/y)dy = 1dx</code></li>
+          <li><b>3.</b> 양변에 적분 기호 — <code>∫(1/y)dy = ∫dx</code></li>
+          <li><b>4.</b> 각각 적분 — <code>ln|y| = x + c</code></li>
+        </ul>
+      </div>
+    </div>
+
+    <p>
+      경로 B의 2단계가 문제가 되는 지점임. <code>dy</code>와 <code>dx</code>는 각각 독립된 양이
+      아니라 극한 기호의 일부이므로, 분수처럼 곱하고 나누는 조작 자체에는 근거가 없음. 그럼에도
+      결과가 맞는 이유는 이 표기가 경로 A의 치환적분 과정을 압축해 적어 놓은 것이기 때문임.
+      즉 변수분리는 새로운 정리가 아니라 치환적분의 축약 표기임.
+    </p>
+
+    <div id="lab-sep"></div>
+
+    <div class="callout">
+      <p><b>읽는 법</b> — 단계를 넘기면 좌변이 <code>x</code>에 대한 적분에서
+      <code>y</code>에 대한 적분으로 바뀌는 지점이 표시됨. 이 변환이 일어나는 곳이 치환적분이
+      들어가는 자리이며, 변수분리법에서는 이 단계가 눈에 보이지 않게 생략됨.</p>
+    </div>
+  </div>
+</section>
+
+<section id="substitution">
+  <div class="wrap">
+    <p class="eyebrow"><span class="num">02</span> 치환적분</p>
+    <h2>dx 위의 균등 분할이 dy 위에서는 불균등해짐</h2>
+
+    <p>
+      치환적분이 하는 일을 리만 합으로 보면 분할의 재배치임. 좌변
+      <code>∫f(y)(dy/dx)dx</code>는 <code>x</code>축을 균등하게 나눈 뒤 각 조각에
+      <code>f(y)·(dy/dx)</code>를 곱해 더하는 계산이고, 우변 <code>∫f(y)dy</code>는
+      <code>y</code>축을 나눈 뒤 <code>f(y)</code>만 곱해 더하는 계산임. 두 합이 같아지는 것은
+      <code>(dy/dx)Δx</code>가 곧 그 구간에서 <code>y</code>가 움직인 폭
+      <code>Δy</code>이기 때문임.
+    </p>
+
+    <div class="eq">
+      ∫ f(y) <b>(dy/dx) dx</b> = ∫ f(y) <b>dy</b>
+      <br><span class="cm">— (dy/dx)Δx ≈ Δy 이므로, x축 균등 분할이 y축에서는 기울기에 비례해 늘어나거나 줄어듦</span>
+    </div>
+
+    <div id="lab-sub"></div>
+
+    <p>
+      <code>y</code>가 빠르게 증가하는 구간에서는 같은 폭의 <code>Δx</code>가 훨씬 넓은
+      <code>Δy</code>로 대응되고, 완만한 구간에서는 좁게 대응됨. 이 신축을 담당하는 항이
+      <code>dy/dx</code>이며, 그래서 이 항이 곱해진 형태의 적분만 <code>dy</code> 적분으로
+      바꿔 쓸 수 있음.
+    </p>
+  </div>
+</section>
+
+<section id="chainrule">
+  <div class="wrap">
+    <p class="eyebrow"><span class="num">03</span> 연쇄법칙 역추적</p>
+    <h2>치환적분은 합성함수 미분을 거꾸로 읽은 것</h2>
+
+    <p>
+      앞 절의 등식은 다음 네 단계로 증명됨. 출발점은 원시함수의 정의이고, 도착점은 두 적분이
+      같은 함수 <code>F(y)</code>로 수렴한다는 사실임.
+    </p>
+
+    <div class="eq">
+      <b>1.</b> 원시함수 정의 &nbsp; (d/dy) F(y) = f(y)<br>
+      <b>2.</b> 연쇄법칙 &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; (d/dx) F(y) = (d/dy)F(y) · (dy/dx) = f(y)(dy/dx)<br>
+      <b>3.</b> 미분의 역연산 &nbsp; ∫ f(y)(dy/dx) dx = F(y) + C<br>
+      <b>4.</b> 정의로 회귀 &nbsp;&nbsp;&nbsp; ∫ f(y) dy = F(y) + C<br>
+      <span class="cm">3과 4의 우변이 같으므로 좌변끼리도 같음</span>
+    </div>
+
+    <ul class="sym">
+      <li><b>F(y)</b><span>f(y)를 y에 대해 적분한 원시함수</span></li>
+      <li><b>f(y)</b><span>피적분함수. 여기서는 1/y</span></li>
+      <li><b>y(x)</b><span>x에 종속인 함수. 단순한 문자가 아니라 종속변수임</span></li>
+      <li><b>dy/dx</b><span>속함수 y의 도함수. 연쇄법칙에서 곱해지는 인자</span></li>
+      <li><b>C</b><span>적분상수. 두 식에서 각각 나오지만 하나로 묶어 표기함</span></li>
+    </ul>
+
+    <p>
+      2단계가 이 증명의 축임. <code>F(y)</code>를 <code>x</code>로 미분할 때
+      <code>y</code>가 <code>x</code>의 함수이므로 겉함수 <code>F</code> 안에 속함수
+      <code>y</code>가 들어간 합성함수가 되고, 여기서 <code>dy/dx</code>가 곱해져 나옴.
+      3단계는 이 미분을 되돌린 것이므로 <code>dy/dx</code>가 곱해진 형태가 그대로 등장할 수밖에 없음.
+    </p>
+
+    <div id="lab-chain"></div>
+
+    <div class="callout ok">
+      <p><b>정리</b> — <code>(dy/dx)dx</code>가 약분되어 <code>dy</code>만 남는 것처럼 보이는 계산은
+      기호의 우연이 아니라 합성함수 미분의 역과정임. 그래서 변수분리 후 양변을 각각 적분해도
+      등식이 유지됨.</p>
+    </div>
+  </div>
+</section>
+
+<section id="slopefield">
+  <div class="wrap">
+    <p class="eyebrow"><span class="num">04</span> 방향장과 해곡선</p>
+    <h2>방정식은 기울기만 정하고, 곡선은 초기조건이 고름</h2>
+
+    <p>
+      <code>y′ = f(x, y)</code> 형태의 1계 미분방정식은 평면의 각 점에서 해곡선이 가져야 할
+      기울기를 지정함. 그 기울기를 짧은 선분으로 평면에 뿌린 것이 방향장이고, 해를 구한다는 것은
+      이 선분들을 매끄럽게 이어 붙인 곡선을 찾는 일임. 방정식 하나가 곡선 하나가 아니라
+      곡선족을 낳는 이유가 여기 있음 — 어느 점을 지나느냐에 따라 서로 다른 곡선이 나옴.
+    </p>
+
+    <div id="lab-field"></div>
+
+    <p>
+      <code>y′ = y</code>를 고르면 기울기가 <code>y</code>에만 의존하므로 방향장이 가로 방향으로
+      균일해지고, 해는 <code>y = Ce<sup>x</sup></code> 꼴이 됨. <code>y′ = −2xy</code>를 고르면
+      기울기가 <code>x</code>에도 걸려 가우스 형태 <code>y = Ce<sup>−x²</sup></code>가 나옴.
+      두 경우 모두 <code>C</code>는 초기조건이 정하고, 방정식 자체는 <code>C</code>에 대해
+      아무 말도 하지 않음.
+    </p>
+  </div>
+</section>
+
+<section id="constant">
+  <div class="wrap">
+    <p class="eyebrow"><span class="num">05</span> 적분상수</p>
+    <h2>지수로 올라간 상수는 곱셈 상수가 됨</h2>
+
+    <p>
+      <code>ln|y| = x + c</code>의 양변에 지수를 취하면 <code>|y| = e<sup>x+c</sup> = e<sup>c</sup>e<sup>x</sup></code>가 됨.
+      <code>e<sup>c</sup></code>는 <code>c</code>가 실수인 한 항상 양수이므로, 절댓값을 벗기면서
+      부호를 흡수시켜 <code>y = Ce<sup>x</sup></code>로 쓰고 이때 <code>C</code>는
+      0이 아닌 임의의 실수가 됨. <code>C = 0</code>도 <code>y = 0</code>이라는 자명해에 해당하므로
+      최종적으로 <code>C</code>는 임의의 실수로 확장됨.
+    </p>
+
+    <div class="eq">
+      ln|y| = x + c<br>
+      |y| = e<sup>x+c</sup> = e<sup>c</sup> · e<sup>x</sup><br>
+      y = C e<sup>x</sup> &nbsp;&nbsp;<span class="cm">C = ±e<sup>c</sup>, 그리고 자명해 y=0을 포함해 C ∈ ℝ</span>
+    </div>
+
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>단계</th><th>식</th><th>상수의 지위</th></tr></thead>
+        <tbody>
+          <tr><td>적분 직후</td><td>ln|y| + C₁ = x + C₂</td><td>양변에 각각 하나씩</td></tr>
+          <tr><td>이항·통합</td><td>ln|y| = x + c</td><td>c = C₂ − C₁, 덧셈 상수</td></tr>
+          <tr><td>지수화</td><td>|y| = e<sup>c</sup>e<sup>x</sup></td><td>e<sup>c</sup> &gt; 0, 곱셈 상수</td></tr>
+          <tr><td>절댓값 해제</td><td>y = Ce<sup>x</sup></td><td>C = ±e<sup>c</sup>, 부호 흡수</td></tr>
+          <tr><td>자명해 포함</td><td>y = Ce<sup>x</sup></td><td>C ∈ ℝ</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div id="lab-const"></div>
+
+    <p class="hint">
+      해곡선족이 서로 교차하지 않는 점을 확인해 볼 것. 평면의 각 점에서 기울기가 하나로
+      정해지므로 두 해곡선이 한 점에서 만나면 그 점에서 기울기가 둘이 되어 모순임 —
+      해의 유일성이 그래프 위에 그대로 나타남.
+    </p>
+  </div>
+</section>
+
+<div class="wrap">
+  <div class="pager">
+    <a href="../index.html"><span class="pg-lbl">이전</span>분야 색인</a>
+    <a href="electrochem.html" style="text-align:right"><span class="pg-lbl">다음</span>전기화학과 Ag/AgCl 전극</a>
+  </div>
+</div>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <p>Field 01 · 미분방정식과 적분법</p>
+  </div>
+</footer>
+
+<script src="../assets/js/site.js"></script>
+<script src="../assets/js/lab.js"></script>
+<script>
+/* ============================ 01. 변수분리 단계 ============================ */
+(function(){
+  const STEPS_A = [
+    {t:'y′ = y', d:'출발 방정식. y는 x의 함수 y(x)임.', hl:false},
+    {t:'(1/y)·y′ = 1', d:'양변을 y로 나눠 y항을 좌변에 모음.', hl:false},
+    {t:'∫(1/y)·y′ dx = ∫1 dx', d:'양변을 똑같이 x에 대해 적분함. 이 시점에서는 양변 모두 dx 적분임.', hl:false},
+    {t:'∫(1/y) dy = ∫1 dx', d:'좌변에만 치환적분 적용 — (dy/dx)dx가 dy로 바뀜. 여기가 변수분리법에서 생략되는 단계임.', hl:true},
+    {t:'ln|y| + C₁ = x + C₂', d:'각각 적분함. 상수가 양변에 하나씩 나옴.', hl:false},
+    {t:'ln|y| = x + c', d:'C₁을 이항해 c = C₂ − C₁로 통합함.', hl:false},
+    {t:'y = C e^x', d:'지수화하고 절댓값을 부호로 흡수함.', hl:false}
+  ];
+  const STEPS_B = [
+    {t:'y′ = y', d:'같은 출발점.', hl:false},
+    {t:'(1/y)·(dy/dx) = 1', d:'y′을 dy/dx로 바꿔 씀.', hl:false},
+    {t:'(1/y) dy = 1 dx', d:'dy/dx를 분수처럼 취급해 양변에 dx를 곱함. 표기상의 조작이며 근거는 치환적분임.', hl:true},
+    {t:'∫(1/y) dy = ∫1 dx', d:'변수가 분리됐으므로 양변에 적분 기호를 붙임.', hl:false},
+    {t:'ln|y| = x + c', d:'좌변은 y로, 우변은 x로 적분함. 상수는 처음부터 하나로 씀.', hl:false},
+    {t:'y = C e^x', d:'지수화함. 경로 A와 결과가 같음.', hl:false}
+  ];
+  const host = document.getElementById('lab-sep');
+  const panel = document.createElement('div'); panel.className = 'panel accent-top';
+  panel.innerHTML =
+    '<div class="panel-hd"><h4>두 경로 단계별 대조</h4><span>INTERACTIVE</span></div>' +
+    '<div class="panel-bd">' +
+      '<div class="btnrow" id="sep-path"></div>' +
+      '<div style="height:14px"></div>' +
+      '<div class="ctl"><label for="sep-step">진행 단계</label>' +
+        '<input type="range" id="sep-step" min="0" max="6" step="1" value="0"><output id="sep-out">1 / 7</output></div>' +
+      '<div id="sep-list" style="margin-top:14px"></div>' +
+    '</div>';
+  host.appendChild(panel);
+
+  let path = 'A';
+  const pb = panel.querySelector('#sep-path');
+  [['A','경로 A — x로 적분 후 치환'],['B','경로 B — 변수분리']].forEach(([k,label])=>{
+    const b = document.createElement('button'); b.type='button'; b.textContent = label;
+    b.setAttribute('aria-pressed', String(k===path));
+    b.addEventListener('click',()=>{
+      path = k;
+      Array.from(pb.children).forEach(x=>x.setAttribute('aria-pressed','false'));
+      b.setAttribute('aria-pressed','true');
+      const st = steps();
+      slider.max = st.length-1; if(+slider.value > st.length-1) slider.value = st.length-1;
+      draw();
+    });
+    pb.appendChild(b);
+  });
+  const steps = () => path==='A' ? STEPS_A : STEPS_B;
+  const slider = panel.querySelector('#sep-step');
+  const out = panel.querySelector('#sep-out');
+  const list = panel.querySelector('#sep-list');
+  slider.addEventListener('input', draw);
+
+  function draw(){
+    const st = steps(), i = Math.min(+slider.value, st.length-1);
+    out.textContent = (i+1) + ' / ' + st.length;
+    list.innerHTML = '';
+    st.forEach((s,k)=>{
+      const on = k<=i;
+      const row = document.createElement('div');
+      row.style.cssText = 'padding:11px 14px;margin-bottom:6px;border-left:3px solid ' +
+        (k===i ? (s.hl?'var(--accent)':'var(--purple)') : (on?'var(--rule)':'transparent')) +
+        ';background:' + (k===i ? (s.hl?'var(--warm)':'var(--lilac)') : (on?'var(--panel)':'transparent')) +
+        ';opacity:' + (on?1:0.32) + ';border-top:1px solid var(--rule-2);transition:opacity .2s';
+      row.innerHTML =
+        '<div style="font-family:var(--mono);font-size:15px;font-weight:600">' + s.t + '</div>' +
+        (k<=i ? '<div style="font-size:13px;color:var(--ink-2);margin-top:4px">' + s.d + '</div>' : '');
+      list.appendChild(row);
+    });
+  }
+  draw();
+})();
+
+/* ============================ 02. 치환적분 리만 합 ============================ */
+Lab.make({
+  mount:'#lab-sub',
+  title:'분할의 재배치 — dx 균등분할 vs dy 분할',
+  badge:'RIEMANN',
+  controls:[
+    {id:'n', label:'분할 수 n', min:4, max:60, step:1, value:12, fmt:v=>v.toFixed(0)},
+    {id:'x1', label:'적분 상한 x₁', min:0.2, max:2.4, step:0.05, value:1.6, unit:'', fmt:v=>v.toFixed(2)},
+    {id:'view', type:'toggle', label:'보는 축',
+      options:[{value:'x',label:'x축 분할'},{value:'y',label:'y축 분할'}], value:'x'}
+  ],
+  stats:[
+    {id:'sum', label:'리만 합', fmt:v=>v.toFixed(4)},
+    {id:'exact', label:'정확값 ln y₁', fmt:v=>v.toFixed(4)},
+    {id:'err', label:'오차', fmt:v=>v.toFixed(4)},
+    {id:'dy', label:'Δy 최대/최소', fmt:v=>v}
+  ],
+  plot:{width:620,height:360,xLabel:'x',yLabel:'y = e^x',autoX:false,autoY:false,
+        xMin:0,xMax:2.5,yMin:0,yMax:12},
+  legend:[{color:'--accent',label:'y = e^x'},{color:'--purple',label:'분할 경계'}],
+  note:'y = e<sup>x</sup>, f(y) = 1/y로 두면 ∫(1/y)(dy/dx)dx = ∫(1/y)dy = ln y 임. ' +
+       'x축을 균등 분할해도 대응되는 y 구간은 기울기 dy/dx = e<sup>x</sup>에 비례해 벌어짐.',
+  compute(v){
+    const n = Math.round(v.n), x1 = v.x1;
+    const f = x => Math.exp(x);
+    // curve
+    const curve = [];
+    for(let i=0;i<=200;i++){ const x = 2.5*i/200; curve.push([x, f(x)]); }
+    const series = [{points:curve, color:'--accent', width:2.2}];
+    const overlays = [];
+    // Riemann sum of ∫(1/y)(dy/dx)dx over [0,x1] with 1/y * y' = 1 → sum = x1 exactly.
+    // Instead integrate ∫(1/y) dy from 1 to e^x1 = ln(e^x1) = x1 → both equal x1.
+    let sum = 0;
+    const dxs = [];
+    const dy = [];
+    for(let k=0;k<n;k++){
+      const xa = x1*k/n, xb = x1*(k+1)/n;
+      const xm = (xa+xb)/2;
+      const ya = f(xa), yb = f(xb);
+      dy.push(yb-ya);
+      if(v.view==='x'){
+        // ∫ (1/y)(dy/dx) dx with midpoint rule
+        sum += (1/f(xm)) * f(xm) * (xb-xa);
+      } else {
+        // ∫ (1/y) dy with midpoint on y-interval
+        const ym = (ya+yb)/2;
+        sum += (1/ym) * (yb-ya);
+      }
+      dxs.push([xa,xb,ya,yb]);
+    }
+    // draw partition lines
+    dxs.forEach(([xa,xb,ya,yb],i)=>{
+      if(v.view==='x'){
+        overlays.push({type:'vline', x:xb, color:'--purple', dash:'2 3'});
+      } else {
+        overlays.push({type:'hline', y:yb, color:'--purple', dash:'2 3'});
+      }
+    });
+    overlays.push({type:'point', x:x1, y:f(x1), color:'--accent', label:'y₁ = '+f(x1).toFixed(2)});
+    overlays.push({type:'band', x1:0, x2:x1, color:'--accent', opacity:0.07});
+    // shaded steps
+    const stepPts = [];
+    dxs.forEach(([xa,xb,ya,yb])=>{ stepPts.push([xa,ya],[xb,ya]); });
+    series.push({points:stepPts, color:'--purple', width:1.2, opacity:0.8, dash:'3 3'});
+
+    const dmax = Math.max.apply(null,dy), dmin = Math.min.apply(null,dy);
+    return {
+      series, overlays,
+      stats:{
+        sum: sum,
+        exact: x1,
+        err: sum - x1,
+        dy: dmax.toFixed(2) + ' / ' + dmin.toFixed(2)
+      }
+    };
+  }
+});
+
+/* ============================ 03. 연쇄법칙 역추적 ============================ */
+Lab.make({
+  mount:'#lab-chain',
+  title:'F(y(x))를 x로 미분하면 dy/dx가 딸려 나옴',
+  badge:'CHAIN RULE',
+  controls:[
+    {id:'x0', label:'관찰 위치 x₀', min:-1.2, max:1.6, step:0.02, value:0.6, fmt:v=>v.toFixed(2)},
+    {id:'k', label:'속함수 계수 k (y = e^{kx})', min:0.3, max:2.5, step:0.05, value:1.0, fmt:v=>v.toFixed(2)}
+  ],
+  stats:[
+    {id:'y', label:'y(x₀)', fmt:v=>v.toFixed(3)},
+    {id:'dydx', label:'dy/dx', fmt:v=>v.toFixed(3)},
+    {id:'dFdy', label:'dF/dy = f(y)', fmt:v=>v.toFixed(3)},
+    {id:'dFdx', label:'dF/dx = 곱', fmt:v=>v.toFixed(3)}
+  ],
+  plot:{width:620,height:380,xLabel:'x',yLabel:'값',autoX:false,autoY:true,xMin:-1.2,xMax:1.6},
+  legend:[
+    {color:'--charcoal',label:'y = e^{kx}'},
+    {color:'--green',label:'F(y) = ln y (원시함수)'},
+    {color:'--accent',label:'dF/dx = f(y)·dy/dx = k'}
+  ],
+  note:'f(y) = 1/y, F(y) = ln y로 두었음. F를 x로 미분하면 (1/y)·(dy/dx) = (1/e^{kx})·k·e^{kx} = k로 ' +
+       'x에 무관한 상수가 되며, 이것이 곧 ∫f(y)(dy/dx)dx = ∫f(y)dy 가 성립하는 구조임.',
+  compute(v){
+    const k = v.k;
+    const y = x => Math.exp(k*x);
+    const F = x => Math.log(y(x));            // = k x
+    const dydx = x => k*Math.exp(k*x);
+    const f = yy => 1/yy;
+    const pts = (fn) => { const a=[]; for(let i=0;i<=200;i++){ const x=-1.2+2.8*i/200; a.push([x,fn(x)]); } return a; };
+    const series = [
+      {points:pts(y), color:'--charcoal', width:2},
+      {points:pts(F), color:'--green', width:2},
+      {points:pts(x=>f(y(x))*dydx(x)), color:'--accent', width:2.4}
+    ];
+    const x0=v.x0;
+    const overlays=[
+      {type:'vline', x:x0, color:'--ink-3'},
+      {type:'point', x:x0, y:y(x0), color:'--charcoal'},
+      {type:'point', x:x0, y:F(x0), color:'--green'},
+      {type:'point', x:x0, y:f(y(x0))*dydx(x0), color:'--accent', label:'= k'}
+    ];
+    return {series, overlays, stats:{
+      y:y(x0), dydx:dydx(x0), dFdy:f(y(x0)), dFdx:f(y(x0))*dydx(x0)
+    }};
+  }
+});
+
+/* ============================ 04. 방향장 + 해곡선 ============================ */
+(function(){
+  const MODELS = {
+    'y':      {label:"y′ = y",      f:(x,y)=>y,          sol:(x,C)=>C*Math.exp(x),                  name:'y = C e^x'},
+    'ny':     {label:"y′ = −y",     f:(x,y)=>-y,         sol:(x,C)=>C*Math.exp(-x),                 name:'y = C e^{−x}'},
+    'm2xy':   {label:"y′ = −2xy",   f:(x,y)=>-2*x*y,     sol:(x,C)=>C*Math.exp(-x*x),               name:'y = C e^{−x²}'},
+    'xoy':    {label:"y′ = −x/y",   f:(x,y)=>-x/(y||1e-9), sol:null,                                name:'x² + y² = C (원)'},
+    'logi':   {label:"y′ = y(1−y)", f:(x,y)=>y*(1-y),    sol:(x,C)=>1/(1+C*Math.exp(-x)),           name:'로지스틱'}
+  };
+  Lab.make({
+    mount:'#lab-field',
+    title:'방향장 위의 해곡선족',
+    badge:'SLOPE FIELD',
+    controls:[
+      {id:'model', type:'select', label:'미분방정식', value:'y',
+       options:Object.keys(MODELS).map(k=>({value:k,label:MODELS[k].label}))},
+      {id:'y0', label:'초기값 y(0)', min:-3, max:3, step:0.05, value:1, fmt:v=>v.toFixed(2)},
+      {id:'dens', label:'격자 밀도', min:8, max:22, step:1, value:14, fmt:v=>v.toFixed(0)},
+      {id:'family', type:'toggle', label:'표시',
+       options:[{value:'one',label:'선택한 해만'},{value:'many',label:'곡선족 전체'}], value:'many'}
+    ],
+    stats:[
+      {id:'form', label:'일반해'},
+      {id:'C', label:'적분상수 C', fmt:v=>v.toFixed(3)},
+      {id:'slope', label:'(0, y₀)에서 기울기', fmt:v=>v.toFixed(3)}
+    ],
+    plot:{width:620,height:420,xLabel:'x',yLabel:'y',autoX:false,autoY:false,
+          xMin:-3,xMax:3,yMin:-3,yMax:3,xTicks:6,yTicks:6},
+    note:'각 짧은 선분은 그 점에서 해곡선이 가져야 할 기울기임. 초기값을 움직이면 같은 방향장 위에서 ' +
+         '다른 곡선이 선택되며, 곡선들끼리는 서로 교차하지 않음.',
+    compute(v){
+      const M = MODELS[v.model];
+      const series=[], overlays=[];
+      // slope field as many tiny line segments
+      const N = Math.round(v.dens), L = 0.16;
+      for(let i=0;i<=N;i++){
+        for(let j=0;j<=N;j++){
+          const x = -3 + 6*i/N, y = -3 + 6*j/N;
+          let s = M.f(x,y);
+          if(!isFinite(s)) continue;
+          s = Math.max(-40, Math.min(40, s));
+          const th = Math.atan(s);
+          const dx = L*Math.cos(th), dy = L*Math.sin(th);
+          series.push({points:[[x-dx,y-dy],[x+dx,y+dy]], color:'--ink-3', width:1, opacity:0.5});
+        }
+      }
+      // numeric integration (RK4) both directions from (0, y0)
+      function trace(y0){
+        const pts=[[0,y0]];
+        const step=0.012;
+        for(const dir of [1,-1]){
+          let x=0,y=y0; const arr=[];
+          for(let i=0;i<260;i++){
+            const k1=M.f(x,y), k2=M.f(x+dir*step/2,y+dir*step*k1/2),
+                  k3=M.f(x+dir*step/2,y+dir*step*k2/2), k4=M.f(x+dir*step,y+dir*step*k3);
+            const yn = y + dir*step*(k1+2*k2+2*k3+k4)/6;
+            x += dir*step; y = yn;
+            if(!isFinite(y) || Math.abs(y)>8) break;
+            arr.push([x,y]);
+          }
+          if(dir===1) pts.push.apply(pts,arr); else pts.unshift.apply(pts,arr.reverse());
+        }
+        return pts;
+      }
+      if(v.family==='many'){
+        for(let c=-3;c<=3;c+=0.5){
+          if(Math.abs(c-v.y0)<0.02) continue;
+          series.push({points:trace(c), color:'--purple', width:1.2, opacity:0.4});
+        }
+      }
+      series.push({points:trace(v.y0), color:'--accent', width:2.6});
+      overlays.push({type:'point', x:0, y:v.y0, color:'--accent', label:'y(0)='+v.y0.toFixed(2)});
+      return {series, overlays, stats:{
+        form: M.name,
+        C: v.y0,
+        slope: M.f(0, v.y0)
+      }};
+    }
+  });
+})();
+
+/* ============================ 05. 적분상수 곡선족 ============================ */
+Lab.make({
+  mount:'#lab-const',
+  title:'c → e^c → C : 상수가 지위를 바꾸는 과정',
+  badge:'CONSTANT',
+  controls:[
+    {id:'c', label:'적분상수 c', min:-2.5, max:2.5, step:0.05, value:0, fmt:v=>v.toFixed(2)},
+    {id:'sign', type:'toggle', label:'절댓값 해제 시 부호',
+     options:[{value:1,label:'y > 0'},{value:-1,label:'y < 0'}], value:1},
+    {id:'show', type:'toggle', label:'표시 형태',
+     options:[{value:'y',label:'y = Ce^x'},{value:'ln',label:'ln|y| = x + c'}], value:'y'}
+  ],
+  stats:[
+    {id:'ec', label:'e^c', fmt:v=>v.toFixed(4)},
+    {id:'C', label:'C = ±e^c', fmt:v=>v.toFixed(4)},
+    {id:'y1', label:'y(1)', fmt:v=>v.toFixed(3)},
+    {id:'root', label:'y = 1 통과 x', fmt:v=>v}
+  ],
+  plot:{width:620,height:400,xLabel:'x',yLabel:'y',autoX:false,autoY:false,
+        xMin:-2.5,xMax:2.5,yMin:-6,yMax:6},
+  note:'c를 움직이면 ln 평면에서는 직선이 위아래로 평행이동하지만, y 평면에서는 곡선이 세로로 ' +
+       '배율 조정됨. 덧셈 상수가 지수화를 거치며 곱셈 상수로 바뀌기 때문임.',
+  compute(v){
+    const C = v.sign * Math.exp(v.c);
+    const series=[], overlays=[];
+    if(v.show==='y'){
+      for(let cc=-2.5; cc<=2.5; cc+=0.5){
+        for(const s of [1,-1]){
+          const Ck = s*Math.exp(cc);
+          if(Math.abs(Ck-C)<1e-6) continue;
+          const p=[]; for(let i=0;i<=160;i++){ const x=-2.5+5*i/160; p.push([x, Ck*Math.exp(x)]); }
+          series.push({points:p, color:'--purple', width:1, opacity:0.28});
+        }
+      }
+      const p=[]; for(let i=0;i<=200;i++){ const x=-2.5+5*i/200; p.push([x, C*Math.exp(x)]); }
+      series.push({points:p, color:'--accent', width:2.6});
+      overlays.push({type:'hline', y:0, color:'--ink-3', dash:'2 4', label:'y = 0 (자명해)'});
+      overlays.push({type:'point', x:0, y:C, color:'--accent', label:'y(0) = C'});
+      return {plot:{yLabel:'y', yMin:-6, yMax:6, autoY:false},
+        series, overlays, stats:{
+        ec:Math.exp(v.c), C:C, y1:C*Math.E,
+        root: C>0 ? (-v.c).toFixed(2) : '없음 (y<0)'
+      }};
+    } else {
+      for(let cc=-2.5; cc<=2.5; cc+=0.5){
+        if(Math.abs(cc-v.c)<1e-6) continue;
+        const p=[]; for(let i=0;i<=120;i++){ const x=-2.5+5*i/120; p.push([x, x+cc]); }
+        series.push({points:p, color:'--purple', width:1, opacity:0.28});
+      }
+      const p=[]; for(let i=0;i<=160;i++){ const x=-2.5+5*i/160; p.push([x, x+v.c]); }
+      series.push({points:p, color:'--accent', width:2.6});
+      overlays.push({type:'hline', y:0, color:'--ink-3', dash:'2 4', label:'ln|y| = 0 → |y| = 1'});
+      overlays.push({type:'point', x:0, y:v.c, color:'--accent', label:'절편 = c'});
+      return {plot:{yLabel:'ln|y|', yMin:-5, yMax:5, autoY:false},
+        series, overlays, stats:{
+        ec:Math.exp(v.c), C:C, y1:C*Math.E,
+        root: C>0 ? (-v.c).toFixed(2) : '없음 (y<0)'
+      }};
+    }
+  }
+});
+</script>
+</body>
+</html>

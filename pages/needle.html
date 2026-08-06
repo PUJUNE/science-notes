@@ -1,0 +1,1391 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>니들 기하와 투과역학 — 수학·물리·화학 노트</title>
+<meta name="description" content="베벨각과 절삭날 길이의 기하 관계를 세우고, 하중–변위 곡선의 구간 분해·게이지 규격·재질·표면 처리·계면 임피던스까지 니들 설계 변수를 인터랙티브로 다룸.">
+<link rel="stylesheet" href="../assets/css/site.css">
+</head>
+<body>
+
+<div class="topbar">
+  <div class="wrap">
+    <a class="brand" href="../index.html">← 수학·물리·화학 노트</a>
+    <ul class="topnav">
+      <li><a href="#s1">투과력 곡선</a></li>
+      <li><a href="#s2">베벨 기하</a></li>
+      <li><a href="#s3">시험 설계</a></li>
+      <li><a href="#s4">게이지 규격</a></li>
+      <li><a href="#s5">SUS304·304V</a></li>
+      <li><a href="#s6">표면 처리</a></li>
+      <li><a href="#s7">전기적 특성</a></li>
+      <li><a href="#s8">근전도</a></li>
+    </ul>
+    <button class="theme-btn" type="button">DARK</button>
+  </div>
+</div>
+
+<header class="mast">
+  <div class="wrap">
+    <p class="kicker">Field 09 · 공학 · 니들 기하와 투과역학</p>
+    <h1>베벨각이 정하는 <em>절삭날 길이와 천공력</em></h1>
+    <p class="lede">
+      바늘 팁의 설계 변수는 각도 하나로 요약되지 않음. 베벨각을 1° 깎으면 절삭날 길이와 팁의
+      세장비, 하중–변위 곡선의 피크 배열이 함께 움직이고, 게이지·재질·표면 처리·노출 면적은
+      각각 투과력과 임피던스의 다른 항에 걸림. 이 페이지는 그 연결을 기하식과 회로식으로
+      풀고, 모든 그림을 브라우저에서 직접 계산해 그림.
+    </p>
+    <div class="eq" style="border-left-color:var(--accent)">
+      L = OD / sin α &nbsp;&nbsp;<span class="cm">— 절삭날 길이는 외경과 베벨각만으로 결정됨</span>
+    </div>
+  </div>
+</header>
+
+<main>
+
+<!-- ================= 01 ================= -->
+<section id="s1">
+  <div class="wrap">
+    <p class="eyebrow"><span class="num">01</span><span>F(x) = F<sub>탄성</sub> + F<sub>절삭</sub> + F<sub>마찰</sub></span></p>
+    <h2>하중–변위 곡선은 단일 피크로 끝나지 않음</h2>
+
+    <p>
+      바늘이 매질을 뚫을 때 만능재료시험기가 기록하는 하중–변위 곡선은 절삭면 개수만큼의 다단
+      피크로 갈라지므로, 곡선을 구간별로 나누어 각 피크가 어느 관통 사건에 대응하는지를 짚어야
+      지표가 의미를 얻음. F1·F2의 크기는 투과 난이도를 드러내는 데 비해 F3 구간의 크기는 삽입 후
+      위치를 조정할 때 시술자가 느끼는 저항을 예측하는 데 쓰이므로, 두 지표를 하나의 "투과력"으로
+      합쳐 읽으면 팁 설계와 몸체 표면 처리 중 어느 쪽을 손봐야 하는지 판단하지 못하게 됨.
+    </p>
+
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>구간</th><th>물리적 정의</th><th>해석</th></tr></thead>
+        <tbody>
+          <tr><td>F0 peak</td><td>초기 접촉 직후 발생하는 작은 꺾임 피크로, 절삭 형태에 따라 나타나기도 하고 나타나지 않기도 함</td><td>팁 형상에 의존하는 부수 피크</td></tr>
+          <tr><td>F1 peak</td><td>초기 투과가 시작된 뒤 첫 번째 cutting 면 경계까지 매질을 통과하며 저항력이 증가하는 구간의 최대값</td><td>피부 투과 난이도, 곧 초기 삽입 통증과 직결됨</td></tr>
+          <tr><td>F2 peak</td><td>첫 번째 cutting 면을 지나 나머지 cutting 면이 매질을 통과하는 구간의 최대값</td><td>절삭면이 다단으로 구성된 팁에서만 관측되며, 단일 절삭면인 trocar-cut에서는 거의 잡히지 않음</td></tr>
+          <tr><td>F3 area</td><td>cutting 면이 모두 지나간 뒤 바늘 몸체(shaft)가 매질을 통과하며 생기는 저항 구간</td><td>삽입 후 니들 포지셔닝 시의 저항감을 예측함</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p>
+      시험 매질로 폴리우레탄 필름을 쓰는 까닭은 두께가 균일하고 로트 간 편차가 작아 바늘 간 차이를
+      매질 편차와 분리해 읽을 수 있기 때문임. 시편은 지그에 수직으로 고정하고 foil은 홀더에 주름
+      없이 팽팽하게 물려야 초기 접촉 시점이 흐려지지 않으며, 정렬이 어긋나면 팁이 매질에 비스듬히
+      닿아 F1이 실제보다 높게 잡힘. 관통 순간의 하중 급강하가 수 밀리초 안에 끝나므로 샘플링
+      주파수가 낮으면 피크 정점이 잘려 나가 F1이 과소평가되고, 관통 후 이동 거리가 짧으면 F3
+      구간이 충분히 확보되지 않아 평균 마찰 하중의 산포가 커짐.
+    </p>
+
+    <div class="eq">
+      F(x) = F<sub>탄성</sub>(x) + F<sub>절삭</sub>(x) + F<sub>마찰</sub>(x)<br><br>
+      F<sub>탄성</sub> = K·x&nbsp; (x ≤ x<sub>p</sub>),&nbsp;&nbsp; K = E·d·(w/L<sub>0</sub>) &nbsp;&nbsp;<span class="cm">— 클램프된 막의 압입 강성</span><br>
+      x<sub>p</sub> = F₁ / K &nbsp;&nbsp;<span class="cm">— 관통이 일어나는 변위</span><br>
+      F<sub>마찰</sub> = µ · p · π · OD · ℓ(x),&nbsp;&nbsp; p = E·ε<sub>r</sub>,&nbsp;&nbsp; ℓ = min(x − x<sub>p</sub>, d)<br><br>
+      <b>F₁ = k · OD² / sin α · µ</b> &nbsp;&nbsp;<span class="cm">— 간이 예측식, k = 250 N/mm²</span>
+    </div>
+    <ul class="sym">
+      <li><b>F₁</b><span>최대 천공력 [N]</span></li>
+      <li><b>OD</b><span>바늘 외경 [mm]</span></li>
+      <li><b>α</b><span>1차 베벨각 [°]</span></li>
+      <li><b>µ</b><span>매질–표면 마찰계수 [무차원]</span></li>
+      <li><b>E, d</b><span>막의 탄성계수 [MPa], 막 두께 [mm]</span></li>
+      <li><b>K</b><span>막의 압입 강성 [N/mm]</span></li>
+      <li><b>p</b><span>막이 샤프트를 조이는 반경 방향 압력 [MPa]</span></li>
+      <li><b>ℓ</b><span>샤프트와 매질의 접촉 길이 [mm]</span></li>
+    </ul>
+
+    <div id="lab-curve"></div>
+
+    <h3>측정 조건이 결과를 가름</h3>
+    <p>
+      관통력과 드래그력을 함께 측정할 때는 측정값이 아니라 측정 조건이 결과를 가르므로 파라미터를
+      시험군 전체에서 고정하고 기록해야 함. 로드셀 영점 교정과 예열은 매 시험 전 수행하고, 보고
+      항목에는 검체 정보(게이지·길이), 시험 조건, 최대 관통력의 평균과 표준편차, 시험 수, 원시
+      데이터가 함께 들어감.
+    </p>
+
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>파라미터</th><th>통제 이유</th></tr></thead>
+        <tbody>
+          <tr><td>시편 재질·두께</td><td>매질 강성과 두께가 바뀌면 F1 절대값이 이동하므로 비교군 간 동일 로트를 씀</td></tr>
+          <tr><td>시험 속도</td><td>매질의 점탄성 응답이 속도에 따라 달라져 피크 높이가 이동함</td></tr>
+          <tr><td>데이터 취득률</td><td>관통 순간의 하중 급강하가 수 밀리초에 끝나 취득률이 낮으면 피크가 잘림</td></tr>
+          <tr><td>관통 후 이동 거리</td><td>F3 구간이 충분히 길어야 평균 마찰 하중이 안정적으로 수렴함</td></tr>
+          <tr><td>지그 정렬</td><td>바늘이 홀더에 수직으로 서지 않으면 초기 접촉 시점과 F1이 함께 왜곡됨</td></tr>
+          <tr><td>로드셀 용량·정밀도</td><td>용량이 과대하면 분해능이 떨어지고, 영점 이탈은 F3 평균에 직접 실림</td></tr>
+          <tr><td>온도·습도</td><td>고분자 시편의 강성과 윤활막 거동이 환경 조건에 따라 이동함</td></tr>
+          <tr><td>관통 회차</td><td>윤활막이 회차에 따라 소모되어 같은 시료에서도 모집단이 갈림</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div class="callout note">
+      <p><b>ISO 7864:2016</b> — 지정 미터 치수 0.18 mm ~ 1.2 mm 범위의 일회용 멸균 주사바늘을
+      대상으로 하며, 치과용 바늘과 pen needle은 적용 범위에서 제외함. 바늘 끝은 2.5배 확대
+      관찰에서 sharp하고 feather edge·burr·hook이 없어야 하고, 통상적인 primary bevel 각도는
+      11° ± 2°, 짧은 bevel의 예시는 17° ± 2°임. 윤활제를 쓸 경우 육안으로 액적이 보이면 안 되고,
+      희석하지 않은 폴리디메틸실록산 기준 윤활 면적당 0.25 mg/cm²를 넘지 않도록 권고함. 관통
+      시험은 바늘 끝의 예리도와 윤활 상태를 나타내는 지표로 규정되고, 시험 방법 예시가 Annex D에
+      실려 있음. 추출액 pH는 대조액 대비 ±1 이내, 추출 금속은 납·주석·아연·철 합계 5 mg/l 이하,
+      카드뮴 0.1 mg/l 미만이어야 함.</p>
+    </div>
+
+    <p>
+      측정 순서도 통제 대상임. 제품 표면에 도포된 윤활막은 F1을 낮추는 방향으로 작용하는데, 개봉
+      직후 1회차와 표면을 닦아내고 여러 차례 관통한 뒤의 값이 서로 다른 모집단을 이루므로 회차를
+      섞어 평균하면 팁 기하의 차이가 윤활 상태의 차이에 묻힘.
+    </p>
+  </div>
+</section>
+
+<!-- ================= 02 ================= -->
+<section id="s2">
+  <div class="wrap">
+    <p class="eyebrow"><span class="num">02</span><span>L = OD / sin α, H = OD / tan α</span></p>
+    <h2>각도 하나로는 팁 기하를 재현하지 못함</h2>
+
+    <p>
+      바늘 팁은 하나의 평면으로 깎이지 않고 여러 단의 경사면이 이어 붙은 다면체로 만들어지므로,
+      각도를 하나의 값으로 기술하면 기하를 재현할 수 없음. 몸체 축에 대해 가장 크게 열린 1차
+      베벨이 팁의 전체 길이와 굵기를 정하고, 그 위에 얹히는 2차 베벨이 절삭 경계를 좁히며,
+      side-cut은 1차 베벨 양옆을 다시 깎아 절삭날을 세움. 계측할 때는 각 단의 경사각과 각 절삭면의
+      길이를 함께 재야 하는데, 각도만으로는 같은 각도에서도 절삭면이 길거나 짧은 두 팁을 구분하지
+      못하기 때문임.
+    </p>
+
+    <div class="eq">
+      L = OD / sin α &nbsp;&nbsp;<span class="cm">— 절삭날 길이 = 팁 개구 타원의 장축</span><br>
+      H = OD / tan α &nbsp;&nbsp;<span class="cm">— 팁 끝에서 베벨 뒤끝까지의 축방향 길이</span><br>
+      A<sub>개구</sub> = π·OD² / (4 sin α) &nbsp;&nbsp;<span class="cm">— 베벨면에 드러나는 타원 면적</span><br>
+      λ = H / OD = cot α &nbsp;&nbsp;<span class="cm">— 팁 세장비, 휨·파손 취약도의 기하 지표</span><br><br>
+      F<sub>index</sub> = sin 15° / sin α &nbsp;&nbsp;<span class="cm">— α = 15° 기준 상대 투과저항</span>
+    </div>
+    <ul class="sym">
+      <li><b>L</b><span>1차 베벨 절삭날 길이 [mm]</span></li>
+      <li><b>H</b><span>팁 축방향 길이 [mm]</span></li>
+      <li><b>α</b><span>1차 베벨각 [°], 축과 베벨면이 이루는 각</span></li>
+      <li><b>λ</b><span>세장비 [무차원]. α가 작아질수록 커짐</span></li>
+      <li><b>F<sub>index</sub></b><span>상대 투과저항 [무차원]</span></li>
+    </ul>
+
+    <div id="lab-bevel"></div>
+
+    <h3>연마 계열마다 곡선 형태가 갈림</h3>
+    <p>
+      연마 방식은 팁 형상 계열로 갈림. lancet은 1차 베벨에 좌우 side-cut을 더한 3면 구조로 조직을
+      찢으며 들어가고, trocar-cut은 세 면이 한 점으로 모이는 삼각뿔 구조로 단일 절삭 경계를
+      이루며, tri-bevel은 1차 베벨 위에 두 개의 2차 면을 대칭으로 얹어 초기 관통 저항을 낮추고,
+      conical은 절삭날 없이 원뿔로 다듬어 조직을 밀어내며 진입함. lancet 계열은 절삭면이 여러
+      단이라 F2가 뚜렷하게 잡히는 반면 trocar 계열은 절삭 경계가 하나라 F2가 거의 관측되지
+      않으므로, 곡선 형태만 보아도 연마 계열을 역추정할 수 있음.
+    </p>
+
+    <div class="cards">
+      <div class="card">
+        <h5><span class="tag">lancet</span> 1차 베벨 + side-cut 2면</h5>
+        <ul>
+          <li>조직을 <b>찢으며</b> 진입</li>
+          <li>출혈·통증이 상대적으로 큼</li>
+          <li>단면이 넓어 니들링 중 휘지 않음</li>
+          <li>F2가 뚜렷하게 잡힘</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h5><span class="tag" style="background:var(--mint);color:var(--green)">conical</span> 절삭날 없는 원뿔</h5>
+        <ul>
+          <li>조직을 <b>밀어내며</b> 진입</li>
+          <li>통증·출혈이 적음</li>
+          <li>가는 게이지에서 휘기 쉬움</li>
+          <li>절삭 경계가 없어 F2가 없음</li>
+        </ul>
+      </div>
+    </div>
+
+    <p class="pull">
+      통증 저감과 강성 확보를 한 형상으로 동시에 만족시킬 수 없음. 삽입 깊이와 게이지를 먼저
+      정한 뒤 형상을 고르는 순서가 되는 이유가 여기에 있음.
+    </p>
+
+    <h3>상관계수를 그대로 읽으면 안 되는 이유</h3>
+    <p>
+      연마각과 관통력의 관계는 각 단의 각도 변수와 F1·F2·F3에 각각 상관 분석을 걸어 살피지만,
+      상관계수가 크다는 이유로 특정 각도를 단일 원인으로 지목하면 기하 구조를 잘못 읽게 됨. 다단
+      베벨에서 어떤 각도는 설계로 직접 지정되는 독립 변수이지만, 다른 각도는 나머지 각도의 조합으로
+      결정되는 종속 변수임. 앞단 각도가 작으면서 매질에 처음 닿는 지점의 각도가 동시에 작기는
+      어려운 기하 제약이 걸리므로, 앞단 각도와 F 사이에 음의 상관이 잡히고 각도가 줄면 투과 저항이
+      커지는 듯한 외형이 만들어짐. 이 음의 상관은 앞단 각도 자체의 물리 효과라기보다 종속 각도를
+      매개로 한 이중 인과가 겹쳐 나타난 결과이므로, 상관 구조를 해석하기 전에 어느 각도가 설계로
+      지정되고 어느 각도가 나머지로부터 따라오는지를 분리해야 함.
+    </p>
+    <p>
+      코팅 유무도 상관의 세기를 갈라놓음. 몸체 전장을 PTFE로 덮은 전극에서는 F2·F3에 코팅 마찰이
+      크게 개입해 각도와의 상관이 흐려지는 반면, 몸체 금속이 노출된 전극에서는 각도가 F1부터
+      F3까지 일관되게 작용함. 코팅 사양이 다른 유형끼리 상관계수를 나란히 놓고 비교하면 각도의
+      기여를 과소·과대 평가하게 됨.
+    </p>
+
+    <h3>연마는 조도와 노출 면적을 함께 결정함</h3>
+    <p>
+      연마는 각도만 만드는 공정이 아님. 지석 입도가 거칠면 절삭면에 남는 스크래치가 깊어져 관통 중
+      매질과의 마찰이 늘고, 절삭면 가장자리에 burr가 남으면 초기 접촉 저항이 불규칙하게 튐. 반대로
+      마무리 연마를 길게 끌면 edge와 모서리가 둥글어져 표면은 매끈해지되 팁의 예리도가 떨어지므로,
+      조도 개선과 예리도 유지가 상충하는 구간에서 조건을 정해야 함.
+    </p>
+    <p>
+      동심 구조를 연마할 때는 외측 관과 절연된 중심 도선의 단면이 동시에 규정된 면적으로 드러나야
+      하므로, 노출 면적 제어가 연마 설계의 주 변수로 올라옴. 절연 코팅이 적용된 상태로 연마 공정에
+      들어가는 경우에는 코팅이 눌려 손상되면서 절연이 파괴될 수 있고, 연마 중 금속과 코팅층 사이의
+      마찰열이 박리나 수축을 유발할 수 있으므로, 코팅 보호 치공구와 냉각·집진 조건을 함께 검증해야 함.
+    </p>
+    <ul class="notes">
+      <li><b>불량 유형</b><span>팁 마모, 엣지 부분 마모, 코팅 들림, 코팅 손상, 팁 휨, 연마 면 마모, 연마 비대칭으로 분류되며, 벽 두께가 얇은 게이지일수록 연마 중 관 벽 손상이 발생하기 쉬움.</span></li>
+      <li><b>계측 배치</b><span>기준 대역 행과 실측 행을 같은 표에 배치해야 도면 공차 이탈 여부를 바로 읽을 수 있음.</span></li>
+      <li><b>이론값 역산</b><span>trocar 계열 정밀 측정에서는 선단 각도, 절삭면 길이, 후속 면의 각도를 함께 계측하고, 절삭면 길이와 절삭 폭의 삼각 관계로 해당 각도의 이론값을 역산해 실측과 대조함.</span></li>
+      <li><b>편차의 부호</b><span>실측이 이론값보다 작게 나오는 경향은 연마면이 평면이 아니라 미세하게 곡면화되었을 가능성을 가리키므로, 편차의 크기만이 아니라 부호가 일정한지도 함께 봄.</span></li>
+    </ul>
+  </div>
+</section>
+
+<!-- ================= 03 ================= -->
+<section id="s3">
+  <div class="wrap">
+    <p class="eyebrow"><span class="num">03</span><span>x̄ ± 1.96 s/√n</span></p>
+    <h2>공정 변경의 효과는 신뢰구간으로 판정함</h2>
+
+    <p>
+      연마각 개정이나 전해연마 도입 같은 공정 변경의 효과는 같은 시험 조건에서 변경 전 로트와
+      변경 후 로트의 F1을 나란히 재어 저감률로 읽음. 제품 유형마다 절삭면 구조가 다르므로 유형을
+      섞지 않고 유형별로 짝을 지어야 하고, 개선 수단이 연마각 단독인지 표면 처리 병행인지를 함께
+      기록해야 저감분을 어느 수단에 귀속시킬지 판단할 수 있음.
+    </p>
+
+    <div class="eq">
+      저감률(%) = (x̄<sub>전</sub> − x̄<sub>후</sub>) / x̄<sub>전</sub> × 100<br>
+      95% CI = x̄ ± 1.96 · s / √n<br><br>
+      n<sub>필요</sub> = [ 1.96 (s<sub>전</sub> + s<sub>후</sub>) / (x̄<sub>전</sub> − x̄<sub>후</sub>) ]²
+      &nbsp;&nbsp;<span class="cm">— 두 구간이 갈라지는 최소 시료 수</span>
+    </div>
+    <ul class="sym">
+      <li><b>x̄</b><span>F1 평균 [N]</span></li>
+      <li><b>s</b><span>F1 표준편차 [N]</span></li>
+      <li><b>n</b><span>군당 시료 수 [개]</span></li>
+      <li><b>1.96</b><span>표준정규분포 95% 양측 임계값</span></li>
+    </ul>
+
+    <div id="lab-ci"></div>
+
+    <h3>각도–F1 대응 측정</h3>
+    <p>
+      연마각-F1 대응 측정은 시료 한 개마다 현미경으로 각 단의 각도를 계측하고 같은 시료를 UTM으로
+      관통시켜 F1을 얻는 방식으로, 각도와 관통력을 시료 단위로 짝지어 기록함. 게이지별로 복수
+      시료를 묶어 평균과 표준편차를 함께 내는데, 평균만 보면 연마 산포가 가려지므로 표준편차를
+      각도 산포와 나란히 놓고 읽어야 함. 시료마다 불량 유형을 함께 적으면 각도로 설명되지 않는 F1
+      이상치가 표면 결함에서 온 것인지 구분할 수 있고, 윤활막의 개입을 배제하려면 오일을 적용하지
+      않은 조건으로 통일함.
+    </p>
+    <p>
+      규격 적합성 확인에서는 외주 생산 샘플이 어느 도면 개정본을 기준으로 제작되었는지를 먼저
+      확정한 뒤, 시료별 각도를 실측해 해당 도면의 공차 대역 안에 들어오는지 확인하고 같은 시료의
+      F1을 함께 취함. 개정 전 도면과 개정 후 도면 샘플을 같은 표에 놓으면 도면 차이와 제작 편차가
+      뒤섞이므로, 기준 도면을 열로 분리해 기록함. 각도가 공차 대역을 크게 벗어나 둔각으로 잡힌
+      로트에서 F1도 함께 올라가는지를 확인하면, 각도 관리 이탈이 관통력으로 이어지는 경로가
+      성립하는지 점검할 수 있음.
+    </p>
+
+    <h3>침 끝 손상 시험</h3>
+    <p>
+      침 끝 손상 시험은 모의 피부에 정해진 횟수만큼 천자한 뒤 현미경으로 침 끝을 관찰하고, 변화가
+      잡히지 않으면 횟수를 늘려 재관찰하는 순서로 진행함. 판독 대상은 팁 라운딩, 엣지 결손, 휨,
+      코팅 들림이며, 천자 횟수를 단계적으로 올려 손상이 나타나기 시작하는 구간을 찾는 것이 시험의
+      목적임. 시험용 시료와 별도로 유보 시료를 남겨 두면 이상값이 나왔을 때 같은 로트에서 재시험할
+      수 있음.
+    </p>
+
+    <div class="callout">
+      <p><b>손상 발생 확률의 형태</b> — 천자 회차 n에 대한 손상 발생은 로지스틱
+      P(손상) = 1 / (1 + exp(−(n − n₅₀)/s)) 형태로 정리되며, n₅₀은 손상이 절반의 시료에서 나타나는
+      회차, s는 전이 구간의 폭임. 손상 유형마다 n₅₀이 다르므로 반복 횟수를 짧게 잡으면 늦게
+      나타나는 유형을 통째로 놓침.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ================= 04 ================= -->
+<section id="s4">
+  <div class="wrap">
+    <p class="eyebrow"><span class="num">04</span><span>Q ∝ r⁴</span></p>
+    <h2>게이지 체계와 내강 단면적</h2>
+
+    <p>
+      Gauge는 숫자가 작을수록 굵어지는 레거시 치수 체계이며, ISO 7864는 각 gauge를 지정 미터
+      치수에 대응시켜 외경 한계를 규정함. 벽 두께 등급은 RW(regular wall), TW(thin wall),
+      ETW(extra thin wall), UTW(ultra-thin wall)로 나뉘고, 같은 게이지라도 등급에 따라 확보되는
+      내강이 달라짐. 30 G가 TW 기준 0.067 ~ 0.078 mm까지 얇아지므로, 가는 게이지의 concentric을
+      연마할 때 관 벽 손상이 발생하는 물리적 이유가 여기서 나옴.
+    </p>
+
+    <div class="eq">
+      wall = (OD − ID) / 2 &nbsp;&nbsp;<span class="cm">— 벽 두께는 OD 한계 두 값에서 대역으로 나옴</span><br>
+      A<sub>lumen</sub> = π · (ID/2)² &nbsp;&nbsp;<span class="cm">— 내강 단면적</span><br><br>
+      Q = π ΔP r⁴ / (8 η L) &nbsp;&nbsp;<span class="cm">— Hagen–Poiseuille</span><br>
+      Q<sub>A</sub> / Q<sub>B</sub> = (ID<sub>A</sub> / ID<sub>B</sub>)⁴
+      &nbsp;&nbsp;<span class="cm">— 같은 압력·길이·점도에서의 상대 유량</span>
+    </div>
+    <ul class="sym">
+      <li><b>OD, ID</b><span>외경, 내경 [mm]</span></li>
+      <li><b>r = ID/2</b><span>내강 반지름 [mm]</span></li>
+      <li><b>ΔP</b><span>관 양단 압력차 [Pa]</span></li>
+      <li><b>η</b><span>유체 점도 [Pa·s]</span></li>
+      <li><b>L</b><span>관 길이 [mm]</span></li>
+    </ul>
+
+    <div id="lab-gauge"></div>
+
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>Gauge</th><th>미터 치수 (mm)</th><th>OD min (mm)</th><th>OD max (mm)</th><th>최소 ID — RW (mm)</th><th>최소 ID — TW (mm)</th></tr></thead>
+        <tbody>
+          <tr><td>34</td><td>0,18</td><td>0,178</td><td>0,191</td><td>0,064</td><td>0,091</td></tr>
+          <tr><td>33</td><td>0,20</td><td>0,203</td><td>0,216</td><td>0,089</td><td>0,105</td></tr>
+          <tr><td>32</td><td>0,23</td><td>0,229</td><td>0,241</td><td>0,089</td><td>0,105</td></tr>
+          <tr><td>31</td><td>0,25</td><td>0,254</td><td>0,267</td><td>0,114</td><td>0,125</td></tr>
+          <tr><td>30</td><td>0,30</td><td>0,298</td><td>0,320</td><td>0,133</td><td>0,165</td></tr>
+          <tr><td>29</td><td>0,33</td><td>0,324</td><td>0,351</td><td>0,133</td><td>0,190</td></tr>
+          <tr><td>28</td><td>0,36</td><td>0,349</td><td>0,370</td><td>0,133</td><td>0,190</td></tr>
+          <tr><td>27</td><td>0,40</td><td>0,400</td><td>0,420</td><td>0,184</td><td>0,241</td></tr>
+          <tr><td>26</td><td>0,45</td><td>0,440</td><td>0,470</td><td>0,232</td><td>0,292</td></tr>
+          <tr><td>25</td><td>0,50</td><td>0,500</td><td>0,530</td><td>0,232</td><td>0,292</td></tr>
+          <tr><td>23</td><td>0,60</td><td>0,600</td><td>0,673</td><td>0,317</td><td>0,370</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>길이 공차</h3>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>표시 길이</th><th>공차</th></tr></thead>
+        <tbody>
+          <tr><td>25 mm 미만</td><td>+1 / −2 mm</td></tr>
+          <tr><td>25 ~ 39 mm</td><td>+1.5 / −2.5 mm</td></tr>
+          <tr><td>40 mm</td><td>0 / −4 mm</td></tr>
+          <tr><td>40 mm 초과</td><td>+1.5 / −2.5 mm</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>전극 유형별 구조</h3>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>유형</th><th>구조</th><th>활성 전극</th><th>기준 전극</th><th>절연</th></tr></thead>
+        <tbody>
+          <tr><td>Monopolar</td><td>스테인리스 단일 침, 팁 일부를 제외한 전 길이를 PTFE로 피복</td><td>노출된 팁</td><td>피부에 부착한 표면 전극</td><td>PTFE 전장 피복</td></tr>
+          <tr><td>Concentric</td><td>캐뉼라(외측 관) 중심에 절연된 코어 와이어를 삽입한 동심 구조</td><td>코어 와이어의 팁 단면</td><td>외측 캐뉼라</td><td>코어와 캐뉼라 사이의 절연체</td></tr>
+          <tr><td>Hypodermic</td><td>개방 lumen을 가진 스테인리스 관, back-cut bevel 팁, PTFE 절연 코팅, 주사기 결합용 slip fit</td><td>팁 단면</td><td>표면 전극</td><td>PTFE 코팅</td></tr>
+          <tr><td>EP</td><td>스테인리스 침, 표재 삽입용</td><td>침 전체</td><td>표면 전극</td><td>—</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p>
+      Concentric은 활성 전극과 기준 전극이 가까이 붙어 있어 배경 잡음이 줄고, 아주 짧은 거리의
+      운동단위만 포착하므로 공간 해상도가 높음. 차동 측정 원리에 따라 코어와 캐뉼라 사이의 전위차를
+      읽음. Monopolar는 단일 활성 전극과 별도의 표면 기준 전극을 쓰므로 공간 해상도가 상대적으로
+      낮고, Hypodermic은 자발 활동 기록과 약물 주입을 동시에 수행하도록 설계되어 전기 자극 전극
+      역할도 겸함.
+    </p>
+    <p>
+      Concentric과 hypodermic의 차이는 lumen 처리에서 갈림. hypodermic은 개방 lumen을 유지하기만
+      하면 되지만, concentric은 lumen 안에 절연된 코어를 넣고 그 사이를 충전하는 구조라 연마 시
+      코어 단면과 캐뉼라 단면이 동시에 규정 면적으로 드러나야 함. 코어의 동심도가 어긋나면 시료마다
+      노출 면적이 달라져 임피던스 산포가 커지므로, 동심도는 연마 품질과 전기적 산포를 잇는 계측
+      항목이 됨.
+    </p>
+
+    <div class="callout note">
+      <p><b>멸균·커넥터</b> — EO 가스 멸균과 방사선 멸균은 PTFE·폴리이미드 절연층의 열화 경로가
+      서로 다르므로, 멸균 조건을 적지 않은 절연 데이터끼리는 나란히 놓기 어려움. 커넥터는 EMG
+      계측기 접속 규격인 DIN 42802를 따름.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ================= 05 ================= -->
+<section id="s5">
+  <div class="wrap">
+    <p class="eyebrow"><span class="num">05</span><span>I = π(D⁴ − d⁴)/64</span></p>
+    <h2>SUS304와 SUS304V — 강도를 얻고 연신율을 내줌</h2>
+
+    <p>
+      SUS304는 오스테나이트계 스테인리스강으로, 연성과 내식성을 함께 갖춘 점이 바늘 소재로서의
+      1차 선정 근거임. 냉간 가공을 가하면 강도가 오르고 연신율이 떨어지므로, 열처리 또는 가공 조건
+      관리가 뒤따라야 함. SUS304V는 진공 용해(VIM, VAR)로 개재물과 탄소를 줄여 인장 강도와 경도를
+      크게 끌어올리는 대신 연신율을 희생하며, 이 조합이 얇은 관에서 끝 휨을 억제하는 데 유리함.
+      다만 연신율이 낮아지면 연마·압착 공정에서 취성 파단 여지가 커지므로, 소재 전환은 경도 상승분과
+      가공성 손실을 함께 평가해야 함.
+    </p>
+
+    <div class="cards">
+      <div class="card">
+        <h5>SUS304 조성</h5>
+        <ul>
+          <li>Cr <b>18.0 ~ 20.0</b> wt%</li>
+          <li>Ni <b>8.0 ~ 10.5</b> wt%</li>
+          <li>C 최대 0.08 · Mn 최대 2.0</li>
+          <li>Si 최대 1.0 · P 최대 0.045</li>
+          <li>S 최대 0.03 · N 최대 0.10</li>
+          <li>Fe 잔량</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h5>SUS304 기계적 물성</h5>
+        <ul>
+          <li>인장 강도 <b>540 ~ 750</b> MPa</li>
+          <li>항복 강도 205 ~ 230 MPa</li>
+          <li>연신율 최소 45% (50 mm 기준)</li>
+          <li>탄성 계수 193 ~ 200 GPa</li>
+          <li>전단 계수 74 ~ 81 GPa</li>
+          <li>밀도 8.00 g/cm³</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>항목</th><th>SUS304</th><th>SUS304V</th></tr></thead>
+        <tbody>
+          <tr><td>공정 방식</td><td>일반 용해 (AOD 등)</td><td>진공 용해 (VIM, VAR)</td></tr>
+          <tr><td>탄소 함량</td><td>≤ 0.08%</td><td>≤ 0.03%</td></tr>
+          <tr><td>인장 강도</td><td>약 515 ~ 700 MPa</td><td>약 850 ~ 965 MPa (냉간 가공 20%)</td></tr>
+          <tr><td>항복 강도</td><td>약 205 MPa</td><td>약 483 MPa 이상 (냉간 가공 20%)</td></tr>
+          <tr><td>연신율</td><td>≥ 40%</td><td>20 ~ 35%</td></tr>
+          <tr><td>경도 (HV)</td><td>140 ~ 160</td><td>200 ~ 300</td></tr>
+          <tr><td>자성</td><td>비자성</td><td>비자성</td></tr>
+          <tr><td>내식성</td><td>우수</td><td>우수 (동등 수준)</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>항복 강도가 걸리는 자리</h3>
+    <p>
+      소재 차이가 실제로 나타나는 자리는 얇은 관의 굽힘임. 니들 샤프트를 팁에 측방 하중이 걸리는
+      외팔보로 두면 단면 2차 모멘트가 외경의 4제곱으로 들어가므로 게이지가 한 단계 가늘어지는 것만으로
+      굽힘 강성이 절반 아래로 떨어지고, 그 자리에서 항복이 시작되는 하중은 항복 강도에 비례해
+      갈라짐. 탄성 계수는 두 소재가 사실상 같아 처짐량은 같은 값이 나오지만, 되돌아오지 않는 영구
+      변형이 언제 시작되는지가 달라짐.
+    </p>
+
+    <div class="eq">
+      I = π (OD⁴ − ID⁴) / 64 &nbsp;&nbsp;<span class="cm">— 중공 원형 단면의 단면 2차 모멘트</span><br>
+      δ = F L³ / (3 E I) &nbsp;&nbsp;<span class="cm">— 외팔보 자유단 처짐</span><br>
+      F<sub>y</sub> = σ<sub>y</sub> I / (c L),&nbsp;&nbsp; c = OD/2 &nbsp;&nbsp;<span class="cm">— 항복이 시작되는 측방 하중</span><br>
+      P<sub>cr</sub> = π² E I / (4 L²) &nbsp;&nbsp;<span class="cm">— 일단 고정 외팔보의 좌굴 임계 축하중</span>
+    </div>
+    <ul class="sym">
+      <li><b>I</b><span>단면 2차 모멘트 [mm⁴]</span></li>
+      <li><b>E</b><span>탄성 계수 [MPa]. SUS304 계열 193 GPa</span></li>
+      <li><b>σ<sub>y</sub></b><span>항복 강도 [MPa]. SUS304 205, SUS304V 483 (냉간 가공 20%)</span></li>
+      <li><b>L</b><span>노출 샤프트 길이 [mm]</span></li>
+      <li><b>c</b><span>중립축에서 표면까지의 거리 [mm]</span></li>
+      <li><b>P<sub>cr</sub></b><span>좌굴 임계 축하중 [N]</span></li>
+    </ul>
+
+    <div id="lab-bend"></div>
+  </div>
+</section>
+
+<!-- ================= 06 ================= -->
+<section id="s6">
+  <div class="wrap">
+    <p class="eyebrow"><span class="num">06</span><span>m = M·Q / (n·F)</span></p>
+    <h2>표면 처리 — 절연과 마찰을 같은 두께로 다룸</h2>
+
+    <p>
+      Monopolar에서 PTFE는 팁 일부를 제외한 전 길이를 덮어 절연과 삽입 통증 저감을 동시에 담당함.
+      절연은 몸체를 지나는 근섬유 전위가 신호에 섞이지 않게 막고, 표면 마찰 저감은 F3 구간의
+      드래그력을 낮춤. 코팅 두께는 자유 변수가 아님. 완성품 외경이 게이지 공차 안에 들어와야 하므로
+      소지 외경과 코팅 두께의 합이 상한에 묶이고, 절연 여유를 벌려고 코팅을 두껍게 올리면 게이지
+      규격을 벗어남. 반대로 두께를 줄이면 확산 경로가 짧아져 절연 성능이 떨어지므로, 코팅 두께는
+      게이지 상한과 절연 하한 사이의 좁은 창에서 정해짐.
+    </p>
+
+    <h3>전해연마 — 이론 용해량은 상한임</h3>
+    <p>
+      전해연마는 인산계 전해액에서 금속을 양극으로 걸어 표면을 미세하게 용해시키는 공정으로,
+      돌출부에 전류 밀도가 집중되는 성질을 이용해 미세 요철을 우선 제거함. 이론 용해량은 전하량에서
+      몰수, 질량, 부피, 길이 순으로 이어지며 Faraday 법칙 하나로 계산됨. 이 계산값은 순철이 2가로
+      전량 용해된다고 가정한 상한이고, 스테인리스는 Cr·Ni·Mo가 섞여 내산성이 훨씬 강하고 부동태
+      피막이 재형성되므로 실제 용해는 이보다 작음. 전해연마 시간이 길어지면 표면 용해가 누적되어
+      edge와 모서리가 둥글어지고 팁의 예리도가 떨어지므로, 표면 조도 개선과 예리도 손실이 상충하는
+      구간에서 시간을 정해야 함.
+    </p>
+
+    <div class="eq">
+      Q = I · t &nbsp;&nbsp;<span class="cm">— 전하량</span><br>
+      m = M · Q / (n · F) &nbsp;&nbsp;<span class="cm">— Faraday 법칙</span><br>
+      V = m / ρ,&nbsp;&nbsp; L<sub>용해</sub> = V / A
+    </div>
+    <ul class="sym">
+      <li><b>Q</b><span>전하량 [C]</span></li>
+      <li><b>I, t</b><span>전류 [A], 시간 [s]</span></li>
+      <li><b>M</b><span>몰질량 [g/mol]. 철 기준 55.85</span></li>
+      <li><b>n</b><span>반응 전자수 [—]. Fe²⁺ 기준 2</span></li>
+      <li><b>F</b><span>Faraday 상수 96485 [C/mol]</span></li>
+      <li><b>ρ</b><span>밀도 [g/cm³]. 철 7.87</span></li>
+      <li><b>A</b><span>용해 단면적 [mm²]</span></li>
+    </ul>
+
+    <div id="lab-faraday"></div>
+
+    <h3>PTFE와 실리콘 — 절연 성능이 갈리는 분자적 근거</h3>
+    <p>
+      고분자 막의 통전은 이온 확산으로 일어나고, 이온 확산은 막이 부분적으로 양전하 또는 음전하가
+      풍부한지에 좌우됨. PTFE는 전하 구조가 극도로 대칭이라 이온을 거의 확산시키지 않는 반면,
+      실리콘 고분자는 Si와 O가 번갈아 배열되어 부분적 전하 비대칭 구조를 가지므로 이온 확산이
+      일어남. Fick의 제1법칙에 따라 flux는 확산 계수와 농도 구배의 곱으로 결정되는데, 농도 구배가
+      막 두께의 함수이므로 PTFE 두께가 얇아지면 flux가 증가하고 절연 성능이 약화되어 노이즈 증가로
+      이어짐. PTFE도 확산 계수가 낮을 뿐 0은 아님.
+    </p>
+
+    <div class="eq">
+      J = −D · dC/dx &nbsp;&nbsp;<span class="cm">— Fick의 제1법칙, 두께가 얇아지면 flux가 커짐</span>
+    </div>
+
+    <p>
+      실리콘 계열 코팅은 수직 dip coating으로 적용하며, 자연 건조만으로 막이 형성되는 유형과 가열
+      또는 이성분 혼합으로 경화시키는 유형이 갈림. 저점도 유체는 얇은 소수성 막을, 고점도 PDMS는
+      두꺼운 층을 만들며, 분산액은 희석 농도로 두께를 조절함. 코팅 적용성은 코팅 전후 직류
+      저항(DCR)을 같은 침지 조건에서 여러 회 재어 평균과 표준편차로 읽는데, 절연막이 형성되었다면
+      코팅 후 저항이 올라가야 하므로 저항이 오르지 않거나 오히려 내려가면 막이 연속적으로 덮이지
+      않았거나 도전 경로가 남아 있다는 신호로 봄. 코팅층이 두꺼워지면 관통 시 매질과 접촉하는 층이
+      늘어 F1·F2·F3가 함께 올라갈 수 있으므로, 두께 설계는 저항–두께 관계와 투과력–두께 관계를
+      나란히 놓고 판단함.
+    </p>
+
+    <h3>DCR 측정과 침지 깊이 판별</h3>
+    <p>
+      측정 셀은 0.9% 생리식염수, counter 전극은 아연판, working 전극은 니들이며 케이블로 디지털
+      멀티미터에 연결함. 아연판에서는 Zn(s) → Zn²⁺(aq) + 2e⁻ (E° = −0.1 ~ −0.76 V vs. NHE)가,
+      니들에서는 O₂ + 2H₂O + 4e⁻ → 4OH⁻ (E° = +0.2 ~ +0.4 V vs. NHE)가 일어남. 측정 시작 후 수 초
+      시점의 값만 읽는데, 전극 주변 전하가 전기 이중층에 누적되면서 저항이 급격히 증가하기 때문임.
+      µA 수준의 전류가 흐르므로 (−)극을 니들에, (+)극을 아연판에 연결함.
+    </p>
+    <ul class="notes">
+      <li><b>판독 묶음</b><span>침지 깊이 3 mm·10 mm·20 mm를 한 조로 묶어 코팅 제거 전후를 대조함.</span></li>
+      <li><b>절연 정상</b><span>침지 깊이를 늘려도 저항이 같은 자릿수에 머묾. 계면이 팁에만 형성되기 때문임.</span></li>
+      <li><b>절연 제거</b><span>금속이 드러나면 반응 면적이 확대되면서 전류 경로가 넓어져 저항이 자릿수 단위로 떨어짐.</span></li>
+      <li><b>부분 손상</b><span>깊은 침지에서만 저항이 급감하는 패턴은 손상이 몸체 중간 이하에 국한되었다는 뜻임.</span></li>
+    </ul>
+
+    <h3>코팅 내산성 평가</h3>
+    <p>
+      전해연마 공정이 산 환경에서 이뤄지므로, 산이 PTFE 코팅과 그 아래 스테인리스를 어떻게
+      공격하는지를 통제 실험으로 확인함. 설계 변수는 산 농도, 온도, 노출 시간 세 축이며, 실온 조건과
+      가속 온도 조건을 나누고 노출 시간을 여러 단계로 끊는 구성은 가속 조건에서 먼저 나타나는 열화
+      모드를 잡아 실온 장기 거동을 추정하기 위함임. 판정 기준은 pinhole, 박리, 균열, 마모 네
+      항목이고, 손상 메커니즘은 산의 표면 미세결함 침투에 따른 팽윤·미세균열, 통전 발열에 따른
+      열팽창 계수 차이로 인한 박리, pinhole·마모 흔적에서 시작되는 열화 세 갈래로 정리됨.
+      PTFE가 벗겨져 금속이 노출되면 산이 부동태 피막을 공격해 국부 부식이 진행되고, 미박리
+      부위와의 전위차로 galvanic coupling이 형성되면 부식 위험이 더 커짐.
+    </p>
+
+    <div class="callout">
+      <p><b>침지 시험만으로는 부족함</b> — 화학적 노출만으로 진행하는 침지 시험은 통전에 따른 발열
+      메커니즘을 재현하지 못하므로, 통전 조건 시험을 따로 두어야 함. 윤활막 쪽에서는 ISO 7864가
+      규정한 폴리디메틸실록산 기준 0.25 mg/cm² 상한과 액적 육안 관찰 조건이 함께 걸림.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ================= 07 ================= -->
+<section id="s7">
+  <div class="wrap">
+    <p class="eyebrow"><span class="num">07</span><span>Z = R<sub>s</sub> + (R<sub>ct</sub> ∥ 1/jωC)</span></p>
+    <h2>노출 면적이 임피던스를 반비례로 끌어내림</h2>
+
+    <p>
+      니들을 생리식염수에 침지하면 금속 표면과 이온 용액 사이에 계면이 형성되고, 이 계면은 단순
+      저항체가 아니라 저항과 정전용량이 결합한 R-C 구조로 작동함. R은 전극 내부와 용액 도전 경로의
+      저항이고, C는 금속-이온 계면의 전기 이중층에서 생기는 정전용량임. 두 성분 모두 면적에 걸리는데
+      정전용량은 면적에 비례하고 전하이동 저항은 면적에 반비례하므로, 노출 길이를 늘리면 임피던스가
+      전 대역에서 함께 내려감. 연마로 결정되는 노출 면적이 전기 특성의 산포로 곧장 넘어오는 경로가
+      이것임.
+    </p>
+
+    <div class="eq">
+      A = π · OD · L<sub>e</sub> + π · OD² / 4 &nbsp;&nbsp;<span class="cm">— 측면 + 팁 단면</span><br>
+      C = c<sub>d</sub> · A,&nbsp;&nbsp; R<sub>ct</sub> = r<sub>a</sub> / A &nbsp;&nbsp;<span class="cm">— 면적 밀도에서 소자값으로</span><br><br>
+      X<sub>c</sub> = 1 / (2π f C)<br>
+      Z(ω) = R<sub>s</sub> + [ R<sub>ct</sub><sup>−1</sup> + jωC ]<sup>−1</sup><br>
+      |Z| = √(R² + X<sub>c</sub>²),&nbsp;&nbsp; θ = atan(−X<sub>c</sub>/R)
+    </div>
+    <ul class="sym">
+      <li><b>A</b><span>노출 면적 [mm²]</span></li>
+      <li><b>L<sub>e</sub></b><span>노출 길이 [mm]</span></li>
+      <li><b>c<sub>d</sub></b><span>이중층 용량 밀도 [µF/cm²]</span></li>
+      <li><b>r<sub>a</sub></b><span>전하이동 저항 면적밀도 [kΩ·cm²]</span></li>
+      <li><b>R<sub>s</sub></b><span>용액 저항 [Ω]</span></li>
+      <li><b>X<sub>c</sub></b><span>용량성 리액턴스 [Ω]</span></li>
+      <li><b>θ</b><span>위상각 [°]</span></li>
+    </ul>
+
+    <div id="lab-imp"></div>
+
+    <p>
+      위상각은 계면의 성질을 드러냄. 이상적 정전용량만 있으면 θ = −90°, 이상적 저항만 있으면
+      θ = 0°이며, 실제 전극은 그 사이에 자리함. 위상각이 0°에 가까워지면 전류가 순수 저항 경로로
+      흐르는 상태이므로 커패시턴스를 잃었거나 접촉면이 사라진 경우를 의심하게 됨. 주파수 의존성도
+      진단 지표임. R-C 회로에서 주파수가 오르면 용량성 리액턴스가 줄어들므로 정상 계면이라면
+      100 Hz에서 1 kHz, 5 kHz로 갈수록 임피던스가 계속 감소해야 하고, 이 감소 패턴이 보이지 않으면
+      커패시턴스 손실이나 접촉 계면 문제를 의심함.
+    </p>
+
+    <h3>침지 범위로 절연 손상을 가름</h3>
+    <p>
+      Monopolar는 팁만 도전성 금속이 노출되어 있으므로, 팁만 침지하면 계면이 좁아 고임피던스가
+      나오고 전체를 침지해도 절연이 온전하면 여전히 높은 임피던스를 유지함. 전체 침지에서 임피던스가
+      갑자기 낮아지면 절연이 파손되어 전류가 본체를 통해 누설되는 상태임. 측정 자체가 전극을 바꾸지
+      않도록 출력 전류를 µA 수준으로, 출력 전압을 1 Vrms 이하로 제한하고, 측정 주파수는 실사용
+      대역을 포함하도록 잡음.
+    </p>
+
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>참고 자료</th><th>권장 저항 범위</th></tr></thead>
+        <tbody>
+          <tr><td>Cadwell Laboratories 기술사양</td><td>2 ~ 20 kΩ</td></tr>
+          <tr><td>Nihon Kohden 사용자 매뉴얼</td><td>2 ~ 15 kΩ</td></tr>
+          <tr><td>Journal of Clinical Neurophysiology (2011;28(4):417-423)</td><td>5 ~ 15 kΩ</td></tr>
+          <tr><td>AANEM</td><td>≤ 20 kΩ</td></tr>
+          <tr><td>전극 임피던스가 EMG 신호 품질에 미치는 영향 보고</td><td>25 kΩ 초과 시 노이즈 위험 증가</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>오실로스코프 기반 임피던스 산출</h3>
+    <p>
+      함수발생기 내장형 오실로스코프로 100 Hz ~ 1 kHz 대역의 계면 임피던스와 신호 왜곡을 평가함.
+      신호는 sine wave, 부하 저항은 정밀 금속 필름 저항, 침지 매질은 생리식염수를 적신 스폰지를
+      금속 컵 안에 넣은 형태로 구성함. 단극 전극은 함수발생기 출력을 전극 커넥터에, 금속 컵을
+      부하저항 거쳐 오실로스코프 GND에 연결하고 CH1으로 함수발생기 출력을, CH2로 부하저항 양단을
+      읽음. 동심 전극은 함수발생기 출력을 외측 캐뉼라에, 내측 코어 와이어를 부하저항 거쳐 GND에
+      연결하며 코어까지 포함해 전극 전체를 침지함.
+    </p>
+
+    <div class="eq">
+      I = V<sub>load</sub> / R<sub>load</sub>,&nbsp;&nbsp; Z = V<sub>input</sub> / I<br>
+      <span class="cm">예: V<sub>input</sub> 500 mV, V<sub>load</sub> 400 mV, R<sub>load</sub> 1 kΩ → I = 0.4 mA, Z = 1250 Ω</span><br><br>
+      V<sub>pp</sub> = I<sub>pp</sub> (R + x) &nbsp;&nbsp;<span class="cm">— 서로 다른 두 부하로 연립해 셀 임피던스 x를 분리</span><br>
+      I<sub>rms</sub> = I<sub>pp</sub> / (2√2)
+    </div>
+
+    <p>
+      부하 저항을 바꿔 연립하는 변형은 셀 임피던스를 분리해 내지만 전하전달 저항과 이중층
+      커패시턴스를 나누지 못해 임피던스 해상도가 낮으므로, 공정 검사용 판별에는 적합하지 않음.
+      성분 분리가 필요하면 EIS로 넘어가야 함.
+    </p>
+
+    <h3>커패시턴스 비율과 DC–AC 방향의 어긋남</h3>
+    <p>
+      1 kHz 조건에서 상대전극을 아연판, 전해질을 0.9% NaCl로 두고 정상군과 손상군의 커패시턴스를
+      tip dipping과 body dipping으로 나누어 측정하면, 절연이 온전한 경우 계면이 팁에만 형성되므로
+      body와 tip의 커패시턴스가 비슷하게 나오고 절연이 열화되면 몸체 쪽 유효 전극 면적이 넓어져
+      body 커패시턴스만 올라감. 판정 지표로는 절대값보다 C<sub>body</sub> / C<sub>tip</sub> 비율이
+      유효한데, 시료 간 표면 상태와 침지 깊이 편차가 비율에서 상쇄되기 때문임.
+    </p>
+    <p class="pull">
+      멀티미터는 직류로 저항을 재므로 절연이 손상되어 중간 부위 금속이 노출되면 전류가 더 넓고
+      가까운 경로로 흘러 DC 저항이 오히려 감소함. 반면 손상이 lifting·균열·내부 delamination처럼
+      불균일한 형태일 때는 전류 경로가 불안정해지고 stray capacitance와 유전체 간섭이 개입해
+      AC 임피던스가 오히려 증가하거나 급격히 변동함. 두 값이 같은 방향으로 움직인다고 전제하고
+      한쪽만 재면 손상을 놓치게 됨.
+    </p>
+
+    <div class="callout">
+      <p><b>노이즈의 전기적 원인</b> — 저항이 오르면 Johnson-Nyquist 열 소음이 증가하고, 임피던스
+      변동이 움직임 아티팩트를 증폭하며, 고저항 상태에서 증폭기의 신호 대 잡음비가 떨어짐. 통전
+      검사에서 계기 표시가 OL에서 수치로 바뀌기만 하면 통과로 처리하는 방식은 저항이 어느 구간에
+      있는지를 판별하지 못해 고저항 제품을 걸러내지 못함.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ================= 08 ================= -->
+<section id="s8">
+  <div class="wrap">
+    <p class="eyebrow"><span class="num">08</span><span>V<sub>core</sub> − V<sub>cannula</sub></span></p>
+    <h2>근전도 검사에서 니들이 맡는 자리</h2>
+
+    <p>
+      근전도 검사는 근육이 신경 자극에 반응하는 정도를 측정함. 침 전극을 피부를 통해 근육 안으로
+      삽입하면 수축하는 근섬유마다 활동전위가 발생하고, 계측기에 나타나는 활동전위 파형의
+      유무·크기·모양이 근육의 신경 자극 반응 능력을 알려줌. 신경전도검사는 말초신경을 전기적으로
+      자극한 뒤 다른 부위에서 활동전위를 기록해 신경 전달 속도를 평가하며, 정확한 진단을 위해
+      근전도 검사와 함께 시행하는 경우가 일반적임.
+    </p>
+
+    <figure>
+      <svg viewBox="0 0 680 300" role="img" aria-label="Concentric 니들 전극의 신호 경로 네 단계">
+        <text class="th" x="86" y="26" text-anchor="middle">① 활동전위 포착</text>
+        <text class="th" x="256" y="26" text-anchor="middle">② 차동 측정</text>
+        <text class="th" x="436" y="26" text-anchor="middle">③ 증폭·필터링</text>
+        <text class="th" x="606" y="26" text-anchor="middle">④ 파형 표시</text>
+
+        <rect x="24" y="44" width="124" height="150" fill="var(--mint)" stroke="var(--rule)"/>
+        <rect x="176" y="44" width="160" height="150" fill="var(--warm)" stroke="var(--rule)"/>
+        <rect x="364" y="44" width="144" height="150" fill="var(--lilac)" stroke="var(--rule)"/>
+        <rect x="536" y="44" width="140" height="150" fill="var(--panel-2)" stroke="var(--rule)"/>
+
+        <path d="M40 160 L58 160 L66 96 L74 178 L82 150 L96 152 L110 118 L120 160 L134 160"
+              fill="none" stroke="var(--curr)" stroke-width="2"/>
+        <text class="ts" x="86" y="184" text-anchor="middle">근섬유 활동전위</text>
+
+        <rect x="206" y="70" width="102" height="24" fill="var(--panel)" stroke="var(--accent)" stroke-width="1.6"/>
+        <text class="tm" x="257" y="86" text-anchor="middle">코어 — 활성</text>
+        <rect x="206" y="112" width="102" height="24" fill="var(--panel)" stroke="var(--neutral)" stroke-width="1.6"/>
+        <text class="tm" x="257" y="128" text-anchor="middle">캐뉼라 — 기준</text>
+        <line x1="257" y1="94" x2="257" y2="112" stroke="var(--ink-3)" stroke-width="1.4"/>
+        <text class="ts" x="257" y="164" text-anchor="middle">전위차만 남기고</text>
+        <text class="ts" x="257" y="180" text-anchor="middle">공통 잡음은 상쇄됨</text>
+
+        <path d="M392 150 L392 88 L470 119 Z" fill="none" stroke="var(--ink-3)" stroke-width="1.6"/>
+        <text class="tm" x="418" y="124" text-anchor="middle">A</text>
+        <line x1="364" y1="119" x2="392" y2="119" stroke="var(--ink-3)" stroke-width="1.4"/>
+        <line x1="470" y1="119" x2="508" y2="119" stroke="var(--ink-3)" stroke-width="1.4"/>
+        <text class="ts" x="436" y="176" text-anchor="middle">대역 100 Hz ~ 1 kHz</text>
+
+        <line x1="552" y1="119" x2="662" y2="119" stroke="var(--rule)"/>
+        <path d="M552 119 L578 119 L586 76 L594 166 L602 108 L616 119 L634 119 L642 100 L650 132 L662 119"
+              fill="none" stroke="var(--im)" stroke-width="2"/>
+        <text class="ts" x="606" y="184" text-anchor="middle">운동단위 활동전위</text>
+
+        <line x1="148" y1="119" x2="172" y2="119" stroke="var(--ink-3)" stroke-width="1.4" stroke-dasharray="4 3"/>
+        <line x1="336" y1="119" x2="360" y2="119" stroke="var(--ink-3)" stroke-width="1.4" stroke-dasharray="4 3"/>
+        <line x1="508" y1="119" x2="532" y2="119" stroke="var(--ink-3)" stroke-width="1.4" stroke-dasharray="4 3"/>
+
+        <text class="ts" x="24" y="230">코어와 캐뉼라 사이 거리가 짧을수록 두 전극이 공유하는 잡음이 커지고, 차동 단계에서 상쇄되는 몫도 함께 커짐.</text>
+        <text class="ts" x="24" y="252">그 결과 좁은 영역의 운동단위만 남아 공간 해상도가 올라감. 접지 전극은 검사 중인 사지와 같은 쪽에 둠.</text>
+        <text class="ts" x="24" y="274">Monopolar는 기준 전극이 피부 위에 있어 두 전극이 공유하는 잡음이 적고, 그만큼 상쇄되지 않는 성분이 남음.</text>
+      </svg>
+      <figcaption>
+        Concentric의 신호 경로는 코어가 근섬유의 전기적 활동을 포착하고, 코어와 캐뉼라 사이의
+        전위차를 차동 측정한 뒤, 포착된 신호를 증폭·필터링해 파형으로 표시하는 순서로 진행됨.
+      </figcaption>
+    </figure>
+
+    <p>
+      니들 전극은 진피하·근육·신경 조직에 삽입해 생체 전기 신호를 감지하고 EMG 유닛에 연결하는
+      용도이며, EP 니들은 수술 중 신경계 감시와 뇌파 검사에 쓰임. 앞 절에서 다룬 노출 면적과 계면
+      임피던스가 이 단계에서 신호 품질로 환산되는데, 대부분의 문헌 기준이 100 Hz ~ 1 kHz 임피던스
+      측정을 전제로 하는 이유도 증폭기와 신호 처리 시스템이 그 대역에서 동작하기 때문임.
+    </p>
+
+    <ul class="notes">
+      <li><b>기하 → 전기</b><span>베벨각과 연마 조건이 노출 면적을 정하고, 노출 면적이 계면 용량과 전하이동 저항을 정하며, 그 두 값이 실사용 대역의 임피던스를 정함.</span></li>
+      <li><b>기하 → 역학</b><span>같은 베벨각이 절삭날 길이와 세장비를 동시에 정하므로, 천공력을 낮추려 각도를 줄이면 휨 여유가 줄어듦.</span></li>
+      <li><b>재질 → 여유</b><span>SUS304V로 항복 강도를 올리면 같은 게이지에서 휨 여유를 회복할 수 있으나 연신율이 낮아져 연마·압착 공정의 취성 파단 여지가 커짐.</span></li>
+      <li><b>표면 → 두 항</b><span>코팅 두께는 절연 성능과 게이지 공차, F3 드래그력에 동시에 걸리므로 한 축만 보고 정할 수 없음.</span></li>
+    </ul>
+  </div>
+</section>
+
+<div class="wrap">
+  <div class="pager">
+    <a href="mechanics.html"><span class="pg-lbl">이전</span>점착·박리와 기계물성</a>
+    <a href="thermal.html" style="text-align:right"><span class="pg-lbl">다음</span>열분석과 전기수술</a>
+  </div>
+</div>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <p>Field 09 · 니들 기하와 투과역학 · 모든 그림은 브라우저에서 직접 계산해 그림</p>
+  </div>
+</footer>
+
+<script src="../assets/js/site.js"></script>
+<script src="../assets/js/lab.js"></script>
+<script>
+"use strict";
+
+/* ============================================================
+   게이지 표 — ISO 7864 대응 (외경·내경 단위 mm)
+   ============================================================ */
+var GAUGE = [
+  {g:34, metric:0.18, odMin:0.178, odMax:0.191, rw:0.064, tw:0.091},
+  {g:33, metric:0.20, odMin:0.203, odMax:0.216, rw:0.089, tw:0.105},
+  {g:32, metric:0.23, odMin:0.229, odMax:0.241, rw:0.089, tw:0.105},
+  {g:31, metric:0.25, odMin:0.254, odMax:0.267, rw:0.114, tw:0.125},
+  {g:30, metric:0.30, odMin:0.298, odMax:0.320, rw:0.133, tw:0.165},
+  {g:29, metric:0.33, odMin:0.324, odMax:0.351, rw:0.133, tw:0.190},
+  {g:28, metric:0.36, odMin:0.349, odMax:0.370, rw:0.133, tw:0.190},
+  {g:27, metric:0.40, odMin:0.400, odMax:0.420, rw:0.184, tw:0.241},
+  {g:26, metric:0.45, odMin:0.440, odMax:0.470, rw:0.232, tw:0.292},
+  {g:25, metric:0.50, odMin:0.500, odMax:0.530, rw:0.232, tw:0.292},
+  {g:23, metric:0.60, odMin:0.600, odMax:0.673, rw:0.317, tw:0.370}
+];
+function gaugeRow(g){
+  for (var i=0;i<GAUGE.length;i++) if (GAUGE[i].g === +g) return GAUGE[i];
+  return GAUGE[8];
+}
+var GAUGE_OPTS = GAUGE.map(function(r){ return {value:String(r.g), label:r.g + ' G (' + r.metric.toFixed(2) + ' mm)'}; });
+
+/* ============================================================
+   01. 하중–변위 곡선 구간 분해
+   ============================================================ */
+Lab.make({
+  mount:'#lab-curve',
+  title:'하중–변위 곡선 구간 분해',
+  badge:'UTM',
+  controls:[
+    {id:'F1', label:'팁 관통 피크력 F₁', min:0.1, max:2.0, step:0.02, value:0.6, unit:'N', fmt:function(v){return v.toFixed(2);}},
+    {id:'OD', label:'외경 OD', min:0.2, max:0.8, step:0.01, value:0.45, unit:'mm', fmt:function(v){return v.toFixed(2);}},
+    {id:'mu', label:'마찰계수 µ', min:0.2, max:1.2, step:0.02, value:0.6, fmt:function(v){return v.toFixed(2);}},
+    {id:'v', label:'삽입 속도', min:50, max:300, step:5, value:150, unit:'mm/min', fmt:function(v){return v.toFixed(0);}},
+    {id:'d', label:'막 두께 d', min:0.05, max:2.0, step:0.01, value:0.5, unit:'mm', fmt:function(v){return v.toFixed(2);}},
+    {id:'E', label:'막 탄성계수 E', min:2, max:100, step:1, value:20, unit:'MPa', fmt:function(v){return v.toFixed(0);}},
+    {id:'tip', type:'toggle', label:'팁 절삭 구조',
+     options:[{value:'lancet', label:'lancet 다단 절삭면'}, {value:'trocar', label:'trocar 단일 절삭면'}], value:'lancet'}
+  ],
+  presets:[
+    {label:'무코팅 µ=1.0', set:{mu:1.0}},
+    {label:'실리콘 µ=0.8', set:{mu:0.8}},
+    {label:'PTFE µ=0.6', set:{mu:0.6}},
+    {label:'얇은 막 0.1 mm', set:{d:0.1}}
+  ],
+  stats:[
+    {id:'f1', label:'최대 천공력', unit:'N', fmt:function(v){return v.toFixed(3);}},
+    {id:'f2', label:'F2 피크', unit:'N'},
+    {id:'f3', label:'정상상태 마찰력', unit:'N', fmt:function(v){return v.toFixed(3);}},
+    {id:'fw', label:'최대 인출력', unit:'N', fmt:function(v){return v.toFixed(3);}},
+    {id:'xp', label:'관통 변위 x_p', unit:'mm', fmt:function(v){return v.toFixed(3);}},
+    {id:'ts', label:'스트로크 시간', unit:'s', fmt:function(v){return v.toFixed(1);}}
+  ],
+  plot:{width:660, height:400, xLabel:'이송 거리 (mm) — 전진 후 인출', yLabel:'하중 (N)', autoX:true, autoY:true},
+  legend:[
+    {color:'--accent', label:'합성 하중'},
+    {color:'--amber', label:'① 탄성 압입'},
+    {color:'--purple', label:'② 관통·절삭면 통과'},
+    {color:'--green', label:'③ 축 마찰'},
+    {color:'--neutral', label:'④ 인출'}
+  ],
+  note:'막 압입 강성은 K = E·d·(w/L₀)로 두고 클램프 창의 폭·스팬 비 w/L₀ = 1을 씀. ' +
+       '샤프트를 조이는 반경 압력은 p = E·ε<sub>r</sub>, ε<sub>r</sub> = 0.15이며, ' +
+       '점탄성 속도 의존은 F ∝ (v/v₀)<sup>m</sup>에 v₀ = 150 mm/min, m = 0.1을 넣었음. ' +
+       'lancet의 F2는 F1의 0.6배, 인출 초기의 정지마찰 여유는 1.25배로 둠.',
+  plotNote:'관통 직후 하중이 급강하한 뒤 샤프트 접촉 길이가 막 두께까지 늘어나는 동안 마찰이 오르고, ' +
+           '접촉 길이가 포화하면 정상상태에 들어감. 인출 구간은 부호가 뒤집힌 마찰만 남음.',
+  compute:function(v){
+    var fr = Math.pow(v.v/150, 0.1);
+    var F1 = v.F1 * fr;
+    var K  = v.E * v.d;                       // N/mm
+    var xp = F1 / K;                          // mm
+    var dl = Math.max(0.02, 0.12*xp);
+    var F2 = (v.tip === 'lancet') ? 0.6*F1 : 0;
+    var p  = v.E * 0.15;                      // MPa
+    var F3 = v.mu * p * Math.PI * v.OD * v.d; // N
+    var X  = xp + v.d + 2.0;
+
+    function fwd(x){
+      var fe = (x <= xp) ? K*x : F1*Math.exp(-(x-xp)/dl);
+      var f2 = F2 ? F2*Math.exp(-0.5*Math.pow((x - (xp + 1.8*dl))/(0.8*dl), 2)) : 0;
+      var lc = Math.min(1, Math.max(0, (x - xp)/v.d));
+      return fe + f2 + F3*lc;
+    }
+    var pts = [], i, x, u, sf, lc;
+    for (i=0;i<=340;i++){ x = X*i/340; pts.push([x, fwd(x)]); }
+    var fwMax = 0;
+    for (i=0;i<=200;i++){
+      u = X*i/200; x = X - u;
+      lc = Math.min(1, Math.max(0, (x - xp)/v.d));
+      sf = 1 + 0.25*Math.exp(-u/0.15);
+      var f = -F3*sf*lc;
+      if (-f > fwMax) fwMax = -f;
+      pts.push([X + u, f]);
+    }
+    var peak = 0;
+    for (i=0;i<=340;i++){ x = X*i/340; if (fwd(x) > peak) peak = fwd(x); }
+
+    return {
+      series:[{points:pts, color:'--accent', width:2.2}],
+      overlays:[
+        {type:'band', x1:0, x2:xp, color:'--amber', opacity:0.14, label:'① 탄성'},
+        {type:'band', x1:xp, x2:xp+4*dl, color:'--purple', opacity:0.14, label:'② 관통'},
+        {type:'band', x1:xp+4*dl, x2:X, color:'--green', opacity:0.12, label:'③ 마찰'},
+        {type:'band', x1:X, x2:2*X, color:'--neutral', opacity:0.12, label:'④ 인출'},
+        {type:'hline', y:0, color:'--ink-3'},
+        {type:'point', x:xp, y:peak, color:'--accent', label:'F1'}
+      ],
+      stats:{
+        f1: peak,
+        f2: F2 ? F2.toFixed(3) : '거의 없음',
+        f3: F3,
+        fw: fwMax,
+        xp: xp,
+        ts: 2*X/(v.v/60)
+      }
+    };
+  }
+});
+
+/* ============================================================
+   02. 베벨 기하 시뮬레이터
+   ============================================================ */
+function bevelSVG(OD, aDeg, form){
+  var a = aDeg*Math.PI/180;
+  var H = OD/Math.tan(a), L = OD/Math.sin(a), shaft = 2.0;
+  var s = Math.min(62/OD, 288/(H + shaft));
+  var ODp = OD*s, Hp = H*s, Sp = shaft*s;
+  var x0 = 44, yb = 104, yt = yb - ODp;
+  var n = function(q){ return q.toFixed(1); };
+
+  var body = 'M' + n(x0) + ' ' + n(yb) + ' L' + n(x0+Hp) + ' ' + n(yt) +
+             ' L' + n(x0+Hp+Sp) + ' ' + n(yt) + ' L' + n(x0+Hp+Sp) + ' ' + n(yb) + ' Z';
+  var ar = Math.min(36, Math.max(14, Hp*0.55));
+  var arc = 'M' + n(x0+ar) + ' ' + n(yb) + ' A' + n(ar) + ' ' + n(ar) + ' 0 0 0 ' +
+            n(x0 + ar*Math.cos(a)) + ' ' + n(yb - ar*Math.sin(a));
+
+  var rx = L*s/2, ry = ODp/2, cx = 190, cy = 172;
+  var side = '';
+  if (form === 'lancet'){
+    side = '<line x1="' + n(cx-rx) + '" y1="' + n(cy) + '" x2="' + n(cx-rx*0.15) + '" y2="' + n(cy-ry*0.66) +
+           '" stroke="var(--accent)" stroke-width="1.6"/>' +
+           '<line x1="' + n(cx-rx) + '" y1="' + n(cy) + '" x2="' + n(cx-rx*0.15) + '" y2="' + n(cy+ry*0.66) +
+           '" stroke="var(--accent)" stroke-width="1.6"/>';
+  }
+
+  return '<svg viewBox="0 0 380 232" role="img" aria-label="베벨각에 따른 니들 팁 단면도">' +
+    '<text class="th" x="6" y="14">측면도 — 실제 각도 비례</text>' +
+    '<path d="' + body + '" fill="var(--warm)" stroke="var(--ink-2)" stroke-width="1.5" stroke-linejoin="round"/>' +
+    '<line x1="' + n(x0) + '" y1="' + n(yb) + '" x2="' + n(x0+Hp+Sp+6) + '" y2="' + n(yb) +
+      '" stroke="var(--rule)" stroke-dasharray="4 3"/>' +
+    '<path d="' + arc + '" fill="none" stroke="var(--accent)" stroke-width="1.4"/>' +
+    '<text class="tm" x="' + n(x0+ar+5) + '" y="' + n(yb-5) + '" fill="var(--accent)">α ' + aDeg.toFixed(0) + '°</text>' +
+    '<line x1="' + n(x0) + '" y1="' + n(yb+16) + '" x2="' + n(x0+Hp) + '" y2="' + n(yb+16) +
+      '" stroke="var(--ink-3)" stroke-width="1.2"/>' +
+    '<text class="tm" x="' + n(x0+Hp/2) + '" y="' + n(yb+30) + '" text-anchor="middle">H ' + H.toFixed(2) + ' mm</text>' +
+    '<text class="tm" x="' + n(x0+Hp+Sp+8) + '" y="' + n((yt+yb)/2+4) + '">OD</text>' +
+    '<line x1="292" y1="18" x2="' + n(292 + Math.min(s, 78)) + '" y2="18" stroke="var(--ink-3)" stroke-width="2"/>' +
+    '<text class="tm" x="292" y="32">' + (s > 78 ? (78/s).toFixed(2) : '1.00') + ' mm</text>' +
+    '<text class="th" x="6" y="146">팁 개구면 실형 — 장축 L × 단축 OD</text>' +
+    '<ellipse cx="' + n(cx) + '" cy="' + n(cy) + '" rx="' + n(rx) + '" ry="' + n(ry) +
+      '" fill="var(--mint)" stroke="var(--ink-2)" stroke-width="1.5"/>' + side +
+    '<text class="tm" x="' + n(cx) + '" y="' + n(cy + ry + 18) + '" text-anchor="middle">L ' + L.toFixed(2) + ' mm</text>' +
+    '<text class="ts" x="6" y="226">' +
+      (form === 'lancet' ? '1차 베벨 + side-cut 2면 — 절삭 경계가 다단이라 F2가 잡힘'
+                         : '단일 평면 베벨 — 절삭 경계가 하나라 F2가 거의 잡히지 않음') +
+    '</text></svg>';
+}
+
+Lab.make({
+  mount:'#lab-bevel',
+  title:'베벨 기하 시뮬레이터 — 각도를 줄이면 팁이 길어짐',
+  badge:'GEOMETRY',
+  custom:true,
+  controls:[
+    {id:'OD', label:'외경 OD', min:0.2, max:1.2, step:0.01, value:0.45, unit:'mm', fmt:function(v){return v.toFixed(2);}},
+    {id:'a', label:'1차 베벨각 α', min:8, max:40, step:0.5, value:15, unit:'°', fmt:function(v){return v.toFixed(1);}},
+    {id:'form', type:'select', label:'베벨 형식', value:'lancet',
+     options:[{value:'lancet', label:'lancet 3면 (side-cut 2면 포함)'}, {value:'plane', label:'단일 평면 베벨'}]}
+  ],
+  presets:[
+    {label:'ISO 통상 11°', set:{a:11}},
+    {label:'ISO 짧은 bevel 17°', set:{a:17}},
+    {label:'26 G 0.45 mm', set:{OD:0.45}},
+    {label:'30 G 0.30 mm', set:{OD:0.30}}
+  ],
+  stats:[
+    {id:'L', label:'절삭날 길이 L', unit:'mm', fmt:function(v){return v.toFixed(3);}},
+    {id:'H', label:'팁 축방향 길이 H', unit:'mm', fmt:function(v){return v.toFixed(3);}},
+    {id:'Lt', label:'총 절삭날 길이', unit:'mm', fmt:function(v){return v.toFixed(3);}},
+    {id:'A', label:'팁 개구 면적', unit:'mm²', fmt:function(v){return v.toFixed(4);}},
+    {id:'lam', label:'팁 세장비 cot α', fmt:function(v){return v.toFixed(2);}},
+    {id:'fi', label:'상대 투과저항', fmt:function(v){return v.toFixed(3);}}
+  ],
+  plot:{width:620, height:360, xLabel:'베벨각 α (°)', yLabel:'길이 (mm)', autoX:false, autoY:true, xMin:8, xMax:40, yMinFixed:0},
+  legend:[
+    {color:'--accent', label:'절삭날 길이 L = OD / sin α'},
+    {color:'--purple', label:'팁 축방향 길이 H = OD / tan α'}
+  ],
+  note:'side-cut 두 면을 1차 베벨과 같은 경사로 두면 lancet의 총 절삭날 길이가 2L이 됨. ' +
+       '상대 투과저항은 sin 15° / sin α로 α = 15°에서 1이 되도록 정규화했음.',
+  plotNote:'α를 8°까지 내리면 L과 H가 함께 발산함. 절삭날이 길어지는 만큼 팁이 가늘고 길어져 ' +
+           '휨과 파손에 약해지므로, 천공력 저감과 팁 강성이 같은 슬라이더에서 갈림.',
+  compute:function(v){
+    var a = v.a*Math.PI/180;
+    var L = v.OD/Math.sin(a), H = v.OD/Math.tan(a);
+    var A = Math.PI*v.OD*v.OD/(4*Math.sin(a));
+    var lam = 1/Math.tan(a);
+    var fi = Math.sin(15*Math.PI/180)/Math.sin(a);
+    var Lt = (v.form === 'lancet') ? 2*L : L;
+    var xs = Lab.linspace(8, 40, 130);
+    var sL = xs.map(function(d){ return [d, v.OD/Math.sin(d*Math.PI/180)]; });
+    var sH = xs.map(function(d){ return [d, v.OD/Math.tan(d*Math.PI/180)]; });
+    return {
+      series:[
+        {points:sH, color:'--purple', width:2},
+        {points:sL, color:'--accent', width:2.4}
+      ],
+      overlays:[
+        {type:'point', x:v.a, y:L, color:'--accent', label:'L'},
+        {type:'point', x:v.a, y:H, color:'--purple', label:'H'},
+        {type:'vline', x:v.a, color:'--ink-3'}
+      ],
+      custom: bevelSVG(v.OD, v.a, v.form),
+      stats:{L:L, H:H, Lt:Lt, A:A, lam:lam, fi:fi}
+    };
+  }
+});
+
+/* ============================================================
+   03. 공정 변경 전후 F1 저감률·신뢰구간
+   ============================================================ */
+Lab.make({
+  mount:'#lab-ci',
+  title:'공정 변경 전후 F1 저감률과 95% 신뢰구간',
+  badge:'STATISTICS',
+  controls:[
+    {id:'m1', label:'변경 전 평균', min:0.2, max:2.0, step:0.01, value:0.82, unit:'N', fmt:function(v){return v.toFixed(2);}},
+    {id:'s1', label:'변경 전 표준편차', min:0.01, max:0.4, step:0.01, value:0.09, unit:'N', fmt:function(v){return v.toFixed(2);}},
+    {id:'m2', label:'변경 후 평균', min:0.2, max:2.0, step:0.01, value:0.64, unit:'N', fmt:function(v){return v.toFixed(2);}},
+    {id:'s2', label:'변경 후 표준편차', min:0.01, max:0.4, step:0.01, value:0.08, unit:'N', fmt:function(v){return v.toFixed(2);}},
+    {id:'n', label:'군당 시료 수 n', min:5, max:30, step:1, value:10, unit:'개', fmt:function(v){return v.toFixed(0);}}
+  ],
+  presets:[
+    {label:'산포 작음', set:{s1:0.04, s2:0.04}},
+    {label:'산포 큼', set:{s1:0.22, s2:0.20}},
+    {label:'n = 30', set:{n:30}},
+    {label:'n = 5', set:{n:5}}
+  ],
+  stats:[
+    {id:'red', label:'저감률', unit:'%', fmt:function(v){return v.toFixed(1);}},
+    {id:'c1', label:'변경 전 95% CI'},
+    {id:'c2', label:'변경 후 95% CI'},
+    {id:'ov', label:'구간 판정'},
+    {id:'nn', label:'겹침 해소 최소 n', unit:'개'}
+  ],
+  plot:{width:600, height:360, xLabel:'', yLabel:'F1 평균 (N)', autoX:false, autoY:true,
+        xMin:0.4, xMax:2.6, xTicks:2, yMinFixed:0,
+        xTickFmt:function(v){ return v === 1 ? '변경 전' : (v === 2 ? '변경 후' : ''); }},
+  legend:[{color:'--neutral', label:'평균'}, {color:'--ink-3', label:'95% 신뢰구간'}],
+  note:'구간은 x̄ ± 1.96 s/√n으로 계산함. 두 구간이 겹치면 평균 차이가 있어도 개선 효과를 확정할 수 없고, ' +
+       '겹침을 해소하려면 시료 수를 [1.96(s₁+s₂)/(x̄₁−x̄₂)]²까지 올려야 함.',
+  plotNote:'표준편차 슬라이더만 올려 보면 평균은 그대로인데 두 오차막대가 맞닿는 지점이 나타남. ' +
+           '평균 차이의 크기가 아니라 산포 대비 차이의 크기가 판정을 가름.',
+  compute:function(v){
+    var n = Math.round(v.n);
+    var e1 = 1.96*v.s1/Math.sqrt(n), e2 = 1.96*v.s2/Math.sqrt(n);
+    var red = (v.m1 - v.m2)/v.m1*100;
+    var lo1 = v.m1 - e1, hi1 = v.m1 + e1, lo2 = v.m2 - e2, hi2 = v.m2 + e2;
+    var overlap = !(lo1 > hi2 || lo2 > hi1);
+    var diff = v.m1 - v.m2;
+    var nn = diff > 0 ? Math.ceil(Math.pow(1.96*(v.s1 + v.s2)/diff, 2)) : NaN;
+    function bar(x, lo, hi, col){
+      return [
+        {points:[[x, lo],[x, hi]], color:col, width:2},
+        {points:[[x-0.12, hi],[x+0.12, hi]], color:col, width:2},
+        {points:[[x-0.12, lo],[x+0.12, lo]], color:col, width:2}
+      ];
+    }
+    var ser = [{points:[[1, v.m1],[2, v.m2]], color:'--neutral', type:'bars', barWidth:74, opacity:0.5}];
+    ser = ser.concat(bar(1, lo1, hi1, '--accent')).concat(bar(2, lo2, hi2, '--green'));
+    return {
+      series: ser,
+      overlays:[
+        {type:'text', x:1, y:v.m1/2, text:v.m1.toFixed(2) + ' N', color:'--ink-2', anchor:'middle'},
+        {type:'text', x:2, y:v.m2/2, text:v.m2.toFixed(2) + ' N', color:'--ink-2', anchor:'middle'}
+      ],
+      stats:{
+        red: red,
+        c1: lo1.toFixed(3) + ' – ' + hi1.toFixed(3),
+        c2: lo2.toFixed(3) + ' – ' + hi2.toFixed(3),
+        ov: overlap ? '겹침 — 확정 불가' : '분리 — 개선 확인',
+        nn: isFinite(nn) ? (overlap ? String(nn) : '충족') : '차이 없음'
+      }
+    };
+  }
+});
+
+/* ============================================================
+   04. 게이지 환산기
+   ============================================================ */
+Lab.make({
+  mount:'#lab-gauge',
+  title:'게이지 환산기 — 벽 두께와 내강, 그리고 유량',
+  badge:'ISO 7864',
+  controls:[
+    {id:'g', type:'select', label:'게이지', value:'26', options:GAUGE_OPTS},
+    {id:'w', type:'toggle', label:'벽 두께 등급',
+     options:[{value:'rw', label:'RW regular'}, {value:'tw', label:'TW thin'}], value:'rw'},
+    {id:'ref', type:'select', label:'기준 게이지 (유량 비교용)', value:'23', options:GAUGE_OPTS}
+  ],
+  stats:[
+    {id:'od', label:'OD 범위', unit:'mm'},
+    {id:'id', label:'최소 ID', unit:'mm', fmt:function(v){return v.toFixed(3);}},
+    {id:'wl', label:'벽 두께 범위', unit:'mm'},
+    {id:'ar', label:'내강 단면적', unit:'mm²', fmt:function(v){return v.toFixed(4);}},
+    {id:'qr', label:'기준 대비 상대 유량', fmt:function(v){return Lab.sci(v,3);}},
+    {id:'qs', label:'한 단계 굵어질 때 유량비', fmt:function(v){return v.toFixed(2);}}
+  ],
+  plot:{width:620, height:380, xLabel:'Gauge', yLabel:'치수 (mm)', autoX:false, autoY:false, yLog:true,
+        xMin:22, xMax:35, yMin:0.01, yMax:1, xTicks:7,
+        xTickFmt:function(v){ return v.toFixed(0) + 'G'; }},
+  legend:[
+    {color:'--accent', label:'외경 OD (중앙값)'},
+    {color:'--green', label:'최소 내경 — RW'},
+    {color:'--purple', label:'최소 내경 — TW'}
+  ],
+  note:'벽 두께는 wall = (OD − ID)/2로 계산하며, OD의 최소·최대 한계가 그대로 벽 두께 대역이 됨. ' +
+       '상대 유량은 Hagen–Poiseuille의 Q ∝ r⁴에서 (ID<sub>선택</sub>/ID<sub>기준</sub>)⁴로 산출함.',
+  plotNote:'세로축이 로그이므로 게이지 한 단계의 간격이 대수적으로 거의 일정하게 보임. ' +
+           '외경 곡선과 내경 곡선의 간격이 벽 두께이고, TW 계열이 RW보다 위에 놓이는 폭이 확보되는 내강임.',
+  compute:function(v){
+    var r = gaugeRow(v.g), rr = gaugeRow(v.ref);
+    var key = (v.w === 'tw') ? 'tw' : 'rw';
+    var id = r[key], idRef = rr[key];
+    var wLo = (r.odMin - id)/2, wHi = (r.odMax - id)/2;
+    var area = Math.PI*Math.pow(id/2, 2);
+    var qr = Math.pow(id/idRef, 4);
+
+    // 한 단계 굵어질 때(게이지 숫자 1 감소)의 유량비 — 표에 없는 게이지는 인접 항목으로 대체
+    var idx = -1, i;
+    for (i=0;i<GAUGE.length;i++) if (GAUGE[i].g === r.g) idx = i;
+    var nxt = GAUGE[Math.min(GAUGE.length-1, idx+1)];
+    var qs = Math.pow(id/nxt[key], 4);
+
+    var odPts = GAUGE.map(function(q){ return [q.g, (q.odMin + q.odMax)/2]; });
+    var rwPts = GAUGE.map(function(q){ return [q.g, q.rw]; });
+    var twPts = GAUGE.map(function(q){ return [q.g, q.tw]; });
+    return {
+      series:[
+        {points:odPts, color:'--accent', width:2},
+        {points:odPts, color:'--accent', type:'scatter', r:3.4},
+        {points:rwPts, color:'--green', width:1.6, dash:'5 4'},
+        {points:rwPts, color:'--green', type:'scatter', r:2.8},
+        {points:twPts, color:'--purple', width:1.6, dash:'5 4'},
+        {points:twPts, color:'--purple', type:'scatter', r:2.8}
+      ],
+      overlays:[
+        {type:'point', x:r.g, y:(r.odMin + r.odMax)/2, color:'--accent', label:r.g + 'G'},
+        {type:'point', x:r.g, y:id, color:'--ink-2', label:'ID'},
+        {type:'vline', x:r.g, color:'--ink-3'}
+      ],
+      stats:{
+        od: r.odMin.toFixed(3) + ' – ' + r.odMax.toFixed(3),
+        id: id,
+        wl: wLo.toFixed(3) + ' – ' + wHi.toFixed(3),
+        ar: area,
+        qr: qr,
+        qs: qs
+      }
+    };
+  }
+});
+
+/* ============================================================
+   05. 샤프트 굽힘·좌굴 — SUS304 대 SUS304V
+   ============================================================ */
+Lab.make({
+  mount:'#lab-bend',
+  title:'샤프트 굽힘과 좌굴 — 항복 강도가 갈리는 자리',
+  badge:'MECHANICS',
+  controls:[
+    {id:'mat', type:'toggle', label:'재질',
+     options:[{value:'304', label:'SUS304 σy 205'}, {value:'304v', label:'SUS304V σy 483'}], value:'304'},
+    {id:'g', type:'select', label:'게이지', value:'26', options:GAUGE_OPTS},
+    {id:'w', type:'toggle', label:'벽 두께 등급',
+     options:[{value:'rw', label:'RW'}, {value:'tw', label:'TW'}], value:'rw'},
+    {id:'L', label:'노출 샤프트 길이 L', min:10, max:75, step:1, value:38, unit:'mm', fmt:function(v){return v.toFixed(0);}},
+    {id:'F', label:'팁 측방 하중 F', min:0.02, max:1.5, step:0.01, value:0.2, unit:'N', fmt:function(v){return v.toFixed(2);}}
+  ],
+  presets:[
+    {label:'30 G 짧은 침', set:{g:'30', L:20}},
+    {label:'26 G 표준', set:{g:'26', L:38}},
+    {label:'23 G 긴 침', set:{g:'23', L:70}}
+  ],
+  stats:[
+    {id:'I', label:'단면 2차 모멘트 I', unit:'mm⁴', fmt:function(v){return Lab.sci(v,3);}},
+    {id:'EI', label:'굽힘 강성 EI', unit:'N·mm²', fmt:function(v){return Lab.sci(v,3);}},
+    {id:'de', label:'자유단 처짐 δ', unit:'mm', fmt:function(v){return v.toFixed(3);}},
+    {id:'Fy', label:'항복 시작 하중', unit:'N', fmt:function(v){return v.toFixed(3);}},
+    {id:'sf', label:'항복 대비 여유', unit:'배', fmt:function(v){return v.toFixed(2);}},
+    {id:'Pcr', label:'좌굴 임계 축하중', unit:'N', fmt:function(v){return v.toFixed(3);}}
+  ],
+  plot:{width:620, height:300, xLabel:'노출 길이 L (mm)', yLabel:'항복 시작 측방 하중 F_y (N)',
+        autoX:false, autoY:true, xMin:10, xMax:75, yLog:true},
+  plot2:{width:620, height:260, xLabel:'노출 길이 L (mm)', yLabel:'자유단 처짐 δ (mm)',
+         autoX:false, autoY:true, xMin:10, xMax:75, yMinFixed:0},
+  legend:[
+    {color:'--accent', label:'SUS304 σy 205 MPa'},
+    {color:'--purple', label:'SUS304V σy 483 MPa'}
+  ],
+  legend2:[{color:'--green', label:'현재 하중에서의 처짐'}],
+  note:'탄성 계수는 두 소재 모두 193 GPa를 씀. 항복 강도는 SUS304 205 MPa, SUS304V는 냉간 가공 20% 기준 483 MPa임. ' +
+       '내경은 선택한 벽 두께 등급의 최소 ID, 외경은 OD 최소 한계를 씀.',
+  plotNote:'세로축이 로그라 두 소재의 곡선 간격이 어디서나 같음. 항복 하중이 σy에 비례하므로 ' +
+           '304V로 바꾸면 길이와 무관하게 2.36배의 여유가 생김.',
+  compute:function(v){
+    var r = gaugeRow(v.g);
+    var key = (v.w === 'tw') ? 'tw' : 'rw';
+    var OD = r.odMin, ID = r[key];
+    var E = 193000;                                  // MPa
+    var sy = (v.mat === '304v') ? 483 : 205;         // MPa
+    var I = Math.PI*(Math.pow(OD,4) - Math.pow(ID,4))/64;
+    var c = OD/2;
+    var de = v.F*Math.pow(v.L,3)/(3*E*I);
+    var Fy = sy*I/(c*v.L);
+    var Pcr = Math.PI*Math.PI*E*I/(4*v.L*v.L);
+    var Ls = Lab.linspace(10, 75, 130);
+    var f304 = Ls.map(function(L){ return [L, 205*I/(c*L)]; });
+    var f304v = Ls.map(function(L){ return [L, 483*I/(c*L)]; });
+    var dcur = Ls.map(function(L){ return [L, v.F*Math.pow(L,3)/(3*E*I)]; });
+    return {
+      series:[
+        {points:f304, color:'--accent', width:2.2},
+        {points:f304v, color:'--purple', width:2.2}
+      ],
+      overlays:[
+        {type:'point', x:v.L, y:Fy, color:(v.mat === '304v' ? '--purple' : '--accent'), label:'F_y'},
+        {type:'hline', y:v.F, color:'--green', label:'인가 하중 ' + v.F.toFixed(2) + ' N'}
+      ],
+      series2:[{points:dcur, color:'--green', width:2.2}],
+      overlays2:[{type:'point', x:v.L, y:de, color:'--green', label:'δ'}],
+      stats:{I:I, EI:E*I, de:de, Fy:Fy, sf:Fy/v.F, Pcr:Pcr}
+    };
+  }
+});
+
+/* ============================================================
+   06. Faraday 전해연마 용해량
+   ============================================================ */
+Lab.make({
+  mount:'#lab-faraday',
+  title:'전해연마 이론 용해량 — Faraday 법칙',
+  badge:'FARADAY',
+  controls:[
+    {id:'I', label:'전류 I', min:0.5, max:10, step:0.1, value:2.5, unit:'mA', fmt:function(v){return v.toFixed(1);}},
+    {id:'t', label:'시간 t', min:60, max:3600, step:20, value:1800, unit:'s', fmt:function(v){return v.toFixed(0);}},
+    {id:'A', label:'용해 단면적 A', min:0.05, max:0.3, step:0.001, value:0.102, unit:'mm²', fmt:function(v){return v.toFixed(3);}}
+  ],
+  presets:[
+    {label:'2.5 mA · 1800 s', set:{I:2.5, t:1800, A:0.102}},
+    {label:'전류 2배', set:{I:5.0}},
+    {label:'시간 절반', set:{t:900}}
+  ],
+  stats:[
+    {id:'Q', label:'전하량 Q', unit:'C', fmt:function(v){return v.toFixed(3);}},
+    {id:'m', label:'용해 질량 m', unit:'mg', fmt:function(v){return v.toFixed(3);}},
+    {id:'V', label:'용해 부피 V', unit:'mm³', fmt:function(v){return v.toFixed(4);}},
+    {id:'L', label:'용해 길이 L', unit:'mm', fmt:function(v){return v.toFixed(3);}}
+  ],
+  plot:{width:620, height:340, xLabel:'시간 t (s)', yLabel:'이론 용해 길이 L (mm)',
+        autoX:false, autoY:true, xMin:0, xMax:3600, yMinFixed:0},
+  legend:[{color:'--accent', label:'현재 전류에서의 L(t)'}],
+  note:'M = 55.85 g/mol, n = 2, F = 96485 C/mol, ρ = 7.87 g/cm³을 씀. ' +
+       '이 값은 순철이 2가로 전량 용해된다고 가정한 <b>상한</b>이며, ' +
+       '스테인리스는 Cr·Ni·Mo가 섞여 내산성이 강하고 부동태 피막이 재형성되므로 실제 용해는 이보다 작음.',
+  plotNote:'전류와 시간 어느 쪽을 올려도 이론 용해 길이는 선형으로 늘어남. ' +
+           '용해 단면적을 줄이면 같은 전하량이 더 긴 길이로 환산되므로, 가는 게이지에서 시간 관리가 더 좁아짐.',
+  compute:function(v){
+    var F = 96485, M = 55.85, nEl = 2, rho = 7.87;
+    var Q = (v.I/1000)*v.t;
+    var m = M*Q/(nEl*F);                 // g
+    var V = (m/rho)*1000;                // mm³
+    var L = V/v.A;                       // mm
+    var ts = Lab.linspace(0, 3600, 120);
+    var pts = ts.map(function(tt){
+      var q = (v.I/1000)*tt;
+      return [tt, ((M*q/(nEl*F))/rho)*1000/v.A];
+    });
+    return {
+      series:[{points:pts, color:'--accent', width:2.2}],
+      overlays:[
+        {type:'point', x:v.t, y:L, color:'--accent', label:L.toFixed(2) + ' mm'},
+        {type:'vline', x:v.t, color:'--ink-3'}
+      ],
+      stats:{Q:Q, m:m*1000, V:V, L:L}
+    };
+  }
+});
+
+/* ============================================================
+   07. 노출 면적과 계면 임피던스
+   ============================================================ */
+Lab.make({
+  mount:'#lab-imp',
+  title:'노출 면적과 계면 임피던스',
+  badge:'IMPEDANCE',
+  controls:[
+    {id:'Le', label:'노출 길이 L_e', min:0.1, max:5, step:0.05, value:0.5, unit:'mm', fmt:function(v){return v.toFixed(2);}},
+    {id:'OD', label:'외경 OD', min:0.2, max:0.8, step:0.01, value:0.45, unit:'mm', fmt:function(v){return v.toFixed(2);}},
+    {id:'f', label:'측정 주파수 f', min:10, max:10000, value:1000, log:true, unit:'Hz', fmt:function(v){return Lab.sci(v,3);}},
+    {id:'cd', label:'이중층 용량 밀도', min:1, max:100, value:20, log:true, unit:'µF/cm²', fmt:function(v){return v.toFixed(1);}},
+    {id:'ra', label:'전하이동 저항 밀도', min:1, max:1000, value:100, log:true, unit:'kΩ·cm²', fmt:function(v){return Lab.sci(v,3);}},
+    {id:'Rs', label:'용액 저항 R_s', min:50, max:5000, value:400, log:true, unit:'Ω', fmt:function(v){return v.toFixed(0);}}
+  ],
+  presets:[
+    {label:'팁만 침지 0.3 mm', set:{Le:0.3}},
+    {label:'몸체 침지 3 mm', set:{Le:3}},
+    {label:'절연 손상 가정', set:{Le:5, cd:2}},
+    {label:'1 kHz 기준', set:{f:1000}}
+  ],
+  stats:[
+    {id:'A', label:'노출 면적 A', unit:'mm²', fmt:function(v){return v.toFixed(4);}},
+    {id:'C', label:'계면 용량 C', fmt:function(v){return Lab.eng(v,'F',2);}},
+    {id:'Rct', label:'전하이동 저항', fmt:function(v){return Lab.eng(v,'Ω',2);}},
+    {id:'Xc', label:'용량성 리액턴스 X_c', fmt:function(v){return Lab.eng(v,'Ω',2);}},
+    {id:'Z', label:'|Z| @ f', fmt:function(v){return Lab.eng(v,'Ω',2);}},
+    {id:'th', label:'위상각 θ', unit:'°', fmt:function(v){return v.toFixed(1);}}
+  ],
+  plot:{width:620, height:320, xLabel:'주파수 f (Hz)', yLabel:'|Z| (Ω)',
+        autoX:false, autoY:true, xMin:1, xMax:1e5, xLog:true, yLog:true},
+  plot2:{width:620, height:250, xLabel:'주파수 f (Hz)', yLabel:'위상각 θ (°)',
+         autoX:false, autoY:true, xMin:1, xMax:1e5, xLog:true},
+  legend:[{color:'--im', label:'|Z|(f)'}, {color:'--green', label:'AANEM 상한 20 kΩ'}],
+  legend2:[{color:'--purple', label:'위상각'}],
+  note:'노출 면적은 A = π·OD·L_e + π·OD²/4로 두고, 계면 용량은 면적에 비례하는 C = c_d·A, ' +
+       '전하이동 저항은 면적에 반비례하는 R_ct = r_a/A로 환산함. ' +
+       '전체 임피던스는 R_s에 R_ct ∥ C를 직렬로 붙인 값임.',
+  plotNote:'음영 구간이 문헌 기준이 전제하는 100 Hz ~ 1 kHz 대역임. ' +
+           '정상 계면은 이 대역을 지나며 |Z|가 계속 내려가지만, 용량 밀도를 낮추면 곡선이 평탄해지면서 ' +
+           '위상각도 0°쪽으로 올라옴.',
+  compute:function(v){
+    var Amm = Math.PI*v.OD*v.Le + Math.PI*v.OD*v.OD/4;   // mm²
+    var Acm = Amm/100;                                    // cm²
+    var C = v.cd*1e-6*Acm;                                // F
+    var Rct = v.ra*1000/Acm;                              // Ω
+    function Z(f){
+      var w = 2*Math.PI*f;
+      var zc = [0, -1/(w*C)];
+      var zp = Lab.C.par([Rct, 0], zc);
+      return [v.Rs + zp[0], zp[1]];
+    }
+    var fs = Lab.logspace(1, 1e5, 200);
+    var mag = fs.map(function(f){ return [f, Lab.C.abs(Z(f))]; });
+    var ph  = fs.map(function(f){ return [f, Lab.C.arg(Z(f))]; });
+    var zNow = Z(v.f);
+    var Xc = 1/(2*Math.PI*v.f*C);
+    return {
+      series:[{points:mag, color:'--im', width:2.4}],
+      overlays:[
+        {type:'band', x1:100, x2:1000, color:'--warm', opacity:0.22, label:'100 Hz – 1 kHz'},
+        {type:'hline', y:20000, color:'--green', label:'20 kΩ'},
+        {type:'point', x:v.f, y:Lab.C.abs(zNow), color:'--accent', label:Lab.eng(Lab.C.abs(zNow),'Ω',1)}
+      ],
+      series2:[{points:ph, color:'--purple', width:2.2}],
+      overlays2:[
+        {type:'band', x1:100, x2:1000, color:'--warm', opacity:0.22},
+        {type:'hline', y:-90, color:'--ink-3', label:'−90° 이상 커패시터'},
+        {type:'point', x:v.f, y:Lab.C.arg(zNow), color:'--purple'}
+      ],
+      stats:{A:Amm, C:C, Rct:Rct, Xc:Xc, Z:Lab.C.abs(zNow), th:Lab.C.arg(zNow)}
+    };
+  }
+});
+</script>
+</body>
+</html>

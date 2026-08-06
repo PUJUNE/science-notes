@@ -1,0 +1,1436 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>전기화학과 Ag/AgCl 전극 — 수학·물리·화학 노트</title>
+<meta name="description" content="Nernst 식에서 출발해 Faraday 전하량-두께 환산, 3-step chronopotentiometry, OCP·CV 판독, 무전해 도금과 AAMI EC12 판정까지 브라우저에서 직접 계산해 다룸.">
+<link rel="stylesheet" href="../assets/css/site.css">
+</head>
+<body>
+
+<div class="topbar">
+  <div class="wrap">
+    <a class="brand" href="../index.html">← 수학·물리·화학 노트</a>
+    <ul class="topnav">
+      <li><a href="#s1">Nernst</a></li>
+      <li><a href="#s2">Faraday 두께</a></li>
+      <li><a href="#s3">3-step</a></li>
+      <li><a href="#s4">종점 판정</a></li>
+      <li><a href="#s5">면적 기준</a></li>
+      <li><a href="#s6">OCP</a></li>
+      <li><a href="#s7">CV</a></li>
+      <li><a href="#s8">무전해 도금</a></li>
+      <li><a href="#s9">AAMI EC12</a></li>
+    </ul>
+    <button class="theme-btn" type="button">DARK</button>
+  </div>
+</div>
+
+<header class="mast">
+  <div class="wrap">
+    <p class="kicker">Field 02 · 화학 · 전기화학과 Ag/AgCl 전극</p>
+    <h1>전위 한 줄에서 <em>두께 한 줄</em>까지</h1>
+    <p class="lede">
+      Ag/AgCl 전극은 전위를 Cl⁻ 활동도 하나로 고정하는 기준전극이면서, 동시에 전하량을 재면
+      적층 두께가 나오는 측정 대상이기도 함. 이 페이지는 Nernst 식에서 출발해 Faraday 환산,
+      3-step 정전류 시퀀스, OCP·CV 판독, 무전해 도금과 규격 판정까지 한 줄로 이어 붙임.
+      모든 그래프는 브라우저에서 식을 직접 풀어 그림.
+    </p>
+    <div class="eq" style="border-left-color:var(--accent)">
+      E = E° − (RT/F) ln a<sub>Cl⁻</sub> &nbsp;&nbsp;<span class="cm">|</span>&nbsp;&nbsp;
+      Q = I·t → n = Q/zF → m = nM → d = (m/ρ)/A
+    </div>
+  </div>
+</header>
+
+<main>
+
+<!-- ================= 01 ================= -->
+<section id="s1">
+  <div class="wrap">
+    <p class="eyebrow"><span class="num">01</span><span>E = E° − (RT/F) ln a</span></p>
+    <h2>기준전극 전위가 Cl⁻ 활동도 하나로 정해지는 구조</h2>
+
+    <p>
+      Ag/AgCl 전극은 금속 Ag 위에 난용성 AgCl이 얹혀 전해질과 접하는 구조이며, 계면에서 일어나는
+      반쪽 반응은 <code>AgCl + e⁻ → Ag + Cl⁻</code> 한 갈래로 고정됨. 고체 Ag와 고체 AgCl은 순수한
+      상으로 존재해 활동도를 1로 두므로 전위식에 남는 변수는 용액 쪽 Cl⁻ 활동도뿐이고, 그래서
+      충전액을 3 M KCl처럼 높은 농도로 잡아 두면 시료 쪽 조성이 바뀌어도 기준선이 흔들리지 않음.
+    </p>
+
+    <div class="eq">
+      E = E° − (RT/F) ln a<sub>Cl⁻</sub>
+      <br><span class="cm">— 25 °C에서 상용로그로 바꾸면 기울기 −2.303·RT/F = −59.16 mV/decade</span>
+      <br>E°<sub>Ag/AgCl</sub> = <b>+0.222 V vs SHE</b>
+    </div>
+
+    <ul class="sym">
+      <li><b>E</b><span>전극 전위 [V]</span></li>
+      <li><b>E°</b><span>표준 전위, AgCl/Ag/Cl⁻ 계에서 +0.222 V vs SHE</span></li>
+      <li><b>R</b><span>기체상수 8.314 J/(mol·K)</span></li>
+      <li><b>T</b><span>절대온도 [K]</span></li>
+      <li><b>F</b><span>Faraday 상수 96,485 C/mol</span></li>
+      <li><b>a<sub>Cl⁻</sub></b><span>Cl⁻ 활동도 [무차원]</span></li>
+    </ul>
+
+    <p>
+      전위가 Cl⁻ 활동도의 로그에 걸린다는 성질은 안정성의 근거이면서 드리프트의 경로이기도 함.
+      충전액에서 KCl이 고체로 석출되면 유효 Cl⁻가 줄어 전위가 양의 방향으로 밀리고, 결정이 접촉면을
+      덮으면 이온 교환에 쓰이는 면적이 줄어 임피던스가 함께 올라감. 온도 항 <code>RT/F</code>도
+      기울기를 통해 걸리므로, 체온 근처에서 재는 계측에서는 25 °C 기준으로 잡은 환산표를 그대로
+      쓰지 말고 측정 온도의 기울기를 다시 계산해야 함.
+    </p>
+
+    <div id="lab-nernst"></div>
+
+    <div class="callout note">
+      <p><b>기준 전위계 환산</b> — 같은 전위라도 어느 기준전극을 썼는지에 따라 숫자가 달라짐.
+      SHE 기준값에서 SCE의 +0.241 V를 빼면 SCE 기준값이 나오며, 문헌값을 옮겨 적을 때는 기준전극과
+      충전액 농도를 함께 표기해야 비교가 성립함.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ================= 02 ================= -->
+<section id="s2">
+  <div class="wrap">
+    <p class="eyebrow"><span class="num">02</span><span>Q → n → m → d</span></p>
+    <h2>전하량에서 두께로 가는 네 단계</h2>
+
+    <p>
+      전하량에서 두께까지 가는 경로는 네 단계이고, 각 단계가 물리적으로 독립된 환산이라 중간값을
+      따로 검증할 수 있음. 전하량(mC)과 질량(mg)은 서로 다른 물리량이므로 단위를 단계마다 밝혀 두고,
+      마지막에 면적으로 나눠 두께를 얻음. 장비가 직접 주는 값은 시간과 전위뿐이므로 이 경로에
+      들어가는 나머지 값은 전부 유도값임.
+    </p>
+
+    <div class="eq">
+      Q = |I| × t &nbsp;&nbsp;<span class="cm">[C]</span><br>
+      n = Q / (zF) &nbsp;&nbsp;<span class="cm">[mol]</span><br>
+      m = n M &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;<span class="cm">[g]</span><br>
+      V = m / ρ &nbsp;&nbsp;&nbsp;&nbsp;<span class="cm">[cm³]</span><br>
+      d = V / A &nbsp;&nbsp;&nbsp;&nbsp;<span class="cm">[cm] → µm 환산 시 ×10⁴</span>
+    </div>
+
+    <ul class="sym">
+      <li><b>Q</b><span>전하량 [C]</span></li>
+      <li><b>I</b><span>인가 전류의 절댓값 [A]</span></li>
+      <li><b>z</b><span>반응 전자 수, AgCl·Ag 모두 1</span></li>
+      <li><b>M</b><span>몰질량 [g/mol]</span></li>
+      <li><b>ρ</b><span>밀도 [g/cm³]</span></li>
+      <li><b>A</b><span>전극 면적 [cm²]</span></li>
+      <li><b>d</b><span>두께 [cm 또는 µm]</span></li>
+    </ul>
+
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>상수</th><th>값</th></tr></thead>
+        <tbody>
+          <tr><td>Faraday 상수 F</td><td>96,485 C/mol</td></tr>
+          <tr><td>AgCl 몰질량 M<sub>AgCl</sub></td><td>143.32 g/mol</td></tr>
+          <tr><td>AgCl 밀도 ρ<sub>AgCl</sub></td><td>5.56 g/cm³</td></tr>
+          <tr><td>Ag 원자량 M<sub>Ag</sub></td><td>107.868 g/mol</td></tr>
+          <tr><td>Ag 밀도 ρ<sub>Ag</sub></td><td>10.49 g/cm³</td></tr>
+          <tr><td>반응 전자 수 z</td><td>AgCl·Ag 모두 1</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div id="lab-faraday"></div>
+
+    <p>
+      두 성분을 가르는 값은 몰부피 <code>M/ρ</code>임. AgCl은 143.32/5.56 = 25.78 cm³/mol,
+      Ag는 107.868/10.49 = 10.28 cm³/mol이므로 같은 전하량에서 AgCl 환산 두께가 Ag 환산 두께보다
+      약 2.5배 큼. 그래서 전체 전하량을 AgCl 단일 물성으로 한 번에 환산하면 두께가 과대평가되고,
+      두 성분을 각자의 몰질량·밀도로 나눠 환산한 뒤 합산해야 값이 맞음.
+    </p>
+
+    <div class="eq">
+      Q<sub>AgCl</sub> = Q₁,&nbsp;&nbsp; Q<sub>Ag</sub> = Q₃ − Q₁<br>
+      d<sub>AgCl</sub> = (1/A) · (Q₁/F) · (M<sub>AgCl</sub>/ρ<sub>AgCl</sub>)<br>
+      d<sub>Ag</sub>&nbsp;&nbsp; = (1/A) · (Q<sub>Ag</sub>/F) · (M<sub>Ag</sub>/ρ<sub>Ag</sub>)<br>
+      d<sub>total</sub> = d<sub>AgCl</sub> + d<sub>Ag</sub>
+    </div>
+
+    <div id="lab-split"></div>
+
+    <div class="callout">
+      <p><b>몰 비와 두께 비는 순서가 다를 수 있음</b> — AgCl은 Cl을 품어 밀도가 5.56 g/cm³로
+      Ag의 10.49 g/cm³보다 낮으므로 같은 몰 수라도 부피를 더 차지함. 몰 비에서 Ag가 우세한 시료도
+      두께 비에서는 AgCl이 비슷하거나 더 두껍게 나올 수 있으므로, 조성을 말할 때는 몰 비를,
+      물리적 적층을 말할 때는 두께 비를 쓰고 두 지표를 함께 제시함.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ================= 03 ================= -->
+<section id="s3">
+  <div class="wrap">
+    <p class="eyebrow"><span class="num">03</span><span>Q<sub>Ag</sub> = Q₃ − Q₁</span></p>
+    <h2>3-step chronopotentiometry — 두 화학종의 분리 정량</h2>
+
+    <p>
+      Ag/AgCl 전극은 AgCl 단일상으로 이루어지지 않고 염소화를 받지 않은 금속 Ag가 함께 남아 있으므로,
+      한 번의 정전류 환원으로는 AgCl 몫만 잡히고 Ag 몫이 빠짐. 이 한계를 넘어서려면 정전류의 부호를
+      바꿔 세 번 인가하는 시퀀스를 구성해야 하며, 각 step이 담당하는 화학종이 달라 두 성분의 전하량을
+      대수적으로 분리할 수 있음.
+    </p>
+
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>Step</th><th>인가 전류</th><th>반응</th><th>얻는 값</th></tr></thead>
+        <tbody>
+          <tr><td>Step 1 (1st reduction)</td><td>환원 방향 정전류</td><td>AgCl + e⁻ → Ag + Cl⁻</td><td>Q₁ = 원래 존재하던 AgCl 전하량</td></tr>
+          <tr><td>Step 2 (2nd oxidation)</td><td>산화 방향 정전류</td><td>Ag + Cl⁻ → AgCl + e⁻</td><td>전처리 — 잔존 Ag를 전량 AgCl로 전환함</td></tr>
+          <tr><td>Step 3 (3rd reduction)</td><td>환원 방향 정전류</td><td>AgCl + e⁻ → Ag + Cl⁻</td><td>Q₃ = 원래 Ag + 원래 AgCl 합산 전하량</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p>
+      Step 2는 정량 목적이 아니라 전처리이므로 Step 1보다 인가 시간을 길게 잡아야 Step 3에서 전체
+      적층을 한 번에 환원시킬 수 있음. 시간이 모자라 잔존 Ag가 다 전환되지 못하면 Q₃가 작게 잡히고
+      그만큼 Q<sub>Ag</sub>가 과소평가되므로, Step 2 종료 전위를 함께 기록해 전처리가 끝났는지
+      확인함. 종료 전위가 낮은 값에 머물면 산화 종점에 이르지 못한 것이고, 반대로 컴플라이언스
+      한계까지 치솟으면 Step 2가 조기 종료된 것이라 두 경우 모두 판정 유보 대상으로 분류함.
+    </p>
+
+    <div class="eq">
+      Q₁ = |I| × t₁ &nbsp;&nbsp;<span class="cm">Step 1 종점까지의 전하량 — 원래 AgCl 몫</span><br>
+      Q₃ = |I| × t₃ &nbsp;&nbsp;<span class="cm">Step 3 종점까지의 전하량 — Ag + AgCl 합산 몫</span><br>
+      <b>Q<sub>Ag</sub> = Q₃ − Q₁</b>
+    </div>
+
+    <div id="lab-3step"></div>
+
+    <h3>셀 구성과 장비 조건</h3>
+
+    <p>
+      정전류·정전압 측정에는 potentiostat/galvanostat을 쓰며, 단일 채널 장비라도 최대 전류와 측정
+      주파수 범위가 대상 시료를 수용하면 전하량과 임피던스를 함께 감당함. 배선은 Working,
+      Working Sense, Reference, Counter의 4선식으로 구성해 배선 저항이 측정 전위에 실리지 않게 함.
+    </p>
+
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>전극</th><th>구성</th></tr></thead>
+        <tbody>
+          <tr><td>WE</td><td>시료 Ag/AgCl 전극</td></tr>
+          <tr><td>CE</td><td>SUS plate, 작업 전극보다 충분히 넓은 면적</td></tr>
+          <tr><td>RE</td><td>Ag/AgCl in 3 M KCl (Vycor glass tip 상용 기준전극 포함)</td></tr>
+          <tr><td>전해질</td><td>saline</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <ul class="notes">
+      <li><b>전류 레인지</b><span>Auto로 두면 스위칭 순간 데이터가 끊기고 잡음이 실리므로 수동 고정함. 허용 레인지의 0.02% 수준이 오차로 실릴 수 있어 그 값을 기준으로 레인지를 고름</span></li>
+      <li><b>레인지 하한</b><span>레인지가 인가 전류보다 작으면 정전류 자체가 걸리지 않으므로, 인가 전류의 절댓값을 수용하는 값 이상으로 잡음</span></li>
+      <li><b>샘플 주기</b><span>초 단위로 두어 전위 급락 시점을 놓치지 않게 함</span></li>
+      <li><b>컴플라이언스</b><span>장비 한계 안에서 충분히 높게 설정해 계면 저항이 큰 시료에서 산화 step이 조기 종료되지 않게 함</span></li>
+      <li><b>initial delay</b><span>전위 변화율이 기준 아래로 안정될 때까지 대기해 초기 드리프트를 배제함</span></li>
+    </ul>
+  </div>
+</section>
+
+<!-- ================= 04 ================= -->
+<section id="s4">
+  <div class="wrap">
+    <p class="eyebrow"><span class="num">04</span><span>V(t) ≤ V<sub>th</sub></span></p>
+    <h2>종점 판정 — 전위 급락과 두 가지 예외 처리</h2>
+
+    <p>
+      종점은 전위 급락 시점으로 정의함. 정전류 환원 중 표면에 AgCl이 남아 있는 동안에는 AgCl/Ag
+      산화환원쌍이 전위를 완만한 plateau로 붙들지만, AgCl이 소진되면 전위가 물 분해 같은 다른 반응
+      쪽으로 급격히 음의 방향으로 떨어짐. 기준전극 대비 음의 방향으로 설정한 임계 전위를 처음
+      통과하는 시점을 종점으로 채택하며, 임계값은 시료군의 전위 거동에 맞춰 정하되 인쇄형처럼 계면
+      저항이 커 전위가 전반적으로 낮게 형성되는 전극군에는 더 깊은 임계를 따로 적용함.
+    </p>
+
+    <div class="cards">
+      <div class="card">
+        <h5><span class="tag">예외 1</span> 개시 직후 IR 강하</h5>
+        <ul>
+          <li>산화 step 직후 환원 step을 시작하면 개시 직후 이미 임계를 위반함</li>
+          <li>그대로 두면 <b>Q₃ &lt; Q₁</b>이라는 모순이 나옴</li>
+          <li>전위가 V<sub>max</sub>까지 회복한 뒤 다시 임계로 내려오는 시점을 잡음</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h5><span class="tag">예외 2</span> transient overshoot</h5>
+        <ul>
+          <li>인쇄형 전극은 개시 직후 구간에 transient가 실림</li>
+          <li>임계를 스쳐 지나가며 거짓 종점을 만듦</li>
+          <li>초기 구간을 무시하는 옵션으로 뒤의 실제 급락 지점을 뽑음</li>
+        </ul>
+      </div>
+    </div>
+
+    <div id="lab-endpoint"></div>
+
+    <p class="hint">
+      두 마커가 찍히는 위치를 비교해 볼 것. 단순 임계 최초 통과 방식은 IR 강하와 transient가 커질수록
+      개시 부근으로 끌려가 Q값을 작게 만들고, V<sub>max</sub> 통과 후 검출은 같은 곡선에서 실제 급락
+      지점을 유지함.
+    </p>
+  </div>
+</section>
+
+<!-- ================= 05 ================= -->
+<section id="s5">
+  <div class="wrap">
+    <p class="eyebrow"><span class="num">05</span><span>Q/A, d ∝ 1/A</span></p>
+    <h2>측정 항목과 면적 기준</h2>
+
+    <p>
+      표를 채울 때 어느 열이 원자료이고 어느 열이 유도값인지 갈라 두면 오류 추적이 쉬워짐. 장비가
+      주는 값은 t₁·t₃와 Step 2 종료 전위이고, 전하량부터는 전부 환산 결과임.
+    </p>
+
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>항목</th><th>얻는 방법</th><th>단위</th></tr></thead>
+        <tbody>
+          <tr><td>A (전극 면적)</td><td>전극 형상 치수를 재서 기하 계산. 양면 도포 전극은 양면 합산, 원형 다구획 전극은 구획 수를 곱함</td><td>cm²</td></tr>
+          <tr><td>임계 전위</td><td>시료군의 전위 거동에 맞춰 사전 설정</td><td>mV</td></tr>
+          <tr><td>t₁</td><td>Step 1에서 전위가 임계를 처음 통과한 시각</td><td>s</td></tr>
+          <tr><td>t₃</td><td>Step 3에서 V<sub>max</sub> 통과 후 임계를 다시 통과한 시각</td><td>s</td></tr>
+          <tr><td>Q<sub>AgCl</sub></td><td>Q₁ = I × t₁ (I는 인가 전류의 절댓값)</td><td>mC</td></tr>
+          <tr><td>Q<sub>total</sub></td><td>Q₃ = I × t₃</td><td>mC</td></tr>
+          <tr><td>Q<sub>Ag</sub></td><td>Q₃ − Q₁</td><td>mC</td></tr>
+          <tr><td>d<sub>AgCl</sub>, d<sub>Ag</sub></td><td>Faraday 경로를 각 성분 물성으로 따로 환산</td><td>µm</td></tr>
+          <tr><td>d<sub>total</sub></td><td>d<sub>AgCl</sub> + d<sub>Ag</sub></td><td>µm</td></tr>
+          <tr><td>Ag:AgCl 몰 비</td><td>n<sub>Ag</sub> : n<sub>AgCl</sub> = (Q<sub>Ag</sub>/F) : (Q₁/F)</td><td>mol%</td></tr>
+          <tr><td>센서 개당 n<sub>total</sub>, Q<sub>total</sub></td><td>면적 정규화 이전의 절댓값</td><td>µmol, mC</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p>
+      형상과 면적이 제각각인 전극을 나란히 놓으려면 절대 전하량 대신 면적당 전하량(mC/cm²)으로
+      환산해야 하고, 두께 역시 면적으로 나눈 값이므로 면적 정의가 흔들리면 두 지표가 함께 흔들림.
+      면적 기준을 단면에서 양면으로 바꾸면 절대 전하량과 몰 비는 그대로지만 면적당 전하량과 두께는
+      배수의 역수만큼 줄어듦.
+    </p>
+
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>항목</th><th>면적 기준 변경 시 거동</th></tr></thead>
+        <tbody>
+          <tr><td>절대 전하량 (mC)</td><td>불변 — 측정 자체가 전극 전체를 대상으로 하므로</td></tr>
+          <tr><td>면적 A</td><td>배수만큼 변함</td></tr>
+          <tr><td>면적당 전하량 (mC/cm²)</td><td>배수의 역수만큼 변함</td></tr>
+          <tr><td>두께 (µm)</td><td>배수의 역수만큼 변함</td></tr>
+          <tr><td>Ag:AgCl 몰 비</td><td>불변 — 전하량 비율이므로 면적과 무관</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div id="lab-area"></div>
+
+    <ul class="notes">
+      <li><b>인쇄형 전극</b><span>외형 면적과 실제 활성 면적이 어긋날 수 있어 외형 기준 등가 두께가 국부 도막 두께를 과소평가할 여지가 있음. 인쇄형과 도금·압착형을 같은 표에 올릴 때는 면적 정의를 각주로 밝힘</span></li>
+      <li><b>평균 내는 순서</b><span>t₁·t₃ 단계에서 평균을 내지 않고 시료별 Q·두께를 각각 환산한 뒤 마지막에 평균함</span></li>
+      <li><b>산포 표기</b><span>n<sub>total</sub> 편차와 전체 두께 범위로 표시해 시료군마다 균질성이 다르다는 점을 드러냄</span></li>
+      <li><b>이상 회차</b><span>종점 미도달, Step 2 컴플라이언스 조기 종료, 초기 transient로 종점이 어긋난 회차는 삭제하지 않고 사유를 붙여 남기되 평균 계산에서 뺄지 여부를 명시함</span></li>
+    </ul>
+  </div>
+</section>
+
+<!-- ================= 06 ================= -->
+<section id="s6">
+  <div class="wrap">
+    <p class="eyebrow"><span class="num">06</span><span>i = 0, ΔE = E<sub>final</sub> − E<sub>initial</sub></span></p>
+    <h2>OCP — 외부 전류 없이 표면 화학종을 읽는 측정</h2>
+
+    <p>
+      개방회로전위(OCP)는 전류를 0으로 두고 작업 전극이 기준전극 대비 자연적으로 갖는 전위를 시간에
+      따라 기록하는 측정임. 표면을 지배하는 화학종에 따라 값이 갈리므로, SUS와 AgCl이 접촉한 전극에서
+      부식이 진행되면 전위를 양의 방향으로 붙들어 주던 산화수 +1의 Ag⁺(AgCl) 층이 사라지고 전자를
+      내놓으려는 성질이 강한 금속 Fe의 노출 면적이 넓어져 OCP가 음의 영역으로 이동함. 부식이
+      활발할수록 전자를 방출하려는 압력이 커져 전위가 더 음으로 흐름.
+    </p>
+
+    <div id="lab-ocp"></div>
+
+    <h3>채널 분해 — 코팅인가 접점인가</h3>
+
+    <p>
+      SUS 스냅과 Ag/AgCl 코팅이 조립된 전극에서 전위가 불안정할 때 원인을 가리려면 조립체 전체를 한
+      채널로 재는 것으로는 부족하고 구성 요소를 나눠 동시에 기록해야 함. total 채널만 수백~수천 mV
+      규모로 요동치고 snap·AgCl·total RE가 수십 mV 이내에 머무르면 전위 폭주가 코팅이 아니라 특정
+      접점에 국한된 것으로 읽음.
+    </p>
+
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>채널</th><th>작업 전극</th><th>읽는 정보</th></tr></thead>
+        <tbody>
+          <tr><td>total</td><td>SUS snap + AgCl 조립체</td><td>완제품 상태의 전위 안정성</td></tr>
+          <tr><td>snap</td><td>SUS 스냅 단독</td><td>금속 접점 자체의 부식 거동</td></tr>
+          <tr><td>AgCl</td><td>Ag/AgCl 코팅 단독</td><td>코팅층의 전위 안정성</td></tr>
+          <tr><td>total RE</td><td>조립체를 기준전극 쪽에 둔 구성</td><td>기준선 자체의 드리프트 확인</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <ul class="notes">
+      <li><b>기록 길이</b><span>침지 조건은 부식 사이클이 정상 상태에 도달할 때까지 기록하고, 비침지 조건은 기준선 드리프트만 확인하면 되므로 짧게 끊음</span></li>
+      <li><b>판독 통계</b><span>초기 E, 최종 E, ΔE, 구간 평균 E 네 값을 뽑고 초 단위 샘플링 원자료를 함께 보관함</span></li>
+      <li><b>판독 방향</b><span>절댓값보다 방향과 폭으로 읽음. 짧은 구간의 ΔE가 수 mV 이내면 안정, 수백 mV 이상이면 폭주로 분류하고 채널 분해로 원인을 좁힘</span></li>
+      <li><b>기준전극</b><span>기준전극 없이 재면 전위 기준선이 시료마다 흩어져 시료 간 비교가 성립하지 않으므로, 비교 목적 측정에는 Ag/AgCl 기준전극을 붙임</span></li>
+    </ul>
+  </div>
+</section>
+
+<!-- ================= 07 ================= -->
+<section id="s7">
+  <div class="wrap">
+    <p class="eyebrow"><span class="num">07</span><span>i<sub>p</sub> ∝ v<sup>1/2</sup></span></p>
+    <h2>CV — SUS 산화물의 환원 피크 검출</h2>
+
+    <p>
+      순환전압전류법은 전위를 일정 속도로 왕복 주사하면서 전류를 기록해 산화·환원 반응이 일어나는
+      전위를 피크로 드러냄. SUS-AgCl 작업 전극에 제작 과정에서 섞여 든 철 산화물이 있는지 판별하려면
+      저속 주사(10 mV/s 수준)를 택하며, 느리게 갈수록 계면 반응이 준정상 상태에 가까워져 미세한 환원
+      피크가 배경 전류에서 분리됨. 대신 총 측정 시간이 늘고 표면 상태가 측정 도중 변할 여지가 커짐.
+    </p>
+
+    <div class="cards">
+      <div class="card">
+        <h5><span class="tag" style="background:var(--mint);color:var(--green)">지표 1</span> 피크 위치</h5>
+        <ul>
+          <li>−0.8 V ~ −1.1 V (vs Ag/AgCl) 환원 피크 — Fe 산화물의 직접 신호</li>
+          <li>+0.1 V ~ +0.3 V 거대한 산화 피크 — Ag/AgCl 반응</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h5><span class="tag" style="background:var(--lilac);color:var(--purple)">지표 2</span> 루프 방향</h5>
+        <ul>
+          <li>정상 전극은 가역·충전성 반응으로 시계 방향 루프</li>
+          <li>산화물이 든 전극은 비가역 환원이 지배해 반시계 방향으로 꼬임</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h5><span class="tag" style="background:var(--warm);color:var(--amber)">지표 3</span> 사이클 간 감쇠</h5>
+        <ul>
+          <li>첫 사이클의 환원 피크가 둘째 사이클에서 사라지거나 급감</li>
+          <li>표면 고체 산화물이 금속으로 환원되어 제거된 것으로 읽음</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="eq">
+      i<sub>p</sub> = 2.69×10⁵ · n<sup>3/2</sup> · A · D<sup>1/2</sup> · C · v<sup>1/2</sup>
+      <br><span class="cm">— Randles–Ševčík 관계. 주사속도의 제곱근에 비례하므로 v를 4배 올리면 피크 전류가 2배가 됨</span>
+    </div>
+
+    <ul class="sym">
+      <li><b>i<sub>p</sub></b><span>피크 전류 [A]</span></li>
+      <li><b>n</b><span>반응 전자 수</span></li>
+      <li><b>A</b><span>전극 면적 [cm²]</span></li>
+      <li><b>D</b><span>확산계수 [cm²/s]</span></li>
+      <li><b>C</b><span>활성 화학종 농도 [mol/cm³]</span></li>
+      <li><b>v</b><span>주사속도 [V/s]</span></li>
+    </ul>
+
+    <div id="lab-cv"></div>
+
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>항목</th><th>설정</th></tr></thead>
+        <tbody>
+          <tr><td>전해질</td><td>0.1 M Borate Buffer, pH 8.4</td></tr>
+          <tr><td>용존 산소 제거</td><td>N₂ 또는 Ar 버블링</td></tr>
+          <tr><td>Initial potential</td><td>0 V vs Eoc</td></tr>
+          <tr><td>Middle potential</td><td>−1.2 V vs ERef</td></tr>
+          <tr><td>Final potential</td><td>+0.6 V vs ERef</td></tr>
+          <tr><td>Scan rate</td><td>0.01 V/s (10 mV/s)</td></tr>
+          <tr><td>Segment count</td><td>6 (3 사이클)</td></tr>
+          <tr><td>Sample interval</td><td>0.001 V (1 mV)</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p>
+      완충 용액을 전해질로 쓰는 이유는 염화물이 없는 중성 영역에서 SUS 부동태 피막이 안정하게 유지되어
+      Cl⁻가 유발하는 공식이 산화물 신호를 덮지 않기 때문이고, 불활성 기체로 용존 산소를 몰아내는 이유는
+      산소 환원 전위가 SUS 산화물 환원 영역(−0.8 V ~ −1.0 V)과 겹쳐 두 신호를 분리할 수 없기 때문임.
+      전위 창은 음의 끝을 금속 산화물 환원 영역까지 내리고 양의 끝을 AgCl 산화 반응이 관찰되는 영역까지
+      올려 잡되, 용매 분해가 시작되는 전위를 넘기지 않는 선에서 닫음.
+    </p>
+  </div>
+</section>
+
+<!-- ================= 08 ================= -->
+<section id="s8">
+  <div class="wrap">
+    <p class="eyebrow"><span class="num">08</span><span>Sn²⁺ + 2Ag⁺ → Sn⁴⁺ + 2Ag⁰</span></p>
+    <h2>Ag/AgCl 석출 — 무전해 도금과 염소화</h2>
+
+    <p>
+      전기화학 도금은 전극마다 개별 전위·전류를 걸어야 해 대량 제작에 불리하고 금속 치환 도금은 Cu·Al
+      기판이나 특정 페이스트를 요구하므로, 침지만으로 다수 전극을 동시에 처리하려면 무전해 도금이
+      유리함. 대신 다단계 표면처리와 촉매 절차가 따라붙음. 민감화·시딩은 은보다 이온화 경향이 강한
+      주석을 매개로 환원력을 표면에 심는 조작이며, 본 도금 단계에서 착화제가 없으면 용액 전체에서 은이
+      환원되어 침전으로 소실됨.
+    </p>
+
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>단계</th><th>공정</th><th>주요 재료</th><th>화학</th></tr></thead>
+        <tbody>
+          <tr><td>1</td><td>민감화 (Sensitization)</td><td>SnCl₂ + HCl</td><td>비전도체 표면에 Sn²⁺ 흡착</td></tr>
+          <tr><td>2</td><td>시딩 (Activation)</td><td>AgNO₃ 묽은 용액</td><td>Sn²⁺ + 2Ag⁺ → Sn⁴⁺ + 2Ag⁰ 갈바닉 치환으로 결정 핵 형성</td></tr>
+          <tr><td>3</td><td>본 도금</td><td>착화제(EDTA 등), AgNO₃, 환원제(ascorbate 등), PEG, 구연산</td><td>착화제가 Ag⁺를 킬레이팅해 벌크 환원을 억제하고 환원제가 seed 중심에서 Ag⁺ → Ag⁰ 환원</td></tr>
+          <tr><td>4</td><td>염소화</td><td>FeCl₃</td><td>표면 Ag를 AgCl로 부분 변환</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p>
+      은 베이스와 환원제를 별도 용액으로 나눠 사용 직전에 혼합하면 환원제 농도를 낮게 유지할 수 있고,
+      그 조건에서 은이 용액 중에 흩날리는 대신 표면에서 치밀한 막으로 자람. 반응 속도가 느려지는 대신
+      침지 시간을 길게 가져가도 배스가 무너지지 않으며, 도금 후 열처리로 입자 간 접촉을 늘려 전도성을
+      완성함. 민감화 직후 세척은 짧게 끊어야 하는데, 너무 오래 씻으면 수산화 주석 Sn(OH)ₓ 얼룩이 생겨
+      밀착력이 떨어지고 너무 대충 씻으면 Cl⁻가 남아 다음 단계에서 AgCl 침전이 터짐. 염소화 용액은
+      실온에서 쓰고 표면색이 바뀌는 즉시 인출하며, 잔여 FeCl₃는 증류수로 여러 차례 헹궈 제거함.
+    </p>
+
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>항목</th><th>Ag 도금 직후</th><th>AgCl 처리 후</th></tr></thead>
+        <tbody>
+          <tr><td>색상</td><td>반짝이는 은백색</td><td>무광 회갈색 (dark grey / sepia)</td></tr>
+          <tr><td>표면</td><td>금속 광택</td><td>매트한 질감, 빛 반사 없음</td></tr>
+          <tr><td>역할</td><td>전도성 확보</td><td>이온-전자 변환</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p>
+      품질은 색으로 1차 판정하며, 색이 짙을수록 임피던스가 낮고 잡음이 줄어드는 관계가 나타남. 다만
+      육안으로 은색이 나왔는데도 멀티미터로 전도성이 잡히지 않으면서 용액이 검게 변하며 침전이 생기는
+      역설이 나타날 수 있음. 이때는 코팅 유무를 다시 보지 말고 도금욕의 화학양론부터 검산함. 배스에
+      녹인 AgNO₃ 질량을 몰 수로 환산해 은 이온 총량을 구하고 투입한 환원제 몰 수와 맞대면 환원 가능한
+      은 비율이 나오는데, 이 비율이 1%에도 못 미치면 기판 위 은 나노 입자들이 서로 닿지 못해 고립된
+      아일랜드 구조에 머물고 전자 이동 경로가 생기지 않음.
+    </p>
+
+    <div id="lab-bath"></div>
+
+    <p>
+      전처리에서 딸려 들어온 활성화 용액이나 미세 입자는 떠다니는 촉매로 작용해, 가뜩이나 부족한
+      환원제를 표면 성장에 쓰이기 전에 용액 중에서 소모시켜 검은 침전으로 빼앗아 감. 대책은 환원제
+      농도를 올려 환원 가능한 은 비율을 끌어올리고, 활성화 후 세척을 강화해 딸림 오염을 줄이며,
+      빙초산으로 약산성 영역을 정밀 제어하는 세 갈래임.
+    </p>
+
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>pH</th><th>현상</th><th>메커니즘</th></tr></thead>
+        <tbody>
+          <tr><td>낮음 (산성)</td><td>흰 침전물</td><td>H⁺ 농도가 높아 EDTA가 Ag⁺를 선택적으로 킬레이팅하지 못함</td></tr>
+          <tr><td>높음 (염기성)</td><td>용액 내 Ag⁺ 벌크 환원·침전</td><td>ascorbate 반응성 증가</td></tr>
+          <tr><td>적정 (약산성)</td><td>투명 용액, 표면 코팅 성장</td><td>EDTA 킬레이팅 + seed 중심 성장</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p>
+      민감화 실패도 같은 방식으로 규명됨. HCl 농도가 지나치게 높은 용액에 SnCl₂를 녹이면 sensitizing이
+      일어나지 않아 코팅층이 아예 생기지 않는데, 르샤틀리에 원리로 해석하면 H⁺ 과다가 Sn²⁺ 비율을 키우고
+      기판 흡착에 필요한 Sn(OH)⁻ 형태를 줄이기 때문임. HCl 농도를 낮춰야 흡착 효율이 올라감.
+    </p>
+
+    <div class="eq">
+      V<sub>coat</sub> = A<sub>substrate</sub> × d<sub>target</sub> &nbsp;&nbsp;<span class="cm">[cm³]</span><br>
+      m<sub>Ag</sub> = V<sub>coat</sub> × ρ<sub>Ag</sub> (10.49 g/cm³)<br>
+      n<sub>Ag</sub> = m<sub>Ag</sub> / M<sub>Ag</sub> (107.868 g/mol)<br>
+      m<sub>AgNO₃</sub> = n<sub>Ag</sub> × M<sub>AgNO₃</sub> (169.87 g/mol)
+    </div>
+
+    <div id="lab-cost"></div>
+
+    <p class="hint">
+      시약가 대신 은 시세와 환율을 쓰면 원료 기준 하한선이 나오므로 두 경로를 함께 계산해 범위로 봄.
+      실제 공정에서는 도금조의 은을 전량 소진하지 못하는 loss가 있어 이론값보다 크게 잡아야 함.
+    </p>
+  </div>
+</section>
+
+<!-- ================= 09 ================= -->
+<section id="s9">
+  <div class="wrap">
+    <p class="eyebrow"><span class="num">09</span><span>|Z| = √(Z′² + Z″²)</span></p>
+    <h2>규격 시험 항목과 판정 기준</h2>
+
+    <p>
+      SDR(sensor defibrillation recovery)은 AAMI EC12 규격이 정의하는 제세동 과부하 회복 시험으로,
+      고전압 펄스를 인가한 뒤 전극 offset 전위가 얼마나 빨리 가라앉는지 측정함. AAMI EC12 항목은 전용
+      다채널 시험기로 측정하며, 채널별로 항목을 반복 측정하고 항목마다 측정 구간과 판정선이 규격으로
+      고정돼 있음.
+    </p>
+
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>항목</th><th>측정 구간</th><th>판정선</th><th>읽는 정보</th></tr></thead>
+        <tbody>
+          <tr><td>ACZ (Ω), 초기</td><td>시험 개시 시점</td><td>3000 Ω</td><td>전극-겔-접점 경로의 교류 임피던스</td></tr>
+          <tr><td>DCO (mV)</td><td>20~61 s</td><td>100 mV</td><td>정지 상태 DC offset 전위</td></tr>
+          <tr><td>NOISE (µVpp)</td><td>60~360 s</td><td>150 µVpp</td><td>무입력 구간 잡음 진폭</td></tr>
+          <tr><td>SDR 5 s (mV)</td><td>제세동 펄스 후 5 s</td><td>100 mV</td><td>과부하 직후 잔류 offset</td></tr>
+          <tr><td>SDR 15/25/35 s (mV/s)</td><td>펄스 후 각 시점</td><td>1 mV/s</td><td>offset 회복 속도</td></tr>
+          <tr><td>ACZ (Ω), 시험 종료 후</td><td>전 항목 종료 시점</td><td>3000 Ω</td><td>시험 도중 접점 손상 여부</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div id="lab-aami"></div>
+
+    <p>
+      시험기는 실패 사유를 개방 회로, 제세동 고전압 펄스 오류, 저전압 펄스 오류로 나눠 코드로 표시함.
+      초기 ACZ와 종료 ACZ를 함께 재는 이유는 시험 전에는 통전되던 채널이 제세동 펄스를 겪고 개방 회로로
+      바뀌는지 확인하기 위함이며, 초기 임피던스가 판정선에 한참 못 미치더라도 종료 ACZ가 개방 회로로
+      넘어가면 실패 모드를 임피던스가 아니라 접점 단선으로 읽음. SDR은 반복 인가해 특정 채널의 실패가
+      우연인지 재현되는지 가림.
+    </p>
+
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>판독 항목</th><th>측정 내용</th><th>부식 시 나타나는 변화</th></tr></thead>
+        <tbody>
+          <tr><td>ACZ (초기·종료)</td><td>교류 임피던스를 시험 전후로 두 번 기록</td><td>시험을 거치며 값이 크게 내려가면 전극-겔 계면이 변형된 상태</td></tr>
+          <tr><td>DCO</td><td>전극쌍 간 직류 오프셋 전압</td><td>부식 생성물이 만든 갈바닉 전위가 오프셋으로 실림</td></tr>
+          <tr><td>SDR 5초</td><td>제세동 과부하 5초 후 잔류 전압</td><td>부동태 피막이 손상된 계면은 전하 해소가 느려 한계값 초과</td></tr>
+          <tr><td>SDR 15/25/35초 기울기</td><td>회복 구간의 전압 변화율</td><td>회복이 지연되면 기울기가 규격 상한에 근접</td></tr>
+          <tr><td>NOISE</td><td>무입력 상태 잡음 진폭</td><td>계면 불안정이 잡음 증가로 드러남</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div id="lab-sdr"></div>
+
+    <h3>임피던스 교차 검증</h3>
+
+    <p>
+      ACZ가 흔들릴 때 potentiostat의 주파수 스윕 결과를 LCR 미터로 교차 확인하는데, 두 장비의 출력
+      형식이 달라 그대로 비교되지 않음. LCR 미터는 특정 주파수에서 임피던스 크기 한 값을 주는 반면
+      potentiostat은 실수부와 허수부를 나눠 주므로, 두 성분을 합성한 뒤 같은 주파수끼리 맞대야 함.
+      교차 확인 주파수로는 생체 신호 계측에서 통용되는 1 kHz 부근을 씀.
+    </p>
+
+    <div class="eq">
+      |Z| = √(Z<sub>real</sub>² + Z<sub>imag</sub>²) &nbsp;&nbsp;<span class="cm">— LCR 미터가 직접 출력하는 값</span><br>
+      ω<sub>max</sub> = 1 / (R<sub>ct</sub> · C<sub>dl</sub>) &nbsp;&nbsp;<span class="cm">— Nyquist 반원 정점의 각주파수</span>
+    </div>
+
+    <ul class="notes">
+      <li><b>스윕 조건</b><span>100 kHz → 100 mHz를 Log Scale로 스윕하고, 바이어스는 OCV 기준 0 V, 진폭 10 mV, decade당 10 point로 두는 설정이 통용됨</span></li>
+      <li><b>해석 경로</b><span>Nyquist plot의 고주파 절편에서 Rs, 반원 지름에서 Rct, 반원 정점 주파수에서 시간상수를 뽑고 저주파 45° 기울기를 Warburg 확산으로 읽음</span></li>
+      <li><b>등가회로</b><span>Randles 회로 Rs-(Rct//Cdl)-Zw를 기본형으로 씀</span></li>
+      <li><b>위상 정보</b><span>LCR의 단일 크기값에서는 위상이 복원되지 않으므로, 계면 시정수를 보려면 스윕 데이터를 씀</span></li>
+    </ul>
+  </div>
+</section>
+
+<div class="wrap">
+  <div class="pager">
+    <a href="math-ode.html"><span class="pg-lbl">이전</span>미분방정식과 적분법</a>
+    <a href="corrosion.html" style="text-align:right"><span class="pg-lbl">다음</span>금속 부식과 내식성</a>
+  </div>
+</div>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <p>Field 02 · 전기화학과 Ag/AgCl 전극 · 모든 그림은 브라우저에서 직접 계산해 그림</p>
+  </div>
+</footer>
+
+<script src="../assets/js/site.js"></script>
+<script src="../assets/js/lab.js"></script>
+<script>
+/* ===== 공통 물리 상수 (팩 표 기준) ===== */
+var FARADAY = 96485;        /* C/mol */
+var RGAS    = 8.314;        /* J/(mol·K) */
+var E0_AGCL = 0.222;        /* V vs SHE */
+var E_SCE   = 0.241;        /* V vs SHE */
+var M_AGCL  = 143.32,  RHO_AGCL = 5.56;
+var M_AG    = 107.868, RHO_AG   = 10.49;
+var M_AGNO3 = 169.87;
+var VM_AGCL = M_AGCL / RHO_AGCL;   /* 25.78 cm³/mol */
+var VM_AG   = M_AG   / RHO_AG;     /* 10.28 cm³/mol */
+
+/* Q[C], A[cm²] → 두께 [µm] */
+function thickUm(Qc, vm, A){ return (Qc / FARADAY) * vm / A * 1e4; }
+
+/* ============================ 01. Nernst 전위 계산기 ============================ */
+Lab.make({
+  mount:'#lab-nernst',
+  title:'Nernst 전위 — Cl⁻ 활동도와 온도',
+  badge:'NERNST',
+  controls:[
+    {id:'a', label:'Cl⁻ 활동도 a', min:1e-4, max:5, value:1, log:true, fmt:function(v){ return Lab.sci(v,3); }},
+    {id:'T', label:'온도', min:5, max:45, step:0.5, value:25, unit:'°C', fmt:function(v){ return v.toFixed(1); }}
+  ],
+  presets:[
+    {label:'a = 1 (표준 상태)', set:{a:1, T:25}},
+    {label:'a = 0.15', set:{a:0.15, T:25}},
+    {label:'a = 3', set:{a:3, T:25}},
+    {label:'체온 37 °C', set:{T:37}}
+  ],
+  stats:[
+    {id:'E',     label:'E vs SHE', unit:'mV', fmt:function(v){ return v.toFixed(1); }},
+    {id:'Esce',  label:'E vs SCE', unit:'mV', fmt:function(v){ return v.toFixed(1); }},
+    {id:'slope', label:'Nernst 기울기', unit:'mV/decade', fmt:function(v){ return v.toFixed(2); }},
+    {id:'dT',    label:'25 °C 대비 편차', unit:'mV', fmt:function(v){ return (v>0?'+':'') + v.toFixed(2); }}
+  ],
+  plot:{width:640,height:390,xLabel:'log₁₀ a(Cl⁻)',yLabel:'E vs SHE (mV)',
+        autoX:false,autoY:true,xMin:-4,xMax:0.7},
+  legend:[{color:'--accent',label:'현재 온도'},{color:'--neutral',label:'25 °C 기준선'}],
+  note:'E° = 0.222 V vs SHE (AgCl + e⁻ → Ag + Cl⁻), R = 8.314 J/(mol·K), F = 96485 C/mol을 그대로 ' +
+       '넣어 계산함. SCE 환산은 SCE의 +0.241 V vs SHE를 빼서 얻음. 활동도는 농도와 다른 양이므로 ' +
+       '슬라이더는 활동도를 직접 지정함.',
+  plotNote:'가로축이 log₁₀ a 이므로 직선의 기울기가 곧 decade당 전위 이동량임.',
+  compute:function(v){
+    var T = v.T + 273.15, T25 = 298.15;
+    var k = RGAS * T / FARADAY, k25 = RGAS * T25 / FARADAY;
+    var E = E0_AGCL - k * Math.log(v.a);
+    var E25 = E0_AGCL - k25 * Math.log(v.a);
+    var slope = -Math.LN10 * k * 1000;
+    var cur = [], ref = [], i, la, aa;
+    for(i=0;i<=160;i++){
+      la = -4 + 4.7 * i / 160;
+      aa = Math.pow(10, la);
+      cur.push([la, (E0_AGCL - k   * Math.log(aa)) * 1000]);
+      ref.push([la, (E0_AGCL - k25 * Math.log(aa)) * 1000]);
+    }
+    var lx = Math.log10(v.a);
+    return {
+      series:[
+        {points:ref, color:'--neutral', width:1.6, dash:'5 4'},
+        {points:cur, color:'--accent', width:2.4}
+      ],
+      overlays:[
+        {type:'vline', x:0, color:'--ink-3', label:'a = 1'},
+        {type:'hline', y:E0_AGCL*1000, color:'--ink-3', label:'E° = 222 mV'},
+        {type:'point', x:lx, y:E*1000, color:'--accent',
+         label:Math.round(E*1000) + ' mV'},
+        {type:'text', x:-3.8, y:E0_AGCL*1000 - 40,
+         text:'25 °C 기울기 −59.16 mV/decade', color:'--ink-2'}
+      ],
+      stats:{ E:E*1000, Esce:(E - E_SCE)*1000, slope:slope, dT:(E - E25)*1000 }
+    };
+  }
+});
+
+/* ============================ 02. Faraday 두께 계산기 ============================ */
+Lab.make({
+  mount:'#lab-faraday',
+  title:'Faraday 두께 계산기 — Q에서 d까지',
+  badge:'CALCULATOR',
+  controls:[
+    {id:'I',  label:'전류 I', min:0.01, max:5, step:0.01, value:0.5, unit:'mA', fmt:function(v){ return v.toFixed(2); }},
+    {id:'t',  label:'시간 t', min:1, max:600, step:1, value:120, unit:'s', fmt:function(v){ return v.toFixed(0); }},
+    {id:'A',  label:'전극 면적 A', min:0.1, max:10, step:0.05, value:1.0, unit:'cm²', fmt:function(v){ return v.toFixed(2); }},
+    {id:'eff',label:'전류효율', min:50, max:100, step:1, value:100, unit:'%', fmt:function(v){ return v.toFixed(0); }},
+    {id:'sp', type:'select', label:'화학종', value:'agcl',
+     options:[{value:'agcl',label:'AgCl (M 143.32, ρ 5.56)'},{value:'ag',label:'Ag (M 107.868, ρ 10.49)'}]}
+  ],
+  presets:[
+    {label:'0.5 mA · 120 s · 1 cm²', set:{I:0.5, t:120, A:1.0, eff:100}}
+  ],
+  stats:[
+    {id:'Q', label:'전하량 Q', unit:'mC',  fmt:function(v){ return v.toFixed(3); }},
+    {id:'n', label:'몰 수 n',  unit:'µmol',fmt:function(v){ return v.toFixed(4); }},
+    {id:'m', label:'질량 m',   unit:'mg',  fmt:function(v){ return v.toFixed(4); }},
+    {id:'d', label:'두께 d',   unit:'µm',  fmt:function(v){ return v.toFixed(4); }},
+    {id:'r', label:'다른 화학종 대비', fmt:function(v){ return v; }}
+  ],
+  plot:{width:640,height:380,xLabel:'t (s)',yLabel:'두께 (µm)',autoX:false,autoY:true,
+        xMin:0,xMax:600,yMinFixed:0},
+  legend:[{color:'--accent',label:'선택 화학종'},{color:'--neutral',label:'다른 화학종'}],
+  note:'z = 1, F = 96485 C/mol. Q = |I|·t·(전류효율), n = Q/(zF), m = nM, d = (m/ρ)/A ×10⁴ [µm]. ' +
+       '전류효율은 인가 전하 중 목적 반응에 쓰인 비율을 뜻하며 100%에서 내리면 두께가 그 비율만큼 줄어듦.',
+  compute:function(v){
+    var vmSel = v.sp === 'ag' ? VM_AG : VM_AGCL;
+    var vmOth = v.sp === 'ag' ? VM_AGCL : VM_AG;
+    var MSel  = v.sp === 'ag' ? M_AG : M_AGCL;
+    var eta = v.eff / 100;
+    var Qc = v.I * 1e-3 * v.t * eta;
+    var n  = Qc / FARADAY;
+    var m  = n * MSel;
+    var d  = thickUm(Qc, vmSel, v.A);
+    var s1 = [], s2 = [], i, tt, q;
+    for(i=0;i<=120;i++){
+      tt = 600 * i / 120;
+      q = v.I * 1e-3 * tt * eta;
+      s1.push([tt, thickUm(q, vmSel, v.A)]);
+      s2.push([tt, thickUm(q, vmOth, v.A)]);
+    }
+    return {
+      series:[
+        {points:s2, color:'--neutral', width:1.6, dash:'5 4'},
+        {points:s1, color:'--accent', width:2.4}
+      ],
+      overlays:[
+        {type:'vline', x:v.t, color:'--ink-3'},
+        {type:'point', x:v.t, y:d, color:'--accent', label:d.toFixed(3) + ' µm'}
+      ],
+      stats:{
+        Q: Qc*1000, n: n*1e6, m: m*1000, d: d,
+        r: (vmSel/vmOth).toFixed(3) + '배'
+      }
+    };
+  }
+});
+
+/* ============================ 03. AgCl/Ag 두께 분해기 ============================ */
+Lab.make({
+  mount:'#lab-split',
+  title:'Q₁·Q₃에서 성분별 두께로 — 합산 두께 분해',
+  badge:'DECOMPOSE',
+  controls:[
+    {id:'Q1', label:'Q₁ (Step 1)', min:0.5, max:20, step:0.1, value:5,  unit:'mC', fmt:function(v){ return v.toFixed(1); }},
+    {id:'Q3', label:'Q₃ (Step 3)', min:0.5, max:30, step:0.1, value:12, unit:'mC', fmt:function(v){ return v.toFixed(1); }},
+    {id:'A',  label:'전극 면적 A', min:0.1, max:5, step:0.05, value:1.0, unit:'cm²', fmt:function(v){ return v.toFixed(2); }}
+  ],
+  presets:[
+    {label:'Ag 우세 (5 / 20)', set:{Q1:5, Q3:20}},
+    {label:'AgCl 우세 (14 / 18)', set:{Q1:14, Q3:18}},
+    {label:'모순 조건 (12 / 8)', set:{Q1:12, Q3:8}}
+  ],
+  stats:[
+    {id:'QAg', label:'Q_Ag = Q₃ − Q₁', unit:'mC', fmt:function(v){ return v.toFixed(2); }},
+    {id:'dc',  label:'d_AgCl', unit:'µm', fmt:function(v){ return v.toFixed(4); }},
+    {id:'da',  label:'d_Ag',   unit:'µm', fmt:function(v){ return v.toFixed(4); }},
+    {id:'dt',  label:'d_total',unit:'µm', fmt:function(v){ return v.toFixed(4); }},
+    {id:'mol', label:'n_Ag : n_AgCl', fmt:function(v){ return v; }},
+    {id:'chk', label:'정합성', fmt:function(v){ return v; }}
+  ],
+  plot:{width:640,height:380,xLabel:'',yLabel:'두께 (µm)',autoX:false,autoY:true,
+        xMin:0.4,xMax:3.6,yMinFixed:0,xTicks:3,
+        xTickFmt:function(v){ var k=Math.round(v); return k===1?'d_AgCl':k===2?'d_Ag':k===3?'d_total':''; }},
+  legend:[{color:'--accent',label:'AgCl 몫'},{color:'--purple',label:'Ag 몫'}],
+  note:'d_AgCl = (Q₁/F)·(M/ρ)_AgCl / A, d_Ag = (Q_Ag/F)·(M/ρ)_Ag / A. 몰부피는 AgCl 25.78 cm³/mol, ' +
+       'Ag 10.28 cm³/mol 이므로 같은 전하량에서 AgCl 쪽이 2.5배 두껍게 쌓임. Q₃ &lt; Q₁ 조합은 종점 ' +
+       '판정이 어긋난 회차에 해당함.',
+  plotNote:'세 번째 막대는 두 성분을 쌓아 올린 합산 두께임.',
+  compute:function(v){
+    var QAg = v.Q3 - v.Q1;
+    var QAgC = Math.max(QAg, 0) * 1e-3;
+    var dc = thickUm(v.Q1 * 1e-3, VM_AGCL, v.A);
+    var da = thickUm(QAgC, VM_AG, v.A);
+    var dt = dc + da;
+    var nAg = QAgC / FARADAY, nCl = v.Q1 * 1e-3 / FARADAY;
+    var sum = nAg + nCl;
+    return {
+      series:[
+        {points:[[3, dt]], color:'--purple', type:'bars', barWidth:60, opacity:0.75},
+        {points:[[3, dc]], color:'--accent', type:'bars', barWidth:60, opacity:0.85},
+        {points:[[1, dc]], color:'--accent', type:'bars', barWidth:60, opacity:0.85},
+        {points:[[2, da]], color:'--purple', type:'bars', barWidth:60, opacity:0.75}
+      ],
+      overlays:[
+        {type:'text', x:1, y:dt*0.96, text:dc.toFixed(3), color:'--ink-2', anchor:'middle'},
+        {type:'text', x:2, y:dt*0.96, text:da.toFixed(3), color:'--ink-2', anchor:'middle'},
+        {type:'text', x:3, y:dt*0.96, text:dt.toFixed(3), color:'--ink-2', anchor:'middle'}
+      ],
+      stats:{
+        QAg: QAg, dc: dc, da: da, dt: dt,
+        mol: sum > 0 ? (nAg/sum*100).toFixed(1) + ' : ' + (nCl/sum*100).toFixed(1) : '—',
+        chk: QAg < 0 ? 'Q₃ < Q₁ — 종점 재검토' : (dc > da ? 'AgCl이 더 두꺼움' : 'Ag가 더 두꺼움')
+      }
+    };
+  }
+});
+
+/* ============================ 04. 3-step 시퀀스 시뮬레이터 ============================ */
+Lab.make({
+  mount:'#lab-3step',
+  title:'3-step chronopotentiometry 시퀀스',
+  badge:'SEQUENCE',
+  controls:[
+    {id:'Ir', label:'환원 전류 I_red', min:0.05, max:2, step:0.01, value:0.2, unit:'mA', fmt:function(v){ return v.toFixed(2); }},
+    {id:'Io', label:'산화 전류 I_ox', min:0.05, max:2, step:0.01, value:0.3, unit:'mA', fmt:function(v){ return v.toFixed(2); }},
+    {id:'t2', label:'Step 2 지속시간', min:10, max:300, step:1, value:120, unit:'s', fmt:function(v){ return v.toFixed(0); }},
+    {id:'Vth',label:'임계 전위 V_th', min:-800, max:-200, step:5, value:-300, unit:'mV', fmt:function(v){ return v.toFixed(0); }},
+    {id:'Q1', label:'실제 AgCl 전하량', min:0.1, max:10, step:0.1, value:6, unit:'mC', fmt:function(v){ return v.toFixed(1); }},
+    {id:'Qa', label:'실제 Ag 전하량', min:0.1, max:10, step:0.1, value:4, unit:'mC', fmt:function(v){ return v.toFixed(1); }},
+    {id:'vm', type:'toggle', label:'Step 3 종점 검출 방식',
+     options:[{value:'on',label:'V_max 통과 후'},{value:'off',label:'단순 임계 최초 통과'}], value:'on'}
+  ],
+  presets:[
+    {label:'Step 2 부족 (20 s)', set:{t2:20}},
+    {label:'Step 2 충분 (120 s)', set:{t2:120}}
+  ],
+  stats:[
+    {id:'t1', label:'검출 t₁', unit:'s',  fmt:function(v){ return v.toFixed(1); }},
+    {id:'t3', label:'검출 t₃', unit:'s',  fmt:function(v){ return v.toFixed(1); }},
+    {id:'q1', label:'Q₁ = I·t₁', unit:'mC', fmt:function(v){ return v.toFixed(2); }},
+    {id:'q3', label:'Q₃ = I·t₃', unit:'mC', fmt:function(v){ return v.toFixed(2); }},
+    {id:'qa', label:'Q_Ag = Q₃ − Q₁', unit:'mC', fmt:function(v){ return v.toFixed(2); }},
+    {id:'err',label:'실제 Ag 대비 오차', unit:'%', fmt:function(v){ return (v>0?'+':'') + v.toFixed(1); }}
+  ],
+  plot:{width:640,height:420,xLabel:'t (s)',yLabel:'E vs RE (mV)',autoX:true,autoY:false,
+        yMin:-1150,yMax:1150,yTicks:6},
+  legend:[
+    {color:'--accent',label:'Step 1 환원'},
+    {color:'--amber', label:'Step 2 산화'},
+    {color:'--purple',label:'Step 3 환원'}
+  ],
+  note:'plateau는 AgCl/Ag 쌍이 전위를 붙드는 구간이고, 소진 시점에서 로지스틱 형태로 급락하도록 ' +
+       '모사함. Step 3 개시부에는 IR 강하 380 mV가 지수 감쇠로 실려 있어, 단순 임계 최초 통과로 ' +
+       '검출하면 개시 직후를 종점으로 잘못 잡음. Step 2가 짧으면 잔존 Ag가 다 전환되지 못해 ' +
+       'Q_Ag가 과소평가됨.',
+  compute:function(v){
+    var EP = -60, EEND = -1000, EOXP = 120, ECOMP = 1000, IRDIP = 380, TAU = 1.2;
+    var t1t = v.Q1 / v.Ir;
+    var tconv = v.Qa / v.Io;
+    var Qconv = Math.min(v.Io * v.t2, v.Qa);
+    var t3t = (v.Q1 + Qconv) / v.Ir;
+    var T1 = t1t * 1.35 + 8, T3 = t3t * 1.3 + 8;
+    var dt = Math.max(0.2, (T1 + v.t2 + T3) / 900);
+    var i, t;
+
+    var s1 = [], e1 = [], tm1 = [];
+    for(t=0;t<=T1;t+=dt){
+      var y1 = EP + (EEND - EP) / (1 + Math.exp(-(t - t1t) / TAU));
+      s1.push([t, y1]); e1.push(y1); tm1.push(t);
+    }
+    var s2 = [];
+    for(t=0;t<=v.t2;t+=dt){
+      s2.push([T1 + t, EOXP + (ECOMP - EOXP) / (1 + Math.exp(-(t - tconv) / TAU))]);
+    }
+    var s3 = [], e3 = [], tm3 = [], t0 = T1 + v.t2;
+    for(t=0;t<=T3;t+=dt){
+      var y3 = EP + (EEND - EP) / (1 + Math.exp(-(t - t3t) / TAU)) - IRDIP * Math.exp(-t / 2.5);
+      s3.push([t0 + t, y3]); e3.push(y3); tm3.push(t);
+    }
+
+    function detect(E, ts, vth, useVmax){
+      var st = 0, mi = 0, k;
+      if(useVmax){
+        for(k=0;k<E.length;k++) if(E[k] > E[mi]) mi = k;
+        st = mi;
+      }
+      for(k=st;k<E.length;k++) if(E[k] <= vth) return ts[k];
+      return ts[ts.length-1];
+    }
+    var d1 = detect(e1, tm1, v.Vth, false);
+    var d3 = detect(e3, tm3, v.Vth, v.vm === 'on');
+
+    var q1 = v.Ir * d1, q3 = v.Ir * d3, qa = q3 - q1;
+    return {
+      series:[
+        {points:s1, color:'--accent', width:2.2},
+        {points:s2, color:'--amber',  width:2.2},
+        {points:s3, color:'--purple', width:2.2}
+      ],
+      overlays:[
+        {type:'band', x1:0, x2:T1, color:'--accent', opacity:0.07, label:'Step 1'},
+        {type:'band', x1:T1, x2:T1+v.t2, color:'--amber', opacity:0.07, label:'Step 2'},
+        {type:'band', x1:t0, x2:t0+T3, color:'--purple', opacity:0.07, label:'Step 3'},
+        {type:'hline', y:v.Vth, color:'--green', label:'V_th ' + v.Vth.toFixed(0) + ' mV'},
+        {type:'vline', x:d1, color:'--accent', label:'t₁'},
+        {type:'vline', x:t0 + d3, color:'--purple', label:'t₃'}
+      ],
+      stats:{
+        t1:d1, t3:d3, q1:q1, q3:q3, qa:qa,
+        err:(qa - v.Qa) / v.Qa * 100
+      }
+    };
+  }
+});
+
+/* ============================ 05. 종점 판정 로직 비교기 ============================ */
+Lab.make({
+  mount:'#lab-endpoint',
+  title:'종점 판정 — 단순 임계 통과 vs V_max 통과 후',
+  badge:'ENDPOINT',
+  controls:[
+    {id:'ir',  label:'개시 IR 강하', min:0, max:400, step:5, value:200, unit:'mV', fmt:function(v){ return v.toFixed(0); }},
+    {id:'ov',  label:'transient overshoot 크기', min:0, max:500, step:5, value:180, unit:'mV', fmt:function(v){ return v.toFixed(0); }},
+    {id:'tov', label:'overshoot 지속', min:0, max:30, step:1, value:10, unit:'s', fmt:function(v){ return v.toFixed(0); }},
+    {id:'Vth', label:'임계 전위 V_th', min:-800, max:-200, step:5, value:-300, unit:'mV', fmt:function(v){ return v.toFixed(0); }},
+    {id:'mode',type:'toggle', label:'채택 방식',
+     options:[{value:'vmax',label:'V_max 통과 후 검출'},{value:'first',label:'단순 임계 최초 통과'}], value:'vmax'}
+  ],
+  presets:[
+    {label:'IR·transient 없음', set:{ir:0, ov:0, tov:0}},
+    {label:'인쇄형 전극 조건', set:{ir:120, ov:260, tov:14}}
+  ],
+  stats:[
+    {id:'ts', label:'단순 임계 통과 t', unit:'s', fmt:function(v){ return v.toFixed(1); }},
+    {id:'tv', label:'V_max 통과 후 t',  unit:'s', fmt:function(v){ return v.toFixed(1); }},
+    {id:'dd', label:'두 방식의 차', unit:'s', fmt:function(v){ return v.toFixed(1); }},
+    {id:'qd', label:'Q 차 (I = 0.5 mA)', unit:'mC', fmt:function(v){ return v.toFixed(2); }},
+    {id:'jd', label:'판정', fmt:function(v){ return v; }}
+  ],
+  plot:{width:640,height:400,xLabel:'t (s)',yLabel:'E vs RE (mV)',autoX:false,autoY:false,
+        xMin:0,xMax:200,yMin:-1150,yMax:250},
+  legend:[{color:'--purple',label:'합성 전위곡선'},{color:'--accent',label:'채택 종점'},{color:'--neutral',label:'다른 방식의 종점'}],
+  note:'같은 곡선에 두 판정 로직을 나란히 적용함. 곡선은 plateau −60 mV, 실제 급락 140 s, ' +
+       'IR 강하는 시정수 2 s의 지수 감쇠, transient는 지속시간 절반 지점을 중심으로 하는 ' +
+       '가우스 형태로 구성했음.',
+  compute:function(v){
+    var EP = -60, EEND = -1000, TEND = 140, TAU = 1.5;
+    var tp = v.tov / 2, w = Math.max(1, v.tov / 2.2);
+    var ts = [], E = [], pts = [], t, y;
+    for(t=0;t<=200;t+=0.25){
+      y = EP + (EEND - EP) / (1 + Math.exp(-(t - TEND) / TAU))
+          - v.ir * Math.exp(-t / 2.0);
+      if(v.tov > 0) y -= v.ov * Math.exp(-Math.pow((t - tp) / w, 2));
+      ts.push(t); E.push(y); pts.push([t, y]);
+    }
+    function first(){
+      for(var k=0;k<E.length;k++) if(E[k] <= v.Vth) return ts[k];
+      return ts[ts.length-1];
+    }
+    function afterMax(){
+      var mi = 0, k;
+      for(k=0;k<E.length;k++) if(E[k] > E[mi]) mi = k;
+      for(k=mi;k<E.length;k++) if(E[k] <= v.Vth) return ts[k];
+      return ts[ts.length-1];
+    }
+    var t1 = first(), t2 = afterMax();
+    var sel = v.mode === 'vmax' ? t2 : t1;
+    var oth = v.mode === 'vmax' ? t1 : t2;
+    function at(tt){
+      var k = Math.round(tt / 0.25);
+      return E[Math.min(k, E.length-1)];
+    }
+    return {
+      series:[{points:pts, color:'--purple', width:2.2}],
+      overlays:[
+        {type:'hline', y:v.Vth, color:'--green', label:'V_th'},
+        {type:'vline', x:TEND, color:'--ink-3', label:'실제 급락'},
+        {type:'point', x:oth, y:at(oth), color:'--neutral'},
+        {type:'point', x:sel, y:at(sel), color:'--accent', label:sel.toFixed(1) + ' s'}
+      ],
+      stats:{
+        ts:t1, tv:t2, dd:t2 - t1, qd:0.5 * (t2 - t1),
+        jd: Math.abs(t1 - t2) < 0.3 ? '두 방식 일치'
+            : (t1 < 30 ? '단순 방식이 개시부에서 오검출' : '두 방식이 다른 지점을 지목')
+      }
+    };
+  }
+});
+
+/* ============================ 06. 면적 기준 변경 영향 ============================ */
+Lab.make({
+  mount:'#lab-area',
+  title:'면적 기준을 바꾸면 어느 지표가 움직이는가',
+  badge:'NORMALIZE',
+  controls:[
+    {id:'Q',  label:'절대 전하량 Q', min:1, max:50, step:0.5, value:10, unit:'mC', fmt:function(v){ return v.toFixed(1); }},
+    {id:'A0', label:'원래 면적 A₀', min:0.1, max:5, step:0.05, value:1.0, unit:'cm²', fmt:function(v){ return v.toFixed(2); }},
+    {id:'f',  label:'면적 배수', min:0.5, max:4, step:0.1, value:2, unit:'배', fmt:function(v){ return v.toFixed(1); }}
+  ],
+  presets:[
+    {label:'단면 → 양면 (×2)', set:{f:2}},
+    {label:'4구획 합산 (×4)', set:{f:4}},
+    {label:'활성 면적 축소 (×0.5)', set:{f:0.5}}
+  ],
+  stats:[
+    {id:'A',   label:'변경 면적 A', unit:'cm²', fmt:function(v){ return v.toFixed(3); }},
+    {id:'qa0', label:'원래 Q/A', unit:'mC/cm²', fmt:function(v){ return v.toFixed(3); }},
+    {id:'qa1', label:'변경 Q/A', unit:'mC/cm²', fmt:function(v){ return v.toFixed(3); }},
+    {id:'d0',  label:'원래 두께', unit:'µm', fmt:function(v){ return v.toFixed(4); }},
+    {id:'d1',  label:'변경 두께', unit:'µm', fmt:function(v){ return v.toFixed(4); }},
+    {id:'inv', label:'몰 비·절대 Q', fmt:function(v){ return v; }}
+  ],
+  plot:{width:640,height:380,xLabel:'',yLabel:'원래 조건 = 1 로 정규화',autoX:false,autoY:false,
+        xMin:0.4,xMax:3.8,yMin:0,yMax:2.4,xTicks:3,
+        xTickFmt:function(v){ var k=Math.round(v); return k===1?'절대 Q':k===2?'Q/A':k===3?'두께':''; }},
+  legend:[{color:'--neutral',label:'원래 기준'},{color:'--accent',label:'변경 기준'}],
+  note:'두께는 AgCl 물성 (M/ρ = 25.78 cm³/mol)으로 환산했음. 절대 전하량은 전극 전체를 대상으로 ' +
+       '측정한 값이라 면적 정의와 무관하고, 면적당 전하량과 두께만 배수의 역수로 움직임.',
+  plotNote:'가로 세 묶음 모두 왼쪽이 원래 기준, 오른쪽이 변경 기준임.',
+  compute:function(v){
+    var A1 = v.A0 * v.f;
+    var qa0 = v.Q / v.A0, qa1 = v.Q / A1;
+    var d0 = thickUm(v.Q*1e-3, VM_AGCL, v.A0), d1 = thickUm(v.Q*1e-3, VM_AGCL, A1);
+    var r = 1 / v.f;
+    return {
+      series:[
+        {points:[[0.82,1],[1.82,1],[2.82,1]], color:'--neutral', type:'bars', barWidth:30, opacity:0.6},
+        {points:[[1.18,1],[2.18,r],[3.18,r]], color:'--accent',  type:'bars', barWidth:30, opacity:0.85}
+      ],
+      overlays:[
+        {type:'hline', y:1, color:'--ink-3', label:'원래 기준'},
+        {type:'text', x:1.18, y:1.12, text:'×1.00', color:'--ink-2', anchor:'middle'},
+        {type:'text', x:2.18, y:r+0.12, text:'×' + r.toFixed(2), color:'--ink-2', anchor:'middle'},
+        {type:'text', x:3.18, y:r+0.12, text:'×' + r.toFixed(2), color:'--ink-2', anchor:'middle'}
+      ],
+      stats:{ A:A1, qa0:qa0, qa1:qa1, d0:d0, d1:d1, inv:'불변' }
+    };
+  }
+});
+
+/* ============================ 07. OCP 시간이력 판독 ============================ */
+Lab.make({
+  mount:'#lab-ocp',
+  title:'OCP 시간이력 — ΔE와 절대 전위로 읽기',
+  badge:'OCP',
+  controls:[
+    {id:'Ei', label:'초기 전위 E_initial', min:-400, max:300, step:5, value:200, unit:'mV', fmt:function(v){ return v.toFixed(0); }},
+    {id:'Ef', label:'최종 전위 E_final', min:-400, max:300, step:5, value:-150, unit:'mV', fmt:function(v){ return v.toFixed(0); }},
+    {id:'T',  label:'측정시간', min:60, max:3600, step:10, value:600, unit:'s', fmt:function(v){ return v.toFixed(0); }},
+    {id:'nz', label:'잡음 진폭', min:0, max:20, step:0.5, value:5, unit:'mV', fmt:function(v){ return v.toFixed(1); }}
+  ],
+  presets:[
+    {label:'갈바닉 부식 진행', set:{Ei:200, Ef:-150}},
+    {label:'부식 후 정상상태', set:{Ei:-180, Ef:-182}},
+    {label:'AgCl 층 지배', set:{Ei:210, Ef:206}}
+  ],
+  stats:[
+    {id:'dE',  label:'ΔE = E_final − E_initial', unit:'mV', fmt:function(v){ return (v>0?'+':'') + v.toFixed(1); }},
+    {id:'avg', label:'구간 평균 E', unit:'mV', fmt:function(v){ return v.toFixed(1); }},
+    {id:'rng', label:'구간 폭', unit:'mV', fmt:function(v){ return v.toFixed(1); }},
+    {id:'lab', label:'판독', fmt:function(v){ return v; }}
+  ],
+  plot:{width:640,height:380,xLabel:'t (s)',yLabel:'E vs Ag/AgCl (mV)',autoX:true,autoY:true},
+  legend:[{color:'--accent',label:'OCP 기록'},{color:'--neutral',label:'잡음 제거 추세'}],
+  note:'E(t) = E_final + (E_initial − E_final)·exp(−t/τ), τ = 측정시간/4 로 두고 잡음은 재현 가능한 ' +
+       '난수열로 실었음. 판독은 절댓값보다 방향과 폭으로 하며, 같은 크기의 ΔE라도 절대 전위가 양의 ' +
+       '영역인지 음의 영역인지에 따라 해석이 갈림.',
+  compute:function(v){
+    var tau = v.T / 4, N = 260, seed = 20250806, i, t, base;
+    var pts = [], trend = [], vals = [], noise = 0;
+    function rnd(){ seed = (seed * 1664525 + 1013904223) % 4294967296; return seed / 4294967296; }
+    for(i=0;i<=N;i++){
+      t = v.T * i / N;
+      base = v.Ef + (v.Ei - v.Ef) * Math.exp(-t / tau);
+      noise = noise * 0.72 + (rnd() - 0.5) * v.nz;
+      pts.push([t, base + noise]);
+      trend.push([t, base]);
+      vals.push(base + noise);
+    }
+    var sum = 0, lo = vals[0], hi = vals[0];
+    for(i=0;i<vals.length;i++){ sum += vals[i]; if(vals[i]<lo) lo=vals[i]; if(vals[i]>hi) hi=vals[i]; }
+    var dE = v.Ef - v.Ei, avg = sum / vals.length;
+    var lab;
+    if(dE < -100) lab = '갈바닉 부식 진행';
+    else if(Math.abs(dE) < 5 && v.Ef < 0) lab = '부식 후 정상상태';
+    else if(v.Ef > 0 && Math.abs(dE) < 20) lab = 'AgCl 층 지배';
+    else if(dE > 100) lab = '양의 방향 이동 — 표면 재산화';
+    else lab = '중간 거동 — 반복 측정 필요';
+    return {
+      series:[
+        {points:trend, color:'--neutral', width:1.6, dash:'5 4'},
+        {points:pts, color:'--accent', width:1.8}
+      ],
+      overlays:[
+        {type:'hline', y:0, color:'--ink-3', label:'0 mV'},
+        {type:'point', x:0, y:v.Ei, color:'--purple', label:'E_initial'},
+        {type:'point', x:v.T, y:v.Ef, color:'--accent', label:'E_final'}
+      ],
+      stats:{ dE:dE, avg:avg, rng:hi - lo, lab:lab }
+    };
+  }
+});
+
+/* ============================ 08. CV 시뮬레이터 ============================ */
+Lab.make({
+  mount:'#lab-cv',
+  title:'CV — Fe 산화물 환원 피크와 사이클 감쇠',
+  badge:'VOLTAMMETRY',
+  controls:[
+    {id:'v',  label:'주사속도', min:1, max:200, step:1, value:10, unit:'mV/s', fmt:function(x){ return x.toFixed(0); }},
+    {id:'fe', label:'Fe 산화물 함량', min:0, max:100, step:1, value:30, unit:'%', fmt:function(x){ return x.toFixed(0); }},
+    {id:'cy', type:'toggle', label:'강조할 사이클',
+     options:[{value:'1',label:'1st cycle'},{value:'2',label:'2nd cycle'}], value:'1'}
+  ],
+  presets:[
+    {label:'저속 10 mV/s', set:{v:10}},
+    {label:'고속 100 mV/s', set:{v:100}},
+    {label:'산화물 없음', set:{fe:0}},
+    {label:'산화물 과다', set:{fe:90}}
+  ],
+  stats:[
+    {id:'ipf', label:'Fe 환원 피크 i_p', unit:'µA', fmt:function(x){ return x.toFixed(2); }},
+    {id:'ipa', label:'Ag/AgCl 산화 피크 i_p', unit:'µA', fmt:function(x){ return x.toFixed(2); }},
+    {id:'rt',  label:'√v 비례 계수', fmt:function(x){ return x.toFixed(3); }},
+    {id:'tc',  label:'1 사이클 소요시간', unit:'s', fmt:function(x){ return x.toFixed(0); }},
+    {id:'jd',  label:'판독', fmt:function(x){ return x; }}
+  ],
+  plot:{width:640,height:420,xLabel:'E vs Ag/AgCl (V)',yLabel:'i (µA)',autoX:false,autoY:true,
+        xMin:-1.3,xMax:0.72},
+  legend:[{color:'--accent',label:'강조 사이클'},{color:'--neutral',label:'다른 사이클'}],
+  note:'i_p = 2.69×10⁵·n^(3/2)·A·D^(1/2)·C·v^(1/2) 를 그대로 계산함. n = 1, A = 1 cm², ' +
+       'D = 1×10⁻⁶ cm²/s, C_Ag = 5×10⁻⁶ mol/cm³, C_Fe = 함량×2×10⁻⁶ mol/cm³로 두었고 배경 전류는 ' +
+       'C_dl = 40 µF/cm²의 충전 전류임. 2번째 사이클에서는 표면 산화물이 이미 환원 제거되어 Fe 피크 ' +
+       '진폭이 12%만 남도록 설정했음.',
+  plotNote:'전위 창은 0 → −1.2 V → +0.6 V → 0 순환이며, 색 띠가 판별 구간임.',
+  compute:function(x){
+    var vs = x.v / 1000;                 /* V/s */
+    var rs = 2.69e5, D = 1e-6, A = 1, n = 1;
+    var Cfe = x.fe / 100 * 2e-6, Cag = 5e-6;
+    var k = rs * Math.pow(n, 1.5) * A * Math.sqrt(D) * Math.sqrt(vs);
+    var ipFe1 = k * Cfe * 1e6;           /* µA */
+    var ipAg  = k * Cag * 1e6;
+    var icap  = 40e-6 * A * vs * 1e6;    /* µA */
+    var sFe = 0.075, sAg = 0.05, EFe = -0.95, EAg = 0.20;
+
+    function seg(a, b, m, out, cyc){
+      var i, E, dir = b > a ? 1 : -1, cur;
+      for(i=0;i<=m;i++){
+        E = a + (b - a) * i / m;
+        cur = icap * dir;
+        if(dir < 0) cur -= (cyc === 1 ? ipFe1 : ipFe1 * 0.12) * Math.exp(-Math.pow((E - EFe)/sFe, 2));
+        if(dir > 0) cur += ipAg * Math.exp(-Math.pow((E - EAg)/sAg, 2));
+        out.push([E, cur]);
+      }
+    }
+    function loop(cyc){
+      var p = [];
+      seg(0, -1.2, 120, p, cyc);
+      seg(-1.2, 0.6, 180, p, cyc);
+      seg(0.6, 0, 60, p, cyc);
+      return p;
+    }
+    var c1 = loop(1), c2 = loop(2);
+    var hi = x.cy === '1' ? c1 : c2;
+    var lo = x.cy === '1' ? c2 : c1;
+    var ipSel = x.cy === '1' ? ipFe1 : ipFe1 * 0.12;
+    var tcyc = (1.2 + 1.8 + 0.6) / vs;
+    return {
+      series:[
+        {points:lo, color:'--neutral', width:1.5, opacity:0.7},
+        {points:hi, color:'--accent', width:2.2}
+      ],
+      overlays:[
+        {type:'band', x1:-1.1, x2:-0.8, color:'--purple', opacity:0.1, label:'Fe 산화물 환원'},
+        {type:'band', x1:0.1, x2:0.3, color:'--amber', opacity:0.1, label:'Ag/AgCl 산화'},
+        {type:'hline', y:0, color:'--ink-3'},
+        {type:'point', x:EFe, y:-ipSel - icap, color:'--purple'},
+        {type:'point', x:EAg, y:ipAg + icap, color:'--amber'}
+      ],
+      stats:{
+        ipf:ipSel, ipa:ipAg, rt:ipAg / Math.sqrt(vs) * 1e-3, tc:tcyc,
+        jd: x.fe < 3 ? 'Fe 피크 없음'
+            : (x.cy === '2' ? '2차 사이클에서 급감 — 산화물 제거' : '1차 사이클에 환원 피크 존재')
+      }
+    };
+  }
+});
+
+/* ============================ 09. 도금욕 화학양론 검산기 ============================ */
+Lab.make({
+  mount:'#lab-bath',
+  title:'도금욕 화학양론 검산 — 환원 가능한 은 비율',
+  badge:'STOICHIOMETRY',
+  plot:false,
+  controls:[
+    {id:'m',  label:'AgNO₃ 투입 질량', min:0.1, max:50, step:0.1, value:5, unit:'g', fmt:function(v){ return v.toFixed(1); }},
+    {id:'nr', label:'환원제 투입 몰수', min:0.001, max:0.5, value:0.02, log:true, unit:'mol', fmt:function(v){ return Lab.sci(v,3); }}
+  ],
+  presets:[
+    {label:'환원제 부족', set:{m:20, nr:0.001}},
+    {label:'화학양론 균형', set:{m:5, nr:0.03}}
+  ],
+  stats:[
+    {id:'nAg', label:'은 이온 총량 n_Ag', unit:'mol', fmt:function(v){ return Lab.sci(v,3); }},
+    {id:'rat', label:'환원 가능 은 비율', unit:'%', fmt:function(v){ return v.toFixed(2); }},
+    {id:'mAg', label:'환원 가능 은 질량', unit:'g', fmt:function(v){ return v.toFixed(3); }},
+    {id:'jd',  label:'진단', fmt:function(v){ return v; }}
+  ],
+  note:'n_Ag = m(AgNO₃)/169.87 g/mol, 환원 가능 은 비율 = min(환원제 몰수 / n_Ag, 1)×100. ' +
+       '이 비율이 1%에 못 미치면 기판 위 은 입자가 서로 닿지 못해 고립된 아일랜드 구조에 머물고 ' +
+       '전자 이동 경로가 생기지 않으므로, 육안 색상이 은색이어도 전도성이 잡히지 않음.',
+  compute:function(v){
+    var nAg = v.m / M_AGNO3;
+    var ratio = Math.min(v.nr / nAg, 1);
+    var jd;
+    if(ratio < 0.01) jd = '1% 미만 — 고립 아일랜드 구조 위험';
+    else if(ratio < 0.2) jd = '환원제 부족 — 성장 지연';
+    else if(ratio < 1) jd = '부분 환원 — 침지 시간 확보 필요';
+    else jd = '환원제 충분';
+    return {
+      stats:{
+        nAg:nAg, rat:ratio*100, mAg:nAg*ratio*M_AG, jd:jd
+      }
+    };
+  }
+});
+
+/* ============================ 10. 은 도금 재료비 역산 ============================ */
+Lab.make({
+  mount:'#lab-cost',
+  title:'목표 두께에서 AgNO₃ 소요량 역산',
+  badge:'MATERIAL',
+  controls:[
+    {id:'A',   label:'기판 면적 A', min:0.5, max:20, step:0.1, value:2, unit:'cm²', fmt:function(v){ return v.toFixed(1); }},
+    {id:'d',   label:'목표 두께 d', min:0.5, max:20, step:0.1, value:3, unit:'µm', fmt:function(v){ return v.toFixed(1); }},
+    {id:'p',   label:'AgNO₃ 단가', min:100, max:2000, step:10, value:600, unit:'원/g', fmt:function(v){ return v.toFixed(0); }},
+    {id:'loss',label:'loss율', min:0, max:50, step:1, value:20, unit:'%', fmt:function(v){ return v.toFixed(0); }}
+  ],
+  stats:[
+    {id:'V',   label:'코팅 부피 V', unit:'cm³',  fmt:function(v){ return Lab.sci(v,3); }},
+    {id:'mAg', label:'은 질량 m_Ag', unit:'g',   fmt:function(v){ return v.toFixed(5); }},
+    {id:'nAg', label:'몰 수 n_Ag', unit:'mol',   fmt:function(v){ return Lab.sci(v,3); }},
+    {id:'mN',  label:'AgNO₃ 질량', unit:'g',     fmt:function(v){ return v.toFixed(5); }},
+    {id:'c0',  label:'이론 재료비', unit:'원',    fmt:function(v){ return v.toFixed(2); }},
+    {id:'c1',  label:'loss 반영 재료비', unit:'원', fmt:function(v){ return v.toFixed(2); }}
+  ],
+  plot:{width:640,height:360,xLabel:'목표 두께 (µm)',yLabel:'loss 반영 재료비 (원)',
+        autoX:false,autoY:true,xMin:0,xMax:20,yMinFixed:0},
+  legend:[{color:'--accent',label:'현재 면적·단가 기준'}],
+  note:'V = A·d×10⁻⁴ [cm³], m_Ag = V×10.49 g/cm³, n_Ag = m_Ag/107.868 g/mol, ' +
+       'm(AgNO₃) = n_Ag×169.87 g/mol. loss 반영 재료비는 이론값/(1−loss율)로 계산함.',
+  plotNote:'두께와 재료비가 정비례하므로 목표 두께를 2배로 올리면 재료비도 2배가 됨.',
+  compute:function(v){
+    function cost(d){
+      var V = v.A * d * 1e-4;
+      var mAg = V * RHO_AG;
+      var nAg = mAg / M_AG;
+      var mN = nAg * M_AGNO3;
+      return { V:V, mAg:mAg, nAg:nAg, mN:mN, c0:mN * v.p, c1:mN * v.p / (1 - v.loss/100) };
+    }
+    var cur = cost(v.d), line = [], i, dd;
+    for(i=0;i<=100;i++){ dd = 20 * i / 100; line.push([dd, cost(dd).c1]); }
+    return {
+      series:[{points:line, color:'--accent', width:2.2}],
+      overlays:[
+        {type:'vline', x:v.d, color:'--ink-3'},
+        {type:'point', x:v.d, y:cur.c1, color:'--accent', label:cur.c1.toFixed(1) + ' 원'}
+      ],
+      stats:{ V:cur.V, mAg:cur.mAg, nAg:cur.nAg, mN:cur.mN, c0:cur.c0, c1:cur.c1 }
+    };
+  }
+});
+
+/* ============================ 11. AAMI EC12 판정 대시보드 ============================ */
+Lab.make({
+  mount:'#lab-aami',
+  title:'AAMI EC12 판정 대시보드',
+  badge:'PASS / FAIL',
+  controls:[
+    {id:'az0', label:'ACZ 초기', min:100, max:5000, step:10, value:1500, unit:'Ω', fmt:function(v){ return v.toFixed(0); }},
+    {id:'az1', label:'ACZ 종료', min:100, max:5000, step:10, value:1800, unit:'Ω', fmt:function(v){ return v.toFixed(0); }},
+    {id:'dco', label:'DCO', min:0, max:300, step:1, value:60, unit:'mV', fmt:function(v){ return v.toFixed(0); }},
+    {id:'nz',  label:'NOISE', min:0, max:300, step:1, value:90, unit:'µVpp', fmt:function(v){ return v.toFixed(0); }},
+    {id:'sdr', label:'SDR 5 s', min:0, max:300, step:1, value:70, unit:'mV', fmt:function(v){ return v.toFixed(0); }},
+    {id:'slp', label:'SDR 15/25/35 s 기울기', min:0, max:5, step:0.05, value:0.6, unit:'mV/s', fmt:function(v){ return v.toFixed(2); }},
+    {id:'oc', type:'select', label:'종료 ACZ 상태', value:'ok',
+     options:[{value:'ok',label:'정상 통전'},{value:'open',label:'개방 회로'}]}
+  ],
+  presets:[
+    {label:'전 항목 여유 통과', set:{az0:900, az1:1000, dco:30, nz:50, sdr:40, slp:0.3}},
+    {label:'SDR 회복 지연', set:{sdr:180, slp:2.4}}
+  ],
+  stats:[
+    {id:'r1', label:'ACZ 초기 (3000 Ω)', fmt:function(v){ return v; }},
+    {id:'r2', label:'ACZ 종료 (3000 Ω)', fmt:function(v){ return v; }},
+    {id:'r3', label:'DCO (100 mV)', fmt:function(v){ return v; }},
+    {id:'r4', label:'NOISE (150 µVpp)', fmt:function(v){ return v; }},
+    {id:'r5', label:'SDR 5 s (100 mV)', fmt:function(v){ return v; }},
+    {id:'r6', label:'SDR 기울기 (1 mV/s)', fmt:function(v){ return v; }},
+    {id:'all',label:'종합 판정', fmt:function(v){ return v; }}
+  ],
+  plot:{width:640,height:390,xLabel:'',yLabel:'측정값 / 판정선',autoX:false,autoY:false,
+        xMin:0.4,xMax:6.6,yMin:0,yMax:2.6,xTicks:6,
+        xTickFmt:function(v){
+          var k = Math.round(v);
+          return ['','ACZ₀','ACZ₁','DCO','NOISE','SDR5','기울기'][k] || '';
+        }},
+  legend:[{color:'--green',label:'통과'},{color:'--accent',label:'미달'}],
+  note:'판정선은 ACZ 3000 Ω, DCO 100 mV, NOISE 150 µVpp, SDR 5 s 100 mV, SDR 15/25/35 s 기울기 ' +
+       '1 mV/s 임. 막대는 측정값을 판정선으로 나눈 비이므로 1을 넘으면 미달이며, 전 항목 통과일 ' +
+       '때만 종합 판정이 합격으로 떨어짐. 종료 ACZ를 개방 회로로 두면 초기값과 무관하게 실패 모드가 ' +
+       '접점 단선으로 분류됨.',
+  plotNote:'점선이 판정선(비 = 1)임.',
+  compute:function(v){
+    var open = v.oc === 'open';
+    var vals = [
+      {x:1, r:v.az0/3000, ok:v.az0 <= 3000, txt:v.az0.toFixed(0) + ' Ω'},
+      {x:2, r:open ? 2.5 : v.az1/3000, ok:!open && v.az1 <= 3000, txt:open ? '개방 회로' : v.az1.toFixed(0) + ' Ω'},
+      {x:3, r:v.dco/100, ok:v.dco <= 100, txt:v.dco.toFixed(0) + ' mV'},
+      {x:4, r:v.nz/150,  ok:v.nz  <= 150, txt:v.nz.toFixed(0) + ' µVpp'},
+      {x:5, r:v.sdr/100, ok:v.sdr <= 100, txt:v.sdr.toFixed(0) + ' mV'},
+      {x:6, r:v.slp/1,   ok:v.slp <= 1,   txt:v.slp.toFixed(2) + ' mV/s'}
+    ];
+    var series = [], overlays = [{type:'hline', y:1, color:'--ink-3', label:'판정선'}];
+    var pass = true, i;
+    for(i=0;i<vals.length;i++){
+      if(!vals[i].ok) pass = false;
+      series.push({points:[[vals[i].x, Math.min(vals[i].r, 2.5)]],
+                   color:vals[i].ok ? '--green' : '--accent',
+                   type:'bars', barWidth:44, opacity:0.8});
+      overlays.push({type:'text', x:vals[i].x, y:Math.min(vals[i].r, 2.3) + 0.12,
+                     text:vals[i].txt, color:'--ink-2', anchor:'middle'});
+    }
+    function tag(o, t){ return (o ? '통과' : '미달') + ' · ' + t; }
+    return {
+      series:series, overlays:overlays,
+      stats:{
+        r1:tag(vals[0].ok, vals[0].txt),
+        r2:open ? '미달 · 접점 단선' : tag(vals[1].ok, vals[1].txt),
+        r3:tag(vals[2].ok, vals[2].txt),
+        r4:tag(vals[3].ok, vals[3].txt),
+        r5:tag(vals[4].ok, vals[4].txt),
+        r6:tag(vals[5].ok, vals[5].txt),
+        all:pass ? '합격 — 전 항목 통과' : '불합격'
+      }
+    };
+  }
+});
+
+/* ============================ 12. SDR 회복 곡선 ============================ */
+Lab.make({
+  mount:'#lab-sdr',
+  title:'SDR 회복 곡선 — 시정수와 기울기 판정',
+  badge:'RECOVERY',
+  controls:[
+    {id:'o0', label:'펄스 직후 offset', min:50, max:500, step:5, value:200, unit:'mV', fmt:function(v){ return v.toFixed(0); }},
+    {id:'tau',label:'회복 시정수 τ', min:5, max:60, step:0.5, value:15, unit:'s', fmt:function(v){ return v.toFixed(1); }}
+  ],
+  presets:[
+    {label:'빠른 회복 τ = 6 s', set:{tau:6}},
+    {label:'지연 회복 τ = 45 s', set:{tau:45}}
+  ],
+  stats:[
+    {id:'v5',  label:'5 s 값', unit:'mV', fmt:function(v){ return v.toFixed(1); }},
+    {id:'s15', label:'15→25 s 기울기', unit:'mV/s', fmt:function(v){ return v.toFixed(3); }},
+    {id:'s25', label:'25→35 s 기울기', unit:'mV/s', fmt:function(v){ return v.toFixed(3); }},
+    {id:'j5',  label:'5 s 판정 (100 mV)', fmt:function(v){ return v; }},
+    {id:'js',  label:'기울기 판정 (1 mV/s)', fmt:function(v){ return v; }}
+  ],
+  plot:{width:640,height:380,xLabel:'펄스 후 경과 시간 (s)',yLabel:'offset (mV)',
+        autoX:false,autoY:true,xMin:0,xMax:40,yMinFixed:0},
+  legend:[{color:'--accent',label:'offset(t)'}],
+  note:'offset(t) = offset₀ · exp(−t/τ) 로 두고 5 s 지점 값과 15→25 s, 25→35 s 구간의 평균 기울기를 ' +
+       '계산함. 판정선은 5 s 100 mV, 기울기 1 mV/s 임. τ가 커질수록 5 s 값이 남고 회복 구간 기울기가 ' +
+       '판정선에 다가섬.',
+  compute:function(v){
+    function f(t){ return v.o0 * Math.exp(-t / v.tau); }
+    var pts = [], i, t;
+    for(i=0;i<=200;i++){ t = 40 * i / 200; pts.push([t, f(t)]); }
+    var v5 = f(5);
+    var s15 = (f(15) - f(25)) / 10, s25 = (f(25) - f(35)) / 10;
+    var worst = Math.max(s15, s25);
+    return {
+      series:[{points:pts, color:'--accent', width:2.4}],
+      overlays:[
+        {type:'hline', y:100, color:'--green', label:'5 s 판정선 100 mV'},
+        {type:'vline', x:5,  color:'--ink-3', label:'5 s'},
+        {type:'vline', x:15, color:'--ink-3', label:'15 s'},
+        {type:'vline', x:25, color:'--ink-3', label:'25 s'},
+        {type:'vline', x:35, color:'--ink-3', label:'35 s'},
+        {type:'point', x:5, y:v5, color:'--accent', label:v5.toFixed(0) + ' mV'}
+      ],
+      stats:{
+        v5:v5, s15:s15, s25:s25,
+        j5: v5 <= 100 ? '통과' : '미달',
+        js: worst <= 1 ? '통과' : '미달'
+      }
+    };
+  }
+});
+</script>
+</body>
+</html>
