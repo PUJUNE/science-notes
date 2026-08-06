@@ -28,13 +28,14 @@
       <li><a href="#s1">실수부와 허수부</a></li>
       <li><a href="#s2">전류를 줄이는 방식</a></li>
       <li><a href="#s3">부호와 위상</a></li>
-      <li><a href="#s4">EIS</a></li>
-      <li><a href="#s5">Nyquist</a></li>
-      <li><a href="#s6">Randles</a></li>
-      <li><a href="#s7">반원의 기하</a></li>
-      <li><a href="#s8">CPE</a></li>
-      <li><a href="#s9">이탈 사례</a></li>
-      <li><a href="#s10">측정 설계</a></li>
+      <li><a href="#s4">커패시턴스</a></li>
+      <li><a href="#s5">EIS</a></li>
+      <li><a href="#s6">Nyquist</a></li>
+      <li><a href="#s7">Randles</a></li>
+      <li><a href="#s8">반원의 기하</a></li>
+      <li><a href="#s9">CPE</a></li>
+      <li><a href="#s10">이탈 사례</a></li>
+      <li><a href="#s11">측정 설계</a></li>
     </ul>
     <button class="theme-btn" type="button">DARK</button>
   </div>
@@ -229,10 +230,93 @@
   </div>
 </section>
 
-<!-- ================= 04 ================= -->
+<!-- ================= 04 커패시턴스 ================= -->
 <section id="s4">
   <div class="wrap">
-    <p class="eyebrow"><span class="num">04</span><span>Z(ω)</span></p>
+    <p class="eyebrow"><span class="num">04</span><span>C = εA/d</span></p>
+    <h2>커패시턴스의 기원 — 판 기하와 유전율</h2>
+
+    <p>
+      용량성 리액턴스를 다루기 전에 커패시턴스 자체가 어디서 오는지 정리함. 평행판 커패시터를
+      기준으로 하면 정전용량은 판의 기하와 판 사이를 채운 매질의 유전율만으로 결정됨.
+    </p>
+
+    <div class="eq">
+      C = ε · A / d &nbsp;&nbsp;<span class="cm">— 평행판 커패시터</span><br>
+      ε = ε₀ · ε<sub>r</sub> &nbsp;&nbsp;<span class="cm">— 진공 유전율 × 비유전율</span>
+    </div>
+    <ul class="sym">
+      <li><b>C</b><span>커패시턴스(정전용량) [F]</span></li>
+      <li><b>ε</b><span>유전율 [F/m]</span></li>
+      <li><b>ε₀</b><span>진공 유전율 8.854×10⁻¹² F/m</span></li>
+      <li><b>ε<sub>r</sub></b><span>유전체(절연체)의 비유전율 [무차원]</span></li>
+      <li><b>A</b><span>전극 판의 단면적 [m²]</span></li>
+      <li><b>d</b><span>두 판 사이의 간격 [m]</span></li>
+    </ul>
+
+    <p>
+      판 면적 A가 넓을수록 전하가 쌓일 자리가 늘어 C가 비례해 커지고, 유전율 ε이 높은 매질을
+      채울수록 같은 전압에서 더 많은 전하를 담음. 반면 간격 d가 좁아지면 양쪽 판의 전하가 서로를
+      강하게 끌어당겨 정전용량이 반비례로 증가함. 전기이중층 용량 Cdl이 면적 대비 큰 값을 갖는
+      이유도 같은 구조로 읽힘 — 계면의 전하 분리 간격이 분자 크기 수준이라 d가 극단적으로 작은
+      평행판에 해당하기 때문임.
+    </p>
+
+    <div id="lab-cap"></div>
+
+    <h3>커패시턴스에서 임피던스로 가는 환산</h3>
+    <p>
+      커패시터가 교류 전류를 방해하는 정도는 용량성 리액턴스 X<sub>C</sub>로 나타나며,
+      커패시턴스와 주파수 양쪽에 반비례함. 직류(f = 0)에서는 이 값이 무한대로 발산해 전류가
+      차단되고, 주파수가 올라갈수록 임피던스가 줄어 전류가 쉽게 통과함. 저항 R이 직렬로 붙으면
+      전체 임피던스는 실수부 R과 허수부 −X<sub>C</sub>의 합이 되고, 크기는 두 성분의
+      제곱합 제곱근으로 계산함.
+    </p>
+
+    <div class="eq">
+      |Z<sub>C</sub>| = X<sub>C</sub> = 1 / (ωC) = 1 / (2πfC) &nbsp;&nbsp;<span class="cm">— 커패시터 단독</span><br>
+      Z = R − jX<sub>C</sub> &nbsp;&nbsp;<span class="cm">— 직렬 RC</span><br>
+      |Z| = √(R² + X<sub>C</sub>²) = √(R² + (1/2πfC)²)
+    </div>
+    <ul class="sym">
+      <li><b>X<sub>C</sub></b><span>용량성 리액턴스 [Ω]</span></li>
+      <li><b>R</b><span>직렬 저항 [Ω]. 주파수의 영향을 받지 않음</span></li>
+      <li><b>ω</b><span>각주파수 [rad/s], ω = 2πf</span></li>
+      <li><b>f</b><span>교류 전원의 주파수 [Hz]</span></li>
+    </ul>
+
+    <p>
+      같은 커패시터라도 주파수에 따라 저항 환산값이 달라짐. 70 nF를 예로 들면 60 Hz 상용 전원에서는
+      37.9 kΩ으로 잡히지만, 1 kHz에서는 2.27 kΩ, 10 kHz에서는 0.23 kΩ까지 내려감. "커패시턴스가
+      몇 Ω인가"라는 물음에는 주파수를 함께 지정해야 답이 정해짐.
+    </p>
+
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>주파수</th><th>X<sub>C</sub> = 1/(2πfC), C = 70 nF</th><th>환산</th></tr></thead>
+        <tbody>
+          <tr><td>직류 (0 Hz)</td><td>∞</td><td>전류 차단</td></tr>
+          <tr><td>60 Hz (한국 상용 전원)</td><td>37,894 Ω</td><td>37.9 kΩ</td></tr>
+          <tr><td>1 kHz (회로 시험 주파수)</td><td>2,274 Ω</td><td>2.27 kΩ</td></tr>
+          <tr><td>10 kHz</td><td>227 Ω</td><td>0.23 kΩ</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div id="lab-rc"></div>
+
+    <p>
+      주파수가 f<sub>c</sub> = 1/(2πRC)보다 낮으면 X<sub>C</sub>가 지배해 |Z|가 f에 반비례하는
+      직선으로 떨어지고, f<sub>c</sub>를 넘으면 R이 지배해 수평으로 눕게 됨. 뒤에서 다룰 Bode
+      선도에서 |Z| 곡선이 꺾이는 자리가 바로 이 전환 주파수임.
+    </p>
+  </div>
+</section>
+
+<!-- ================= 05 ================= -->
+<section id="s5">
+  <div class="wrap">
+    <p class="eyebrow"><span class="num">05</span><span>Z(ω)</span></p>
     <h2>EIS는 같은 임피던스를 반대 방향으로 씀</h2>
 
     <p>
@@ -317,10 +401,10 @@
   </div>
 </section>
 
-<!-- ================= 05 ================= -->
-<section id="s5">
+<!-- ================= 06 ================= -->
+<section id="s6">
   <div class="wrap">
-    <p class="eyebrow"><span class="num">05</span><span>−Z″ vs Z′</span></p>
+    <p class="eyebrow"><span class="num">06</span><span>−Z″ vs Z′</span></p>
     <h2>Nyquist 선도 — 주파수 스윕을 한 장에</h2>
     <p>
       가로축은 Z′(실수부), 세로축은 −Z″(허수부의 부호를 뒤집은 값)이며, 주파수를 훑으며 찍은 궤적임.
@@ -405,10 +489,10 @@
   </div>
 </section>
 
-<!-- ================= 06 ================= -->
-<section id="s6">
+<!-- ================= 07 ================= -->
+<section id="s7">
   <div class="wrap">
-    <p class="eyebrow"><span class="num">06</span><span>Rs + (Rct + Zw) ∥ Cdl</span></p>
+    <p class="eyebrow"><span class="num">07</span><span>Rs + (Rct + Zw) ∥ Cdl</span></p>
     <h2>Randles 등가회로 — 전류가 흐를 길이 두 개임</h2>
     <p>
       전극에 전위를 걸면 전류가 흐를 길이 두 개로 갈림. 하나는 실제 산화·환원 반응으로 전자가 넘어가는
@@ -440,10 +524,10 @@
   </div>
 </section>
 
-<!-- ================= 07 ================= -->
-<section id="s7">
+<!-- ================= 08 ================= -->
+<section id="s8">
   <div class="wrap">
-    <p class="eyebrow"><span class="num">07</span><span>(Z′ − Rs − Rct/2)² + Z″² = (Rct/2)²</span></p>
+    <p class="eyebrow"><span class="num">08</span><span>(Z′ − Rs − Rct/2)² + Z″² = (Rct/2)²</span></p>
     <h2>왜 반원인가 — 세 개의 극한</h2>
     <p>Warburg를 잠시 빼고(σ = 0) 계산하면 반원이 나오는 이유가 떨어짐.</p>
 
@@ -510,10 +594,10 @@ Z′&nbsp; = Rs + Rct / (1 + ω²τ²)&nbsp;&nbsp;&nbsp;&nbsp;<span class="cm">�
   </div>
 </section>
 
-<!-- ================= 08 CPE ================= -->
-<section id="s8">
+<!-- ================= 09 CPE ================= -->
+<section id="s9">
   <div class="wrap">
-    <p class="eyebrow"><span class="num">08</span><span>Z<sub>CPE</sub> = 1 / [Q(jω)<sup>n</sup>]</span></p>
+    <p class="eyebrow"><span class="num">09</span><span>Z<sub>CPE</sub> = 1 / [Q(jω)<sup>n</sup>]</span></p>
     <h2>CPE — 지수 n이 이상성의 척도가 됨</h2>
 
     <p>
@@ -547,10 +631,10 @@ Z′&nbsp; = Rs + Rct / (1 + ω²τ²)&nbsp;&nbsp;&nbsp;&nbsp;<span class="cm">�
   </div>
 </section>
 
-<!-- ================= 09 이탈 사례 ================= -->
-<section id="s9">
+<!-- ================= 10 이탈 사례 ================= -->
+<section id="s10">
   <div class="wrap">
-    <p class="eyebrow"><span class="num">09</span><span>Randles ≠ 실측</span></p>
+    <p class="eyebrow"><span class="num">10</span><span>Randles ≠ 실측</span></p>
     <h2>실제 데이터가 교과서와 갈라지는 지점</h2>
     <p>Randles는 가장 단순한 이상화임. 실측 스펙트럼은 아래처럼 벗어남. 버튼을 눌러 비교해 볼 것.</p>
 
@@ -593,10 +677,10 @@ Z′&nbsp; = Rs + Rct / (1 + ω²τ²)&nbsp;&nbsp;&nbsp;&nbsp;<span class="cm">�
   </div>
 </section>
 
-<!-- ================= 10 측정 설계 ================= -->
-<section id="s10">
+<!-- ================= 11 측정 설계 ================= -->
+<section id="s11">
   <div class="wrap">
-    <p class="eyebrow"><span class="num">10</span><span>측정 설계</span></p>
+    <p class="eyebrow"><span class="num">11</span><span>측정 설계</span></p>
     <h2>측정 수단이 다르면 같은 시료도 다른 값을 냄</h2>
 
     <p>
@@ -1062,7 +1146,96 @@ drawDev(0);
 document.addEventListener('themechange', function(){ drawDev(devMode); });
 })();
 
-/* ============ 08. CPE explorer ============ */
+/* ============ 04. 평행판 커패시턴스 ============ */
+Lab.make({
+  mount:'#lab-cap',
+  title:'평행판 커패시턴스 계산기',
+  badge:'C = εA/d',
+  controls:[
+    {id:'er', label:'비유전율 ε_r', min:1, max:100, step:1, value:80, fmt:v=>v.toFixed(0)},
+    {id:'A', label:'판 면적 A', min:0.1, max:100, value:1, log:true, unit:'cm²', fmt:v=>v.toPrecision(3)},
+    {id:'d', label:'판 간격 d', min:1, max:1000, value:100, log:true, unit:'µm', fmt:v=>v.toPrecision(3)}
+  ],
+  presets:[
+    {label:'진공 간극', set:{er:1}},
+    {label:'면적 10배', set:{A:10}},
+    {label:'간격 1/10', set:{d:10}}
+  ],
+  stats:[
+    {id:'C', label:'커패시턴스 C', fmt:v=>Lab.eng(v,'F',3)},
+    {id:'x60', label:'X_C @ 60 Hz', fmt:v=>Lab.eng(v,'Ω',3)},
+    {id:'x1k', label:'X_C @ 1 kHz', fmt:v=>Lab.eng(v,'Ω',3)}
+  ],
+  plot:{width:640,height:340,xLabel:'판 간격 d (µm)',yLabel:'C (nF)',
+        xLog:true,yLog:true,autoX:false,xMin:1,xMax:1000,autoY:true},
+  legend:[{color:'--accent',label:'C(d) — 현재 ε_r·A 기준'}],
+  note:'ε₀ = 8.854×10⁻¹² F/m를 사용함. 면적을 10배로 하면 C도 10배가 되고, ' +
+       '간격을 10배로 벌리면 C가 1/10로 떨어짐. 로그–로그 좌표에서 기울기 −1 직선이 그 반비례임.',
+  compute(v){
+    const e0=8.854e-12, Am=v.A*1e-4;
+    const Cof = d => e0*v.er*Am/(d*1e-6);
+    const ds = Lab.logspace(1,1000,140);
+    const C = Cof(v.d);
+    return {
+      series:[{points:ds.map(d=>[d, Cof(d)*1e9]), color:'--accent', width:2.2}],
+      overlays:[{type:'point', x:v.d, y:C*1e9, color:'--accent', label:'현재'}],
+      stats:{C:C, x60:1/(2*Math.PI*60*C), x1k:1/(2*Math.PI*1000*C)}
+    };
+  }
+});
+
+/* ============ 04. 직렬 RC 임피던스 ============ */
+Lab.make({
+  mount:'#lab-rc',
+  title:'직렬 RC 임피던스 — 주파수에 따른 |Z|',
+  badge:'|Z|(f)',
+  controls:[
+    {id:'R', label:'직렬 저항 R', min:0.01, max:100, value:1, log:true, unit:'kΩ', fmt:v=>v.toPrecision(3)},
+    {id:'C', label:'커패시턴스 C', min:1, max:1000, value:70, log:true, unit:'nF', fmt:v=>v.toPrecision(3)},
+    {id:'f', label:'관찰 주파수 f', min:1, max:1e6, value:60, log:true, fmt:v=>Lab.eng(v,'Hz',3)}
+  ],
+  presets:[
+    {label:'70 nF · 60 Hz', set:{C:70, f:60}},
+    {label:'70 nF · 1 kHz', set:{C:70, f:1000}},
+    {label:'70 nF · 10 kHz', set:{C:70, f:10000}}
+  ],
+  stats:[
+    {id:'xc', label:'X_C', fmt:v=>Lab.eng(v,'Ω',3)},
+    {id:'z', label:'|Z|', fmt:v=>Lab.eng(v,'Ω',3)},
+    {id:'th', label:'위상각 θ', fmt:v=>v.toFixed(1), unit:'°'},
+    {id:'fc', label:'전환 주파수 f_c', fmt:v=>Lab.eng(v,'Hz',3)}
+  ],
+  plot:{width:640,height:360,xLabel:'f (Hz)',yLabel:'|Z| (Ω)',
+        xLog:true,yLog:true,autoX:false,xMin:1,xMax:1e6,autoY:true},
+  legend:[
+    {color:'--accent',label:'|Z| = √(R² + X_C²)'},
+    {color:'--im',label:'X_C = 1/(2πfC) (점선)'},
+    {color:'--re',label:'R (수평선)'}
+  ],
+  note:'f_c = 1/(2πRC) 아래에서는 X_C가 지배해 |Z|가 −1 기울기로 떨어지고, ' +
+       'f_c를 넘으면 R이 지배해 수평으로 눕게 됨. 프리셋은 70 nF 환산표의 세 지점임.',
+  compute(v){
+    const R=v.R*1e3, C=v.C*1e-9;
+    const Xc = f => 1/(2*Math.PI*f*C);
+    const Zm = f => Math.hypot(R, Xc(f));
+    const fs = Lab.logspace(1,1e6,200);
+    const fc = 1/(2*Math.PI*R*C);
+    return {
+      series:[
+        {points:fs.map(f=>[f,Xc(f)]), color:'--im', width:1.5, dash:'4 4'},
+        {points:fs.map(f=>[f,Zm(f)]), color:'--accent', width:2.4}
+      ],
+      overlays:[
+        {type:'hline', y:R, color:'--re', label:'R'},
+        {type:'vline', x:fc, color:'--ink-3', label:'f_c'},
+        {type:'point', x:v.f, y:Zm(v.f), color:'--accent', label:'현재'}
+      ],
+      stats:{xc:Xc(v.f), z:Zm(v.f), th:-Math.atan2(Xc(v.f),R)*180/Math.PI, fc:fc}
+    };
+  }
+});
+
+/* ============ 09. CPE explorer ============ */
 Lab.make({
   mount:'#lab-cpe',
   title:'CPE 지수 n이 반원을 어떻게 누르는가',
@@ -1123,7 +1296,7 @@ Lab.make({
   }
 });
 
-/* ============ 10. 진폭 비선형성 ============ */
+/* ============ 11. 진폭 비선형성 ============ */
 Lab.make({
   mount:'#lab-lin',
   title:'진폭이 커지면 응답이 왜곡됨 — Butler–Volmer 국소 선형화',

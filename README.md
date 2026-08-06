@@ -11,7 +11,7 @@
 | 01 수학 | `pages/math-ode.html` | 변수분리법, 치환적분, 연쇄법칙, 방향장, 적분상수 |
 | 02 화학 | `pages/electrochem.html` | Nernst 식, Faraday 두께 환산, 3-step 정전류법, OCP, CV |
 | 03 화학 | `pages/corrosion.html` | 갈바닉·공식·틈새 부식, Tafel, Pourbaix, 통계 |
-| 04 화학 | `pages/eis.html` | 복소 임피던스, Nyquist, Bode, Randles, CPE, Warburg |
+| 04 화학 | `pages/eis.html` | 복소 임피던스, 평행판 커패시턴스, 직렬 RC, Nyquist, Bode, Randles, CPE, Warburg |
 | 05 화학 | `pages/polymer.html` | 라디칼 중합, Flory–Huggins, Flory–Rehner, 가교 밀도 |
 | 06 화학 | `pages/surface.html` | Young 식, 접촉각, Owens–Wendt, Neumann EoS |
 | 07 물리 | `pages/rheology.html` | 멱법칙, 전단담화, 항복응력, 도공 두께 |
