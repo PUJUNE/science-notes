@@ -1,0 +1,901 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>확산층 형성 원리 — 수학·물리·화학 노트</title>
+<meta name="description" content="픽의 제1법칙에서 물질 수지와 제2법칙을 거쳐 코트렐 방정식과 네른스트 확산층 두께까지, 평면 전극 반무한 선형 확산의 유도 사슬 전체를 인터랙티브로 다룸.">
+<!-- social -->
+<link rel="canonical" href="https://pujune.github.io/science-notes/pages/diffusion.html">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="수학·물리·화학 노트">
+<meta property="og:locale" content="ko_KR">
+<meta property="og:url" content="https://pujune.github.io/science-notes/pages/diffusion.html">
+<meta property="og:title" content="확산층 형성 원리 — 수학·물리·화학 노트">
+<meta property="og:description" content="픽의 제1법칙에서 물질 수지와 제2법칙을 거쳐 코트렐 방정식과 네른스트 확산층 두께까지, 평면 전극 반무한 선형 확산의 유도 사슬 전체를 인터랙티브로 다룸.">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="확산층 형성 원리 — 수학·물리·화학 노트">
+<meta name="twitter:description" content="픽의 제1법칙에서 물질 수지와 제2법칙을 거쳐 코트렐 방정식과 네른스트 확산층 두께까지, 평면 전극 반무한 선형 확산의 유도 사슬 전체를 인터랙티브로 다룸.">
+<!-- /social -->
+<link rel="stylesheet" href="../assets/css/site.css">
+</head>
+<body>
+
+<div class="topbar">
+  <div class="wrap">
+    <a class="brand" href="../index.html">← 수학·물리·화학 노트</a>
+    <ul class="topnav">
+      <li><a href="#s1">적용 조건</a></li>
+      <li><a href="#s2">픽 제1법칙</a></li>
+      <li><a href="#s3">픽 제2법칙</a></li>
+      <li><a href="#s4">경계조건</a></li>
+      <li><a href="#s5">오차함수 해</a></li>
+      <li><a href="#s6">코트렐</a></li>
+      <li><a href="#s7">확산층 두께</a></li>
+      <li><a href="#s8">수치 예</a></li>
+      <li><a href="#s9">주파수 영역</a></li>
+      <li><a href="#s10">적용 한계</a></li>
+      <li><a href="#s11">기호</a></li>
+    </ul>
+    <button class="theme-btn" type="button">DARK</button>
+  </div>
+</div>
+
+<header class="mast">
+  <div class="wrap">
+    <p class="kicker">Field 05 · 화학 · 확산층 형성 원리</p>
+    <h1>농도 기울기 하나에서 <em>코트렐 방정식</em>까지</h1>
+    <p class="lede">
+      전극에 전위를 계단으로 걸면 표면 농도가 0으로 떨어지고, 그 교란이 용액 쪽으로 번져
+      나가면서 확산층이 자람. 픽의 제1법칙에서 출발해 물질 수지로 시간 항을 얻고, 오차함수 해를
+      거쳐 코트렐 방정식과 네른스트 확산층 두께에 닿는 경로를 한 줄로 이어 정리했음. 마지막에는
+      같은 방정식을 주파수 영역에서 푼 바르부르크 임피던스까지 연결함.
+    </p>
+    <div class="eq" style="border-left-color:var(--accent)">
+      δ(t) = √(πDt) &nbsp;&nbsp;<span class="cm">— 확산층은 시간의 제곱근에 비례해 자람</span>
+    </div>
+  </div>
+</header>
+
+<main>
+
+<section id="s1">
+  <div class="wrap">
+    <p class="eyebrow"><span class="num">01</span><span>평면 전극 · 반무한 선형 확산</span></p>
+    <h2>이 유도가 성립하는 다섯 조건</h2>
+    <p>
+      아래 사슬은 특정한 실험 배치를 전제로 하며, 조건 하나가 깨지면 결과식의 계수뿐 아니라
+      함수 형태까지 바뀜. 그래서 측정값을 식에 대입하기 전에 배치가 이 조건에 들어오는지부터
+      확인해야 하고, 벗어나는 항목이 있으면 10절의 대응 항목으로 넘어가야 함.
+    </p>
+    <ul class="notes">
+      <li><b>선형 확산</b><span>전극 표면이 평면이고 확산이 표면에 수직인 한 방향으로만 일어남. 가장자리에서 옆으로 들어오는 물질이 없다고 봄.</span></li>
+      <li><b>반무한 조건</b><span>용액 두께가 확산층에 비해 충분히 커서, 전극에서 먼 곳의 농도가 벌크 값을 계속 유지함.</span></li>
+      <li><b>지지 전해질 과량</b><span>전기장에 의한 이온 이동(migration)이 무시될 만큼 지지 전해질을 넣어, 물질 수송을 확산만으로 기술함.</span></li>
+      <li><b>대류 없음</b><span>교반하지 않고 자연대류도 일어나지 않아 대류 항이 0임. 실제로는 시간이 흐르면 이 조건이 먼저 깨짐.</span></li>
+      <li><b>확산 지배</b><span>전극 반응이 충분히 빨라 표면 농도가 전위를 인가한 순간 0이 됨. 반응 속도가 느리면 표면 농도가 0에 도달하지 않음.</span></li>
+    </ul>
+    <div class="callout note">
+      <p><b>조건의 위계</b> — 앞의 네 조건은 방정식을 세우는 단계에 걸리고, 마지막 조건은 경계조건을
+      정하는 단계에 걸림. 그래서 반응이 느린 계에서는 지배 방정식은 그대로 쓰면서 표면 경계조건만
+      바꿔 풀게 됨.</p>
+    </div>
+  </div>
+</section>
+
+<section id="s2">
+  <div class="wrap">
+    <p class="eyebrow"><span class="num">02</span><span>J = −D ∂C/∂x</span></p>
+    <h2>픽의 제1법칙 — 기울기가 유속을 정함</h2>
+    <p>
+      농도 기울기가 있는 곳에서 물질은 농도가 낮은 쪽으로 흐름. 단위 시간·단위 면적당 이동하는
+      물질량을 유속이라 부르고 기호 J로 쓰면, 유속이 기울기에 비례한다는 관계가 제1법칙임.
+      음의 부호는 흐름이 농도가 감소하는 방향을 향한다는 뜻이며, 비례상수 D가 확산계수임.
+    </p>
+    <div class="eq">
+      J = −D ∂C/∂x &nbsp;&nbsp;<span class="cm">— 픽의 제1법칙</span>
+    </div>
+    <ul class="sym">
+      <li><b>J</b><span>유속, 단위 면적·단위 시간당 물질량 [mol·cm⁻²·s⁻¹]</span></li>
+      <li><b>D</b><span>확산계수 [cm²·s⁻¹]</span></li>
+      <li><b>C</b><span>농도 [mol·cm⁻³]</span></li>
+      <li><b>x</b><span>전극 표면으로부터의 거리 [cm]</span></li>
+    </ul>
+    <p>
+      이 법칙은 어느 한 순간의 기울기와 유속을 연결할 뿐이어서, 시간이 흐르며 농도가 어떻게
+      재배치되는지는 말하지 않음. 확산층의 성장을 얻으려면 시간 항이 들어간 식이 따로 필요하고,
+      그것을 다음 절의 물질 수지에서 만듦.
+    </p>
+    <div id="lab-fick1"></div>
+  </div>
+</section>
+
+<section id="s3">
+  <div class="wrap">
+    <p class="eyebrow"><span class="num">03</span><span>∂C/∂t = D ∂²C/∂x²</span></p>
+    <h2>물질 수지에서 픽의 제2법칙으로</h2>
+    <p>
+      두께 dx의 얇은 층을 잡고 왼쪽 면으로 들어온 양에서 오른쪽 면으로 나간 양을 빼면 그 층에
+      남는 양이 나오는데, 이것이 곧 그 층의 농도 변화율임. 들고 남의 차이를 유속의 공간 미분으로
+      쓰면 물질 수지식이 얻어짐.
+    </p>
+    <div class="eq">
+      ∂C/∂t = −∂J/∂x &nbsp;&nbsp;<span class="cm">— 물질 수지. 유속이 거리에 따라 줄어드는 만큼 농도가 쌓임</span>
+    </div>
+    <p>
+      여기에 제1법칙을 대입하면 J가 사라지고 C에 대한 편미분방정식만 남으며, 시간 미분 한 번과
+      공간 미분 두 번이 확산계수로 묶인 형태가 됨. 이것이 제2법칙이고, 확산층 형성 문제는 이제
+      이 방정식을 주어진 경계조건에서 푸는 문제로 환원됨.
+    </p>
+    <div class="eq">
+      ∂C/∂t = D ∂²C/∂x² &nbsp;&nbsp;<span class="cm">— 픽의 제2법칙</span>
+    </div>
+    <div class="callout">
+      <p><b>차원이 말해 주는 것</b> — 좌변은 농도를 시간으로, 우변은 농도를 길이 제곱으로 나눈
+      형태여서, D의 단위가 길이²/시간이 됨. 이 조합에서 길이가 시간의 제곱근에 비례한다는 결론이
+      이미 예고되며, 뒤에 나오는 √(Dt)는 그 예고를 구체적인 계수까지 채운 결과임.</p>
+    </div>
+    <div id="lab-fick2"></div>
+  </div>
+</section>
+
+<section id="s4">
+  <div class="wrap">
+    <p class="eyebrow"><span class="num">04</span><span>C(x,0) = C* · C(∞,t) = C* · C(0,t) = 0</span></p>
+    <h2>경계조건 — 전위 계단 실험</h2>
+    <p>
+      정지 용액에서 전극 전위를 반응이 확산 지배가 되는 값으로 계단 인가하는 경우를 생각함.
+      전위를 걸기 전에는 용액 어디나 벌크 농도이고, 전극에서 무한히 먼 곳은 실험 내내 벌크 농도를
+      유지하며, 전위를 인가한 순간부터 표면 농도는 0으로 고정됨.
+    </p>
+    <div class="eq">
+      C(x, 0) = C*<br>
+      C(∞, t) = C*<br>
+      C(0, t) = 0 &nbsp;&nbsp;<span class="cm">— t &gt; 0</span>
+    </div>
+    <ul class="notes">
+      <li><b>초기조건</b><span>C(x,0) = C*. 전위를 걸기 직전 용액은 어디나 벌크 농도임.</span></li>
+      <li><b>먼 쪽 경계</b><span>C(∞,t) = C*. 반무한 조건이 여기 들어가며, 용액이 얇으면 이 조건이 유한 두께 조건으로 바뀜.</span></li>
+      <li><b>표면 경계</b><span>C(0,t) = 0. 확산 지배 조건이 여기 들어가며, 반응이 느리면 표면 농도가 0 대신 유한한 값을 가짐.</span></li>
+    </ul>
+    <p>
+      세 조건 가운데 표면 조건이 계단 함수라는 점이 뒤의 해에서 t = 0 특이성을 만듦. 전위를 건
+      순간 기울기가 무한대가 되고 전류도 발산하는데, 실제 측정에서는 셀 시정수와 충전 전류가
+      그 구간을 덮어 버림.
+    </p>
+  </div>
+</section>
+
+<section id="s5">
+  <div class="wrap">
+    <p class="eyebrow"><span class="num">05</span><span>C(x,t) = C* erf(x / 2√(Dt))</span></p>
+    <h2>농도 분포의 해 — 오차함수</h2>
+    <p>
+      제2법칙을 위 경계조건에서 라플라스 변환으로 풀면 오차함수 형태의 해가 얻어짐. 변환을 거치면
+      편미분방정식이 상미분방정식으로 내려가고, 표면 조건과 먼 쪽 조건을 적용해 적분상수를 정한
+      뒤 되돌리는 경로임.
+    </p>
+    <div class="eq">
+      C(x, t) = C* · erf( x / (2√(Dt)) ) &nbsp;&nbsp;<span class="cm">— erf는 오차함수</span>
+    </div>
+    <ul class="sym">
+      <li><b>C*</b><span>벌크 농도 [mol·cm⁻³]</span></li>
+      <li><b>erf</b><span>오차함수. erf(0) = 0, erf(∞) = 1로 표면에서 0, 먼 쪽에서 C*를 만족시킴</span></li>
+      <li><b>2√(Dt)</b><span>거리를 무차원화하는 척도 [cm]</span></li>
+    </ul>
+    <p>
+      괄호 안이 x와 √(Dt)의 비로만 이루어졌다는 점이 이 해의 성격을 정함. 시간이 흐를수록 √(Dt)가
+      커지므로 같은 농도비를 주는 위치 x가 그만큼 멀어지고, 결과적으로 농도가 교란된 영역이
+      시간의 제곱근에 비례해 용액 쪽으로 넓어짐. 시간을 100배 늘려도 교란 영역은 10배만 넓어지는데,
+      확산이 무작위 걸음의 통계에서 나오기 때문임.
+    </p>
+    <div id="lab-profile"></div>
+  </div>
+</section>
+
+<section id="s6">
+  <div class="wrap">
+    <p class="eyebrow"><span class="num">06</span><span>i(t) = nFA√D C* / √(πt)</span></p>
+    <h2>표면 유속과 코트렐 방정식</h2>
+    <p>
+      전류는 전극 표면에서 물질이 도착하는 속도에 비례하므로, 위 해를 x로 미분해 표면에서
+      평가하면 전류로 가는 길이 열림. 오차함수의 미분에서 지수 함수와 √π가 함께 나오고,
+      x = 0에서 지수 항이 1이 되어 기울기가 다음 형태로 정리됨.
+    </p>
+    <div class="eq">
+      ∂C/∂x |<sub>x=0</sub> = C* / √(πDt) &nbsp;&nbsp;<span class="cm">— 표면 농도 기울기</span>
+    </div>
+    <p>
+      여기에 전자 수 n, 패러데이 상수 F, 전극 면적 A를 곱하면 유속이 전류로 환산됨. 패러데이
+      상수가 붙는 이유는 도착한 물질량 1 mol마다 n mol의 전자가 외부 회로를 지나기 때문임.
+    </p>
+    <div class="eq">
+      i = nFAD · ∂C/∂x |<sub>x=0</sub> &nbsp;&nbsp;<span class="cm">— 유속을 전류로 환산</span>
+    </div>
+    <p>
+      두 식을 합치면 D의 지수가 1에서 1/2로 내려가면서 코트렐 방정식이 얻어짐. 전류가 시간의
+      제곱근에 반비례해 감소하는데, 확산층이 넓어질수록 같은 농도차가 더 긴 거리에 걸쳐 배분되어
+      표면 기울기가 완만해지기 때문임.
+    </p>
+    <div class="eq" style="border-left-color:var(--purple)">
+      i(t) = nFA√D · C* / √(πt) &nbsp;&nbsp;<span class="cm">— 코트렐 방정식</span>
+    </div>
+    <ul class="sym">
+      <li><b>n</b><span>반응에 관여하는 전자 수 [—]</span></li>
+      <li><b>F</b><span>패러데이 상수 96485 [C·mol⁻¹]</span></li>
+      <li><b>A</b><span>전극 면적 [cm²]</span></li>
+      <li><b>i</b><span>전류 [A]</span></li>
+    </ul>
+    <div class="callout ok">
+      <p><b>판별 기준으로 쓰는 법</b> — i를 t<sup>−1/2</sup>에 대해 도시했을 때 직선이 되고 원점을
+      지나는지가 반응이 확산 지배인지 판별하는 기준임. 직선의 기울기가 nFA√D C*/√π이므로, 다른
+      값을 알고 있으면 기울기에서 확산계수 D를 구할 수 있음.</p>
+    </div>
+    <div id="lab-cottrell"></div>
+  </div>
+</section>
+
+<section id="s7">
+  <div class="wrap">
+    <p class="eyebrow"><span class="num">07</span><span>δ(t) = √(πDt)</span></p>
+    <h2>확산층 두께 — 접선으로 정의함</h2>
+    <p>
+      실제 농도 분포는 오차함수 곡선이라 어디까지가 확산층인지 경계가 뚜렷하지 않음. 그래서
+      표면 기울기를 그대로 연장한 직선이 벌크 농도와 만나는 지점을 두께로 정의하며, 이렇게 잡은
+      두께를 네른스트 확산층이라 부름. 이 선형 근사에서는 농도가 δ에 걸쳐 0에서 C*까지 직선으로
+      변한다고 보므로 전류가 다음과 같이 단순해짐.
+    </p>
+    <div class="eq">
+      i = nFAD · C* / δ &nbsp;&nbsp;<span class="cm">— 선형 근사에서의 전류</span>
+    </div>
+    <p>
+      이 값을 코트렐 방정식과 같게 두면 δ가 결정됨. 양변에서 nFA와 C*가 소거되고 D의 지수 차이가
+      정리되면서, 두께가 시간의 제곱근에 비례하고 그 계수가 확산계수의 제곱근과 원주율에서
+      나오는 형태가 남음.
+    </p>
+    <div class="eq" style="border-left-color:var(--accent)">
+      δ(t) = √(πDt) &nbsp;&nbsp;<span class="cm">— 네른스트 확산층 두께</span>
+    </div>
+    <div class="callout">
+      <p><b>δ에서의 농도는 항상 같은 비율임</b> — 정의를 해에 대입하면 x = δ에서
+      erf(√(πDt) / 2√(Dt)) = erf(√π/2)가 되어 D와 t가 모두 소거됨. 값은 약 0.79이므로, 네른스트
+      확산층의 바깥 끝은 시간과 확산계수에 관계없이 벌크 농도의 약 79 %인 지점에 놓임. 두께가
+      자라도 이 비율은 고정되며, 곡선 전체가 x축 방향으로 늘어날 뿐임.</p>
+    </div>
+    <p>
+      π가 붙는 것은 오차함수의 미분에서 나온 것이므로, 이 계수는 4절의 경계조건에 묶여 있음.
+      문헌에 따라 확산의 특성 길이를 √(Dt)나 √(2Dt)로 잡는 경우가 있어 같은 실험에서도 두께 값이
+      달라 보일 수 있으니, 다른 자료와 비교할 때는 정의부터 확인해야 함.
+    </p>
+    <div id="lab-delta"></div>
+  </div>
+</section>
+
+<section id="s8">
+  <div class="wrap">
+    <p class="eyebrow"><span class="num">08</span><span>D = 1×10⁻⁵ cm²/s 기준</span></p>
+    <h2>수치 예 — 두께와 전류의 크기</h2>
+    <p>
+      수용액에서 일반적인 이온의 확산계수 D = 1×10⁻⁵ cm²/s를 대입한 값임. 전류는 n = 1,
+      A = 1 cm², C* = 1 mmol/L 조건에서 계산했으며, 시간이 10배 늘어날 때 두께는 √10배 늘고
+      전류는 √10분의 1로 줄어드는 대응이 표에 그대로 나타남.
+    </p>
+    <div class="tbl-wrap">
+      <table>
+        <thead>
+          <tr><th>경과 시간 t</th><th>확산층 두께 δ</th><th>전류 i (n=1, A=1 cm², C* = 1 mmol/L)</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>0.01 s</td><td>5.6 μm</td><td>1721 μA</td></tr>
+          <tr><td>0.1 s</td><td>17.7 μm</td><td>544 μA</td></tr>
+          <tr><td>1 s</td><td>56.0 μm</td><td>172 μA</td></tr>
+          <tr><td>10 s</td><td>177.2 μm</td><td>54 μA</td></tr>
+          <tr><td>100 s</td><td>560.5 μm</td><td>17 μA</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="hint">
+      100 초 구간의 값은 계산상의 값임. 실제로는 10절의 자연대류 때문에 그 이전에 두께 성장이 멈춤.
+    </p>
+    <div id="lab-calc"></div>
+  </div>
+</section>
+
+<section id="s9">
+  <div class="wrap">
+    <p class="eyebrow"><span class="num">09</span><span>Z<sub>W</sub> = σω<sup>−1/2</sup>(1 − j)</span></p>
+    <h2>주파수 영역에서의 대응 — 바르부르크 임피던스</h2>
+    <p>
+      같은 확산 방정식을 계단 전위 대신 정현파 전위로 풀면 임피던스의 확산 성분이 얻어짐.
+      전위가 진동하면 농도 교란도 같은 주파수로 진동하며 표면에서 안쪽으로 감쇠해 들어가고,
+      그 응답을 임피던스로 정리한 것이 바르부르크 임피던스임.
+    </p>
+    <div class="eq" style="border-left-color:var(--purple)">
+      Z<sub>W</sub> = σ · ω<sup>−1/2</sup> · (1 − j) &nbsp;&nbsp;<span class="cm">— 무한 확산 바르부르크</span>
+    </div>
+    <p>
+      크기가 각주파수의 −1/2 승에 비례하고 실수부와 허수부의 크기가 서로 같아, 나이퀴스트 선도에서
+      기울기 1의 45도 직선으로 나타남. 시간 영역의 t<sup>−1/2</sup>와 지수가 같은데, 두 결과가 같은
+      확산 방정식에서 나왔기 때문임. 계단 응답의 √t와 정현파 응답의 √ω가 서로 역수 관계로
+      대응하는 셈임.
+    </p>
+    <p>
+      농도 교란이 실제로 미치는 거리도 주파수로 정해짐. 각주파수가 클수록 방향이 빨리 뒤집혀
+      물질이 멀리 가기 전에 되돌아오므로, 침투 깊이가 다음과 같이 짧아짐.
+    </p>
+    <div class="eq">
+      δ<sub>AC</sub> = √(2D / ω) , &nbsp; ω = 2πf &nbsp;&nbsp;<span class="cm">— 교류 침투 깊이</span>
+    </div>
+    <ul class="sym">
+      <li><b>ω</b><span>각주파수 2πf [rad·s⁻¹]</span></li>
+      <li><b>σ</b><span>바르부르크 계수 [Ω·s⁻¹ᐟ²]</span></li>
+      <li><b>δ<sub>AC</sub></b><span>교류 조건에서의 확산 침투 깊이 [cm]</span></li>
+    </ul>
+    <div class="callout note">
+      <p><b>고주파가 확산을 보지 못하는 이유</b> — D = 1×10⁻⁵ cm²/s 기준으로 20 Hz에서 약 4.0 μm,
+      36 kHz에서 약 94 nm, 60 kHz에서 약 73 nm임. 전기이중층 두께와 같은 자릿수까지 내려오므로
+      고주파 임피던스 측정은 확산이 아니라 계면과 용액 저항을 읽게 됨.</p>
+    </div>
+    <div id="lab-warburg"></div>
+  </div>
+</section>
+
+<section id="s10">
+  <div class="wrap">
+    <p class="eyebrow"><span class="num">10</span><span>조건이 깨지는 다섯 지점</span></p>
+    <h2>적용 한계</h2>
+    <p>
+      1절의 조건은 실험 시간이 길어지거나 전극이 작아지면 차례로 깨짐. 어느 조건이 먼저 깨지는지가
+      측정 구간을 정하므로, 코트렐 직선성이 무너지는 지점을 아래 항목과 대조해 원인을 구분함.
+    </p>
+    <ul class="notes">
+      <li><b>자연대류</b><span>확산층이 두꺼워지면 밀도 차에 의한 대류가 발생함. 정지 용액에서 확산층은 대체로 10⁻² cm 수준에서 성장이 멈추며, 그 이후 전류는 코트렐 예측보다 큰 값으로 수렴함.</span></li>
+      <li><b>전기이중층 충전</b><span>전위 계단 직후에는 충전 전류가 패러데이 전류를 가림. 셀 시정수의 몇 배가 지난 뒤의 구간만 해석에 씀.</span></li>
+      <li><b>구형·미소전극 확산</b><span>전극 크기가 확산층과 비슷해지면 가장자리에서 옆으로 들어오는 물질 때문에 선형 확산 가정이 깨짐. 미소전극에서는 전류가 0으로 감쇠하지 않고 정상상태 값에 수렴함.</span></li>
+      <li><b>이동(migration)</b><span>지지 전해질이 부족하면 전기장에 의한 이온 이동이 더해져 유속이 확산만으로 기술되지 않음.</span></li>
+      <li><b>용액 저항</b><span>미보상 저항이 크면 인가 전위가 계단 형태로 걸리지 않아, 표면 농도가 0이라는 경계조건이 성립하지 않음.</span></li>
+    </ul>
+    <div class="callout">
+      <p><b>측정 창</b> — 앞쪽은 충전 전류가, 뒤쪽은 자연대류가 막으므로 코트렐 해석이 성립하는
+      구간은 양쪽에서 잘린 중간 구간임. 07절 위젯의 대류 한계선과 06절 위젯의 t<sup>−1/2</sup>
+      직선을 함께 보면 그 창의 폭을 조건별로 확인할 수 있음.</p>
+    </div>
+  </div>
+</section>
+
+<section id="s11">
+  <div class="wrap">
+    <p class="eyebrow"><span class="num">11</span><span>기호와 단위</span></p>
+    <h2>기호</h2>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>기호</th><th>의미</th><th>단위</th></tr></thead>
+        <tbody>
+          <tr><td>J</td><td>유속 (단위 면적·단위 시간당 물질량)</td><td>mol·cm⁻²·s⁻¹</td></tr>
+          <tr><td>D</td><td>확산계수</td><td>cm²·s⁻¹</td></tr>
+          <tr><td>C</td><td>농도</td><td>mol·cm⁻³</td></tr>
+          <tr><td>C*</td><td>벌크 농도</td><td>mol·cm⁻³</td></tr>
+          <tr><td>x</td><td>전극 표면으로부터의 거리</td><td>cm</td></tr>
+          <tr><td>δ</td><td>확산층 두께 (네른스트)</td><td>cm</td></tr>
+          <tr><td>i</td><td>전류</td><td>A</td></tr>
+          <tr><td>n</td><td>반응에 관여하는 전자 수</td><td>—</td></tr>
+          <tr><td>F</td><td>패러데이 상수 96485</td><td>C·mol⁻¹</td></tr>
+          <tr><td>A</td><td>전극 면적</td><td>cm²</td></tr>
+          <tr><td>ω</td><td>각주파수 2πf</td><td>rad·s⁻¹</td></tr>
+          <tr><td>σ</td><td>바르부르크 계수</td><td>Ω·s⁻¹ᐟ²</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p class="hint">
+      단위계는 전기화학 문헌의 관례를 따라 cm 기준으로 씀. SI로 옮길 때 D는 10⁻⁴배, 농도는 10⁶배가
+      되므로 두 계를 섞으면 전류가 자릿수로 어긋남.
+    </p>
+  </div>
+</section>
+
+<div class="wrap">
+  <div class="pager">
+    <a href="eis.html"><span class="pg-lbl">이전</span>임피던스와 EIS</a>
+    <a href="polymer.html" style="text-align:right"><span class="pg-lbl">다음</span>고분자와 하이드로젤</a>
+  </div>
+</div>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <p>Field 05 · 확산층 형성 원리 · 모든 그림은 브라우저에서 직접 계산해 그림</p>
+  </div>
+</footer>
+
+<script src="../assets/js/site.js"></script>
+<script src="../assets/js/lab.js"></script>
+<script>
+/* ========================================================================
+   공통 상수와 수치 유틸
+   F  : 패러데이 상수 [C/mol]
+   단위계는 본문과 같이 cm 기준 — D [cm²/s], C [mol/cm³], x·δ [cm], A [cm²]
+   ======================================================================== */
+var F = 96485;
+
+function erf(x){
+  // Abramowitz & Stegun 7.1.26 (|ε| ≤ 1.5×10⁻⁷)
+  var s = x < 0 ? -1 : 1, ax = Math.abs(x);
+  var p = 0.3275911;
+  var a1 = 0.254829592, a2 = -0.284496736, a3 = 1.421413741,
+      a4 = -1.453152027, a5 = 1.061405429;
+  var t = 1 / (1 + p * ax);
+  var y = 1 - (((((a5 * t + a4) * t) + a3) * t + a2) * t + a1) * t * Math.exp(-ax * ax);
+  return s * y;
+}
+
+/* mmol/L → mol/cm³ : 1 mmol/L = 1e-3 mol/L, 1 L = 1000 cm³ */
+function molPerCm3(mM){ return mM * 1e-6; }
+function cmToUm(x){ return x * 1e4; }
+function aToUa(x){ return x * 1e6; }
+
+/* 네른스트 확산층 두께 δ(t) = √(πDt)  [cm] */
+function deltaOf(D, t){ return Math.sqrt(Math.PI * D * t); }
+/* 코트렐 전류 i(t) = nFA√D C* / √(πt)  [A] */
+function cottrell(n, A, D, Cs, t){
+  return n * F * A * Math.sqrt(D) * Cs / Math.sqrt(Math.PI * t);
+}
+
+/* ========================================================================
+   02. 픽의 제1법칙 — 기울기와 유속
+   ======================================================================== */
+Lab.make({
+  mount:'#lab-fick1',
+  title:'픽의 제1법칙 — J = −D ∂C/∂x',
+  badge:'FLUX',
+  controls:[
+    {id:'D',  label:'확산계수 D',  min:1e-7, max:1e-4, value:1e-5, log:true, unit:'cm²/s', fmt:v=>Lab.sci(v,3)},
+    {id:'Cs', label:'벌크 농도 C*', min:0.1, max:10, step:0.1, value:1, unit:'mmol/L', fmt:v=>v.toFixed(1)},
+    {id:'L',  label:'기울기 구간 L', min:1, max:500, step:1, value:56, unit:'μm', fmt:v=>v.toFixed(0)}
+  ],
+  presets:[
+    {label:'1 s 상당 (56 μm)',  set:{L:56}},
+    {label:'10 s 상당 (177 μm)', set:{L:177}},
+    {label:'박막 (5 μm)',        set:{L:5}}
+  ],
+  stats:[
+    {id:'grad', label:'농도 기울기 C*/L', fmt:v=>Lab.sci(v,3), unit:'mol/cm⁴'},
+    {id:'J',    label:'유속 J',           fmt:v=>Lab.sci(v,3), unit:'mol/cm²·s'},
+    {id:'i',    label:'전류 i (n=1, A=1 cm²)', fmt:v=>v.toFixed(1), unit:'μA'}
+  ],
+  plot:{width:640, height:300, xLabel:'거리 x (μm)', yLabel:'농도 C (mmol/L)',
+        autoX:false, autoY:false, xMin:0, xMax:500, yMin:0, yMax:10},
+  legend:[{color:'--accent', label:'선형 농도 분포'}],
+  plot2:{width:640, height:300, xLabel:'구간 길이 L (μm)', yLabel:'유속 J (mol/cm²·s)',
+         xLog:true, yLog:true, autoX:false, autoY:true, xMin:1, xMax:500},
+  legend2:[{color:'--purple', label:'J = D·C*/L'}],
+  note:'표면 농도를 0, 거리 L에서 벌크 농도 C*를 갖는 직선 분포를 가정한 계산임. ' +
+       '제1법칙은 이 순간의 기울기와 유속만 연결하므로, L이 시간에 따라 어떻게 변하는지는 ' +
+       '여기서 정해지지 않고 7절의 δ(t)가 정함.',
+  plotNote:'유속이 구간 길이에 반비례하므로 양 축 로그에서 기울기 −1의 직선이 됨. ' +
+           '같은 농도차라도 그것이 짧은 거리에 몰려 있으면 물질이 훨씬 빠르게 도착함.',
+  compute(v){
+    var Cs = molPerCm3(v.Cs);              // mol/cm³
+    var Lcm = v.L * 1e-4;                  // μm → cm
+    var grad = Cs / Lcm;                   // mol/cm⁴
+    var J = v.D * grad;                    // mol/cm²·s
+    var i = 1 * F * 1 * J;                 // A  (n=1, A=1 cm²)
+
+    var prof = [[0, 0], [v.L, v.Cs]];
+    var jl = [], k, LL;
+    for(k = 0; k <= 160; k++){
+      LL = Math.pow(10, Math.log10(1) + (Math.log10(500) - Math.log10(1)) * k / 160);
+      jl.push([LL, v.D * Cs / (LL * 1e-4)]);
+    }
+    return {
+      plot:{xMin:0, xMax:500, yMin:0, yMax:v.Cs * 1.1, autoX:false, autoY:false},
+      series:[
+        {points:prof, color:'--accent', width:2.6},
+        {points:[[v.L, v.Cs], [500, v.Cs]], color:'--neutral', width:1.2, dash:'4 4'}
+      ],
+      overlays:[
+        {type:'vline', x:v.L, color:'--green', label:'L'},
+        {type:'hline', y:v.Cs, color:'--ink-3', label:'C*'}
+      ],
+      series2:[{points:jl, color:'--purple', width:2.2}],
+      overlays2:[{type:'point', x:v.L, y:J, color:'--accent', label:'현재'}],
+      stats:{grad:grad, J:J, i:aToUa(i)}
+    };
+  }
+});
+
+/* ========================================================================
+   03. 픽의 제2법칙 — 물질 수지가 농도를 재배치함
+   ======================================================================== */
+Lab.make({
+  mount:'#lab-fick2',
+  title:'물질 수지 — 유속의 기울기가 농도 변화를 만듦',
+  badge:'MASS BALANCE',
+  controls:[
+    {id:'D', label:'확산계수 D', min:1e-7, max:1e-4, value:1e-5, log:true, unit:'cm²/s', fmt:v=>Lab.sci(v,3)},
+    {id:'t', label:'경과 시간 t', min:0.01, max:100, value:1, log:true, unit:'s', fmt:v=>Lab.sci(v,3)}
+  ],
+  presets:[
+    {label:'0.1 s', set:{t:0.1}},
+    {label:'1 s',   set:{t:1}},
+    {label:'10 s',  set:{t:10}}
+  ],
+  stats:[
+    {id:'d',    label:'확산층 두께 δ',      fmt:v=>v.toFixed(1), unit:'μm'},
+    {id:'jmax', label:'표면 유속 (C*=1 mmol/L)', fmt:v=>Lab.sci(v,3), unit:'mol/cm²·s'},
+    {id:'xpk',  label:'농도 변화율 최대 위치', fmt:v=>v.toFixed(1), unit:'μm'}
+  ],
+  plot:{width:640, height:300, xLabel:'거리 x (μm)', yLabel:'유속 J (규격화)',
+        autoX:false, autoY:false, xMin:0, xMax:200, yMin:0, yMax:1.1},
+  legend:[{color:'--accent', label:'유속 J(x)'}],
+  plot2:{width:640, height:300, xLabel:'거리 x (μm)', yLabel:'∂C/∂t (규격화)',
+         autoX:false, autoY:false, xMin:0, xMax:200, yMin:-1.1, yMax:0.1},
+  legend2:[{color:'--purple', label:'∂C/∂t = −∂J/∂x'}],
+  note:'해 C = C* erf(x/2√(Dt))를 미분해 얻은 유속 J(x) = D·C*/√(πDt) · exp(−x²/4Dt)와 ' +
+       '그 공간 미분을 규격화해 그린 것임. 유속은 표면에서 가장 크고 안쪽으로 갈수록 지수적으로 ' +
+       '줄어들며, 줄어드는 정도가 그 위치의 농도 변화율이 됨.',
+  plotNote:'∂C/∂t가 어디서나 음수인데, 전극이 물질을 소모하는 동안 용액 쪽 농도가 계속 낮아지기 ' +
+           '때문임. 값이 0에 가까워지는 지점이 아직 교란이 닿지 않은 영역임.',
+  compute(v){
+    var d = deltaOf(v.D, v.t);                 // cm
+    var s = 2 * Math.sqrt(v.D * v.t);          // cm
+    var xmax = Math.max(20, cmToUm(d) * 3.2);
+    var Cs = molPerCm3(1);
+    var js = [], dc = [], k, xu, xcm, ex, jj, ddt;
+    var j0 = v.D * Cs / Math.sqrt(Math.PI * v.D * v.t);
+    for(k = 0; k <= 240; k++){
+      xu = xmax * k / 240;
+      xcm = xu * 1e-4;
+      ex = Math.exp(-(xcm * xcm) / (4 * v.D * v.t));
+      jj = ex;                                            // J(x)/J(0)
+      ddt = -(2 * xcm / (s * s)) * ex;                    // −∂J/∂x 를 J(0) 기준으로 규격화한 형태
+      js.push([xu, jj]);
+      dc.push([xu, ddt * s]);                             // s를 곱해 무차원화
+    }
+    return {
+      plot:{xMin:0, xMax:xmax, yMin:0, yMax:1.1, autoX:false, autoY:false},
+      series:[{points:js, color:'--accent', width:2.4}],
+      overlays:[{type:'vline', x:cmToUm(d), color:'--green', label:'δ'}],
+      plot2:{xMin:0, xMax:xmax, yMin:-1.1, yMax:0.1, autoX:false, autoY:false},
+      series2:[{points:dc, color:'--purple', width:2.4}],
+      overlays2:[
+        {type:'hline', y:0, color:'--ink-3'},
+        {type:'vline', x:cmToUm(d), color:'--green', label:'δ'}
+      ],
+      stats:{d:cmToUm(d), jmax:j0, xpk:cmToUm(s / Math.SQRT2)}
+    };
+  }
+});
+
+/* ========================================================================
+   05. 농도 분포 C(x,t) = C* erf(x / 2√(Dt))
+   ======================================================================== */
+Lab.make({
+  mount:'#lab-profile',
+  title:'농도 분포와 확산층의 성장 — C(x,t) = C* erf(x / 2√(Dt))',
+  badge:'PROFILE',
+  controls:[
+    {id:'D',  label:'확산계수 D',  min:1e-7, max:1e-4, value:1e-5, log:true, unit:'cm²/s', fmt:v=>Lab.sci(v,3)},
+    {id:'t',  label:'경과 시간 t', min:0.001, max:1000, value:1, log:true, unit:'s', fmt:v=>Lab.sci(v,3)},
+    {id:'Cs', label:'벌크 농도 C*', min:0.1, max:10, step:0.1, value:1, unit:'mmol/L', fmt:v=>v.toFixed(1)}
+  ],
+  presets:[
+    {label:'0.01 s', set:{t:0.01}},
+    {label:'1 s',    set:{t:1}},
+    {label:'100 s',  set:{t:100}}
+  ],
+  stats:[
+    {id:'d',    label:'확산층 두께 δ = √(πDt)', fmt:v=>v.toFixed(2), unit:'μm'},
+    {id:'pen',  label:'2√(Dt)',                 fmt:v=>v.toFixed(2), unit:'μm'},
+    {id:'cd',   label:'C(δ,t) / C*',            fmt:v=>v.toFixed(4)},
+    {id:'grad', label:'표면 기울기 C*/√(πDt)',   fmt:v=>Lab.sci(v,3), unit:'mol/cm⁴'}
+  ],
+  plot:{width:640, height:400, xLabel:'거리 x (μm)', yLabel:'농도 C (mmol/L)',
+        autoX:false, autoY:false, xMin:0, xMax:200, yMin:0, yMax:1.1},
+  legend:[
+    {color:'--accent',  label:'현재 시간 t'},
+    {color:'--purple',  label:'t/100 · t/10 · 10t'},
+    {color:'--neutral', label:'표면 접선 (δ 작도)'}
+  ],
+  note:'오차함수는 Abramowitz–Stegun 7.1.26 근사식으로 직접 구현했고 오차는 1.5×10⁻⁷ 이내임. ' +
+       '회색 점선이 표면 기울기를 그대로 연장한 접선이며, 그것이 벌크 농도와 만나는 위치가 ' +
+       '네른스트 확산층 두께 δ임.',
+  plotNote:'시간을 100배 늘려도 곡선은 10배만 넓어짐. 곡선 모양 자체는 변하지 않고 x축 방향으로 ' +
+           '늘어나기만 하므로, C(δ,t)/C*는 시간과 확산계수에 관계없이 erf(√π/2)로 고정됨.',
+  compute(v){
+    var d = deltaOf(v.D, v.t);                 // cm
+    var dum = cmToUm(d);
+    var xmax = Math.max(1, dum * 3.5);
+    function prof(tt, col, w, op){
+      var pts = [], k, xu, xcm, s = 2 * Math.sqrt(v.D * tt);
+      for(k = 0; k <= 240; k++){
+        xu = xmax * k / 240;
+        xcm = xu * 1e-4;
+        pts.push([xu, v.Cs * erf(s > 0 ? xcm / s : 1e9)]);
+      }
+      return {points:pts, color:col, width:w, opacity:op};
+    }
+    var tangent = [[0, 0], [dum, v.Cs]];
+    var cd = erf(Math.sqrt(Math.PI) / 2);
+    return {
+      plot:{xMin:0, xMax:xmax, yMin:0, yMax:v.Cs * 1.1, autoX:false, autoY:false},
+      series:[
+        prof(v.t / 100, '--purple', 1.2, 0.40),
+        prof(v.t / 10,  '--purple', 1.5, 0.62),
+        prof(v.t * 10,  '--purple', 1.2, 0.40),
+        prof(v.t,       '--accent', 2.6, 1),
+        {points:tangent, color:'--neutral', width:1.4, dash:'5 4'}
+      ],
+      overlays:[
+        {type:'vline', x:dum, color:'--green', label:'δ'},
+        {type:'hline', y:v.Cs, color:'--ink-3', label:'C*'},
+        {type:'point', x:dum, y:v.Cs * cd, color:'--accent'}
+      ],
+      stats:{
+        d:   dum,
+        pen: cmToUm(2 * Math.sqrt(v.D * v.t)),
+        cd:  cd,
+        grad: molPerCm3(v.Cs) / Math.sqrt(Math.PI * v.D * v.t)
+      }
+    };
+  }
+});
+
+/* ========================================================================
+   06. 코트렐 방정식 — 감쇠와 t^(−1/2) 직선성
+   ======================================================================== */
+Lab.make({
+  mount:'#lab-cottrell',
+  title:'코트렐 감쇠와 t^(−1/2) 직선성',
+  badge:'COTTRELL',
+  controls:[
+    {id:'D',  label:'확산계수 D',  min:1e-7, max:1e-4, value:1e-5, log:true, unit:'cm²/s', fmt:v=>Lab.sci(v,3)},
+    {id:'n',  label:'전자 수 n',   min:1, max:4, step:1, value:1, unit:'—', fmt:v=>v.toFixed(0)},
+    {id:'A',  label:'전극 면적 A', min:0.01, max:10, step:0.01, value:1, unit:'cm²', fmt:v=>v.toFixed(2)},
+    {id:'Cs', label:'벌크 농도 C*', min:0.1, max:10, step:0.1, value:1, unit:'mmol/L', fmt:v=>v.toFixed(1)},
+    {id:'t',  label:'표시 시점 t',  min:0.01, max:100, value:1, log:true, unit:'s', fmt:v=>Lab.sci(v,3)}
+  ],
+  presets:[
+    {label:'표 기준 조건', set:{D:1e-5, n:1, A:1, Cs:1, t:1}},
+    {label:'2전자 반응',   set:{n:2}},
+    {label:'미소 면적',    set:{A:0.05}}
+  ],
+  stats:[
+    {id:'i',    label:'전류 i(t)',            fmt:v=>v.toFixed(2), unit:'μA'},
+    {id:'k',    label:'직선 기울기 nFA√D C*/√π', fmt:v=>Lab.sci(v,3), unit:'A·s¹ᐟ²'},
+    {id:'d',    label:'그때의 δ',              fmt:v=>v.toFixed(1), unit:'μm'},
+    {id:'Q',    label:'누적 전하량 Q',          fmt:v=>Lab.eng(v,'C',3)}
+  ],
+  plot:{width:640, height:330, xLabel:'시간 t (s)', yLabel:'전류 i (μA)',
+        xLog:true, yLog:true, autoX:false, autoY:true, xMin:0.01, xMax:100},
+  legend:[{color:'--accent', label:'i(t) — 양 축 로그에서 기울기 −1/2'}],
+  plot2:{width:640, height:330, xLabel:'t^(−1/2) (s^(−1/2))', yLabel:'전류 i (μA)',
+         autoX:false, autoY:true, xMin:0, xMax:10},
+  legend2:[{color:'--purple', label:'i vs t^(−1/2) — 원점을 지나는 직선'}],
+  note:'코트렐 방정식 i(t) = nFA√D C*/√(πt)를 그대로 계산함. 누적 전하량은 이 식을 시간으로 ' +
+       '적분한 Q(t) = 2nFA C* √(Dt/π)이며, 전량 분석에서 확산으로 도달한 물질량을 셀 때 쓰는 값임.',
+  plotNote:'오른쪽 그림에서 직선이 되고 원점을 지나는지가 반응이 확산 지배인지 판별하는 기준임. ' +
+           '기울기를 알면 D를 역산할 수 있고, 절편이 0에서 벗어나면 충전 전류나 표면 반응이 섞였다는 뜻임.',
+  compute(v){
+    var Cs = molPerCm3(v.Cs);
+    var k = v.n * F * v.A * Math.sqrt(v.D) * Cs / Math.sqrt(Math.PI);   // A·s^1/2
+    var ts = Lab.logspace(0.01, 100, 160);
+    var s1 = ts.map(function(tt){ return [tt, aToUa(k / Math.sqrt(tt))]; });
+    var s2 = [], k2, u;
+    for(k2 = 0; k2 <= 120; k2++){
+      u = 10 * k2 / 120;                          // t^(−1/2) from 0 to 10
+      s2.push([u, aToUa(k * u)]);
+    }
+    var it = cottrell(v.n, v.A, v.D, Cs, v.t);
+    return {
+      series:[{points:s1, color:'--accent', width:2.4}],
+      overlays:[{type:'point', x:v.t, y:aToUa(it), color:'--green', label:'현재'}],
+      series2:[{points:s2, color:'--purple', width:2.4}],
+      overlays2:[{type:'point', x:1 / Math.sqrt(v.t), y:aToUa(it), color:'--green', label:'현재'}],
+      stats:{
+        i: aToUa(it),
+        k: k,
+        d: cmToUm(deltaOf(v.D, v.t)),
+        Q: 2 * v.n * F * v.A * Cs * Math.sqrt(v.D * v.t / Math.PI)
+      }
+    };
+  }
+});
+
+/* ========================================================================
+   07. 확산층 두께의 성장과 자연대류 한계
+   ======================================================================== */
+Lab.make({
+  mount:'#lab-delta',
+  title:'δ(t) = √(πDt) — 성장과 자연대류 한계',
+  badge:'GROWTH',
+  controls:[
+    {id:'D',  label:'확산계수 D',    min:1e-7, max:1e-4, value:1e-5, log:true, unit:'cm²/s', fmt:v=>Lab.sci(v,3)},
+    {id:'dc', label:'대류 한계 두께', min:10, max:1000, step:5, value:100, unit:'μm', fmt:v=>v.toFixed(0)},
+    {id:'t',  label:'표시 시점 t',   min:0.01, max:1000, value:1, log:true, unit:'s', fmt:v=>Lab.sci(v,3)}
+  ],
+  presets:[
+    {label:'수용액 표준',   set:{D:1e-5, dc:100}},
+    {label:'젤 내부 확산',  set:{D:1e-6, dc:100}},
+    {label:'한계 완화',     set:{dc:500}}
+  ],
+  stats:[
+    {id:'d',   label:'δ(t)',              fmt:v=>v.toFixed(1), unit:'μm'},
+    {id:'tc',  label:'한계 도달 시간 t_c', fmt:v=>Lab.eng(v,'s',3)},
+    {id:'ilim',label:'한계 전류 (n=1, A=1, C*=1 mM)', fmt:v=>v.toFixed(1), unit:'μA'},
+    {id:'rat', label:'δ / 한계 두께',      fmt:v=>v.toFixed(3)}
+  ],
+  plot:{width:640, height:330, xLabel:'시간 t (s)', yLabel:'확산층 두께 δ (μm)',
+        xLog:true, yLog:true, autoX:false, autoY:true, xMin:0.01, xMax:1000},
+  legend:[
+    {color:'--accent', label:'δ(t) = √(πDt)'},
+    {color:'--amber',  label:'자연대류 한계'}
+  ],
+  plot2:{width:640, height:330, xLabel:'시간 t (s)', yLabel:'전류 i (μA)',
+         xLog:true, yLog:true, autoX:false, autoY:true, xMin:0.01, xMax:1000},
+  legend2:[
+    {color:'--neutral', label:'코트렐 예측'},
+    {color:'--green',   label:'대류를 반영한 거동'}
+  ],
+  note:'정지 용액에서 확산층이 두꺼워지면 밀도 차에 의한 자연대류가 일어나 성장이 멈춤. ' +
+       '한계 두께는 대체로 10⁻² cm 수준이며 기본값 100 μm가 그 값임. 두께가 δ_c에 고정된 뒤의 ' +
+       '전류는 선형 근사식 i = nFAD C*/δ_c로 계산한 정상상태 값임.',
+  plotNote:'한계 도달 시간은 δ_c² / (πD)로 정해짐. 그 시점 이후 코트렐 예측은 계속 감소하지만 ' +
+           '실제 전류는 일정한 값으로 수렴하며, 확산계수가 작을수록 이 갈림이 늦게 나타남.',
+  compute(v){
+    var dccm = v.dc * 1e-4;                       // μm → cm
+    var tc = (dccm * dccm) / (Math.PI * v.D);     // s
+    var Cs = molPerCm3(1);
+    var ilim = 1 * F * 1 * v.D * Cs / dccm;       // A  (n=1, A=1 cm²)
+    var ts = Lab.logspace(0.01, 1000, 180);
+    var ds = ts.map(function(tt){ return [tt, cmToUm(deltaOf(v.D, tt))]; });
+    var dsCap = ts.map(function(tt){
+      return [tt, Math.min(cmToUm(deltaOf(v.D, tt)), v.dc)];
+    });
+    var ic = ts.map(function(tt){ return [tt, aToUa(cottrell(1, 1, v.D, Cs, tt))]; });
+    var ir = ts.map(function(tt){
+      return [tt, aToUa(Math.max(cottrell(1, 1, v.D, Cs, tt), ilim))];
+    });
+    var dnow = deltaOf(v.D, v.t);
+    return {
+      series:[
+        {points:ds, color:'--accent', width:1.4, dash:'4 4', opacity:0.55},
+        {points:dsCap, color:'--accent', width:2.6}
+      ],
+      overlays:[
+        {type:'hline', y:v.dc, color:'--amber', label:'δ_c'},
+        {type:'vline', x:tc, color:'--ink-3', label:'t_c'},
+        {type:'point', x:v.t, y:Math.min(cmToUm(dnow), v.dc), color:'--green', label:'현재'}
+      ],
+      series2:[
+        {points:ic, color:'--neutral', width:1.4, dash:'4 4'},
+        {points:ir, color:'--green', width:2.6}
+      ],
+      overlays2:[
+        {type:'hline', y:aToUa(ilim), color:'--amber', label:'한계 전류'},
+        {type:'vline', x:tc, color:'--ink-3', label:'t_c'}
+      ],
+      stats:{
+        d: Math.min(cmToUm(dnow), v.dc),
+        tc: tc,
+        ilim: aToUa(ilim),
+        rat: cmToUm(dnow) / v.dc
+      }
+    };
+  }
+});
+
+/* ========================================================================
+   08. 수치 계산기 — 본문 표의 재현
+   ======================================================================== */
+Lab.make({
+  mount:'#lab-calc',
+  title:'두께·전류 계산기 — 본문 표의 재현',
+  badge:'CALCULATOR',
+  controls:[
+    {id:'D',  label:'확산계수 D',  min:1e-7, max:1e-4, value:1e-5, log:true, unit:'cm²/s', fmt:v=>Lab.sci(v,3)},
+    {id:'t',  label:'경과 시간 t', min:0.001, max:1000, value:1, log:true, unit:'s', fmt:v=>Lab.sci(v,3)},
+    {id:'n',  label:'전자 수 n',   min:1, max:4, step:1, value:1, unit:'—', fmt:v=>v.toFixed(0)},
+    {id:'A',  label:'전극 면적 A', min:0.01, max:10, step:0.01, value:1, unit:'cm²', fmt:v=>v.toFixed(2)},
+    {id:'Cs', label:'벌크 농도 C*', min:0.1, max:10, step:0.1, value:1, unit:'mmol/L', fmt:v=>v.toFixed(1)}
+  ],
+  presets:[
+    {label:'0.01 s', set:{D:1e-5, t:0.01, n:1, A:1, Cs:1}},
+    {label:'0.1 s',  set:{D:1e-5, t:0.1,  n:1, A:1, Cs:1}},
+    {label:'1 s',    set:{D:1e-5, t:1,    n:1, A:1, Cs:1}},
+    {label:'10 s',   set:{D:1e-5, t:10,   n:1, A:1, Cs:1}},
+    {label:'100 s',  set:{D:1e-5, t:100,  n:1, A:1, Cs:1}}
+  ],
+  stats:[
+    {id:'d',    label:'확산층 두께 δ',    fmt:v=>v.toFixed(1), unit:'μm'},
+    {id:'i',    label:'전류 i',           fmt:v=>v.toFixed(0), unit:'μA'},
+    {id:'j',    label:'유속 J',           fmt:v=>Lab.sci(v,3), unit:'mol/cm²·s'},
+    {id:'Q',    label:'누적 전하량 Q',     fmt:v=>Lab.eng(v,'C',3)},
+    {id:'rat',  label:'δ / 100 μm',       fmt:v=>v.toFixed(3)}
+  ],
+  plot:false,
+  note:'프리셋 다섯 개가 본문 표의 다섯 행과 같은 조건임. D = 1×10⁻⁵ cm²/s, n = 1, A = 1 cm², ' +
+       'C* = 1 mmol/L에서 프리셋을 눌러 표의 값과 대조할 수 있음. δ / 100 μm 가 1을 넘는 구간은 ' +
+       '자연대류 때문에 계산상의 값에 그치는 구간임.',
+  compute(v){
+    var Cs = molPerCm3(v.Cs);
+    var d = deltaOf(v.D, v.t);
+    var i = cottrell(v.n, v.A, v.D, Cs, v.t);
+    return {
+      stats:{
+        d:   cmToUm(d),
+        i:   aToUa(i),
+        j:   i / (v.n * F * v.A),
+        Q:   2 * v.n * F * v.A * Cs * Math.sqrt(v.D * v.t / Math.PI),
+        rat: cmToUm(d) / 100
+      }
+    };
+  }
+});
+
+/* ========================================================================
+   09. 주파수 영역 — 바르부르크 45도 직선과 교류 침투 깊이
+   ======================================================================== */
+Lab.make({
+  mount:'#lab-warburg',
+  title:'바르부르크 임피던스와 교류 침투 깊이',
+  badge:'AC',
+  controls:[
+    {id:'sig', label:'바르부르크 계수 σ', min:1, max:1e4, value:100, log:true, unit:'Ω·s⁻¹ᐟ²', fmt:v=>Lab.sci(v,3)},
+    {id:'D',   label:'확산계수 D',       min:1e-7, max:1e-4, value:1e-5, log:true, unit:'cm²/s', fmt:v=>Lab.sci(v,3)},
+    {id:'f',   label:'주파수 f',         min:0.1, max:1e6, value:20, log:true, unit:'Hz', fmt:v=>Lab.eng(v,'Hz',3)}
+  ],
+  presets:[
+    {label:'20 Hz',  set:{f:20}},
+    {label:'1 kHz',  set:{f:1e3}},
+    {label:'36 kHz', set:{f:3.6e4}},
+    {label:'60 kHz', set:{f:6e4}}
+  ],
+  stats:[
+    {id:'zr',  label:"Z′ = σ/√ω",   fmt:v=>Lab.eng(v,'Ω',3)},
+    {id:'zi',  label:'−Z″ = σ/√ω',  fmt:v=>Lab.eng(v,'Ω',3)},
+    {id:'zm',  label:'|Z_W|',       fmt:v=>Lab.eng(v,'Ω',3)},
+    {id:'dac', label:'침투 깊이 δ_AC', fmt:v=>Lab.eng(v,'m',3)}
+  ],
+  plot:{width:640, height:380, xLabel:"Z′ (Ω)", yLabel:'−Z″ (Ω)',
+        autoX:true, autoY:true, equalAspect:true},
+  legend:[{color:'--accent', label:'Z_W 궤적 — 기울기 1의 45도 직선'}],
+  plot2:{width:640, height:330, xLabel:'주파수 f (Hz)', yLabel:'침투 깊이 δ_AC (μm)',
+         xLog:true, yLog:true, autoX:false, autoY:true, xMin:0.1, xMax:1e6},
+  legend2:[{color:'--purple', label:'δ_AC = √(2D/ω)'}],
+  note:'무한 확산 조건의 바르부르크 임피던스 Z_W = σω^(−1/2)(1 − j)를 그대로 계산함. ' +
+       '실수부와 허수부의 크기가 항상 같으므로 나이퀴스트 선도에서 기울기 1의 직선이 되며, ' +
+       'σ가 커지면 직선의 길이만 늘어나고 각도는 변하지 않음.',
+  plotNote:'침투 깊이가 주파수의 제곱근에 반비례하므로, 고주파에서는 농도 교란이 계면 부근에만 ' +
+           '머물러 확산이 임피던스에 거의 기여하지 않음. 이 구간에서 읽히는 값은 용액 저항과 ' +
+           '이중층 응답임.',
+  compute(v){
+    var fs = Lab.logspace(0.1, 1e6, 200);
+    var ny = fs.map(function(ff){
+      var w = 2 * Math.PI * ff, r = v.sig / Math.sqrt(w);
+      return [r, r];
+    });
+    var dl = fs.map(function(ff){
+      var w = 2 * Math.PI * ff;
+      return [ff, cmToUm(Math.sqrt(2 * v.D / w))];
+    });
+    var wNow = 2 * Math.PI * v.f;
+    var rNow = v.sig / Math.sqrt(wNow);
+    var dac = Math.sqrt(2 * v.D / wNow);          // cm
+    return {
+      series:[{points:ny, color:'--accent', width:2.4}],
+      overlays:[{type:'point', x:rNow, y:rNow, color:'--green', label:'현재 f'}],
+      series2:[{points:dl, color:'--purple', width:2.4}],
+      overlays2:[{type:'point', x:v.f, y:cmToUm(dac), color:'--green', label:'현재 f'}],
+      stats:{
+        zr:  rNow,
+        zi:  rNow,
+        zm:  rNow * Math.SQRT2,
+        dac: dac * 1e-2                            // cm → m
+      }
+    };
+  }
+});
+</script>
+</body>
+</html>
