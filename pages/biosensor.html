@@ -1,0 +1,722 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>바이오센서와 전극 구성 — 수학·물리·화학 노트</title>
+<meta name="description" content="효소가 만든 전자를 매개체를 거쳐 전극으로 옮기는 3단계 구조와 속도결정단계, 미하엘리스–멘텐 감응 곡선, 확산억제막, 그리고 2전극계와 3전극계의 전위 오차를 인터랙티브로 다룸.">
+<!-- social -->
+<link rel="canonical" href="https://pujune.github.io/science-notes/pages/biosensor.html">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="수학·물리·화학 노트">
+<meta property="og:locale" content="ko_KR">
+<meta property="og:url" content="https://pujune.github.io/science-notes/pages/biosensor.html">
+<meta property="og:title" content="바이오센서와 전극 구성 — 수학·물리·화학 노트">
+<meta property="og:description" content="효소가 만든 전자를 매개체를 거쳐 전극으로 옮기는 3단계 구조와 속도결정단계, 미하엘리스–멘텐 감응 곡선, 확산억제막, 그리고 2전극계와 3전극계의 전위 오차를 인터랙티브로 다룸.">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="바이오센서와 전극 구성 — 수학·물리·화학 노트">
+<meta name="twitter:description" content="효소가 만든 전자를 매개체를 거쳐 전극으로 옮기는 3단계 구조와 속도결정단계, 미하엘리스–멘텐 감응 곡선, 확산억제막, 그리고 2전극계와 3전극계의 전위 오차를 인터랙티브로 다룸.">
+<!-- /social -->
+<link rel="stylesheet" href="../assets/css/site.css">
+</head>
+<body>
+
+<div class="topbar">
+  <div class="wrap">
+    <a class="brand" href="../index.html">← 수학·물리·화학 노트</a>
+    <ul class="topnav">
+      <li><a href="#s1">효소 도입</a></li>
+      <li><a href="#s2">3단계 구조</a></li>
+      <li><a href="#s3">세대 분류</a></li>
+      <li><a href="#s4">감응 곡선</a></li>
+      <li><a href="#s5">확산억제막</a></li>
+      <li><a href="#s6">인가 전위</a></li>
+      <li><a href="#s7">2전극·3전극</a></li>
+      <li><a href="#s8">기준전극</a></li>
+      <li><a href="#s9">적재량과 전류</a></li>
+    </ul>
+    <button class="theme-btn" type="button">DARK</button>
+  </div>
+</div>
+
+<header class="mast">
+  <div class="wrap">
+    <p class="kicker">Field 06 · 화학 · 바이오센서와 전극 구성</p>
+    <h1>농도를 전류로 바꾸는 <em>세 단계</em>와 그 전류를 읽는 전극</h1>
+    <p class="lede">
+      전극만으로는 포도당을 재지 못하므로 효소를 넣고, 효소가 뽑은 전자를 매개체가 전극까지
+      옮기는 구조를 세움. 세 단계 가운데 가장 느린 단계가 전체 속도를 정하기 때문에 무엇을
+      과량으로 두고 무엇을 제한할지가 설계가 되며, 연속 측정용 센서에서는 감도를 일부러 낮추는
+      확산억제막이 그 도구가 됨. 마지막으로 만들어진 전류를 왜곡 없이 읽으려면 기준 전위를
+      누가 잡는지를 정해야 하고, 그 답이 2전극계와 3전극계를 가름함.
+    </p>
+    <div class="eq" style="border-left-color:var(--accent)">
+      i = i<sub>max</sub> · C / (K<sub>M</sub> + C) &nbsp;&nbsp;<span class="cm">— 효소 반응이 정하는 감응 곡선</span>
+    </div>
+  </div>
+</header>
+
+<main>
+
+<section id="s1">
+  <div class="wrap">
+    <p class="eyebrow"><span class="num">01</span><span>흡착과 간섭</span></p>
+    <h2>전극만으로 포도당을 재지 못하는 두 이유</h2>
+    <p>
+      전기화학 측정에서 전류는 반응 속도에 그대로 대응하므로, 어떤 물질의 농도를 전류로 읽으려면
+      그 물질이 산화되는 속도가 농도에만 의존하도록 계를 세워야 함. 유기나 무기 재료로 된 전극으로
+      포도당을 직접 산화시키는 구성은 이 조건을 두 곳에서 어김.
+    </p>
+    <ul class="notes">
+      <li><b>표면 흡착</b><span>산화된 포도당이 전극 표면에 흡착되어 반응이 이어지지 않으므로 전류가 시간에 따라 줄어듦.</span></li>
+      <li><b>간섭 산화</b><span>포도당이 산화되는 전위에서 ascorbic acid·acetaminophen·uric acid가 더 빠르게 산화되어, 측정된 전류에서 포도당의 몫을 분리할 수 없음.</span></li>
+    </ul>
+    <p>
+      효소를 전극에 도입하면 두 문제가 함께 풀림. 효소는 포도당만 선택적으로 산화시키고 자신은
+      소모되지 않으므로 반응이 지속되며, 전극이 읽는 것은 포도당이 아니라 효소가 넘긴 전자를 받은
+      다른 물질이라 인가 전위를 간섭 물질이 산화되지 않는 낮은 값으로 옮길 수 있음. 효소를 쓰는
+      전기화학 측정 방식은 1962년에 바이오센서라는 개념과 함께 보고되었음.
+    </p>
+  </div>
+</section>
+
+<section id="s2">
+  <div class="wrap">
+    <p class="eyebrow"><span class="num">02</span><span>기질 → 효소 → 매개체 → 전극</span></p>
+    <h2>3단계 구조와 속도결정단계</h2>
+    <p>
+      바이오센서의 반응은 세 단계가 직렬로 이어진 구조임. 기질이 효소의 cofactor를 환원시키고,
+      환원된 cofactor가 매개체에 전자를 넘기며, 전극이 그 매개체를 산화시켜 전류를 만듦. 직렬로
+      이어진 계에서는 가장 느린 단계가 전체 속도를 정하므로, 전류를 기질 농도로 환산하려면 1차
+      반응이 속도결정단계가 되도록 나머지 두 단계를 과량으로 유지해야 함.
+    </p>
+    <div class="tbl-wrap">
+      <table>
+        <thead>
+          <tr><th>단계</th><th>반응</th><th>과량으로 둘 대상</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>1차</td><td>기질이 효소의 cofactor를 환원시킴</td><td>없음 — 이 단계가 측정 대상</td></tr>
+          <tr><td>2차</td><td>환원된 cofactor가 매개체를 환원시킴</td><td>매개체 농도와 전자전달 효율</td></tr>
+          <tr><td>3차</td><td>전극이 매개체를 산화시켜 전류를 만듦</td><td>인가 전위</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="callout note">
+      <p><b>속도결정단계가 옮겨 가면 측정이 무너짐</b> — 2차 단계를 산소가 맡는 구성에서는 산소가
+      외부에서 확산되어 오므로 농도를 통제하기 어려움. 산소 공급이 모자라면 전류가 기질 농도가
+      아니라 산소 농도를 따라가게 되고, 같은 포도당 농도에서도 측정값이 달라짐.</p>
+    </div>
+  </div>
+</section>
+
+<section id="s3">
+  <div class="wrap">
+    <p class="eyebrow"><span class="num">03</span><span>산소 · 매개체 · 직접 전자전달</span></p>
+    <h2>세대별 분류 — 전자를 무엇으로 옮기는가</h2>
+    <p>
+      효소가 뽑은 전자를 전극까지 옮기는 방식에 따라 세 세대로 나뉘며, 뒤 세대일수록 전달 경로가
+      짧아지는 대신 구현 난도가 오름.
+    </p>
+    <div class="cards">
+      <div class="card">
+        <h5><span class="tag" style="background:var(--mint);color:var(--green)">1</span> 산소·과산화수소</h5>
+        <ul>
+          <li>효소 → 산소 → 과산화수소 → 전극</li>
+          <li><b>산소 농도를 통제하지 못함</b></li>
+          <li>과산화수소 산화 전위가 높아 간섭이 큼</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h5><span class="tag" style="background:var(--warm);color:var(--amber)">2</span> 매개체</h5>
+        <ul>
+          <li>효소 → redox 금속 착물 → 전극</li>
+          <li><b>매개체의 E⁰로 인가 전위를 정함</b></li>
+          <li>산소 환원이 매개체와 경쟁할 여지가 남음</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h5><span class="tag" style="background:var(--lilac);color:var(--purple)">3</span> 직접 전자전달</h5>
+        <ul>
+          <li>효소 → 전극</li>
+          <li><b>중간 물질이 없어 경쟁 반응이 없음</b></li>
+          <li>cofactor가 효소 안쪽이라 배선이 어려움</li>
+        </ul>
+      </div>
+    </div>
+    <p>
+      1세대에서 전류가 산소에 묶이는 정도는 두 속도의 대소로 정해짐. 효소가 낼 수 있는 최대 전류가
+      산소 공급이 감당하는 전류보다 크면, 그 교차점 위쪽 농도에서 곡선이 평평해지며 포도당 농도를
+      더 이상 반영하지 않음.
+    </p>
+    <div id="lab-oxygen"></div>
+    <p>
+      매개체로는 초기에 ferrocene과 ferricyanide가 쓰였고, 이후 산화 상태와 환원 상태가 모두 안정한
+      ruthenium·osmium 착물로 옮겨감. Osmium 착물은 질소를 포함하는 헤테로고리 ligand를 통해 산화·환원
+      전위를 조절할 수 있으며, 착물을 고분자 backbone에 결합시킬 때 ligand와 공유결합으로 잇는 방식은
+      E⁰를 바꾸지 않지만 backbone이 금속 중심에 배위하는 방식은 ligand가 늘어난 것과 같아 E⁰를 양의
+      방향으로 이동시킴. 3세대는 전도성 나노재료를 cofactor 가까이 놓아야 하는데 센서막을 두껍게 쌓을수록
+      배선 길이가 길어져 양쪽 끝을 정확히 고정하기 어려우며, 반응 메커니즘의 유일성도 검증되지 않아
+      상용 기기에는 쓰이지 않음.
+    </p>
+  </div>
+</section>
+
+<section id="s4">
+  <div class="wrap">
+    <p class="eyebrow"><span class="num">04</span><span>i = i<sub>max</sub> · C / (K<sub>M</sub> + C)</span></p>
+    <h2>감응 곡선 — 미하엘리스–멘텐 관계</h2>
+    <p>
+      효소 반응 속도는 기질 농도가 낮을 때 농도에 비례하다가, 효소가 기질과 결합하는 속도가 분리되는
+      속도를 넘어서면서 포화함. 이 관계를 기술하는 미하엘리스–멘텐 식을 전류로 옮기면 아래와 같으며,
+      i<sub>max</sub>는 모든 효소가 기질로 채워졌을 때의 전류이고 K<sub>M</sub>은 전류가 그 절반이 되는
+      농도임.
+    </p>
+    <div class="eq">
+      i = i<sub>max</sub> · C / (K<sub>M</sub> + C) &nbsp;&nbsp;<span class="cm">— 저농도에서 i ≈ (i<sub>max</sub>/K<sub>M</sub>) · C</span>
+    </div>
+    <ul class="sym">
+      <li><b>i</b><span>측정 전류 [μA]</span></li>
+      <li><b>i<sub>max</sub></b><span>포화 전류, 전기화학적 Vmax [μA]</span></li>
+      <li><b>K<sub>M</sub></b><span>미하엘리스 상수, 전류가 절반이 되는 기질 농도 [mM]</span></li>
+      <li><b>C</b><span>기질 농도 [mM]</span></li>
+    </ul>
+    <p>
+      저농도 접선의 기울기 i<sub>max</sub>/K<sub>M</sub>가 센서의 감도이고, 측정값을 농도로 환산할 때
+      쓰는 선형 구간은 이 접선에서 얼마나 벗어나는지로 정해짐. 곡선이 접선의 95 %까지 내려오는 농도는
+      K<sub>M</sub>/19이므로, 선형 구간을 넓히려면 K<sub>M</sub>이 커야 함.
+    </p>
+    <div id="lab-mm"></div>
+    <div class="callout">
+      <p><b>전극에 고정된 효소에서는 활성 자체를 묻지 않음</b> — 용액에서 하는 assay는 효소가 기능하는지를
+      보지만, 센서막에서는 효소가 매개체와 전자를 주고받을 수 있는 위치에 있는지가 문제가 됨. 그래서
+      기질을 과량으로 공급해 도달하는 포화 전류를 직접 측정하고, 그 값을 전기화학적 Vmax로 삼음. 이렇게
+      하면 확산의 영향이 빠지고 센서막 자체의 활성만 남음.</p>
+    </div>
+  </div>
+</section>
+
+<section id="s5">
+  <div class="wrap">
+    <p class="eyebrow"><span class="num">05</span><span>flux 감소비 = 저농도 전류비 ÷ Vmax비</span></p>
+    <h2>확산억제막 — 감도를 낮추어 수명을 얻음</h2>
+    <p>
+      연속 측정용 센서에서 감도가 높은 것이 유리하지만은 않음. 효소 활성이 유지되는 기질 농도 범위가
+      정해져 있어, 그 범위를 넘는 기질이 계속 들어오면 며칠 만에 감응이 무너지기 때문임. 센서막 위에
+      고분자와 가교제를 반응시킨 hydrogel 막을 한 층 더 올려 기질의 유입 자체를 줄이는 방법이
+      확산억제막이며, 5 mM에서 100 μA가 흐르던 센서를 1~5 μA까지 낮추는 것이 설계 조건이 됨.
+    </p>
+    <p>
+      막을 올리면 전류가 줄어드는 원인이 둘로 섞임. 막이 기질의 확산을 억제하는 작용과, 막의 가교제가
+      센서막의 작용기와 반응해 효소 활성을 떨어뜨리는 작용이 함께 일어나기 때문임. 두 몫을 분리하는
+      방법이 전기화학적 Vmax인데, 막이 확산만 억제하고 활성을 건드리지 않았다면 기질을 과량으로 공급했을
+      때의 포화 전류는 그대로여야 하므로, Vmax가 줄어든 만큼이 활성 감소분이고 나머지가 확산 억제분임.
+    </p>
+    <div class="eq">
+      (flux 감소비) = (저농도 전류비) ÷ (Vmax 비) &nbsp;&nbsp;<span class="cm">— 1/100 ÷ 1/3 = 1/33</span>
+    </div>
+    <div id="lab-membrane"></div>
+    <div class="tbl-wrap">
+      <table>
+        <thead>
+          <tr><th>항목</th><th>값</th><th>해석</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>보호막 없는 센서막의 전기화학적 Vmax</td><td>0.4~0.5 mA</td><td>재현성 있게 관측됨</td></tr>
+          <tr><td>Nafion 코팅 후 저농도 전류</td><td>1/100</td><td>확산 억제와 활성 감소가 섞인 값</td></tr>
+          <tr><td>Nafion 코팅 후 Vmax</td><td>1/3</td><td>활성 감소분</td></tr>
+          <tr><td>분리된 기질 flux 감소</td><td>1/33</td><td>저농도 전류비를 Vmax비로 나눈 값</td></tr>
+          <tr><td>가교제 분자량 500 대 2000</td><td>둘 다 500 μA에서 포화</td><td>분자량이 센서막 활성을 바꾸지 않음</td></tr>
+          <tr><td>PEI/PTGE 막의 5 mM 전류</td><td>0.25 μA</td><td>코팅 전 대비 1/2000, 20일 이상 연속 감응 유지</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="callout note">
+      <p><b>확산층 페이지와 이어지는 지점</b> — 막을 통과하는 기질이 정상상태에 이르면 막 안의 농도
+      분포가 직선이 되고 유입량이 막 두께에 반비례함. 정상상태가 왜 직선을 만드는지는
+      <a href="diffusion.html#s3">확산층 형성 원리 3절</a>에 있으며, 확산층을 접선으로 정의하는 근거도
+      같은 조건에서 나옴.</p>
+    </div>
+  </div>
+</section>
+
+<section id="s6">
+  <div class="wrap">
+    <p class="eyebrow"><span class="num">06</span><span>E⁰ 선택이 간섭과 산소 경쟁을 함께 정함</span></p>
+    <h2>매개체의 E⁰와 인가 전위</h2>
+    <p>
+      매개체를 쓰는 구성에서 인가 전위는 매개체가 산화되는 전위를 기준으로 정해짐. E⁰보다 충분히 양의
+      방향에 두면 매개체가 전극에서 전부 산화되어 전류가 효소 반응과 확산에만 의존하게 되고, 그보다
+      낮으면 매개체가 다 산화되지 않아 전류가 인가 전위에 따라 변함. 동시에 인가 전위가 낮을수록 간섭
+      물질이 산화될 여지가 줄어드므로, 낮은 E⁰를 가진 매개체가 간섭 회피에는 유리함.
+    </p>
+    <div class="tbl-wrap">
+      <table>
+        <thead>
+          <tr><th>매개체</th><th>ligand 구성</th><th>E⁰ vs Ag/AgCl</th><th>인가 전위</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>PVP-Os(bim)₃</td><td>bisimidazole 3개</td><td>−150 mV</td><td>0 V</td></tr>
+          <tr><td>PVI-Os(bpy)₂Cl</td><td>bipyridine 2개 + imidazole 1개</td><td>200 mV</td><td>0.35 V</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p>
+      낮은 E⁰가 언제나 유리하지는 않음. −0.2~−0.1 V 구간은 산소가 환원되는 전위 범위와 겹치므로, 환원된
+      매개체가 전극에 전자를 넘기지 못하고 주변 산소를 환원시키는 데 소진됨. 이 경쟁이 일어나면 낮은
+      기질 농도에서 농도당 전류가 오히려 감소하며, 매개체 선택은 간섭 회피와 산소 경쟁 회피 사이에서
+      결정됨.
+    </p>
+    <div class="callout">
+      <p><b>두 측정이 나누어 맡는 것</b> — cyclic voltammetry는 −0.4~0.6 V vs Ag/AgCl 구간을 10 mV/s로
+      주사해 매개체가 센서막에 고정되었는지와 산화·환원 전위를 드러내고, amperometry는 전위를 한 값에
+      고정한 채 기질을 더해 가며 농도와 전류의 관계를 만듦. 전자는 계의 성질을 보고 후자는 검량선을 냄.</p>
+    </div>
+  </div>
+</section>
+
+<section id="s7">
+  <div class="wrap">
+    <p class="eyebrow"><span class="num">07</span><span>E<sub>WE</sub> = E<sub>인가</sub> − i·R<sub>s</sub> − η<sub>CE</sub></span></p>
+    <h2>2전극계와 3전극계 — 기준 전위를 누가 잡는가</h2>
+    <p>
+      전기화학 측정에서 전극은 세 가지 기능을 나누어 맡음. 작업전극은 측정하려는 반응이 일어나는 곳이고,
+      기준전극은 전위의 기준점을 제공하며, 상대전극은 작업전극과 같은 크기의 전류를 반대 방향으로 흘려
+      회로를 닫음. 한 전극이 기준과 상대를 겸하면 2전극계, 셋을 따로 두면 3전극계가 됨.
+    </p>
+    <div class="tbl-wrap">
+      <table>
+        <thead>
+          <tr><th>전극</th><th>역할</th><th>전류</th><th>요구 조건</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>작업전극 WE</td><td>측정 대상 반응이 일어남</td><td>흐름</td><td>반응 면적과 표면 상태가 재현되어야 함</td></tr>
+          <tr><td>기준전극 RE</td><td>전위의 기준점을 제공함</td><td>3전극계에서는 거의 흐르지 않음</td><td>전류에 따라 전위가 변하지 않는 비분극성 전극</td></tr>
+          <tr><td>상대전극 CE</td><td>전류 경로를 닫음</td><td>흐름</td><td>작업전극 전류를 감당할 면적</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <p>
+      2전극계에서는 기준을 맡은 전극에 측정 전류가 그대로 흐름. 전류가 흐르는 전극은 분극되어 전위가
+      이동하므로 기준으로 삼은 값 자체가 측정 조건에 따라 달라지고, 두 전극 사이 용액 저항에 걸리는 전압
+      강하도 인가 전압에 포함됨. 작업전극에 실제로 걸리는 전위는 인가한 값에서 그 두 항만큼 어긋남.
+    </p>
+    <div class="eq">
+      E<sub>WE</sub> = E<sub>인가</sub> − i · R<sub>s</sub> − η<sub>CE</sub> &nbsp;&nbsp;<span class="cm">— 2전극계에서 작업전극의 실제 전위</span>
+    </div>
+    <ul class="sym">
+      <li><b>R<sub>s</sub></b><span>두 전극 사이 용액 저항 [Ω]</span></li>
+      <li><b>R<sub>u</sub></b><span>기준전극 끝과 작업전극 사이의 보상되지 않는 저항 [Ω]</span></li>
+      <li><b>η<sub>CE</sub></b><span>상대전극이 전류를 흘리며 생기는 과전압 [V]</span></li>
+    </ul>
+    <p>
+      3전극계는 두 항을 분리함. 퍼텐쇼스탯이 작업전극과 기준전극 사이 전위차를 되먹임으로 유지하면서
+      전류는 상대전극으로 흘리므로, 기준전극에는 전류가 거의 흐르지 않아 분극되지 않고 상대전극의 과전압도
+      기준에서 빠짐. 용액 저항에 의한 오차는 기준전극 끝과 작업전극 사이의 R<sub>u</sub>만 남으며, 기준전극을
+      작업전극 가까이 배치해 줄일 수 있음.
+    </p>
+    <div id="lab-3elec"></div>
+    <p>
+      2전극계의 오차는 전류에 비례하므로 전류가 작으면 두 구성의 차이가 측정 분해능 아래로 내려감.
+      확산억제막을 올려 5 mM에서 0.25 μA가 흐르는 센서라면 용액 저항이 1 kΩ일 때 전압 강하가 0.25 mV에
+      그치지만, 막이 없는 100 μA 센서는 같은 저항에서 100 mV가 어긋나 매개체의 E⁰를 기준으로 정한 인가
+      전위가 의미를 잃음. 삽입형 연속 측정 센서를 전극 두 개로 구성할 수 있는 근거가 여기에 있으며,
+      확산억제막은 효소 수명을 늘리는 동시에 전극 구성을 단순화하는 조건도 함께 만들어 냄.
+    </p>
+    <div class="tbl-wrap">
+      <table>
+        <thead>
+          <tr><th>조건</th><th>2전극계</th><th>3전극계</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>기준 전위의 안정성</td><td>전류에 따라 이동함</td><td>전류가 거의 흐르지 않아 유지됨</td></tr>
+          <tr><td>용액 저항 오차</td><td>두 전극 사이 전체 저항이 실림</td><td>기준전극 끝과 작업전극 사이만 남음</td></tr>
+          <tr><td>전류 크기의 상한</td><td>오차가 허용치를 넘지 않는 범위</td><td>퍼텐쇼스탯 용량까지</td></tr>
+          <tr><td>구성 요소</td><td>전극 2개</td><td>전극 3개와 퍼텐쇼스탯</td></tr>
+          <tr><td>적합한 용도</td><td>소형·삽입형·일회용, 전류가 작은 계</td><td>실험실 특성 분석, 넓은 전위 주사</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<section id="s8">
+  <div class="wrap">
+    <p class="eyebrow"><span class="num">08</span><span>ΔE = −59.16 mV × log(C₂/C₁)</span></p>
+    <h2>기준전극 Ag/AgCl과 염화물 농도</h2>
+    <p>
+      Ag/AgCl 전극의 전위는 AgCl이 Ag와 Cl⁻로 환원되는 반응에 대응하므로 용액의 염화물 활동도가 정함.
+      네른스트 식을 적용하면 염화물 농도가 10배 달라질 때 25 °C에서 전위가 59.16 mV 이동하며, 이 계수는
+      절대온도에 비례해 커짐.
+    </p>
+    <div class="eq">
+      E = E⁰ − (RT/F) · ln(a<sub>Cl⁻</sub>) , &nbsp; ΔE = −(2.303 RT/F) · log(C₂/C₁) &nbsp;&nbsp;<span class="cm">— 25 °C에서 2.303 RT/F = 59.16 mV</span>
+    </div>
+    <p>
+      내부 용액을 가진 실험실용 기준전극은 3 M KCl에 담겨 있어 시료 조성과 무관하게 전위를 유지하지만,
+      내부 용액 없이 시료에 직접 노출되는 유사 기준전극은 시료의 염화물 농도가 전위를 정함. 1X PBS는
+      1 L에 NaCl 8 g과 KCl 0.2 g을 녹인 조성이라 염화물 농도가 0.140 M이고, 3 M을 기준으로 하면 전위가
+      78.8 mV 이동함. 삽입형 센서에서 조직액의 염화물 농도가 변하면 같은 크기의 인가 전위 이동이 그대로
+      따라오므로, 매개체의 E⁰에서 충분히 떨어진 전위를 인가해 이 이동이 전류를 바꾸지 않는 구간에 두어야 함.
+    </p>
+    <div id="lab-ref"></div>
+  </div>
+</section>
+
+<section id="s9">
+  <div class="wrap">
+    <p class="eyebrow"><span class="num">09</span><span>i = n · F · (활성 × 적재량)</span></p>
+    <h2>효소 적재량에서 이론 전류로</h2>
+    <p>
+      센서막에 넣은 효소 가운데 실제로 전자전달에 참여하는 비율은 활성값과 적재량에서 이론 전류를 구해
+      측정된 Vmax와 견주면 나옴. 효소 활성 1 U는 분당 1 μmol의 기질을 산화시키는 능력이므로, 활성에
+      적재량을 곱하면 초당 몰수가 되고 여기에 전자 수와 패러데이 상수를 곱하면 그 활성이 전부 전류로
+      나타났을 때의 값이 됨.
+    </p>
+    <div class="eq">
+      i = n · F · (활성 × 적재량) / 60 &nbsp;&nbsp;<span class="cm">— 400 U/mg × 19 μg = 7.6 U → 24.4 mA (n = 2)</span>
+    </div>
+    <ul class="sym">
+      <li><b>n</b><span>기질 한 분자가 내놓는 전자 수 — 포도당의 락톤화에서 2</span></li>
+      <li><b>F</b><span>패러데이 상수 96485 C/mol</span></li>
+      <li><b>U</b><span>효소 활성 단위, 분당 1 μmol 기질을 산화시키는 능력</span></li>
+    </ul>
+    <p>
+      측정된 전기화학적 Vmax가 0.4~0.5 mA였으므로 센서막 안의 효소 가운데 1.6~2.0 %만 센서 반응에
+      참여하는 것으로 계산됨. 나머지는 매개체와 전자를 주고받을 수 있는 거리 밖에 있거나 고정 과정에서
+      활성을 잃은 것으로 판단됨. 이 비율이 낮다는 것은 효소를 더 넣어 감도를 올릴 여지보다 전자전달
+      경로를 개선할 여지가 크다는 뜻이 됨.
+    </p>
+    <div id="lab-turnover"></div>
+  </div>
+</section>
+
+<div class="wrap">
+  <div class="pager">
+    <a href="diffusion.html"><span class="pg-lbl">이전</span>확산층 형성 원리</a>
+    <a href="polymer.html" style="text-align:right"><span class="pg-lbl">다음</span>고분자와 하이드로젤</a>
+  </div>
+</div>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <p>Field 06 · 바이오센서와 전극 구성 · 모든 그림은 브라우저에서 직접 계산해 그림</p>
+  </div>
+</footer>
+
+<script src="../assets/js/site.js"></script>
+<script src="../assets/js/lab.js"></script>
+<script>
+/* ========================================================================
+   공통 상수
+   F : 패러데이 상수 [C/mol],  R : 기체 상수 [J/mol·K]
+   전류는 μA, 농도는 mM, 저항은 Ω 을 기본 단위로 씀
+   ======================================================================== */
+var F = 96485, Rgas = 8.314;
+
+/* 미하엘리스–멘텐 전류 [μA] */
+function mm(imax, KM, C){ return imax * C / (KM + C); }
+
+/* ========================================================================
+   03. 1세대 — 산소 공급이 전류의 천장을 만듦
+   ======================================================================== */
+Lab.make({
+  mount:'#lab-oxygen',
+  title:'산소 제한 — 속도결정단계가 옮겨 가는 지점',
+  badge:'1ST GEN',
+  controls:[
+    {id:'imax', label:'효소가 낼 수 있는 포화 전류', min:10, max:1000, step:5, value:400, unit:'μA', fmt:v=>v.toFixed(0)},
+    {id:'KM',   label:'미하엘리스 상수 K_M',        min:2, max:40, step:0.5, value:20, unit:'mM', fmt:v=>v.toFixed(1)},
+    {id:'iO2',  label:'산소 공급이 감당하는 전류',   min:5, max:500, step:5, value:60, unit:'μA', fmt:v=>v.toFixed(0)}
+  ],
+  presets:[
+    {label:'산소 충분',       set:{imax:400, KM:20, iO2:500}},
+    {label:'산소 부족',       set:{imax:400, KM:20, iO2:60}},
+    {label:'산소 심한 부족',   set:{imax:400, KM:20, iO2:20}}
+  ],
+  stats:[
+    {id:'ic',  label:'교차 농도 — 산소가 rds가 되는 지점', fmt:v=>isFinite(v)?v.toFixed(2):'없음', unit:'mM'},
+    {id:'i5',  label:'5 mM 에서의 전류',   fmt:v=>v.toFixed(1), unit:'μA'},
+    {id:'i20', label:'20 mM 에서의 전류',  fmt:v=>v.toFixed(1), unit:'μA'},
+    {id:'err', label:'20 mM 에서 효소 곡선 대비 손실', fmt:v=>v.toFixed(1), unit:'%'}
+  ],
+  plot:{width:640, height:340, xLabel:'포도당 농도 (mM)', yLabel:'전류 (μA)',
+        autoX:false, autoY:true, yMinFixed:0, xMin:0, xMax:30},
+  legend:[{color:'--accent', label:'실제 전류 (둘 중 작은 값)'},
+          {color:'--neutral', label:'효소만 볼 때의 곡선'},
+          {color:'--purple', label:'산소 공급 한계'}],
+  note:'전류는 효소 반응이 낼 수 있는 값과 산소 공급이 감당하는 값 가운데 작은 쪽을 따라감. ' +
+       '교차 농도 위에서는 곡선이 평평해져 포도당 농도를 반영하지 못하며, 이것이 1세대 구성에서 ' +
+       '측정 범위를 제한하는 원인임.',
+  compute(v){
+    var xs = Lab.linspace(0.05, 30, 160);
+    var enz = xs.map(function(c){ return [c, mm(v.imax, v.KM, c)]; });
+    var act = xs.map(function(c){ return [c, Math.min(mm(v.imax, v.KM, c), v.iO2)]; });
+    var cap = [[0, v.iO2],[30, v.iO2]];
+    var ic = v.iO2 < v.imax ? v.iO2 * v.KM / (v.imax - v.iO2) : Infinity;
+    var e20 = mm(v.imax, v.KM, 20), a20 = Math.min(e20, v.iO2);
+    return {
+      series:[
+        {points:act, color:'--accent', width:2.4},
+        {points:enz, color:'--neutral', width:1.4, dash:'4 4'},
+        {points:cap, color:'--purple', width:1.4, dash:'2 3'}
+      ],
+      overlays: isFinite(ic) && ic <= 30 ? [{type:'vline', x:ic, color:'--ink-3', label:'교차'}] : [],
+      stats:{
+        ic:  ic,
+        i5:  Math.min(mm(v.imax, v.KM, 5), v.iO2),
+        i20: a20,
+        err: (e20 - a20) / e20 * 100
+      }
+    };
+  }
+});
+
+/* ========================================================================
+   04. 미하엘리스–멘텐 감응 곡선과 선형 구간
+   저농도 접선 i = (imax/KM)·C, 접선의 95 % 가 되는 농도는 KM/19
+   ======================================================================== */
+Lab.make({
+  mount:'#lab-mm',
+  title:'감응 곡선 — 감도와 선형 구간',
+  badge:'RESPONSE',
+  controls:[
+    {id:'imax', label:'포화 전류 i_max', min:10, max:1000, step:5, value:500, unit:'μA', fmt:v=>v.toFixed(1)},
+    {id:'KM',   label:'미하엘리스 상수 K_M', min:1, max:60, step:0.5, value:20, unit:'mM', fmt:v=>v.toFixed(1)},
+    {id:'C',    label:'기질 농도 C', min:0.1, max:40, step:0.1, value:5, unit:'mM', fmt:v=>v.toFixed(1)}
+  ],
+  presets:[
+    {label:'막 없는 센서막 (500 μA)', set:{imax:500, KM:20, C:5}},
+    {label:'정상 혈당 5 mM',          set:{C:5}},
+    {label:'고혈당 20 mM',            set:{C:20}}
+  ],
+  stats:[
+    {id:'i',    label:'전류 i',              fmt:v=>v.toFixed(2), unit:'μA'},
+    {id:'sens', label:'저농도 감도 i_max/K_M', fmt:v=>v.toFixed(2), unit:'μA/mM'},
+    {id:'lin',  label:'접선 대비 비율',        fmt:v=>v.toFixed(1), unit:'%'},
+    {id:'c95',  label:'접선의 95 % 가 되는 농도 K_M/19', fmt:v=>v.toFixed(2), unit:'mM'},
+    {id:'half', label:'포화의 절반이 되는 농도', fmt:v=>v.toFixed(1), unit:'mM'}
+  ],
+  plot:{width:640, height:340, xLabel:'기질 농도 C (mM)', yLabel:'전류 i (μA)',
+        autoX:false, autoY:true, yMinFixed:0, xMin:0, xMax:40},
+  legend:[{color:'--accent', label:'i = i_max·C/(K_M+C)'},
+          {color:'--neutral', label:'저농도 접선'}],
+  note:'접선에서 벗어나는 비율은 K_M/(K_M+C) 로 정해지므로 농도가 K_M/19 를 넘으면 선형 환산의 ' +
+       '오차가 5 % 를 넘음. 선형 구간을 넓히는 방법은 K_M 을 키우거나 확산억제막으로 센서막이 ' +
+       '보는 농도 자체를 낮추는 것임.',
+  compute(v){
+    var xs = Lab.linspace(0.05, 40, 160);
+    var curve = xs.map(function(c){ return [c, mm(v.imax, v.KM, c)]; });
+    var slope = v.imax / v.KM;
+    var tan = [[0,0],[40, slope*40]];
+    var i = mm(v.imax, v.KM, v.C);
+    return {
+      series:[
+        {points:curve, color:'--accent', width:2.4},
+        {points:tan, color:'--neutral', width:1.4, dash:'4 4'}
+      ],
+      overlays:[{type:'point', x:v.C, y:i, color:'--accent', label:'현재'},
+                {type:'vline', x:v.KM/19, color:'--ink-3', label:'95 %'}],
+      plot:{yMax: Math.max(v.imax*1.05, i*1.2)},
+      stats:{
+        i:i, sens:slope,
+        lin: v.KM/(v.KM+v.C)*100,
+        c95: v.KM/19,
+        half: v.KM
+      }
+    };
+  }
+});
+
+/* ========================================================================
+   05. 확산억제막 — 전류 감소를 확산 억제분과 활성 감소분으로 나눔
+   flux 감소비 = 저농도 전류비 ÷ Vmax 비
+   ======================================================================== */
+Lab.make({
+  mount:'#lab-membrane',
+  title:'확산억제막 — 두 원인의 분리',
+  badge:'MEMBRANE',
+  controls:[
+    {id:'rI',  label:'저농도 전류 감소 1/x', min:1, max:3000, value:100, log:true, unit:'배', fmt:v=>'1/'+v.toFixed(0)},
+    {id:'rV',  label:'Vmax 감소 1/y',       min:1, max:20, step:0.1, value:3, unit:'배', fmt:v=>'1/'+v.toFixed(1)},
+    {id:'i0',  label:'막 없을 때 5 mM 전류', min:1, max:500, value:100, log:true, unit:'μA', fmt:v=>v.toFixed(1)}
+  ],
+  presets:[
+    {label:'Nafion 실측 (1/100 · 1/3)', set:{rI:100, rV:3, i0:100}},
+    {label:'설계 조건 1/50',            set:{rI:50,  rV:1, i0:100}},
+    {label:'설계 조건 1/100',           set:{rI:100, rV:1, i0:100}},
+    {label:'5 mM 에서 0.25 μA',          set:{rI:400, rV:1, i0:100}}
+  ],
+  stats:[
+    {id:'flux', label:'분리된 flux 감소 1/z', fmt:v=>'1/'+v.toFixed(1)},
+    {id:'act',  label:'활성으로 남은 비율',    fmt:v=>v.toFixed(1), unit:'%'},
+    {id:'i5',   label:'막 코팅 후 5 mM 전류',  fmt:v=>v.toFixed(3), unit:'μA'},
+    {id:'win',  label:'설계 창 1~5 μA 대비',   fmt:v=>v<1?'아래':(v>5?'위':'안'), unit:''}
+  ],
+  plot:false,
+  note:'저농도 전류가 줄어든 몫에는 확산이 억제된 몫과 효소 활성이 떨어진 몫이 섞여 있음. ' +
+       'Vmax 는 기질을 과량으로 공급해 확산의 영향을 뺀 값이라 활성 감소분만 담고 있으므로, ' +
+       '저농도 전류비를 Vmax 비로 나누면 확산 억제분만 남음. Nafion 프리셋이 1/100 ÷ 1/3 = 1/33 임.',
+  compute(v){
+    var i5 = v.i0 / v.rI;
+    return {
+      stats:{
+        flux: v.rI / v.rV,
+        act:  100 / v.rV,
+        i5:   i5,
+        win:  i5
+      }
+    };
+  }
+});
+
+/* ========================================================================
+   07. 2전극계와 3전극계의 전위 오차
+   2전극 오차 = i·Rs (+ 상대전극 과전압),  3전극 오차 = i·Ru
+   ======================================================================== */
+Lab.make({
+  mount:'#lab-3elec',
+  title:'전위 오차 — 전극 두 개와 세 개',
+  badge:'IR DROP',
+  controls:[
+    {id:'i',   label:'측정 전류 i',        min:0.01, max:500, value:100, log:true, unit:'μA', fmt:v=>v.toFixed(2)},
+    {id:'Rs',  label:'용액 저항 R_s',      min:50, max:50000, value:1000, log:true, unit:'Ω', fmt:v=>Lab.eng(v,'Ω',3)},
+    {id:'f',   label:'R_u / R_s — 기준전극 위치', min:0.01, max:1, step:0.01, value:0.1, unit:'—', fmt:v=>v.toFixed(2)},
+    {id:'eta', label:'상대전극 과전압 η_CE', min:0, max:500, step:1, value:0, unit:'mV', fmt:v=>v.toFixed(0)},
+    {id:'tol', label:'허용 오차',           min:0.1, max:100, value:10, log:true, unit:'mV', fmt:v=>v.toFixed(1)}
+  ],
+  presets:[
+    {label:'막 없는 센서 100 μA',     set:{i:100, Rs:1000, f:0.1, eta:0, tol:10}},
+    {label:'확산억제막 0.25 μA',      set:{i:0.25, Rs:1000, f:0.1, eta:0, tol:10}},
+    {label:'상대전극 과전압 50 mV',    set:{i:100, Rs:1000, f:0.1, eta:50, tol:10}}
+  ],
+  stats:[
+    {id:'e2',  label:'2전극계 오차',        fmt:v=>v.toFixed(3), unit:'mV'},
+    {id:'e3',  label:'3전극계 오차',        fmt:v=>v.toFixed(3), unit:'mV'},
+    {id:'rat', label:'2전극 ÷ 3전극',       fmt:v=>v.toFixed(1), unit:'배'},
+    {id:'imax',label:'2전극계가 허용 오차를 지키는 전류 상한', fmt:v=>v>0?Lab.eng(v*1e-6,'A',3):'없음'}
+  ],
+  plot:{width:640, height:340, xLabel:'측정 전류 i (μA)', yLabel:'전위 오차 (mV)',
+        xLog:true, yLog:true, autoX:false, autoY:true, xMin:0.01, xMax:500},
+  legend:[{color:'--accent', label:'2전극계 — i·R_s + η_CE'},
+          {color:'--green', label:'3전극계 — i·R_u'},
+          {color:'--neutral', label:'허용 오차'}],
+  note:'2전극계에서는 용액 저항 전체에 걸리는 전압 강하와 상대전극 과전압이 그대로 기준을 흔듦. ' +
+       '3전극계는 기준전극에 전류를 흘리지 않으므로 과전압 항이 빠지고, 남는 것은 기준전극 끝과 ' +
+       '작업전극 사이의 R_u 뿐임. 앞의 두 프리셋이 확산억제막을 올리기 전과 후의 전류이고, ' +
+       '세 번째 프리셋은 상대전극 과전압이 더해지면 2전극계 오차가 전류와 무관한 항만큼 ' +
+       '먼저 들리는 것을 보여 줌.',
+  compute(v){
+    var xs = Lab.logspace(0.01, 500, 90);
+    var s2 = xs.map(function(i){ return [i, i*1e-6*v.Rs*1e3 + v.eta]; });
+    var s3 = xs.map(function(i){ return [i, i*1e-6*v.Rs*v.f*1e3]; });
+    var tl = [[0.01, v.tol],[500, v.tol]];
+    var e2 = v.i*1e-6*v.Rs*1e3 + v.eta;
+    var e3 = v.i*1e-6*v.Rs*v.f*1e3;
+    var lim = v.eta >= v.tol ? 0 : (v.tol - v.eta) / (v.Rs*1e-3);
+    return {
+      series:[
+        {points:s2, color:'--accent', width:2.4},
+        {points:s3, color:'--green', width:2.4},
+        {points:tl, color:'--neutral', width:1.2, dash:'4 4'}
+      ],
+      overlays:[{type:'point', x:v.i, y:e2, color:'--accent', label:'2전극'},
+                {type:'point', x:v.i, y:e3, color:'--green', label:'3전극'}],
+      stats:{ e2:e2, e3:e3, rat:e2/e3, imax:lim }
+    };
+  }
+});
+
+/* ========================================================================
+   08. Ag/AgCl 기준전극 — 염화물 농도에 따른 전위 이동
+   ΔE = −(2.303 RT/F) · log(C/C0),  C0 = 3 M
+   PBS 염화물 = NaCl 8 g/L ÷ 58.44 + KCl 0.2 g/L ÷ 74.55 = 0.1396 M
+   ======================================================================== */
+Lab.make({
+  mount:'#lab-ref',
+  title:'Ag/AgCl 기준전극 — 염화물 농도가 전위를 정함',
+  badge:'REFERENCE',
+  controls:[
+    {id:'C',  label:'염화물 농도 C',  min:0.001, max:5, value:0.1396, log:true, unit:'M', fmt:v=>Lab.sci(v,3)},
+    {id:'C0', label:'기준 농도 C₀',   min:0.001, max:5, value:3, log:true, unit:'M', fmt:v=>Lab.sci(v,3)},
+    {id:'T',  label:'온도 T',        min:5, max:60, step:1, value:25, unit:'°C', fmt:v=>v.toFixed(0)}
+  ],
+  presets:[
+    {label:'1X PBS 0.1396 M', set:{C:0.1396, C0:3, T:25}},
+    {label:'체온 37 °C',      set:{C:0.1396, C0:3, T:37}},
+    {label:'기준과 같음 3 M',  set:{C:3, C0:3, T:25}},
+    {label:'0.1 M',           set:{C:0.1, C0:3, T:25}}
+  ],
+  stats:[
+    {id:'slope', label:'십진 기울기 2.303 RT/F', fmt:v=>v.toFixed(2), unit:'mV/decade'},
+    {id:'dE',    label:'C₀ 대비 전위 이동',       fmt:v=>v.toFixed(1), unit:'mV'},
+    {id:'dec',   label:'농도비의 상용로그',        fmt:v=>v.toFixed(3), unit:'decade'}
+  ],
+  plot:{width:640, height:340, xLabel:'염화물 농도 (M)', yLabel:'C₀ 대비 전위 이동 (mV)',
+        xLog:true, autoX:false, autoY:true, xMin:0.001, xMax:5},
+  legend:[{color:'--accent', label:'ΔE = −(2.303RT/F)·log(C/C₀)'}],
+  note:'염화물 농도가 낮아지면 전위가 양의 방향으로 이동함. 1X PBS 조성(NaCl 8 g/L, KCl 0.2 g/L)에서 ' +
+       '염화물은 0.1396 M 이며, 내부 용액 3 M KCl 을 기준으로 하면 78.8 mV 차이가 남. 내부 용액을 ' +
+       '가진 기준전극은 이 값이 고정되지만 시료에 직접 노출된 유사 기준전극은 시료 조성을 따라 움직임.',
+  compute(v){
+    var slope = 2.302585 * Rgas * (v.T + 273.15) / F * 1000;   /* mV/decade */
+    var xs = Lab.logspace(0.001, 5, 90);
+    var curve = xs.map(function(c){ return [c, -slope * Math.log(c/v.C0)/Math.LN10]; });
+    var dE = -slope * Math.log(v.C/v.C0)/Math.LN10;
+    return {
+      series:[{points:curve, color:'--accent', width:2.4}],
+      overlays:[{type:'point', x:v.C, y:dE, color:'--accent', label:'현재'},
+                {type:'hline', y:0, color:'--ink-3', label:'C₀'}],
+      stats:{ slope:slope, dE:dE, dec:Math.log(v.C/v.C0)/Math.LN10 }
+    };
+  }
+});
+
+/* ========================================================================
+   09. 효소 적재량에서 이론 전류로
+   i = n·F·(활성[U/mg] × 적재량[mg]) × 1e-6 / 60   [A]
+   ======================================================================== */
+Lab.make({
+  mount:'#lab-turnover',
+  title:'적재량과 활성에서 이론 전류로',
+  badge:'FARADAY',
+  controls:[
+    {id:'act',  label:'효소 비활성',   min:50, max:1500, step:5, value:400, unit:'U/mg', fmt:v=>v.toFixed(0)},
+    {id:'m',    label:'적재량',        min:1, max:200, step:1, value:19, unit:'μg', fmt:v=>v.toFixed(1)},
+    {id:'n',    label:'전자 수 n',     min:1, max:4, step:1, value:2, unit:'—', fmt:v=>v.toFixed(0)},
+    {id:'vmax', label:'측정된 전기화학적 Vmax', min:0.05, max:3, step:0.005, value:0.45, unit:'mA', fmt:v=>v.toFixed(3)}
+  ],
+  presets:[
+    {label:'논문 조건 (400 U/mg · 19 μg)', set:{act:400, m:19, n:2, vmax:0.45}},
+    {label:'Vmax 하한 0.4 mA',            set:{act:400, m:19, n:2, vmax:0.4}},
+    {label:'Vmax 상한 0.5 mA',            set:{act:400, m:19, n:2, vmax:0.5}}
+  ],
+  stats:[
+    {id:'U',     label:'적재된 총 활성',      fmt:v=>v.toFixed(2), unit:'U (μmol/min)'},
+    {id:'rate',  label:'초당 산화 몰수',      fmt:v=>Lab.sci(v,3), unit:'mol/s'},
+    {id:'ith',   label:'이론 전류',           fmt:v=>v.toFixed(2), unit:'mA'},
+    {id:'ratio', label:'반응에 참여하는 비율', fmt:v=>v.toFixed(2), unit:'%'}
+  ],
+  plot:false,
+  note:'효소 활성 1 U 는 분당 1 μmol 의 기질을 산화시키는 능력이므로, 적재량을 곱해 초당 몰수로 ' +
+       '바꾼 뒤 전자 수와 패러데이 상수를 곱하면 그 활성이 전부 전류로 나타났을 때의 값이 됨. ' +
+       '측정된 Vmax 를 이 값으로 나눈 비율이 센서막 안에서 전자전달에 참여하는 효소의 몫임.',
+  compute(v){
+    var U = v.act * (v.m * 1e-3);          /* U = μmol/min */
+    var rate = U * 1e-6 / 60;              /* mol/s */
+    var ith = v.n * F * rate;              /* A */
+    return {
+      stats:{
+        U: U,
+        rate: rate,
+        ith: ith * 1e3,
+        ratio: v.vmax / (ith * 1e3) * 100
+      }
+    };
+  }
+});
+</script>
+</body>
+</html>

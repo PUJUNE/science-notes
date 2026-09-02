@@ -13,15 +13,16 @@
 | 03 화학 | `pages/corrosion.html` | 갈바닉·공식·틈새 부식, Tafel, Pourbaix, 통계 |
 | 04 화학 | `pages/eis.html` | 복소 임피던스, 평행판 커패시턴스, 직렬 RC, Nyquist, Bode, Randles, CPE, Warburg |
 | 05 화학 | `pages/diffusion.html` | 픽 제1·제2법칙, 물질 수지, 오차함수 해, 코트렐, 네른스트 확산층, Warburg |
-| 06 화학 | `pages/polymer.html` | 라디칼 중합, Flory–Huggins, Flory–Rehner, 가교 밀도 |
-| 07 화학 | `pages/surface.html` | Young 식, 접촉각, Owens–Wendt, Neumann EoS |
-| 08 물리 | `pages/rheology.html` | 멱법칙, 전단담화, 항복응력, 도공 두께 |
-| 09 물리 | `pages/mechanics.html` | 박리 역학, 요철 평균, 로드셀, 응력–변형, 마찰 |
-| 10 공학 | `pages/needle.html` | 베벨 기하, 투과력 곡선, 게이지 규격, 니들 임피던스 |
-| 11 화학 | `pages/thermal.html` | TGA, DSC, Py-GC/MS, FT-IR, 고주파 절단, 팁 온도 |
-| 12 물리 | `pages/biosignal.html` | 반쪽전지, ECG·EMG, 필터, Fick 확산, 침투 문턱 |
-| 13 공학 | `pages/standards.html` | AAMI EC12, ISO 10993, Arrhenius 가속수명, 신뢰구간 |
-| 14 도구 | `pages/ai-tools.html` | 신경망 파라미터, 사전학습, 세션과 기억, 토큰 |
+| 06 화학 | `pages/biosensor.html` | 바이오센서 3단계, 세대 분류, 미하엘리스–멘텐, 확산억제막, 2·3전극, Ag/AgCl 기준전극 |
+| 07 화학 | `pages/polymer.html` | 라디칼 중합, Flory–Huggins, Flory–Rehner, 가교 밀도 |
+| 08 화학 | `pages/surface.html` | Young 식, 접촉각, Owens–Wendt, Neumann EoS |
+| 09 물리 | `pages/rheology.html` | 멱법칙, 전단담화, 항복응력, 도공 두께 |
+| 10 물리 | `pages/mechanics.html` | 박리 역학, 요철 평균, 로드셀, 응력–변형, 마찰 |
+| 11 공학 | `pages/needle.html` | 베벨 기하, 투과력 곡선, 게이지 규격, 니들 임피던스 |
+| 12 화학 | `pages/thermal.html` | TGA, DSC, Py-GC/MS, FT-IR, 고주파 절단, 팁 온도 |
+| 13 물리 | `pages/biosignal.html` | 반쪽전지, ECG·EMG, 필터, Fick 확산, 침투 문턱 |
+| 14 공학 | `pages/standards.html` | AAMI EC12, ISO 10993, Arrhenius 가속수명, 신뢰구간 |
+| 15 도구 | `pages/ai-tools.html` | 신경망 파라미터, 사전학습, 세션과 기억, 토큰 |
 
 ## 기술 구성
 
