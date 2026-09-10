@@ -231,11 +231,35 @@
         </tbody>
       </table>
     </div>
+    <h3>막이 무엇을 얼마나 통과시키는지는 분배계수가 정함</h3>
+    <p>
+      막의 억제 효과를 확산계수 하나로 설명하면 수치가 맞지 않음. 함수 고분자에서 막 안 확산계수가
+      수용액보다 느려지는 폭은 대체로 10⁻²~10⁻³ 배인데, 위 표의 감소비는 그보다 큼. 나머지를 맡는
+      것이 분배계수 K임 — 물질이 막 안으로 얼마나 들어가는지를 정하는 값이며, 막 안에서 얼마나
+      빨리 움직이는지와는 따로 걸림. 계면에서 농도가 K배만큼 뛰고, 정상상태 유속은 두 값의 곱인
+      투과도에만 걸림.
+    </p>
+    <div class="eq">
+      P = D<sub>m</sub> · K &nbsp;&nbsp;<span class="cm">— 투과도. 막 저항은 L/P 이므로 K가 작을수록 커짐</span>
+    </div>
+    <p>
+      간섭물질을 걸러 내는 원리도 여기에 있음. ascorbic acid와 uric acid는 pH 7.4에서 음이온으로
+      존재하고, 술폰산기를 지닌 막은 같은 부호의 전하를 밀어내므로 그 물질의 K가 크게 떨어짐.
+      비슷한 크기의 작은 분자끼리 D<sub>m</sub>의 비는 한 자릿수를 넘지 않지만 K는 서너 자릿수까지
+      벌어지므로, 선택성의 대부분이 확산이 아니라 분배 단계에서 정해짐. 1절의 간섭 산화를 전위
+      선택이 아닌 막으로 막는 경로가 이것임.
+    </p>
+    <div class="eq">
+      선택성 = (D<sub>m</sub>·K)<sub>기질</sub> ÷ (D<sub>m</sub>·K)<sub>간섭물질</sub>
+    </div>
+    <div id="lab-permeability"></div>
+
     <div class="callout note">
       <p><b>확산층 페이지와 이어지는 지점</b> — 막을 통과하는 기질이 정상상태에 이르면 막 안의 농도
       분포가 직선이 되고 유입량이 막 두께에 반비례함. 정상상태가 왜 직선을 만드는지는
       <a href="diffusion.html#s3">확산층 형성 원리 3절</a>에 있으며, 확산층을 접선으로 정의하는 근거도
-      같은 조건에서 나옴.</p>
+      같은 조건에서 나옴. 계면에서 농도가 끊어지는 그림과 용액층·막 저항을 직렬로 잇는 유도는
+      <a href="diffusion.html#s10">같은 페이지 10절</a>에 있음.</p>
     </div>
   </div>
 </section>
@@ -714,6 +738,52 @@ Lab.make({
         ith: ith * 1e3,
         ratio: v.vmax / (ith * 1e3) * 100
       }
+    };
+  }
+});
+
+/* ========================================================================
+   05-2. 관측된 감소비에서 투과도와 분배계수 역산
+   Rm = Raq·(감소비 − 1),  P = L/Rm,  K = P/Dm
+   ======================================================================== */
+Lab.make({
+  mount:'#lab-permeability',
+  title:'감소비에서 투과도와 분배계수 역산',
+  badge:'PARTITION',
+  controls:[
+    {id:'rFlux', label:'관측된 flux 감소 1/x',   min:1, max:10000, value:100, log:true, unit:'배', fmt:v=>'1/'+v.toFixed(0)},
+    {id:'delta', label:'정체 용액층 δ',          min:10, max:500, step:5, value:100, unit:'μm', fmt:v=>v.toFixed(0)},
+    {id:'L',     label:'막 두께 L',              min:1, max:100, step:1, value:20, unit:'μm', fmt:v=>v.toFixed(0)},
+    {id:'D',     label:'수용액 확산계수 D',      min:1e-7, max:1e-3, value:1e-5, log:true, unit:'cm²/s', fmt:v=>Lab.sci(v,3)},
+    {id:'Dr',    label:'막 안 확산계수비 Dm/D',  min:1e-4, max:1, value:0.01, log:true, unit:'', fmt:v=>Lab.sci(v,3)}
+  ],
+  presets:[
+    {label:'분리된 flux 감소 1/33',        set:{rFlux:33,   delta:100, L:20, D:1e-5, Dr:0.01}},
+    {label:'저농도 전류 1/100',            set:{rFlux:100,  delta:100, L:20, D:1e-5, Dr:0.01}},
+    {label:'PEI/PTGE 1/2000',              set:{rFlux:2000, delta:100, L:20, D:1e-5, Dr:0.01}},
+    {label:'막 안 확산이 수용액과 같다면',  set:{rFlux:100,  delta:100, L:20, D:1e-5, Dr:1}},
+    {label:'막 안 확산이 1/1000 이라면',    set:{rFlux:100,  delta:100, L:20, D:1e-5, Dr:1e-3}}
+  ],
+  stats:[
+    {id:'Rmem', label:'필요한 막 저항 L/P', fmt:v=>Lab.sci(v,3), unit:'s/cm'},
+    {id:'P',    label:'투과도 P = Dm·K',    fmt:v=>Lab.sci(v,3), unit:'cm²/s'},
+    {id:'K',    label:'남는 분배계수 K',    fmt:v=>Lab.sci(v,3)},
+    {id:'PoD',  label:'수용액 D 대비 P',    fmt:v=>'1/'+(1/v).toFixed(0)}
+  ],
+  plot:false,
+  note:'관측된 감소비는 용액층 저항과 막 저항의 비로 정해지므로, 감소비에서 막 저항을 얻고 막 ' +
+       '두께로 나누면 투과도가 나옴. 투과도는 Dm 과 K 의 곱이라 둘 중 하나를 가정해야 나머지가 ' +
+       '정해짐. 아래 두 프리셋이 그 폭을 보여 줌 — 막 안 확산이 수용액과 같다고 두면 K 가 10⁻³ ' +
+       '수준이어야 하고, 막 안 확산을 1/1000 로 두면 K 가 1을 넘어야 함. 실제 막은 그 사이에 있고, ' +
+       '어느 쪽인지는 응답 시간을 함께 재야 정해짐.',
+  compute(v){
+    var Lcm = v.L * 1e-4, dcm = v.delta * 1e-4;
+    var Dm  = v.Dr * v.D;
+    var Raq = dcm / v.D;
+    var Rm  = Raq * Math.max(v.rFlux - 1, 1e-6);
+    var P   = Lcm / Rm;
+    return {
+      stats:{ Rmem: Rm, P: P, K: P / Dm, PoD: P / v.D }
     };
   }
 });
