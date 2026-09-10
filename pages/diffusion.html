@@ -34,8 +34,9 @@
       <li><a href="#s7">확산층 두께</a></li>
       <li><a href="#s8">수치 예</a></li>
       <li><a href="#s9">주파수 영역</a></li>
-      <li><a href="#s10">적용 한계</a></li>
-      <li><a href="#s11">기호</a></li>
+      <li><a href="#s10">분배계수</a></li>
+      <li><a href="#s11">적용 한계</a></li>
+      <li><a href="#s12">기호</a></li>
     </ul>
     <button class="theme-btn" type="button">DARK</button>
   </div>
@@ -49,7 +50,8 @@
       전극에 전위를 계단으로 걸면 표면 농도가 0으로 떨어지고, 그 교란이 용액 쪽으로 번져
       나가면서 확산층이 자람. 픽의 제1법칙에서 출발해 물질 수지로 시간 항을 얻고, 오차함수 해를
       거쳐 코트렐 방정식과 네른스트 확산층 두께에 닿는 경로를 한 줄로 이어 정리했음. 마지막에는
-      같은 방정식을 주파수 영역에서 푼 바르부르크 임피던스까지 연결함.
+      같은 방정식을 주파수 영역에서 푼 바르부르크 임피던스와, 전극 위에 막이 한 층 올라갔을 때
+      농도가 계면에서 끊어지는 경우까지 이어 붙임.
     </p>
     <div class="eq" style="border-left-color:var(--accent)">
       δ(t) = √(πDt) &nbsp;&nbsp;<span class="cm">— 확산층은 시간의 제곱근에 비례해 자람</span>
@@ -66,7 +68,7 @@
     <p>
       아래 사슬은 특정한 실험 배치를 전제로 하며, 조건 하나가 깨지면 결과식의 계수뿐 아니라
       함수 형태까지 바뀜. 그래서 측정값을 식에 대입하기 전에 배치가 이 조건에 들어오는지부터
-      확인해야 하고, 벗어나는 항목이 있으면 10절의 대응 항목으로 넘어가야 함.
+      확인해야 하고, 벗어나는 항목이 있으면 11절의 대응 항목으로 넘어가야 함.
     </p>
     <ul class="notes">
       <li><b>선형 확산</b><span>전극 표면이 평면이고 확산이 표면에 수직인 한 방향으로만 일어남. 가장자리에서 옆으로 들어오는 물질이 없다고 봄.</span></li>
@@ -406,7 +408,7 @@
       </table>
     </div>
     <p class="hint">
-      100 초 구간의 값은 계산상의 값임. 실제로는 10절의 자연대류 때문에 그 이전에 두께 성장이 멈춤.
+      100 초 구간의 값은 계산상의 값임. 실제로는 11절의 자연대류 때문에 그 이전에 두께 성장이 멈춤.
     </p>
     <div id="lab-calc"></div>
   </div>
@@ -453,7 +455,99 @@
 
 <section id="s10">
   <div class="wrap">
-    <p class="eyebrow"><span class="num">10</span><span>조건이 깨지는 다섯 지점</span></p>
+    <p class="eyebrow"><span class="num">10</span><span>C<sub>막</sub> = K · C<sub>용액</sub></span></p>
+    <h2>막이 끼면 농도가 계면에서 끊어짐</h2>
+    <p>
+      여기까지는 전극이 용액에 그대로 닿아 있다고 보았음. 전극 위에 고분자 막을 한 층 올리면
+      앞 절들의 매끈한 곡선을 그대로 쓸 수 없음. 용액 쪽 픽의 법칙은 용액 농도를 쓰고 막 안의 픽의
+      법칙은 막 안 농도를 쓰는데, 계면을 사이에 둔 두 값이 같지 않기 때문임.
+    </p>
+
+    <h3>계면에서 뛰는 크기가 분배계수임</h3>
+    <p>
+      분자가 계면을 드나드는 속도가 확산보다 빠르면 양쪽이 국소 평형에 있다고 볼 수 있고, 그때
+      두 농도의 비가 물질과 막이 함께 정하는 상수가 됨. 이것이 분배계수 K임. 용해도와 같은 성질이며
+      확산 속도와는 따로 걸림.
+    </p>
+    <div class="eq">C<sub>막</sub>(0) = K · C<sub>용액</sub>(0)</div>
+    <ul class="notes">
+      <li><b>K &lt; 1</b><span>막이 그 물질을 덜 받아들임. 막 안 농도가 용액보다 낮아 유입이 줄어듦. 소수성 막 안의 포도당이 이쪽임.</span></li>
+      <li><b>K &gt; 1</b><span>막이 그 물질을 끌어당김. 막 안 농도가 용액보다 높음. 실리콘 막 안의 산소가 이쪽임.</span></li>
+      <li><b>K = 1</b><span>계면에서 농도가 이어짐. 1~9절의 그림이 그대로 성립하는 경우임.</span></li>
+    </ul>
+
+    <h3>저항 둘을 직렬로 이어 붙임</h3>
+    <p>
+      정체 용액층 δ 를 지나 두께 L 의 막을 통과하고 전극이 도달한 물질을 즉시 소모한다고 두면,
+      정상상태 유속이 한 줄로 정리됨. 3절에서 본 대로 ∂C/∂t = 0 이면 유속이 위치에 무관하게
+      일정하므로, 두 구간을 지나는 유속이 같다는 조건으로 계면 농도를 소거할 수 있음.
+    </p>
+    <div class="eq" style="border-left-color:var(--accent)">
+      J = C* / ( δ/D &nbsp;+&nbsp; L/(D<sub>m</sub>·K) )
+      &nbsp;&nbsp;<span class="cm">— 앞이 용액층 저항, 뒤가 막 저항</span>
+    </div>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>항</th><th>형태</th><th>커지는 조건</th></tr></thead>
+        <tbody>
+          <tr><td>용액층 저항</td><td>δ / D</td><td>정체층이 두꺼울수록 · 확산이 느릴수록</td></tr>
+          <tr><td>막 저항</td><td>L / (D<sub>m</sub>·K)</td><td>막이 두꺼울수록 · 막 안 확산이 느릴수록 · <b>K가 작을수록</b></td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="callout note">
+      <p><b>K가 분모에 있음</b> — 막이 그 물질을 덜 받아들일수록 막 저항이 커짐. 확산이 느려서가
+      아니라 애초에 막 안으로 들어가는 양이 적어서 유입이 줄어드는 경로이며, 성질이 다른 두 원인이
+      유속 식에서는 곱 하나로 합쳐져 나타남.</p>
+    </div>
+
+    <h3>D<sub>m</sub>과 K는 곱으로만 나타남</h3>
+    <p>
+      막 저항의 분모에서 D<sub>m</sub> 과 K 는 언제나 붙어 다님. 이 곱을 투과도라 하고 P 로 씀.
+      정상상태 유속이 P 에만 걸리므로, 정상상태 전류를 아무리 정밀하게 재도 막 안 확산이 느려서
+      막힌 것인지 애초에 들어가는 양이 적어서 막힌 것인지 구분할 수 없음.
+    </p>
+    <div class="eq">P = D<sub>m</sub> · K</div>
+    <p>
+      두 값을 나누려면 정상상태에 이르기 전 구간을 함께 봐야 함. 농도를 계단으로 바꾸고 유속이
+      정상값에 도달하기까지의 시간 지연에는 K 가 들어가지 않고 D<sub>m</sub> 만 나타나기 때문임.
+      앞 절들이 시간 의존 해에서 D 를 얻은 것과 같은 방법임.
+    </p>
+    <div class="eq">t<sub>lag</sub> = L² / (6 D<sub>m</sub>) &nbsp;&nbsp;<span class="cm">— 응답 시간에서 D<sub>m</sub>, 정상상태 유속에서 P, 남는 것이 K = P/D<sub>m</sub></span></div>
+
+    <div id="lab-partition"></div>
+
+    <h3>수치로 보면 막 하나가 전부를 정함</h3>
+    <p>
+      D = 10⁻⁵ cm²/s, 정체 용액층 100 μm, 막 두께 20 μm, 막 안 확산계수가 수용액의 1/100,
+      K = 0.1 로 두면 용액층 저항이 1,000 s/cm, 막 저항이 200,000 s/cm 임. 전체 저항의 99.5 %가
+      막에서 나오고 유속은 막이 없을 때의 1/201 로 떨어짐. 농도 곡선으로 보면 용액층 100 μm 를
+      지나는 동안 벌크에서 0.5 %만 내려가고, 나머지 낙차는 계면의 도약과 막 안 20 μm 에서 전부
+      일어남.
+    </p>
+
+    <h3>따지지 않아도 되는 경우</h3>
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>경우</th><th>K를 따로 두지 않아도 되는 이유</th></tr></thead>
+        <tbody>
+          <tr><td>막이 없는 맨 전극</td><td>계면이 없으므로 농도가 이어짐. 1~9절이 이 경우임</td></tr>
+          <tr><td>막 저항 ≪ 용액층 저항</td><td>분모의 뒷항이 사라져 δ/D 만 남음. 얇고 잘 통과시키는 막이 여기 들어감</td></tr>
+          <tr><td>감도를 실측 보정으로 쓸 때</td><td>K가 없어진 것이 아니라 감도 상수 안에 들어가 있음. 막이 바뀌면 보정도 다시 해야 함</td></tr>
+        </tbody>
+      </table>
+    </div>
+    <div class="callout">
+      <p><b>실제 센서에서</b> — 연속 측정용 효소 센서는 이 막으로 기질 유입을 일부러 줄여 수명을
+      얻고, 같은 막의 K 차이로 간섭물질을 걸러 냄. 측정된 감소비에서 P 를 역산하는 방법은
+      <a href="biosensor.html#s5">바이오센서와 전극 구성 5절</a>에 있음.</p>
+    </div>
+  </div>
+</section>
+
+<section id="s11">
+  <div class="wrap">
+    <p class="eyebrow"><span class="num">11</span><span>조건이 깨지는 다섯 지점</span></p>
     <h2>적용 한계</h2>
     <p>
       1절의 조건은 실험 시간이 길어지거나 전극이 작아지면 차례로 깨짐. 어느 조건이 먼저 깨지는지가
@@ -474,9 +568,9 @@
   </div>
 </section>
 
-<section id="s11">
+<section id="s12">
   <div class="wrap">
-    <p class="eyebrow"><span class="num">11</span><span>기호와 단위</span></p>
+    <p class="eyebrow"><span class="num">12</span><span>기호와 단위</span></p>
     <h2>기호</h2>
     <div class="tbl-wrap">
       <table>
@@ -494,6 +588,10 @@
           <tr><td>A</td><td>전극 면적</td><td>cm²</td></tr>
           <tr><td>ω</td><td>각주파수 2πf</td><td>rad·s⁻¹</td></tr>
           <tr><td>σ</td><td>바르부르크 계수</td><td>Ω·s⁻¹ᐟ²</td></tr>
+          <tr><td>K</td><td>분배계수 (막 안 농도 ÷ 용액 농도)</td><td>—</td></tr>
+          <tr><td>D<sub>m</sub></td><td>막 안에서의 확산계수</td><td>cm²·s⁻¹</td></tr>
+          <tr><td>P</td><td>투과도 D<sub>m</sub>·K</td><td>cm²·s⁻¹</td></tr>
+          <tr><td>L</td><td>막 두께</td><td>cm</td></tr>
         </tbody>
       </table>
     </div>
@@ -1048,6 +1146,81 @@ Lab.make({
         zi:  rNow,
         zm:  rNow * Math.SQRT2,
         dac: dac * 1e-2                            // cm → m
+      }
+    };
+  }
+});
+
+/* ========================================================================
+   10. 분배계수와 직렬 저항
+   계면에서 C_막 = K · C_용액,  J = C* / (δ/D + L/(Dm·K))
+   ======================================================================== */
+Lab.make({
+  mount:'#lab-partition',
+  title:'막이 낀 정상상태 — 분배계수와 직렬 저항',
+  badge:'PARTITION',
+  controls:[
+    {id:'D',     label:'수용액 확산계수 D',       min:1e-7, max:1e-3, value:1e-5, log:true, unit:'cm²/s', fmt:v=>Lab.sci(v,3)},
+    {id:'delta', label:'정체 용액층 δ',           min:10, max:500, step:5, value:100, unit:'μm', fmt:v=>v.toFixed(0)},
+    {id:'L',     label:'막 두께 L',               min:1, max:100, step:1, value:20, unit:'μm', fmt:v=>v.toFixed(0)},
+    {id:'Dr',    label:'막 안 확산계수비 Dm/D',   min:1e-4, max:1, value:0.01, log:true, unit:'', fmt:v=>Lab.sci(v,3)},
+    {id:'K',     label:'분배계수 K',              min:1e-3, max:10, value:0.1, log:true, unit:'', fmt:v=>Lab.sci(v,3)}
+  ],
+  presets:[
+    {label:'막이 거의 없는 경우',          set:{D:1e-5, delta:100, L:1,  Dr:1,    K:1}},
+    {label:'친수성 하이드로겔 K=1',        set:{D:1e-5, delta:100, L:20, Dr:0.1,  K:1}},
+    {label:'소수성 막 K=0.1',              set:{D:1e-5, delta:100, L:20, Dr:0.01, K:0.1}},
+    {label:'음이온을 밀어내는 막 K=0.001', set:{D:1e-5, delta:100, L:20, Dr:0.01, K:0.001}},
+    {label:'막 두께만 두 배',              set:{D:1e-5, delta:100, L:40, Dr:0.01, K:0.1}}
+  ],
+  stats:[
+    {id:'Raq',  label:'용액층 저항 δ/D',      fmt:v=>Lab.sci(v,3), unit:'s/cm'},
+    {id:'Rmem', label:'막 저항 L/(Dm·K)',     fmt:v=>Lab.sci(v,3), unit:'s/cm'},
+    {id:'frac', label:'전체 저항 중 막의 몫',  fmt:v=>v.toFixed(2), unit:'%'},
+    {id:'red',  label:'막 없을 때 대비 유속',  fmt:v=>'1/'+v.toFixed(1)},
+    {id:'lag',  label:'시간 지연 L²/6Dm',      fmt:v=>Lab.sci(v,3), unit:'s'}
+  ],
+  plot:{width:640, height:400, xLabel:'전극에서의 거리 x (μm)', yLabel:'농도 C / C*',
+        autoX:false, autoY:false, xMin:0, xMax:120, yMin:0, yMax:1.1},
+  legend:[
+    {color:'--accent',  label:'막 안 농도'},
+    {color:'--purple',  label:'용액 쪽 농도'},
+    {color:'--neutral', label:'계면에서의 낙차'}
+  ],
+  note:'막 저항 L/(Dm·K) 에서 Dm 과 K 가 곱으로만 나타나므로, 정상상태 값 하나로는 둘을 구분할 수 ' +
+       '없음. 시간 지연 L²/6Dm 에는 K 가 들어가지 않아, 응답 시간과 정상상태 유속을 함께 재면 ' +
+       'K = P/Dm 으로 분리됨.',
+  plotNote:'기본값에서 용액층 100 μm 를 지나는 동안 농도는 벌크의 0.5 %만 내려가고, 나머지 낙차는 ' +
+           '계면의 도약과 막 안 20 μm 에서 전부 일어남. K 를 낮추면 점선의 도약이 길어지면서 막 안 ' +
+           '기울기가 완만해지고, 막 두께만 늘리면 도약은 그대로인 채 기울기만 완만해짐.',
+  compute(v){
+    var Lcm = v.L * 1e-4, dcm = v.delta * 1e-4;
+    var Dm  = v.Dr * v.D;
+    var P   = Dm * v.K;
+    var Raq = dcm / v.D;                 // 용액층 저항 [s/cm]
+    var Rm  = Lcm / P;                   // 막 저항 [s/cm]
+    var Cs  = Rm / (Raq + Rm);           // 계면 용액 쪽 농도 / C*
+    var Cm  = v.K * Cs;                  // 계면 막 쪽 농도 / C*
+    var xmax = v.L + v.delta;
+    return {
+      plot:{xMin:0, xMax:xmax, yMin:0, yMax:1.1, autoX:false, autoY:false},
+      series:[
+        {points:[[0, 0], [v.L, Cm]],   color:'--accent', width:2.6},
+        {points:[[v.L, Cs], [xmax, 1]], color:'--purple', width:2.6},
+        {points:[[v.L, Cm], [v.L, Cs]], color:'--neutral', width:1.4, dash:'5 4'}
+      ],
+      overlays:[
+        {type:'vline', x:v.L, color:'--green', label:'계면'},
+        {type:'hline', y:1, color:'--ink-3', label:'C*'},
+        {type:'point', x:v.L, y:Cm, color:'--accent'},
+        {type:'point', x:v.L, y:Cs, color:'--purple'}
+      ],
+      stats:{
+        Raq:  Raq,
+        Rmem: Rm,
+        frac: 100 * Rm / (Raq + Rm),
+        red:  (Raq + Rm) / Raq,
+        lag:  Lcm * Lcm / (6 * Dm)
       }
     };
   }

@@ -12,8 +12,8 @@
 | 02 화학 | `pages/electrochem.html` | Nernst 식, Faraday 두께 환산, 3-step 정전류법, OCP, CV |
 | 03 화학 | `pages/corrosion.html` | 갈바닉·공식·틈새 부식, Tafel, Pourbaix, 통계 |
 | 04 화학 | `pages/eis.html` | 복소 임피던스, 평행판 커패시턴스, 직렬 RC, Nyquist, Bode, Randles, CPE, Warburg |
-| 05 화학 | `pages/diffusion.html` | 픽 제1·제2법칙, 물질 수지, 오차함수 해, 코트렐, 네른스트 확산층, Warburg |
-| 06 화학 | `pages/biosensor.html` | 바이오센서 3단계, 세대 분류, 미하엘리스–멘텐, 확산억제막, 2·3전극, Ag/AgCl 기준전극 |
+| 05 화학 | `pages/diffusion.html` | 픽 제1·제2법칙, 물질 수지, 오차함수 해, 코트렐, 네른스트 확산층, Warburg, 분배계수 |
+| 06 화학 | `pages/biosensor.html` | 바이오센서 3단계, 세대 분류, 미하엘리스–멘텐, 확산억제막·분배계수, 2·3전극, Ag/AgCl 기준전극 |
 | 07 화학 | `pages/polymer.html` | 라디칼 중합, Flory–Huggins, Flory–Rehner, 가교 밀도 |
 | 08 화학 | `pages/surface.html` | Young 식, 접촉각, Owens–Wendt, Neumann EoS |
 | 09 물리 | `pages/rheology.html` | 멱법칙, 전단담화, 항복응력, 도공 두께 |
