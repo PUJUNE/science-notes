@@ -42,7 +42,7 @@
 <header class="mast">
   <div class="wrap">
     <p class="kicker">Field 02 · 화학 · 전기화학과 Ag/AgCl 전극</p>
-    <h1>전위 한 줄에서 <em>두께 한 줄</em>까지</h1>
+    <h1>전위 한 줄에서 <em>두께 한 줄</em>까지의 계산</h1>
     <p class="lede">
       Ag/AgCl 전극은 전위를 Cl⁻ 활동도 하나로 고정하는 기준전극이면서, 동시에 전하량을 재면
       적층 두께가 나오는 측정 대상이기도 함. 이 페이지는 Nernst 식에서 출발해 Faraday 환산,
@@ -366,7 +366,7 @@
 
     <div id="lab-ocp"></div>
 
-    <h3>채널 분해 — 코팅인가 접점인가</h3>
+    <h3>채널 분해 — 코팅과 접점의 구분</h3>
 
     <p>
       SUS 스냅과 Ag/AgCl 코팅이 조립된 전극에서 전위가 불안정할 때 원인을 가리려면 조립체 전체를 한
@@ -742,7 +742,7 @@ Lab.make({
 /* ============================ 02. Faraday 두께 계산기 ============================ */
 Lab.make({
   mount:'#lab-faraday',
-  title:'Faraday 두께 계산기 — Q에서 d까지',
+  title:'Faraday 두께 계산기 — Q에서 d로의 환산',
   badge:'CALCULATOR',
   controls:[
     {id:'I',  label:'전류 I', min:0.01, max:5, step:0.01, value:0.5, unit:'mA', fmt:function(v){ return v.toFixed(2); }},
@@ -1035,7 +1035,7 @@ Lab.make({
 /* ============================ 06. 면적 기준 변경 영향 ============================ */
 Lab.make({
   mount:'#lab-area',
-  title:'면적 기준을 바꾸면 어느 지표가 움직이는가',
+  title:'면적 기준 변경에 따라 움직이는 지표',
   badge:'NORMALIZE',
   controls:[
     {id:'Q',  label:'절대 전하량 Q', min:1, max:50, step:0.5, value:10, unit:'mC', fmt:function(v){ return v.toFixed(1); }},

@@ -57,7 +57,7 @@
 <section id="s1">
   <div class="wrap">
     <p class="eyebrow"><span class="num">01</span><span>실행 위치</span></p>
-    <h2>브라우저 안이 아니라 파일 시스템 위에서 동작함</h2>
+    <h2>브라우저 안이 아닌 파일 시스템 위에서의 동작</h2>
 
     <p>
       웹 챗봇은 브라우저 세션 안에서 대화하고 파일을 올리면 읽어서 답을 돌려주는 구조임.
@@ -103,7 +103,7 @@
 <section id="s2">
   <div class="wrap">
     <p class="eyebrow"><span class="num">02</span><span>파라미터 = 가중치</span></p>
-    <h2>학습은 숫자를 조금씩 바꾸는 과정임</h2>
+    <h2>숫자를 조금씩 바꾸는 과정으로서의 학습</h2>
 
     <p>
       신경망 그림에서 원 하나하나를 잇는 선에는 숫자가 저장되어 있고, 이 숫자를 파라미터 또는
@@ -135,7 +135,7 @@
 <section id="s3">
   <div class="wrap">
     <p class="eyebrow"><span class="num">03</span><span>Pre-trained</span></p>
-    <h2>출시 시점에 학습은 이미 끝나 있음</h2>
+    <h2>출시 시점에 이미 끝난 학습</h2>
 
     <p>
       모델 이름에 붙는 버전 숫자는 학습 상태가 고정되었다는 표시임. GPT의 P가 Pre-trained의 P이고,
@@ -163,7 +163,7 @@
 <section id="s4">
   <div class="wrap">
     <p class="eyebrow"><span class="num">04</span><span>세션</span></p>
-    <h2>새 대화창은 이전 대화창의 내용을 갖고 있지 않음</h2>
+    <h2>이전 대화창의 내용이 없는 새 대화창</h2>
 
     <p>
       새 대화창을 열면 이전 세션에서 오간 내용은 전달되지 않음. 이어서 작업하려면 정보를 파일로
@@ -190,7 +190,7 @@
 <section id="s5">
   <div class="wrap">
     <p class="eyebrow"><span class="num">05</span><span>토큰</span></p>
-    <h2>토큰은 글자를 세는 단위이자 곧 비용임</h2>
+    <h2>글자를 세는 단위이자 비용인 토큰</h2>
 
     <p>
       모델은 문자열을 토큰 단위로 쪼개 처리하고, 처리한 토큰 수가 비용과 처리 한도를 결정함.
@@ -260,7 +260,7 @@
 <section id="s7">
   <div class="wrap">
     <p class="eyebrow"><span class="num">07</span><span>한계</span></p>
-    <h2>검수 가능한 범위 안에서만 자동화 도구임</h2>
+    <h2>검수 가능한 범위 안에서의 자동화 도구</h2>
 
     <p>
       모르는 분야는 결과가 틀렸는지 판단할 수 없음. 새 업무를 학습하는 것을 대체하는 도구가
@@ -309,7 +309,7 @@
 /* ===== 02. 경사하강법 ===== */
 Lab.make({
   mount:'#lab-gd',
-  title:'경사하강법 — 학습률이 수렴을 결정함',
+  title:'경사하강법 — 학습률에 따른 수렴',
   badge:'GRADIENT DESCENT',
   controls:[
     {id:'lr', label:'학습률 η', min:0.005, max:1.2, step:0.005, value:0.15, fmt:v=>v.toFixed(3)},
@@ -418,7 +418,7 @@ Lab.make({
 /* ===== 04. 세션 맥락 ===== */
 Lab.make({
   mount:'#lab-session',
-  title:'세션 맥락은 창을 닫으면 사라지고, 파일은 남음',
+  title:'창을 닫으면 사라지는 세션 맥락과 남는 파일',
   badge:'CONTEXT',
   controls:[
     {id:'turns', label:'대화 진행 턴 수', min:1, max:120, step:1, value:30, fmt:v=>v.toFixed(0)},
