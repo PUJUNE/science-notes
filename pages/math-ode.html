@@ -55,7 +55,7 @@
 <section id="separation">
   <div class="wrap">
     <p class="eyebrow"><span class="num">01</span> 변수분리법</p>
-    <h2>같은 식을 두 갈래로 풀어도 결과가 같음</h2>
+    <h2>두 갈래 풀이에서 같아지는 결과</h2>
 
     <p>
       다루는 방정식은 <code>y′ = y</code>임. 이 식을 <code>y</code>로 나누면 좌변이
@@ -106,7 +106,7 @@
 <section id="substitution">
   <div class="wrap">
     <p class="eyebrow"><span class="num">02</span> 치환적분</p>
-    <h2>dx 위의 균등 분할이 dy 위에서는 불균등해짐</h2>
+    <h2>dy 위에서 불균등해지는 dx 위의 균등 분할</h2>
 
     <p>
       치환적분이 하는 일을 리만 합으로 보면 분할의 재배치임. 좌변
@@ -179,7 +179,7 @@
 <section id="slopefield">
   <div class="wrap">
     <p class="eyebrow"><span class="num">04</span> 방향장과 해곡선</p>
-    <h2>방정식은 기울기만 정하고, 곡선은 초기조건이 고름</h2>
+    <h2>기울기를 정하는 방정식과 곡선을 고르는 초기조건</h2>
 
     <p>
       <code>y′ = f(x, y)</code> 형태의 1계 미분방정식은 평면의 각 점에서 해곡선이 가져야 할
@@ -203,7 +203,7 @@
 <section id="constant">
   <div class="wrap">
     <p class="eyebrow"><span class="num">05</span> 적분상수</p>
-    <h2>지수로 올라간 상수는 곱셈 상수가 됨</h2>
+    <h2>지수로 올라가 곱셈 상수가 되는 적분 상수</h2>
 
     <p>
       <code>ln|y| = x + c</code>의 양변에 지수를 취하면 <code>|y| = e<sup>x+c</sup> = e<sup>c</sup>e<sup>x</sup></code>가 됨.
@@ -414,7 +414,7 @@ Lab.make({
 /* ============================ 03. 연쇄법칙 역추적 ============================ */
 Lab.make({
   mount:'#lab-chain',
-  title:'F(y(x))를 x로 미분하면 dy/dx가 딸려 나옴',
+  title:'F(y(x))의 x 미분에 딸려 나오는 dy/dx',
   badge:'CHAIN RULE',
   controls:[
     {id:'x0', label:'관찰 위치 x₀', min:-1.2, max:1.6, step:0.02, value:0.6, fmt:v=>v.toFixed(2)},
