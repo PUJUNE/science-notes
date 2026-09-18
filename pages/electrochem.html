@@ -32,8 +32,9 @@
       <li><a href="#s5">면적 기준</a></li>
       <li><a href="#s6">OCP</a></li>
       <li><a href="#s7">CV</a></li>
-      <li><a href="#s8">무전해 도금</a></li>
-      <li><a href="#s9">AAMI EC12</a></li>
+      <li><a href="#s8">Randles–Ševčík</a></li>
+      <li><a href="#s9">무전해 도금</a></li>
+      <li><a href="#s10">AAMI EC12</a></li>
     </ul>
     <button class="theme-btn" type="button">DARK</button>
   </div>
@@ -478,7 +479,173 @@
 <!-- ================= 08 ================= -->
 <section id="s8">
   <div class="wrap">
-    <p class="eyebrow"><span class="num">08</span><span>Sn²⁺ + 2Ag⁺ → Sn⁴⁺ + 2Ag⁰</span></p>
+    <p class="eyebrow"><span class="num">08</span><span>i<sub>p</sub> = 0.4463 nFAC√(nFvD/RT)</span></p>
+    <h2>Randles–Ševčík식과 Cottrell 방정식 — 확산이 정하는 전류</h2>
+
+    <p>
+      앞 절의 피크 전류 관계를 전제와 적용 범위까지 펼침. Randles(1948)와 Ševčík(1948)이 각각 발표한
+      이 식은 확산으로 공급되는 가역 산화환원 반응에서 피크 전류가 주사 속도의 제곱근·농도·전극 면적·
+      확산계수의 제곱근에 비례한다는 관계이며, Nicholson–Shain(1964)이 가역계와 비가역계를 아우르도록
+      일반화함. 같은 확산 문제를 전위 계단으로 푼 것이 Cottrell 방정식이라, 두 식은 인가 방식만 다른
+      한 쌍으로 읽는 편이 쓰임새를 정확히 함.
+    </p>
+
+    <div class="eq" style="border-left-color:var(--accent)">
+      i<sub>p</sub> = 0.4463 · nFAC · √(nFvD / RT)
+      <br><span class="cm">— 일반형</span>
+      <br><br>
+      i<sub>p</sub> = 2.69×10⁵ · n<sup>3/2</sup> · A · C · D<sup>1/2</sup> · v<sup>1/2</sup>
+      <br><span class="cm">— 25 °C 수치형. 상수는 25 °C에서 2.686×10⁵, 37 °C에서 2.634×10⁵</span>
+    </div>
+
+    <ul class="sym">
+      <li><b>i<sub>p</sub></b><span>피크 전류 [A]</span></li>
+      <li><b>n</b><span>반응 전자 수</span></li>
+      <li><b>A</b><span>전극 면적 [cm²]</span></li>
+      <li><b>C</b><span>활성 화학종 농도 [mol/cm³]</span></li>
+      <li><b>D</b><span>확산계수 [cm²/s]</span></li>
+      <li><b>v</b><span>주사속도 [V/s]</span></li>
+    </ul>
+
+    <div class="callout">
+      <p><b>전제를 벗어나면 계수가 달라짐</b> — 반무한 평면 확산, 가역(Nernst) 전극 반응, 과량 지지전해질,
+      균일한 초기 농도 네 가지를 깔고 얻은 식임. 미소전극처럼 가장자리 확산이 지배하거나, 화학종이 표면에
+      고정되어 확산이 없거나, 전자 전달이 느려 평형을 따라가지 못하면 아래의 다른 형태를 씀.</p>
+    </div>
+
+    <h3>가역성에 따른 네 가지 형태</h3>
+
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>구분</th><th>피크 전류 (25 °C)</th><th>판별 지표</th></tr></thead>
+        <tbody>
+          <tr>
+            <td>가역</td>
+            <td>i<sub>p</sub> = 2.69×10⁵ · n<sup>3/2</sup> A C D<sup>1/2</sup> v<sup>1/2</sup></td>
+            <td>ΔE<sub>p</sub> = 57~59/n mV, |E<sub>p</sub> − E<sub>p/2</sub>| = 56.5/n mV, E<sub>p</sub>는 v와 무관</td>
+          </tr>
+          <tr>
+            <td>완전 비가역</td>
+            <td>i<sub>p</sub> = 2.99×10⁵ · α<sup>1/2</sup> n (n<sub>α</sub>)<sup>1/2</sup> A C D<sup>1/2</sup> v<sup>1/2</sup></td>
+            <td>|E<sub>p</sub> − E<sub>p/2</sub>| = 47.7/(α·n<sub>α</sub>) mV, E<sub>p</sub>가 v에 따라 이동</td>
+          </tr>
+          <tr>
+            <td>준가역</td>
+            <td>가역과 비가역 사이. Nicholson ψ로 보간</td>
+            <td>ψ = k⁰ / √(πDnFv/RT) 와 ΔE<sub>p</sub>의 대응에서 k⁰ 산출</td>
+          </tr>
+          <tr>
+            <td>표면 고정종</td>
+            <td>i<sub>p</sub> = n²F²ΓAv / 4RT</td>
+            <td>확산이 없어 i<sub>p</sub> ∝ v (제곱근이 아님)</td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p>
+      네 형태를 가르는 실무 판별은 로그 기울기 하나로 끝남. log i<sub>p</sub> − log v 그래프의 기울기가
+      0.5면 확산이 공급을 정하는 반응이고, 1.0이면 표면에 고정되거나 흡착된 화학종이 반응하는 것임.
+      중간 값은 두 경로가 섞였다는 뜻이라 농도나 주사 범위를 바꿔 다시 봄.
+    </p>
+
+    <h3>Nicholson ψ — ΔE<sub>p</sub>에서 k⁰로</h3>
+
+    <p>
+      준가역계에서는 피크 간격이 전자 전달 속도를 담음. 아래 대응표(α = 0.5, n = 1)에서 측정한
+      ΔE<sub>p</sub>에 맞는 ψ를 읽고, ψ = k⁰/√(πDnFv/RT)를 k⁰에 대해 풀면 표준 속도상수가 나옴.
+      간격이 벌어질수록 ψ가 작아지고, 곧 전자 전달이 느리다는 뜻임.
+    </p>
+
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>ψ</th><th>20</th><th>7</th><th>5</th><th>3</th><th>2</th><th>1</th><th>0.5</th><th>0.25</th><th>0.1</th></tr></thead>
+        <tbody>
+          <tr><td>ΔE<sub>p</sub> [mV]</td><td>61</td><td>63</td><td>65</td><td>68</td><td>72</td><td>84</td><td>105</td><td>141</td><td>212</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <h3>전기화학 활성 면적(ECSA) 산출</h3>
+
+    <p>
+      식을 면적에 대해 풀면 전극의 실제 활성 면적을 잴 수 있음. 페리시안화물을 탐침으로 삼아
+      (D = 7.6×10⁻⁶ cm²/s, 0.1 M KCl, 25 °C) 주사 속도를 바꿔가며 i<sub>p</sub>를 √v에 대해 그리고,
+      그 기울기 S를 아래에 넣음. 기하학적 면적보다 크게 나오면 표면이 거칠거나 다공성이라는 뜻임.
+    </p>
+
+    <div class="eq">
+      A = S / (2.69×10⁵ · n<sup>3/2</sup> · C · D<sup>1/2</sup>)
+      <br><span class="cm">— S는 i<sub>p</sub> − v<sup>1/2</sup> 직선의 기울기 [A·s<sup>1/2</sup>/V<sup>1/2</sup>]</span>
+    </div>
+
+    <h3>Cottrell 방정식 — 같은 확산, 다른 인가</h3>
+
+    <p>
+      전위를 확산 한계 영역으로 한 번에 계단 인가하면 표면 농도가 즉시 0이 되고, 전류는 피크 없이
+      t<sup>−1/2</sup>로 감소함. 주사 실험의 시간 척도를 τ = RT/(nFv)로 두고 두 식을 나란히 쓰면 형태가
+      같고 계수만 다르다는 것이 드러남.
+    </p>
+
+    <div class="eq">
+      i(t) = nFAC · √D / √(πt) = 0.5642 · nFAC · √(D/t)
+      <br><span class="cm">— Cottrell. 전위 계단, 0.5642 = 1/√π</span>
+      <br><br>
+      i<sub>p</sub> = 0.4463 · nFAC · √(D/τ) &nbsp;&nbsp;<span class="cm">|</span>&nbsp;&nbsp; τ = RT/(nFv)
+      <br><span class="cm">— Randles–Ševčík을 시간 척도로 고쳐 쓴 것. CV 피크 전류는 Cottrell 전류를 t ≈ 1.60τ에서 구한 값과 같음</span>
+    </div>
+
+    <div class="cards">
+      <div class="card">
+        <h5><span class="tag" style="background:var(--mint);color:var(--green)">읽기 1</span> 주사 속도 = 관측 시각</h5>
+        <ul>
+          <li>v를 올리는 것은 계단 실험에서 더 이른 시점의 전류를 보는 것과 같음</li>
+          <li>i<sub>p</sub> ∝ v<sup>1/2</sup>와 i ∝ t<sup>−1/2</sup>는 같은 현상의 다른 변수 표현</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h5><span class="tag" style="background:var(--lilac);color:var(--purple)">읽기 2</span> 피크 뒤 꼬리</h5>
+        <ul>
+          <li>전위가 E°에서 충분히 멀어지면 표면 농도가 0에 가까워짐</li>
+          <li>그래서 CV 피크 뒤쪽 꼬리 전류가 Cottrell형 t<sup>−1/2</sup> 감소를 따름</li>
+        </ul>
+      </div>
+      <div class="card">
+        <h5><span class="tag" style="background:var(--warm);color:var(--amber)">읽기 3</span> 무엇을 못 얻는가</h5>
+        <ul>
+          <li>두 방법 모두 A·√D 곱만 주므로 A와 D를 분리할 수 없음</li>
+          <li>분리하려면 D에 비례하는 미소전극 정상상태 전류(원판 i<sub>ss</sub> = 4nFDCr₀)를 함께 잼</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="callout">
+      <p><b>어느 쪽을 쓸지는 무엇을 알고 싶은지가 정함</b> — Cottrell 측정은 확산 한계 전위에서 하므로
+      전자 전달 속도 정보가 없고 A·√D만 남김. CV는 ΔE<sub>p</sub>로 가역성과 k⁰까지 판정함. 대신 공통
+      한계도 같이 따라옴 — 전극 가장자리 확산, iR drop, 그리고 충전 전류임. 충전 전류는 Cottrell에서는
+      계단 직후 짧은 시간에 몰려 초기 데이터를 버리게 하고, CV에서는 v에 비례하는 배경 전류로 나타나
+      빠른 주사일수록 패러데이 전류를 덮음.</p>
+    </div>
+
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>참고문헌</th><th>내용</th></tr></thead>
+        <tbody>
+          <tr><td>J. E. B. Randles, <i>Trans. Faraday Soc.</i> <b>44</b>, 327 (1948)</td><td>피크 전류–주사 속도 관계의 최초 유도</td></tr>
+          <tr><td>A. Ševčík, <i>Collect. Czech. Chem. Commun.</i> <b>13</b>, 349 (1948)</td><td>같은 관계의 독립 발표</td></tr>
+          <tr><td>R. S. Nicholson, I. Shain, <i>Anal. Chem.</i> <b>36</b>, 706 (1964)</td><td>가역·비가역·준가역계로의 일반화</td></tr>
+          <tr><td>R. S. Nicholson, <i>Anal. Chem.</i> <b>37</b>, 1351 (1965)</td><td>ψ–ΔE<sub>p</sub> 대응에서 k⁰ 산출</td></tr>
+          <tr><td>A. J. Bard, L. R. Faulkner, <i>Electrochemical Methods</i>, 2nd ed., Wiley (2001), Ch. 5–6</td><td>확산 지배 전류의 교과서 정리</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<!-- ================= 09 ================= -->
+<section id="s9">
+  <div class="wrap">
+    <p class="eyebrow"><span class="num">09</span><span>Sn²⁺ + 2Ag⁺ → Sn⁴⁺ + 2Ag⁰</span></p>
     <h2>Ag/AgCl 석출 — 무전해 도금과 염소화</h2>
 
     <p>
@@ -572,10 +739,10 @@
   </div>
 </section>
 
-<!-- ================= 09 ================= -->
-<section id="s9">
+<!-- ================= 10 ================= -->
+<section id="s10">
   <div class="wrap">
-    <p class="eyebrow"><span class="num">09</span><span>|Z| = √(Z′² + Z″²)</span></p>
+    <p class="eyebrow"><span class="num">10</span><span>|Z| = √(Z′² + Z″²)</span></p>
     <h2>규격 시험 항목과 판정 기준</h2>
 
     <p>
