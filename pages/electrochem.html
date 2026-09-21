@@ -102,6 +102,62 @@
       SHE 기준값에서 SCE의 +0.241 V를 빼면 SCE 기준값이 나오며, 문헌값을 옮겨 적을 때는 기준전극과
       충전액 농도를 함께 표기해야 비교가 성립함.</p>
     </div>
+
+    <h3>표준 전위 +0.222 V의 출처 — 용해도곱이 정하는 제2종 전극</h3>
+
+    <p>
+      E°를 상수로 받아 쓰면 계산은 그대로 돌아가지만, 이 값이 어디서 왔는지는 은 이온의 환원
+      전위와 AgCl의 용해 평형을 겹쳐 놓아야 드러남. 전극 표면에서 전자를 주고받는 화학종은
+      Ag⁺이고, 그 Ag⁺의 활동도가 난용성 AgCl의 용해도곱을 통해 Cl⁻ 활동도에 묶이므로 측정되는
+      전위가 Cl⁻ 하나로 정해짐. 금속과 그 금속의 난용성 염을 겹쳐 음이온에 감응하게 만든 이런
+      구성을 제2종 전극(electrode of the second kind)이라 부름.
+    </p>
+
+    <div class="eq">
+      Ag⁺ + e⁻ ⇌ Ag(s)&nbsp;&nbsp;<span class="cm">→ E = E°<sub>Ag⁺/Ag</sub> + (RT/F) ln a<sub>Ag⁺</sub></span><br>
+      AgCl(s) ⇌ Ag⁺ + Cl⁻&nbsp;&nbsp;<span class="cm">→ K<sub>sp</sub> = a<sub>Ag⁺</sub>·a<sub>Cl⁻</sub>,
+      &nbsp;a<sub>Ag⁺</sub> = K<sub>sp</sub> / a<sub>Cl⁻</sub></span><br>
+      E = E°<sub>Ag⁺/Ag</sub> + (RT/F) ln K<sub>sp</sub> − (RT/F) ln a<sub>Cl⁻</sub><br>
+      E°<sub>Ag/AgCl</sub> = <b>E°<sub>Ag⁺/Ag</sub> + (RT/F) ln K<sub>sp</sub></b>
+    </div>
+
+    <ul class="sym">
+      <li><b>E°<sub>Ag⁺/Ag</sub></b><span>은 이온 환원의 표준 전위, +0.7996 V vs SHE</span></li>
+      <li><b>K<sub>sp</sub></b><span>AgCl 용해도곱, 25 °C에서 1.8×10⁻¹⁰ mol²/L²</span></li>
+      <li><b>a<sub>Ag⁺</sub></b><span>용액 쪽 Ag⁺ 활동도 [무차원]</span></li>
+      <li><b>2.303 RT/F</b><span>25 °C에서 59.16 mV/decade</span></li>
+    </ul>
+
+    <p>
+      앞 식의 괄호 항은 상수만 남으므로 그대로 표준 전위가 되고, 25 °C 수치를 넣으면
+      0.7996 V + 0.05916 V × log₁₀(1.8×10⁻¹⁰) = 0.7996 − 0.5765 = <b>+0.2231 V</b>가 나옴.
+      표에 오르는 +0.2223 V와는 0.8 mV 차이가 남는데, 이 간격은 용해도곱 문헌값의 폭에서
+      오는 것이라 K<sub>sp</sub>를 1.75×10⁻¹⁰으로 잡으면 +0.2224 V가 되어 0.1 mV 안에서 맞음.
+      전위가 로그에 걸려 있으므로 용해도곱이 10배 달라져도 표준 전위는 59 mV만 움직임.
+    </p>
+
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>항목</th><th>값</th><th>출처</th></tr></thead>
+        <tbody>
+          <tr><td>E°<sub>Ag⁺/Ag</sub></td><td>+0.7996 V vs SHE</td><td>표준 환원 전위표</td></tr>
+          <tr><td>K<sub>sp,AgCl</sub> (25 °C)</td><td>1.8×10⁻¹⁰ mol²/L²</td><td>용해도곱 문헌값</td></tr>
+          <tr><td>(RT/F) ln K<sub>sp</sub></td><td>−0.5765 V</td><td>위 두 값으로 계산</td></tr>
+          <tr><td>유도한 E°<sub>Ag/AgCl</sub></td><td>+0.2231 V vs SHE</td><td>0.7996 − 0.5765</td></tr>
+          <tr><td>표에 오르는 E°<sub>Ag/AgCl</sub></td><td>+0.2223 V vs SHE</td><td>표준 환원 전위표</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <div id="lab-ksp-e0"></div>
+
+    <p>
+      이 경로는 기준전극을 왜 충전액과 함께 써야 하는지도 같이 설명함. 3 M KCl 충전액에서는
+      Ag⁺ 활동도가 K<sub>sp</sub>/3 = 6.0×10⁻¹¹ 수준으로 고정되어 시료 조성이 바뀌어도 전위가
+      따라 움직이지 않지만, 충전액 없이 전극을 시료에 직접 담그면 같은 식이 그대로 Cl⁻ 농도를
+      읽는 이온 선택성 센서의 감응식이 됨. 기준전극과 염화물 센서는 구조가 다른 것이 아니라
+      Cl⁻ 활동도를 고정했는지 아닌지로 갈림.
+    </p>
   </div>
 </section>
 
@@ -902,6 +958,64 @@ Lab.make({
          text:'25 °C 기울기 −59.16 mV/decade', color:'--ink-2'}
       ],
       stats:{ E:E*1000, Esce:(E - E_SCE)*1000, slope:slope, dT:(E - E25)*1000 }
+    };
+  }
+});
+
+/* ============ 01-b. 용해도곱에서 나오는 E°(Ag/AgCl) ============ */
+var E0_AGAG    = 0.7996;    /* Ag⁺ + e⁻ → Ag, V vs SHE */
+var KSP_AGCL   = 1.8e-10;   /* mol²/L², 25 °C */
+var E0_AGCL_TB = 0.2223;    /* 표에 오르는 E°(AgCl/Ag), V vs SHE */
+
+Lab.make({
+  mount:'#lab-ksp-e0',
+  title:'용해도곱에서 나오는 E°(Ag/AgCl)',
+  badge:'DERIVATION',
+  controls:[
+    {id:'ksp', label:'AgCl 용해도곱 K_sp', min:1e-12, max:1e-8, value:1.8e-10, log:true,
+     unit:'mol²/L²', fmt:function(v){ return Lab.sci(v,3); }},
+    {id:'e0',  label:'E°(Ag⁺/Ag)', min:0.78, max:0.82, step:0.0001, value:0.7996,
+     unit:'V', fmt:function(v){ return v.toFixed(4); }},
+    {id:'cl',  label:'Cl⁻ 활동도', min:1e-4, max:5, value:3, log:true,
+     unit:'M', fmt:function(v){ return Lab.sci(v,3); }}
+  ],
+  presets:[
+    {label:'문헌 K_sp = 1.8×10⁻¹⁰', set:{ksp:1.8e-10, e0:0.7996}},
+    {label:'표값을 재현하는 1.75×10⁻¹⁰', set:{ksp:1.75e-10, e0:0.7996}},
+    {label:'충전액 3 M KCl', set:{cl:3}},
+    {label:'1X PBS 0.14 M', set:{cl:0.14}}
+  ],
+  stats:[
+    {id:'e0d', label:'유도한 E°(Ag/AgCl)', unit:'mV', fmt:function(v){ return v.toFixed(1); }},
+    {id:'dev', label:'표값 222.3 mV 대비', unit:'mV', fmt:function(v){ return (v>0?'+':'') + v.toFixed(1); }},
+    {id:'ag',  label:'[Ag⁺] = K_sp / a(Cl⁻)', unit:'M', fmt:function(v){ return Lab.sci(v,3); }},
+    {id:'E',   label:'E vs SHE', unit:'mV', fmt:function(v){ return v.toFixed(1); }}
+  ],
+  plot:{width:640,height:390,xLabel:'log₁₀ K_sp',yLabel:'E°(Ag/AgCl) vs SHE (mV)',
+        autoX:false,autoY:true,xMin:-12,xMax:-8},
+  legend:[{color:'--accent',label:'E°(Ag⁺/Ag) + (RT/F) ln K_sp'}],
+  note:'E°(Ag/AgCl) = E°(Ag⁺/Ag) + (RT/F) ln K_sp 를 그대로 계산함. 온도는 25 °C로 두었고 ' +
+       'K_sp 의 온도 의존성은 넣지 않았으므로 슬라이더는 문헌값의 폭을 보는 용도임. ' +
+       'K_sp 슬라이더는 로그 눈금을 1000칸으로 나눠 쓰므로 표시값이 세 번째 자리에서 ' +
+       '움직일 수 있고, 그만큼 E° 도 0.1 mV 안팎으로 본문 계산과 어긋날 수 있음. ' +
+       'E 는 유도한 E° 에 −59.16 mV/decade 기울기를 적용해 지정한 Cl⁻ 활동도에서 얻음.',
+  plotNote:'가로축이 log₁₀ K_sp 이므로 직선의 기울기는 59.16 mV/decade 이고, 용해도곱이 10배 ' +
+           '커질 때 표준 전위가 59 mV 올라감.',
+  compute:function(v){
+    var s25 = Math.LN10 * RGAS * 298.15 / FARADAY;   /* V/decade */
+    var e0d = v.e0 + s25 * Math.log10(v.ksp);
+    var E   = e0d - s25 * Math.log10(v.cl);
+    var pts = [], i, lk;
+    for(i=0;i<=160;i++){ lk = -12 + 4 * i / 160; pts.push([lk, (v.e0 + s25 * lk) * 1000]); }
+    var lx = Math.log10(v.ksp);
+    return {
+      series:[{points:pts, color:'--accent', width:2.4}],
+      overlays:[
+        {type:'hline', y:E0_AGCL_TB*1000, color:'--green', label:'표값 222.3 mV'},
+        {type:'vline', x:Math.log10(KSP_AGCL), color:'--ink-3', label:'K_sp = 1.8×10⁻¹⁰'},
+        {type:'point', x:lx, y:e0d*1000, color:'--accent', label:e0d.toFixed(4) + ' V'}
+      ],
+      stats:{ e0d:e0d*1000, dev:(e0d - E0_AGCL_TB)*1000, ag:v.ksp/v.cl, E:E*1000 }
     };
   }
 });
