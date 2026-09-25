@@ -1,0 +1,624 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AI 활용 철학 — 수학·물리·화학 노트</title>
+<meta name="description" content="생성이 싸진 환경에서 독창성이 어느 단계에 남는지를 미야자키의 당부와 아홉 달 258편 사례, 응축의 구조로 정리하고 검수 용량·선별 강도·평판 평균을 직접 계산함.">
+<!-- social -->
+<link rel="canonical" href="https://pujune.github.io/science-notes/pages/ai-philosophy.html">
+<meta property="og:type" content="website">
+<meta property="og:site_name" content="수학·물리·화학 노트">
+<meta property="og:locale" content="ko_KR">
+<meta property="og:url" content="https://pujune.github.io/science-notes/pages/ai-philosophy.html">
+<meta property="og:title" content="AI 활용 철학 — 수학·물리·화학 노트">
+<meta property="og:description" content="생성이 싸진 환경에서 독창성이 어느 단계에 남는지를 미야자키의 당부와 아홉 달 258편 사례, 응축의 구조로 정리하고 검수 용량·선별 강도·평판 평균을 직접 계산함.">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="AI 활용 철학 — 수학·물리·화학 노트">
+<meta name="twitter:description" content="생성이 싸진 환경에서 독창성이 어느 단계에 남는지를 미야자키의 당부와 아홉 달 258편 사례, 응축의 구조로 정리하고 검수 용량·선별 강도·평판 평균을 직접 계산함.">
+<!-- /social -->
+<link rel="stylesheet" href="../assets/css/site.css">
+</head>
+<body>
+
+<div class="topbar">
+  <div class="wrap">
+    <a class="brand" href="../index.html">← 수학·물리·화학 노트</a>
+    <ul class="topnav">
+      <li><a href="#s1">깊이</a></li>
+      <li><a href="#s2">양</a></li>
+      <li><a href="#s3">순가치</a></li>
+      <li><a href="#s4">응축</a></li>
+      <li><a href="#s5">판정</a></li>
+      <li><a href="#s6">독창성</a></li>
+      <li><a href="#s7">귀속</a></li>
+    </ul>
+    <button class="theme-btn" type="button">DARK</button>
+  </div>
+</div>
+
+<header class="mast">
+  <div class="wrap">
+    <p class="kicker">Field 16 · 도구 · AI 활용 철학</p>
+    <h1>산출이 싸진 환경에서 남는 <em>판정의 단계</em></h1>
+    <p class="lede">
+      2026년 9월에 나란히 놓인 세 자료 — 미야자키 하야오의 제작 다큐를 본 정지우의 글, AI로
+      아홉 달에 논문 200편 이상을 올린 니콜라스 폴슨의 사례, 그 사례를 두고 적은 「흩어버린
+      노력과 응축」 메모 — 를 하나의 흐름으로 정리한 페이지임. 다루는 범위는 산출이 거의
+      공짜가 된 환경에서 독창성이 어느 단계에 남는가이며, 개별 도구의 사용법과 학계 제도
+      문제는 다루지 않음. 사례에 붙은 수치는 슬라이더로 직접 움직여 볼 수 있게 옮겼음.
+    </p>
+    <div class="eq">
+      산출 비용 → 0 &nbsp;&nbsp;<span class="cm">|</span>&nbsp;&nbsp;
+      남는 단계 = 무엇을 버릴지 정하는 판정 &nbsp;&nbsp;<span class="cm">|</span>&nbsp;&nbsp;
+      이름 = 합산 장부가 아니라 평균 장부
+    </div>
+  </div>
+</header>
+
+<main>
+
+<!-- ================= 01 ================= -->
+<section id="s1">
+  <div class="wrap">
+    <p class="eyebrow"><span class="num">01</span><span>깊이</span></p>
+    <h2>흉내를 금지하는 당부와 그 당부에 붙은 값</h2>
+
+    <p>
+      다큐의 마지막에 미야자키가 꼭 넣어 달라고 한 말은 "결코 흉내내지 마"였고, 정지우는 이를
+      흉내를 막는 금지인 동시에 자기 내면의 끝까지 내려가 고유한 것을 찾아오라는 요구로 읽음.
+      요구에 값이 따른다는 것도 같은 다큐가 보여 주는데, 미야자키는 10년 동안 자기 뇌를
+      지나치게 열었다고 말하며 눈앞의 현실이 비현실적으로 느껴지고 내면의 허구가 더 현실적이
+      되는 상태를 전함. 그 기간에 세상을 떠난 동료들이 작품 속 인물로 들어왔고, 본인의 말로는
+      들어가 버리면 대가가 따르고 돌아올 수 없게 됨.
+    </p>
+
+    <p>
+      정지우가 여기서 끌어낸 것은 만드는 쪽이 아니라 받는 쪽의 사실임. 자기가 사랑한 지브리
+      세계들이 재미있는 상상이 아니라 한 사람의 가장 깊은 세계였다는 것을 뒤늦게 알았다고
+      적고, 70억 명이 있어도 가장 깊이 닿는 것은 한 사람의 가장 깊은 세계라는 명제로 옮김.
+      처방은 자기 세계를 성처럼 쌓아 올리고 그 세계로 타인을 초대하라는 것으로 닫힘.
+    </p>
+
+    <div class="callout note">
+      <p><b>이 페이지가 다루는 각도</b> — 깊이를 권하는 말은 많지만, 산출이 싸진 환경에서
+      그 말이 어느 작업 단계를 가리키는지는 따로 확인해야 함. 아래 두 절은 같은 시기에 나온
+      반대쪽 사례를 수치로 놓고 그 단계를 찾아감.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ================= 02 ================= -->
+<section id="s2">
+  <div class="wrap">
+    <p class="eyebrow"><span class="num">02</span><span>양</span></p>
+    <h2>아홉 달에 올라온 258편과 검수 용량</h2>
+
+    <p>
+      시카고대 부스경영대학원의 통계학자 니콜라스 폴슨은 2026년 한 해에만 SSRN에 258편을
+      올린 것으로 집계됨(8월 26일 기준). 8월 한 달에 104편이 올라왔고 하루 6편이 등록된 날도
+      있으며, 짧은 메모가 아니라 27·32·58쪽 분량에 80쪽짜리까지 있고 같은 해 그의 이름이 올라간
+      책도 14권임. SSRN은 257편을 내리고 계정을 동결했으며 사유는 AI 사용을 밝히지 않은 것과
+      비정상 제출 패턴으로 전해짐. 집계된 258편과 삭제 조치된 257편은 서로 다른 출처에서 나온
+      수이므로 두 수가 같은 대상을 가리키는지는 확인되지 않았음.
+    </p>
+
+    <p>
+      폴슨은 AI가 반복 작업을 줄여 줬을 뿐이라며 비판을 질투이자 자기 방법을 훔치려는 것으로
+      받아쳤고, 공저자 소콜로프는 봇을 돌린 것이 아니며 현대 AI 덕에 예전이라면 불가능한
+      속도로 자료를 완성했다고 해명함. 두 해명 모두 생산 속도를 다투지만, 속도가 올라갈 때 함께
+      올라가지 않는 항목이 하나 있음 — 올라온 것을 읽고 아니라고 말하는 데 드는 시간임.
+    </p>
+
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>항목</th><th>수치</th><th>비고</th></tr></thead>
+        <tbody>
+          <tr><td>2026년 SSRN 등록</td><td>258편</td><td>8월 26일 기준 집계</td></tr>
+          <tr><td>8월 한 달 등록</td><td>104편</td><td>하루 6편이 올라온 날도 있음</td></tr>
+          <tr><td>문서 분량</td><td>27·32·58쪽, 80쪽</td><td>짧은 메모가 아닌 논문 형식</td></tr>
+          <tr><td>같은 해 저서</td><td>14권</td><td>이름이 올라간 책 기준</td></tr>
+          <tr><td>삭제 조치</td><td>257편</td><td>계정 동결, 사유는 AI 사용 미공개와 제출 패턴</td></tr>
+        </tbody>
+      </table>
+    </div>
+
+    <p>
+      검수는 산출과 달리 사람의 시간에 묶여 있으므로, 연간 검수에 쓸 수 있는 시간을 편수로
+      나누면 한 편에 배정되는 시간이 곧바로 나옴. 아래 계산기는 편당 검수에 필요한 시간과
+      연간 가용 시간을 가정으로 두고, 편수가 늘 때 검수 커버리지가 어디서 1 아래로 내려가는지를
+      보여 줌.
+    </p>
+
+    <div id="lab-review"></div>
+  </div>
+</section>
+
+<!-- ================= 03 ================= -->
+<section id="s3">
+  <div class="wrap">
+    <p class="eyebrow"><span class="num">03</span><span>순가치</span></p>
+    <h2>읽히지 않은 산출의 순가치</h2>
+
+    <p>
+      이 사례에서 값있는 관찰은 통계학자 앤드루 겔만이 블로그에 남긴 한 문장임 — 258편을 1년에
+      쓸 수 없듯 다 읽을 수도 없으므로, 그 내용이 저자에게도 독자만큼이나 놀라웠을 수 있다는
+      것임. 겔만이 열어 본 80쪽짜리 「Theories of Human Connection」은 이혼을 94 % 정확도로
+      예측한다는 오래된 주장을 한 장 통째로 싣고 있는데, 통계학자라면 걸렀을 대목이 그대로
+      통과했다는 것은 저자의 판정이 그 문서에 한 번도 닿지 않았다는 흔적으로 읽힘. 겔만의
+      촌평은 그 프롬프트에 "그럴듯하지 않은 주장은 회의적으로 검토하라"는 말이 없었던 모양이라는
+      것이었고, 258편의 순가치를 음수로 추정함 — 사람들이 훑는 데 쓴 시간이 기여를 넘기 때문임.
+      겔만 본인도 258편 가운데 한 편만 열어 봤다고 밝혔으므로, 나머지 문서의 내용은 이 서술의
+      범위 밖임.
+    </p>
+
+    <p>
+      소콜로프의 해명에 겔만이 단 반박이 두 사례의 차이를 한 줄로 드러냄. 수백 단어의 프롬프트를
+      만 단어의 텍스트로 부풀리는 것은 지적인 의미에서 아무것도 완성하지 않으며 거품 같은
+      페이지만 늘어난다는 것임. 순가치를 수식으로 두면 이 말이 그대로 부등식이 되는데, 편당
+      기여가 독자 전체가 그 편을 훑는 데 쓰는 시간을 넘지 못하면 편수를 늘릴수록 합이 아래로
+      내려감.
+    </p>
+
+    <div class="eq">
+      순가치 = n × ( g − r × p / v ) &nbsp;&nbsp;<span class="cm">[시간]</span><br>
+      손익분기 기여 g* = r × p / v
+    </div>
+
+    <ul class="sym">
+      <li><b>n</b><span>산출 편수 [편]</span></li>
+      <li><b>g</b><span>편당 기여, 시간으로 환산한 값 [h]</span></li>
+      <li><b>r</b><span>그 편을 훑는 사람 수 [명]</span></li>
+      <li><b>p</b><span>편당 분량 [쪽]</span></li>
+      <li><b>v</b><span>훑는 속도 [쪽/h]</span></li>
+    </ul>
+
+    <div id="lab-netvalue"></div>
+  </div>
+</section>
+
+<!-- ================= 04 ================= -->
+<section id="s4">
+  <div class="wrap">
+    <p class="eyebrow"><span class="num">04</span><span>응축</span></p>
+    <h2>배제가 만드는 윤곽</h2>
+
+    <p>
+      메모의 명제는 폴슨이 한 일을 노력을 흩어 놓은 것으로 보고, 값을 내는 것은 반대 방향인
+      응축이라는 것임. 예시로 든 것은 잡스와 함께 일한 수많은 사람의 노력이 매킨토시 하나로
+      모이고 한 번의 프레젠테이션으로 모이는 형태이며, 영화가 같은 구조를 더 크게 보여 줌.
+      한 편에는 수백 명의 촬영·미술·음향·편집·연기 노동이 들어가지만 관객에게 도착하는 것은
+      두 시간짜리 영상 하나이고, 각자의 작업량을 합산해 내놓는 방식은 어디에도 없음. 지브리도
+      마찬가지여서 미야자키는 장편의 원화를 혼자 그리지 않으며 수백 명이 함께 그리므로,
+      1절의 "한 사람의 가장 깊은 세계"는 혼자 만든 세계가 아니라 여럿의 손이 한 사람의 판정을
+      거쳐 하나로 모인 세계라는 뜻으로 읽는 편이 정확함.
+    </p>
+
+    <p>
+      응축이 요약과 다른 점이 여기서 드러남. 요약은 있던 것을 줄이지만 응축은 버릴 것을 정하는
+      판정을 거치며, 무엇을 넣지 않을지가 정해져야 남은 것의 윤곽이 생기므로 응축의 실제
+      내용물은 포함된 것이 아니라 배제된 것임. 선별을 수치로 옮기면 이 관계가 곡선으로 나오는데,
+      산출물의 품질이 어떤 분포에서 나온다고 두고 상위 일부만 고르면 남은 것의 기대 품질은
+      채택 비율이 작아질수록 올라감.
+    </p>
+
+    <div class="eq">
+      상위 비율 p 만 채택할 때의 기대 품질 = φ(z<sub>p</sub>) / p,
+      &nbsp;&nbsp;<span class="cm">z<sub>p</sub> = Φ⁻¹(1 − p)</span><br>
+      <span class="cm">— φ 는 표준정규 밀도, Φ⁻¹ 는 표준정규 분위수. 품질을 표준정규로 둔 절단 평균임</span>
+    </div>
+
+    <ul class="sym">
+      <li><b>p</b><span>채택 비율 [무차원]</span></li>
+      <li><b>z<sub>p</sub></b><span>상위 p 를 가르는 문턱 [σ]</span></li>
+      <li><b>φ(z)</b><span>표준정규 밀도 함수</span></li>
+      <li><b>N</b><span>생성한 산출 개수 [개]</span></li>
+    </ul>
+
+    <div id="lab-select"></div>
+
+    <div class="callout note">
+      <p><b>곡선이 뜻하는 것</b> — 같은 생성량에서도 채택 비율을 낮추면 남은 것의 기대 품질이
+      올라가므로, 값을 만드는 작업은 생성이 아니라 배제 쪽에 있음. 다만 배제를 실행하려면 후보를
+      전부 읽어야 하므로 02절의 검수 용량이 채택 비율의 하한을 정함.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ================= 05 ================= -->
+<section id="s5">
+  <div class="wrap">
+    <p class="eyebrow"><span class="num">05</span><span>판정</span></p>
+    <h2>두 사례가 나뉘는 단계</h2>
+
+    <p>
+      미야자키와 폴슨은 둘 다 남의 손을 대량으로 씀. 한쪽은 수백 명의 애니메이터를 쓰고 다른
+      한쪽은 대규모 언어모델을 쓰므로, 두 사례를 나누는 것은 손을 빌렸는지가 아니라 올라온 것을
+      보고 아니라고 말하는 판정을 끝까지 쥐었는지임. 미야자키는 그 판정을 넘기지 않아 수백 명의
+      노동이 그의 세계로 모였고, 폴슨은 그 판정을 두지 않아 자기 이름이 달린 258편의 내용을
+      본인도 모르는 상태가 된 것으로 겔만은 봄.
+    </p>
+
+    <p>
+      AI가 바꾼 것은 이 대목의 난이도임. 사람에게 일을 시킬 때는 시키는 쪽에도 부담이 있어 안 할
+      것을 자연히 고르게 되지만, 모델은 값이 싸서 멈출 이유가 사라지고 무엇이든 한 번 해 보게 됨.
+      배제가 싸지면 버릴 이유가 없어지고, 버리지 않은 것들은 세계가 아니라 목록으로 남음.
+    </p>
+
+    <div class="cards">
+      <div class="card">
+        <h5>판정을 쥔 경우 <span class="tag">응축</span></h5>
+        <p>수백 명의 손이 한 사람의 채택 판정을 거쳐 한 편으로 모임. 배제된 것이 많을수록 남은
+        것의 윤곽이 분명해지고, 도착하는 물건은 하나임.</p>
+      </div>
+      <div class="card">
+        <h5>판정을 두지 않은 경우 <span class="tag">흩음</span></h5>
+        <p>생성한 것이 그대로 산출이 됨. 편수는 늘지만 어느 것도 저자의 검토를 거치지 않아
+        목록으로 남고, 훑는 쪽의 시간이 기여를 넘김.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ================= 06 ================= -->
+<section id="s6">
+  <div class="wrap">
+    <p class="eyebrow"><span class="num">06</span><span>독창성</span></p>
+    <h2>독창성이 남는 세 단계</h2>
+
+    <p>
+      이 흐름을 따라가면 독창성의 위치가 옮겨 감. 생성이 희소했던 환경에서 독창성은 새로운
+      것을 만들어 내는 능력이었고 남들이 못 쓰는 것을 쓸 수 있다는 사실 자체가 구별을
+      만들었지만, 생성이 거의 공짜가 된 환경에서는 누구나 만 단어를 즉시 얻으므로 만 단어를
+      가졌다는 것이 아무것도 증명하지 않음. 남는 것은 무엇을 남기고 무엇을 버릴지 정하는
+      단계이고, 미야자키의 "흉내내지 마"도 이 단계를 가리키는 말로 읽힘 — 흉내는 남이 이미
+      고른 것을 그대로 받는 일이고 고유성은 자기가 고른 것들의 누적에서 생기기 때문임.
+    </p>
+
+    <p>
+      모델이 내놓는 것은 학습 분포의 평균값에 가깝고, 그것을 읽고 맞다고 받아들이는 순간 그
+      선택은 자기 판정을 거치지 않은 채 자기 것처럼 느껴짐. 그래서 AI 환경에서 흉내는 의지의
+      문제에서 탐지의 문제로 바뀌며, 무엇을 받아들였는지 되짚을 수 있는 사람만 자기 것과 평균값을
+      구분함.
+    </p>
+
+    <div class="notes">
+      <ul class="sym">
+        <li><b>안 할 것을 먼저 정함</b><span>산출의 윤곽은 포함한 것이 아니라 배제한 것에서 생기므로, 시작 전에 범위를 닫아 두면 뒤의 판정이 가벼워짐</span></li>
+        <li><b>원자료에 직접 닿음</b><span>남이 요약해 온 것만 보면 판정의 근거가 남의 선택으로 대체됨. 04절의 채택 판정은 후보를 직접 읽은 만큼만 작동함</span></li>
+        <li><b>완성된 실물 하나로 보임</b><span>기준을 말로 설명하는 대신 응축된 물건 한 개로 보였을 때 그 판정이 다른 사람에게 전달됨</span></li>
+      </ul>
+    </div>
+
+    <p>
+      셋 모두 양으로 대체되지 않으며, 산출이 늘어날수록 오히려 더 적은 양으로 수행해야 함.
+      검수 용량이 고정된 채 편수만 늘면 02절의 커버리지가 내려가고, 커버리지가 내려간 산출은
+      04절의 선별을 통과하지 못한 채 목록에 쌓임.
+    </p>
+  </div>
+</section>
+
+<!-- ================= 07 ================= -->
+<section id="s7">
+  <div class="wrap">
+    <p class="eyebrow"><span class="num">07</span><span>귀속</span></p>
+    <h2>이름이라는 평균 장부</h2>
+
+    <p>
+      응축과 흩음은 이름이 남는 방식에서도 나뉨. 응축된 물건에는 만든 이의 이름이 붙어
+      매킨토시와 지브리 장편과 한 편의 영화가 각각 누구의 것으로 기억되지만, 흩어진 목록에는
+      이름이 붙지 않음. 겔만이 "나는 닉을 안다, 수년간 탄탄한 일을 해 온 사람이다, 무슨 일이
+      있었던 건가"라고 적은 대목은 그 손실이 신규 산출에서만 발생하지 않는다는 것을 보여 줌 —
+      이름은 쌓이는 장부가 아니라 평균을 내는 장부이므로, 검사되지 않은 산출을 붙이면 기존
+      잔고까지 함께 내려감.
+    </p>
+
+    <div class="eq">
+      평판 = ( m·q₀ + n·q₁ ) / ( m + n )
+      <br><span class="cm">— m: 기존 검증된 산출 수, q₀: 그 평균 품질, n: 새로 붙인 산출 수, q₁: 그 평균 품질</span>
+    </div>
+
+    <div id="lab-name"></div>
+
+    <p>
+      정지우의 처방 — 자기 세계를 쌓고 그 세계로 타인을 초대하라 — 은 그래서 AI 환경에서 한 겹
+      더 구체적인 뜻을 지님. 초대할 수 있는 세계는 응축을 거쳐 하나의 물건이 된 것이고, 응축을
+      거치지 않은 산출은 아무리 많아도 초대할 곳이 없음.
+    </p>
+
+    <div class="tbl-wrap">
+      <table>
+        <thead><tr><th>자료</th><th>이 페이지에서 쓰인 범위</th></tr></thead>
+        <tbody>
+          <tr><td>정지우의 글 (2026-09)</td><td>1절의 미야자키 진술과 수용자 쪽 관찰, 마지막 처방</td></tr>
+          <tr><td>앤드루 겔만의 블로그 글</td><td>3절의 순가치 추정, 열어 본 한 편의 내용, 6·7절의 인용</td></tr>
+          <tr><td>폴슨 사례 보도 (2026-09-23)</td><td>2절의 편수·분량·삭제 조치. 원문은 열리지 않아 인용 기사와 블로그를 통해 확인함</td></tr>
+          <tr><td>「흩어버린 노력과 응축」 메모</td><td>4절의 응축 명제와 매킨토시·영화·지브리 예시</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</section>
+
+<div class="wrap">
+  <div class="pager">
+    <a href="ai-tools.html"><span class="pg-lbl">이전</span>AI 도구의 작동 원리</a>
+    <a href="../index.html" style="text-align:right"><span class="pg-lbl">다음</span>분야 색인</a>
+  </div>
+</div>
+
+</main>
+
+<footer>
+  <div class="wrap">
+    <p>Field 16 · AI 활용 철학 · 모든 그림은 브라우저에서 직접 계산해 그림</p>
+  </div>
+</footer>
+
+<script src="../assets/js/site.js"></script>
+<script src="../assets/js/lab.js"></script>
+<script>
+/* ===== 공통 ===== */
+var SQRT2PI = Math.sqrt(2 * Math.PI);
+
+/* 표준정규 밀도 */
+function npdf(z){ return Math.exp(-0.5 * z * z) / SQRT2PI; }
+
+/* 표준정규 분위수 — Acklam 유리함수 근사 (|오차| < 1.15e-9) */
+function ninv(p){
+  if(p <= 0) return -Infinity;
+  if(p >= 1) return Infinity;
+  var a=[-3.969683028665376e+01,2.209460984245205e+02,-2.759285104469687e+02,
+         1.383577518672690e+02,-3.066479806614716e+01,2.506628277459239e+00];
+  var b=[-5.447609879822406e+01,1.615858368580409e+02,-1.556989798598866e+02,
+         6.680131188771972e+01,-1.328068155288572e+01];
+  var c=[-7.784894002430293e-03,-3.223964580411365e-01,-2.400758277161838e+00,
+         -2.549732539343734e+00,4.374664141464968e+00,2.938163982698783e+00];
+  var d=[7.784695709041462e-03,3.224671290700398e-01,2.445134137142996e+00,
+         3.754408661907416e+00];
+  var pl=0.02425, q, r;
+  if(p < pl){
+    q = Math.sqrt(-2 * Math.log(p));
+    return (((((c[0]*q+c[1])*q+c[2])*q+c[3])*q+c[4])*q+c[5]) /
+           ((((d[0]*q+d[1])*q+d[2])*q+d[3])*q+1);
+  }
+  if(p > 1 - pl){
+    q = Math.sqrt(-2 * Math.log(1 - p));
+    return -(((((c[0]*q+c[1])*q+c[2])*q+c[3])*q+c[4])*q+c[5]) /
+            ((((d[0]*q+d[1])*q+d[2])*q+d[3])*q+1);
+  }
+  q = p - 0.5; r = q * q;
+  return (((((a[0]*r+a[1])*r+a[2])*r+a[3])*r+a[4])*r+a[5]) * q /
+         (((((b[0]*r+b[1])*r+b[2])*r+b[3])*r+b[4])*r+1);
+}
+
+/* 상위 비율 p 를 채택할 때의 절단 평균 [σ] */
+function truncMean(p){
+  if(p >= 1) return 0;
+  if(p <= 0) return NaN;
+  return npdf(ninv(1 - p)) / p;
+}
+
+/* ============================ 01. 검수 커버리지 ============================ */
+Lab.make({
+  mount:'#lab-review',
+  title:'검수 커버리지 — 편수와 사람의 시간',
+  badge:'CALCULATOR',
+  controls:[
+    {id:'n', label:'연간 산출 편수 n', min:1, max:300, step:1, value:258, unit:'편',
+     fmt:function(v){ return v.toFixed(0); }},
+    {id:'c', label:'편당 검수 소요 시간 c', min:0.5, max:40, step:0.5, value:8, unit:'h',
+     fmt:function(v){ return v.toFixed(1); }},
+    {id:'T', label:'연간 검수 가용 시간 T', min:100, max:2000, step:10, value:600, unit:'h',
+     fmt:function(v){ return v.toFixed(0); }}
+  ],
+  presets:[
+    {label:'집계된 258편', set:{n:258}},
+    {label:'8월 한 달 104편', set:{n:104}},
+    {label:'월 2편 속도', set:{n:24}},
+    {label:'검수를 하루 2시간(연 600 h)', set:{T:600}}
+  ],
+  stats:[
+    {id:'per', label:'편당 배정 시간', unit:'h', fmt:function(v){ return v.toFixed(2); }},
+    {id:'cov', label:'검수 커버리지', unit:'%', fmt:function(v){ return v.toFixed(1); }},
+    {id:'nmax',label:'커버리지 1을 지키는 최대 편수', unit:'편', fmt:function(v){ return v.toFixed(0); }},
+    {id:'day', label:'하루 평균 산출', unit:'편/일', fmt:function(v){ return v.toFixed(2); }}
+  ],
+  plot:{width:640,height:380,xLabel:'연간 산출 편수 n',yLabel:'검수 커버리지 (%)',
+        autoX:false,autoY:false,xMin:1,xMax:300,yMin:0,yMax:110},
+  legend:[{color:'--accent',label:'min(1, T/(n·c)) × 100'}],
+  note:'커버리지 = min(1, T/(n·c)) 로 두고 계산함. 편당 검수 소요 시간 c 와 연간 가용 시간 T 는 ' +
+       '자료에 없는 값이라 슬라이더로 지정하는 가정이고, 편수 n 만 보도된 집계에서 옮긴 값임. ' +
+       '커버리지가 1 아래면 그만큼의 산출이 저자의 검토를 거치지 않은 채 나간다는 뜻임.',
+  plotNote:'곡선이 100 %에서 꺾이는 지점이 T/c 이며, 그 오른쪽은 편수를 늘린 만큼 검토가 얇아지는 구간임.',
+  compute:function(v){
+    var per = v.T / v.n;
+    var cov = Math.min(1, per / v.c);
+    var nmax = v.T / v.c;
+    var pts = [], i, n;
+    for(i=0;i<=299;i++){
+      n = 1 + i;
+      pts.push([n, Math.min(1, (v.T / n) / v.c) * 100]);
+    }
+    return {
+      series:[{points:pts, color:'--accent', width:2.4}],
+      overlays:[
+        {type:'hline', y:100, color:'--ink-3', label:'전량 검수'},
+        {type:'vline', x:258, color:'--neutral', label:'집계 258편'},
+        {type:'point', x:v.n, y:cov*100, color:'--accent',
+         label:(cov*100).toFixed(1) + ' %'}
+      ],
+      stats:{ per:per, cov:cov*100, nmax:nmax, day:v.n/365 }
+    };
+  }
+});
+
+/* ============================ 02. 순가치 ============================ */
+Lab.make({
+  mount:'#lab-netvalue',
+  title:'순가치 — 기여와 훑는 시간의 차',
+  badge:'MODEL',
+  controls:[
+    {id:'n', label:'산출 편수 n', min:1, max:300, step:1, value:258, unit:'편',
+     fmt:function(v){ return v.toFixed(0); }},
+    {id:'p', label:'편당 분량 p', min:5, max:100, step:1, value:40, unit:'쪽',
+     fmt:function(v){ return v.toFixed(0); }},
+    {id:'v', label:'훑는 속도', min:30, max:600, step:10, value:180, unit:'쪽/h',
+     fmt:function(v){ return v.toFixed(0); }},
+    {id:'r', label:'훑는 사람 수 r', min:1, max:500, step:1, value:50, unit:'명',
+     fmt:function(v){ return v.toFixed(0); }},
+    {id:'g', label:'편당 기여 g', min:0, max:20, step:0.1, value:0.5, unit:'h',
+     fmt:function(v){ return v.toFixed(1); }}
+  ],
+  presets:[
+    {label:'80쪽 문서', set:{p:80}},
+    {label:'훑는 사람 10명', set:{r:10}},
+    {label:'훑는 사람 200명', set:{r:200}},
+    {label:'기여를 5 h 로', set:{g:5}}
+  ],
+  stats:[
+    {id:'skim', label:'편당 훑는 시간(1인)', unit:'분', fmt:function(v){ return v.toFixed(1); }},
+    {id:'tot',  label:'총 훑는 시간', unit:'h', fmt:function(v){ return v.toFixed(0); }},
+    {id:'net',  label:'순가치', unit:'h', fmt:function(v){ return (v>0?'+':'') + v.toFixed(0); }},
+    {id:'gb',   label:'손익분기 기여 g*', unit:'h/편', fmt:function(v){ return v.toFixed(2); }}
+  ],
+  plot:{width:640,height:380,xLabel:'편당 기여 g (h)',yLabel:'순가치 (h)',
+        autoX:false,autoY:true,xMin:0,xMax:20},
+  legend:[{color:'--accent',label:'n·(g − r·p/v)'}],
+  note:'순가치 = n × (g − r·p/v) 로 두고 계산함. 편당 기여 g 와 훑는 사람 수 r, 훑는 속도는 ' +
+       '자료에 없는 값이라 슬라이더로 지정하는 가정이며, 편수와 분량만 사례에서 옮김. ' +
+       '겔만의 추정을 부등식으로 옮겨 어느 조건에서 합이 음수가 되는지를 보는 용도임.',
+  plotNote:'직선이 0을 지나는 x 값이 손익분기 기여 g* = r·p/v 이고, 그 왼쪽에서는 편수를 늘릴수록 ' +
+           '합이 더 내려감.',
+  compute:function(v){
+    var skimH = v.p / v.v;              /* 1인이 한 편을 훑는 시간 [h] */
+    var gb = v.r * skimH;               /* 손익분기 기여 [h/편] */
+    var net = v.n * (v.g - gb);
+    var pts = [], i, g;
+    for(i=0;i<=200;i++){
+      g = 20 * i / 200;
+      pts.push([g, v.n * (g - gb)]);
+    }
+    return {
+      series:[{points:pts, color:'--accent', width:2.4}],
+      overlays:[
+        {type:'hline', y:0, color:'--ink-3', label:'순가치 0'},
+        {type:'vline', x:Math.min(gb, 20), color:'--green', label:'손익분기 g*'},
+        {type:'point', x:v.g, y:net, color:'--accent', label:Math.round(net) + ' h'}
+      ],
+      stats:{ skim:skimH*60, tot:v.n*v.r*skimH, net:net, gb:gb }
+    };
+  }
+});
+
+/* ============================ 03. 선별 강도 ============================ */
+Lab.make({
+  mount:'#lab-select',
+  title:'선별 강도 — 채택 비율과 남은 것의 기대 품질',
+  badge:'DISTRIBUTION',
+  controls:[
+    {id:'N', label:'생성한 산출 개수 N', min:2, max:500, step:1, value:100, unit:'개',
+     fmt:function(v){ return v.toFixed(0); }},
+    {id:'p', label:'채택 비율 p', min:0.005, max:1, step:0.005, value:0.1,
+     fmt:function(v){ return (v*100).toFixed(1) + ' %'; }}
+  ],
+  presets:[
+    {label:'전량 채택 p = 1', set:{p:1}},
+    {label:'절반 p = 0.5', set:{p:0.5}},
+    {label:'열에 하나 p = 0.1', set:{p:0.1}},
+    {label:'백에 하나 p = 0.01', set:{p:0.01}}
+  ],
+  stats:[
+    {id:'k',   label:'채택 개수', unit:'개', fmt:function(v){ return v.toFixed(0); }},
+    {id:'m',   label:'채택분 기대 품질', unit:'σ', fmt:function(v){ return v.toFixed(3); }},
+    {id:'z',   label:'채택 문턱 z', unit:'σ',
+     fmt:function(v){ return isFinite(v) ? v.toFixed(3) : '문턱 없음'; }},
+    {id:'best',label:'N개 중 최고 1개의 기대값', unit:'σ', fmt:function(v){ return v.toFixed(3); }}
+  ],
+  plot:{width:640,height:380,xLabel:'채택 비율 p',yLabel:'채택분 기대 품질 (σ)',
+        autoX:false,autoY:true,xMin:0,xMax:1},
+  legend:[{color:'--accent',label:'φ(z_p)/p'}],
+  note:'산출물의 품질이 표준정규를 따른다고 두고 상위 비율 p 만 채택할 때의 절단 평균 φ(z_p)/p 를 ' +
+       '계산함. 분위수 Φ⁻¹ 는 Acklam 유리함수 근사로 구하고, 최고 1개의 기대값은 Blom 근사 ' +
+       'Φ⁻¹((N−0.375)/(N+0.25)) 를 씀. 품질 분포는 가정이며 사례에서 온 값이 아님.',
+  plotNote:'p 를 1에서 왼쪽으로 옮길수록 기대 품질이 올라가고, 그 상승분 전부가 배제에서 옴.',
+  compute:function(v){
+    var m = truncMean(v.p);
+    var z = v.p >= 1 ? -Infinity : ninv(1 - v.p);
+    var best = ninv((v.N - 0.375) / (v.N + 0.25));
+    var pts = [], i, pp;
+    for(i=1;i<=200;i++){
+      pp = i / 200;
+      pts.push([pp, truncMean(pp)]);
+    }
+    return {
+      series:[{points:pts, color:'--accent', width:2.4}],
+      overlays:[
+        {type:'hline', y:0, color:'--ink-3', label:'전량 채택'},
+        {type:'point', x:v.p, y:m, color:'--accent', label:m.toFixed(2) + ' σ'}
+      ],
+      stats:{ k:Math.max(1, Math.round(v.N * v.p)), m:m, z:z, best:best }
+    };
+  }
+});
+
+/* ============================ 04. 평판 평균 ============================ */
+Lab.make({
+  mount:'#lab-name',
+  title:'평판 평균 — 검사되지 않은 산출을 붙였을 때',
+  badge:'CALCULATOR',
+  controls:[
+    {id:'m',  label:'기존 검증된 산출 수 m', min:1, max:200, step:1, value:40, unit:'편',
+     fmt:function(v){ return v.toFixed(0); }},
+    {id:'q0', label:'기존 평균 품질 q₀', min:0, max:10, step:0.1, value:8,
+     fmt:function(v){ return v.toFixed(1); }},
+    {id:'n',  label:'새로 붙인 산출 수 n', min:0, max:300, step:1, value:258, unit:'편',
+     fmt:function(v){ return v.toFixed(0); }},
+    {id:'q1', label:'새 산출의 평균 품질 q₁', min:0, max:10, step:0.1, value:2,
+     fmt:function(v){ return v.toFixed(1); }}
+  ],
+  presets:[
+    {label:'258편을 붙였을 때', set:{n:258}},
+    {label:'10편만 붙였을 때', set:{n:10}},
+    {label:'새 산출도 같은 품질', set:{q1:8}},
+    {label:'기존 실적 100편', set:{m:100}}
+  ],
+  stats:[
+    {id:'avg',  label:'합산 평균', fmt:function(v){ return v.toFixed(2); }},
+    {id:'drop', label:'기존 대비 하락', fmt:function(v){ return '−' + v.toFixed(2); }},
+    {id:'n90',  label:'기존의 90 %를 지키는 최대 n', unit:'편',
+     fmt:function(v){ return isFinite(v) ? v.toFixed(0) : '제한 없음'; }},
+    {id:'share',label:'새 산출 비중', unit:'%', fmt:function(v){ return v.toFixed(1); }}
+  ],
+  plot:{width:640,height:380,xLabel:'새로 붙인 산출 수 n',yLabel:'합산 평균 품질',
+        autoX:false,autoY:true,xMin:0,xMax:300,yMinFixed:0},
+  legend:[{color:'--accent',label:'(m·q₀ + n·q₁)/(m+n)'},{color:'--neutral',label:'기존 평균 q₀'}],
+  note:'평판을 산출 품질의 가중 평균으로 두고 계산함. 품질 눈금과 기존 실적 수는 가정이며, ' +
+       '합산이 아니라 평균으로 두었을 때 검사되지 않은 산출이 기존 잔고까지 끌어내린다는 관계를 ' +
+       '보는 용도임.',
+  compute:function(v){
+    var avg = (v.m * v.q0 + v.n * v.q1) / (v.m + v.n);
+    var den = 0.9 * v.q0 - v.q1;
+    var n90 = den > 0 ? (0.1 * v.q0 * v.m) / den : Infinity;
+    var cur = [], ref = [], i, nn;
+    for(i=0;i<=300;i++){
+      nn = i;
+      cur.push([nn, (v.m * v.q0 + nn * v.q1) / (v.m + nn)]);
+      ref.push([nn, v.q0]);
+    }
+    return {
+      series:[
+        {points:ref, color:'--neutral', width:1.6, dash:'5 4'},
+        {points:cur, color:'--accent', width:2.4}
+      ],
+      overlays:[
+        {type:'point', x:v.n, y:avg, color:'--accent', label:avg.toFixed(2)},
+        {type:'hline', y:0.9 * v.q0, color:'--green', label:'기존의 90 %'}
+      ],
+      stats:{ avg:avg, drop:v.q0 - avg, n90:n90, share:v.n/(v.m+v.n)*100 }
+    };
+  }
+});
+</script>
+</body>
+</html>
