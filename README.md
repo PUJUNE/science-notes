@@ -21,9 +21,10 @@
 | 11 공학 | `pages/needle.html` | 베벨 기하, 투과력 곡선, 게이지 규격, 니들 임피던스 |
 | 12 화학 | `pages/thermal.html` | TGA, DSC, Py-GC/MS, FT-IR, 고주파 절단, 팁 온도 |
 | 13 물리 | `pages/biosignal.html` | 반쪽전지, ECG·EMG, 필터, Fick 확산, 침투 문턱 |
-| 14 공학 | `pages/standards.html` | AAMI EC12, ISO 10993, Arrhenius 가속수명, 신뢰구간 |
-| 15 도구 | `pages/ai-tools.html` | 신경망 파라미터, 사전학습, 세션과 기억, 토큰 |
-| 16 도구 | `pages/ai-philosophy.html` | 검수 커버리지, 순가치, 선별 강도(절단 평균), 평판 평균 |
+| 14 물리 | `pages/blackhole.html` | 껍질 정리, 표면중력, 중력결합에너지, 슈바르츠실트 반지름, 유효퍼텐셜과 ISCO |
+| 15 공학 | `pages/standards.html` | AAMI EC12, ISO 10993, Arrhenius 가속수명, 신뢰구간 |
+| 16 도구 | `pages/ai-tools.html` | 신경망 파라미터, 사전학습, 세션과 기억, 토큰 |
+| 17 도구 | `pages/ai-philosophy.html` | 검수 커버리지, 순가치, 선별 강도(절단 평균), 평판 평균 |
 
 ## 기술 구성
 
