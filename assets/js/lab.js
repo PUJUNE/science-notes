@@ -14,6 +14,8 @@
 (function (global) {
   'use strict';
 
+  const LOG_STEPS = 100000;   /* 로그 슬라이더 눈금 수 — check-widgets.js 와 같은 값 */
+
   const SVGNS = 'http://www.w3.org/2000/svg';
 
   function el(tag, attrs, kids) {
@@ -402,7 +404,7 @@
         row.appendChild(h('label', { for: 'c_' + c.id }, c.label));
         const inp = h('input', {
           type: 'range', id: 'c_' + c.id,
-          min: c.log ? 0 : c.min, max: c.log ? 1000 : c.max,
+          min: c.log ? 0 : c.min, max: c.log ? LOG_STEPS : c.max,
           step: c.log ? 1 : (c.step || (c.max - c.min) / 100),
           value: c.log ? logPos(c.value, c.min, c.max) : c.value
         });
@@ -420,8 +422,12 @@
       }
     });
 
-    function logPos(v, lo, hi) { return 1000 * (Math.log10(v) - Math.log10(lo)) / (Math.log10(hi) - Math.log10(lo)); }
-    function logVal(p, lo, hi) { return Math.pow(10, Math.log10(lo) + (p / 1000) * (Math.log10(hi) - Math.log10(lo))); }
+    /* 로그 슬라이더의 눈금 수. range 입력은 step 단위로 값을 당기므로, 이 수가 작으면
+       설정한 기본값이 눈금 사이에 걸려 화면에 다른 수로 뜬다(1000일 때 최대 0.5 %).
+       10만이면 유효숫자 3자리 표시가 흔들리지 않는다. scripts/check-widgets.js 가
+       같은 값을 써서 검사하므로 함께 고칠 것. */
+    function logPos(v, lo, hi) { return LOG_STEPS * (Math.log10(v) - Math.log10(lo)) / (Math.log10(hi) - Math.log10(lo)); }
+    function logVal(p, lo, hi) { return Math.pow(10, Math.log10(lo) + (p / LOG_STEPS) * (Math.log10(hi) - Math.log10(lo))); }
     function fmtCtl(c, v) {
       const s = c.fmt ? c.fmt(v) : sci(v, 3);
       return s + (c.unit ? ' ' + c.unit : '');
