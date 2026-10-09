@@ -32,6 +32,8 @@
       <li><a href="#s5">판정</a></li>
       <li><a href="#s6">독창성</a></li>
       <li><a href="#s7">귀속</a></li>
+      <li><a href="#s8">기능과 여지</a></li>
+      <li><a href="#s9">지표 왜곡</a></li>
     </ul>
     <button class="theme-btn" type="button">DARK</button>
   </div>
@@ -325,6 +327,109 @@
       더 구체적인 뜻을 지님. 초대할 수 있는 세계는 응축을 거쳐 하나의 물건이 된 것이고, 응축을
       거치지 않은 산출은 아무리 많아도 초대할 곳이 없음.
     </p>
+  </div>
+</section>
+
+<!-- ================= 08 ================= -->
+<section id="s8">
+  <div class="wrap">
+    <p class="eyebrow"><span class="num">08</span><span>기능과 여지</span></p>
+    <h2>기능이 늘수록 줄어드는 바꿀 여지</h2>
+
+    <p>
+      같은 교환을 소프트웨어 쪽에서 두 축으로 그린 사람이 켄트 벡임. 2026년 발표에서 그는 가로축에
+      지금 수행할 수 있는 것(Features)을, 세로축에 앞으로 바꿀 수 있는 여지(Futures)를 놓음. 세로축을
+      선택권(optionality)이라고도 부르며 두 이름을 같은 것으로 씀. 처음에는 아무 기능도 없는 대신 무엇이든 할 수 있고, 기능을 하나 붙일 때마다
+      그 여지가 줄어드는데 줄어드는 갈래가 둘임 — 다음 기능이 앞의 것과 호환되어야 하므로 할 수 있는
+      일에 제약이 생기고, 마음에 들지 않아 떼어내는 경우에도 지나간 선택이 다음 작업을 묶음.
+    </p>
+
+    <p>
+      기능 진행이 처음에는 빠르다가 점점 느려지는 것을 그는 다른 축에서 벌어지는 일 때문이라고 봄.
+      기능을 하나 얻으려고 여지를 태운다(burn futures)는 것이 그의 표현이고, 끝까지 태우면 무엇을
+      고쳐도 다른 것이 깨지는 절대영도 상태(absolute zero state)에 닿아 같은 이름 뒤에 2·3·4를 붙인
+      프로젝트가 새로 시작됨. 예전에는 100명이 10년을 들여야 그 상태에 이르렀는데 이제 혼자 사무실에서
+      일주일이면 닿는다는 것이 그가 생산성 급증의 다른 면으로 꼽은 대목임.
+    </p>
+
+    <p>
+      처방은 생성을 줄이는 것이 아니라 기능과 기능 사이에 멈추는 리듬임. 기능 하나가 끝나고 모델이
+      다음 단계를 묻는 순간이 멈출 지점이고, 그 사이에 리팩토링과 중복 제거를 하거나 방금 한 작업을
+      버리고 다른 방식으로 다시 구현해 봄. 칼을 쓰는 동안에는 갈 수 없으므로 자르고 갈고 다시 자른다는
+      비유가 여기 붙으며, 앞 절의 배제와 같은 단계를 가리킴 — 내놓는 쪽이 아니라 내놓지 않고 되사는
+      쪽에서 값이 생김.
+    </p>
+
+    <div class="eq">
+      기능 하나: F ← F·(1 − a) &nbsp;&nbsp;<span class="cm">a = 기능당 여지 소모율</span><br>
+      멈춤 한 번: F ← F + b·(F₀ − F) &nbsp;&nbsp;<span class="cm">b = 결손을 되사는 비율</span><br>
+      진행 속도: v = F / F₀ &nbsp;&nbsp;<span class="cm">— 남은 여지에 비례한다고 둠</span>
+    </div>
+
+    <ul class="sym">
+      <li><b>F</b><span>남은 여지 [%], 출발값 F₀ = 100</span></li>
+      <li><b>a</b><span>기능 하나가 태우는 여지의 비율 [무차원]</span></li>
+      <li><b>b</b><span>멈춤 한 번이 되사는 결손의 비율 [무차원]</span></li>
+      <li><b>k</b><span>멈춤 주기 [기능 개수]</span></li>
+    </ul>
+
+    <div id="lab-futures"></div>
+
+    <div class="callout note">
+      <p><b>곡선이 뜻하는 것</b> — 멈추지 않으면 여지가 지수적으로 바닥에 붙고, 멈춤을 끼우면 톱니를
+      그리며 어떤 높이에서 평형을 이룸. 기본값에서는 그 평형이 66 %이고 멈추지 않는 쪽은 60개째에
+      2 % 남음. 멈춤은 기능을 내놓지 않는 시간을 쓰므로 목표 기능 수가 적으면 멈추지 않는 쪽이
+      먼저 닿고, 멀리 갈수록 순서가 뒤집힘. 기본값에서 그 분기점은 20개 근처이고, 60개를 목표로 두면
+      멈추는 쪽이 다섯 배 빨리 닿음 — 「멈추지 않을 때 대비」 칸이 1을 넘는지로 가름.</p>
+    </div>
+  </div>
+</section>
+
+<!-- ================= 09 ================= -->
+<section id="s9">
+  <div class="wrap">
+    <p class="eyebrow"><span class="num">09</span><span>Δv = ρ · i(p)</span></p>
+    <h2>지표를 세게 걸수록 실제 향상이 꺾이는 구간</h2>
+
+    <p>
+      측정하기 쉬운 것은 사슬의 앞쪽임. 코드 줄 수와 기능 개수는 바로 세어지지만 그것이 미션에
+      얼마나 보탬이 되었는지는 늦게, 그것도 위기가 닥친 뒤에야 드러남. 측정 지표가 목표가 되면 좋은
+      지표가 아니라는 굿하트의 법칙이 여기 걸리는데, 벡은 굿하트가 낙관주의자였다고 말함 — 지표가
+      지표 기능을 잃는 데 그치지 않고, 사람들이 더 나은 수치를 얻으려고 시스템 전체를 뒤틀어 상황을
+      더 나쁘게 만들기 때문임. 그가 이 대목을 맺는 문장이 아래 곡선의 세로축을 정함 — 지표를 목표로
+      바꿔서 잃는 것은 가시성이 아니라 미션에서의 진전이라는 것임.
+    </p>
+
+    <p>
+      이 두 단계를 선발 문제로 옮기면 곱 하나로 정리됨. 지표와 실제 목표의 상관을 ρ라 하고 상위 비율
+      p만 채택할 때의 선택강도를 i(p)라 하면, 목표 쪽의 기대 향상은 ρ·i(p)임. 선발을 세게 할수록
+      i(p)는 커지므로 상관이 고정되어 있다면 세게 거는 편이 언제나 나음. 왜곡이 들어오는 자리가
+      ρ인데, 지표가 보상에 걸리는 순간 지표만 올리는 행동이 섞여 상관이 내려가므로 두 항이 반대로
+      움직이고 곱은 어느 지점에서 꺾임.
+    </p>
+
+    <div class="eq">
+      Δv = ρ(p) · i(p) &nbsp;&nbsp;<span class="cm">[σ] — 목표 쪽 기대 향상</span><br>
+      i(p) = φ(z<sub>p</sub>) / p,&nbsp; z<sub>p</sub> = Φ⁻¹(1 − p)<br>
+      ρ(p) = ρ₀ · exp(−λ · i(p)) &nbsp;&nbsp;<span class="cm">— 선발 압력이 셀수록 상관이 내려간다고 둔 모델</span>
+    </div>
+
+    <ul class="sym">
+      <li><b>ρ₀</b><span>왜곡이 없을 때의 지표–목표 상관 [무차원]</span></li>
+      <li><b>λ</b><span>왜곡 강도. 0이면 굿하트가 없는 경우임</span></li>
+      <li><b>i(p)</b><span>선택강도 [σ], 4절과 같은 절단 평균</span></li>
+      <li><b>Δv</b><span>목표 쪽 기대 향상 [σ]</span></li>
+    </ul>
+
+    <div id="lab-goodhart"></div>
+
+    <p>
+      곡선의 꼭대기가 뜻하는 바는 지표를 버리라는 것이 아니라 거는 세기에 상한이 있다는 것임.
+      λ가 0인 선은 왼쪽 끝까지 계속 올라가므로, 상한을 만드는 것은 지표 자체가 아니라 그 지표가
+      보상에 걸렸다는 사실임. 검수 용량이 채택 비율의 하한을 정하고(02절) 검사되지 않은 산출이
+      평판의 평균을 끌어내리는 것(07절)과 같은 구조로, 측정하기 쉬운 수치가 미션을 밀어내는
+      경로가 이것임.
+    </p>
 
     <div class="tbl-wrap">
       <table>
@@ -334,6 +439,7 @@
           <tr><td>앤드루 겔만의 블로그 글</td><td>순가치 추정과 열어 본 한 편의 내용(3절), 인용 두 곳(6·7절)</td></tr>
           <tr><td>폴슨 사례 보도 (2026-09-23)</td><td>편수·분량·삭제 조치(2절). 원문은 열리지 않아 인용 기사와 블로그를 통해 확인함</td></tr>
           <tr><td>「흩어버린 노력과 응축」 메모</td><td>응축 명제와 매킨토시·영화·지브리 예시(4절)</td></tr>
+          <tr><td>켄트 벡 「Software Engineering in the Age of AI」 (Prodacity 2026)</td><td>두 축과 멈춤의 리듬(8절), 굿하트 확장(9절). 원 발표의 영어 자막에서 세 대목을 직접 확인함 — 두 축과 optionality(원본 20:34~20:41), 절대영도 상태와 1인 1주(22:04~22:23), 굿하트 확장과 마무리(48:33~49:09). 한국어 해설본은 분량이 줄어 타임코드가 원본과 어긋나므로 위 숫자는 원 발표 기준임. 영어 트랙이 사람이 단 것인지 자동 인식인지는 가르지 않았음</td></tr>
         </tbody>
       </table>
     </div>
@@ -616,6 +722,135 @@ Lab.make({
         {type:'hline', y:0.9 * v.q0, color:'--green', label:'기존의 90 %'}
       ],
       stats:{ avg:avg, drop:v.q0 - avg, n90:n90, share:v.n/(v.m+v.n)*100 }
+    };
+  }
+});
+
+/* ============================ 05. 기능과 여지 ============================ */
+Lab.make({
+  mount:'#lab-futures',
+  title:'여지의 소모와 되사기 — 멈춤을 끼울 때',
+  badge:'MODEL',
+  controls:[
+    {id:'a', label:'기능당 여지 소모율 a', min:1, max:20, step:0.5, value:6, unit:'%',
+     fmt:function(v){ return v.toFixed(1); }},
+    {id:'b', label:'멈춤 한 번의 회복률 b', min:0, max:60, step:1, value:25, unit:'%',
+     fmt:function(v){ return v.toFixed(0); }},
+    {id:'k', label:'멈춤 주기 k', min:1, max:20, step:1, value:3, unit:'기능',
+     fmt:function(v){ return v.toFixed(0); }},
+    {id:'c', label:'멈춤 한 번의 시간 비용', min:0, max:5, step:0.1, value:1.5, unit:'기능 단위',
+     fmt:function(v){ return v.toFixed(1); }},
+    {id:'n', label:'목표 기능 수 n', min:10, max:200, step:1, value:60, unit:'개',
+     fmt:function(v){ return v.toFixed(0); }}
+  ],
+  presets:[
+    {label:'멈추지 않음 (b = 0)', set:{b:0}},
+    {label:'세 기능마다 멈춤', set:{b:25, k:3}},
+    {label:'열 기능마다 멈춤', set:{b:25, k:10}},
+    {label:'깊게 되사기 b = 50 %', set:{b:50, k:5}}
+  ],
+  stats:[
+    {id:'fend', label:'n개 뒤 남은 여지', unit:'%', fmt:function(v){ return v.toFixed(1); }},
+    {id:'tend', label:'n개까지 걸린 시간', unit:'기능 단위', fmt:function(v){ return v.toFixed(1); }},
+    {id:'ratio',label:'멈추지 않을 때 대비', unit:'배', fmt:function(v){ return v.toFixed(2); }},
+    {id:'n10', label:'여지가 10 % 아래로', unit:'기능째',
+     fmt:function(v){ return isFinite(v) ? v.toFixed(0) : '내려가지 않음'; }}
+  ],
+  plot:{width:640,height:390,xLabel:'누적 기능 수',yLabel:'남은 여지 (%)',
+        autoX:false,autoY:false,xMin:0,xMax:200,yMin:0,yMax:100},
+  legend:[{color:'--accent',label:'멈춤을 끼운 경우'},{color:'--neutral',label:'멈추지 않는 경우'}],
+  note:'기능 하나가 남은 여지의 a 만큼을 태우고, k 개마다 한 번 멈춰 결손 (F₀ − F) 의 b 만큼을 ' +
+       '되산다고 두었음. 진행 속도는 남은 여지에 비례한다고 두어 여지가 줄수록 한 기능에 드는 ' +
+       '시간이 늘어나며, 멈춤 자체도 기능을 내놓지 않는 시간을 쓰므로 그 비용을 따로 둠. ' +
+       '네 가정 모두 발표에서 온 수치가 아니라 두 축의 관계를 보려고 세운 모델임.',
+  plotNote:'멈추지 않는 선은 지수적으로 바닥에 붙고, 멈춤을 끼운 선은 톱니를 그리며 어떤 높이에서 평형을 이룸.',
+  compute:function(v){
+    var a = v.a / 100, b = v.b / 100, F0 = 100;
+    var F = F0, t = 0, i;
+    var cur = [[0, F0]], ref = [[0, F0]];
+    var fend = F0, tend = 0, n10 = Infinity, tNo = 0, Fno = F0;
+    for(i = 1; i <= 200; i++){
+      t += 1 / Math.max(F / F0, 0.01);
+      F = F * (1 - a);
+      if(i % v.k === 0){ F = F + b * (F0 - F); t += v.c; }
+      cur.push([i, F]);
+      tNo += 1 / Math.max(Fno / F0, 0.01);
+      Fno = Fno * (1 - a);
+      ref.push([i, Fno]);
+      if(!isFinite(n10) && F < 10) n10 = i;
+      if(i === v.n){ fend = F; tend = t; }
+    }
+    var tNoAtN = 0, Fx = F0;
+    for(i = 1; i <= v.n; i++){ tNoAtN += 1 / Math.max(Fx / F0, 0.01); Fx = Fx * (1 - a); }
+    return {
+      series:[
+        {points:ref, color:'--neutral', width:1.8, dash:'5 4'},
+        {points:cur, color:'--accent', width:2.4}
+      ],
+      overlays:[
+        {type:'vline', x:v.n, color:'--ink-3', label:'목표 n'},
+        {type:'hline', y:10, color:'--amber', label:'여지 10 %'},
+        {type:'point', x:v.n, y:fend, color:'--accent', label:fend.toFixed(0) + ' %'}
+      ],
+      stats:{ fend:fend, tend:tend, ratio:tend / tNoAtN, n10:n10 }
+    };
+  }
+});
+
+/* ============================ 06. 지표 왜곡 ============================ */
+Lab.make({
+  mount:'#lab-goodhart',
+  title:'지표로 고를 때의 실제 향상 — ρ · i(p)',
+  badge:'SELECTION',
+  controls:[
+    {id:'rho0', label:'왜곡 전 상관 ρ₀', min:0.05, max:1, step:0.01, value:0.6,
+     fmt:function(v){ return v.toFixed(2); }},
+    {id:'lam',  label:'왜곡 강도 λ', min:0, max:1.5, step:0.01, value:0.5,
+     fmt:function(v){ return v.toFixed(2); }},
+    {id:'p',    label:'채택 비율 p', min:0.005, max:1, step:0.005, value:0.2,
+     fmt:function(v){ return (v*100).toFixed(1) + ' %'; }}
+  ],
+  presets:[
+    {label:'굿하트 없음 λ = 0', set:{lam:0}},
+    {label:'약한 왜곡 λ = 0.3', set:{lam:0.3}},
+    {label:'강한 왜곡 λ = 1.0', set:{lam:1.0}},
+    {label:'백에 하나 p = 0.01', set:{p:0.01}}
+  ],
+  stats:[
+    {id:'i',    label:'선택강도 i(p)', unit:'σ', fmt:function(v){ return v.toFixed(3); }},
+    {id:'rho',  label:'왜곡 후 상관 ρ', fmt:function(v){ return v.toFixed(3); }},
+    {id:'gain', label:'목표 쪽 향상 Δv', unit:'σ', fmt:function(v){ return v.toFixed(3); }},
+    {id:'popt', label:'향상이 가장 큰 p', unit:'%', fmt:function(v){ return v.toFixed(1); }}
+  ],
+  plot:{width:640,height:390,xLabel:'채택 비율 p',yLabel:'목표 쪽 향상 Δv (σ)',
+        autoX:false,autoY:true,xMin:0,xMax:1},
+  legend:[{color:'--accent',label:'왜곡 있음 ρ(p)·i(p)'},{color:'--neutral',label:'왜곡 없음 ρ₀·i(p)'}],
+  note:'i(p) 는 4절과 같은 절단 평균 φ(z_p)/p 이고, 왜곡은 ρ(p) = ρ₀·exp(−λ·i(p)) 로 두었음. ' +
+       '선발 압력이 셀수록 지표만 겨냥한 행동이 섞여 상관이 내려간다는 가정이며, λ 와 ρ₀ 는 ' +
+       '발표에서 온 수치가 아니라 이 관계를 보려고 세운 값임.',
+  plotNote:'λ 를 0으로 두면 왼쪽 끝까지 올라가고, λ 가 커질수록 꼭대기가 오른쪽으로 옮겨 가며 낮아짐.',
+  compute:function(v){
+    function gain(p){ var ii = truncMean(p); return v.rho0 * Math.exp(-v.lam * ii) * ii; }
+    var cur = [], ref = [], i, pp, best = 0, popt = 1;
+    for(i = 1; i <= 200; i++){
+      pp = i / 200;
+      var g = gain(pp);
+      cur.push([pp, g]);
+      ref.push([pp, v.rho0 * truncMean(pp)]);
+      if(g > best){ best = g; popt = pp; }
+    }
+    var ii = truncMean(v.p);
+    var rho = v.rho0 * Math.exp(-v.lam * ii);
+    return {
+      series:[
+        {points:ref, color:'--neutral', width:1.8, dash:'5 4'},
+        {points:cur, color:'--accent', width:2.4}
+      ],
+      overlays:[
+        {type:'vline', x:popt, color:'--green', label:'최적 p'},
+        {type:'point', x:v.p, y:rho * ii, color:'--accent', label:(rho*ii).toFixed(2) + ' σ'}
+      ],
+      stats:{ i:ii, rho:rho, gain:rho * ii, popt:popt * 100 }
     };
   }
 });
